@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_PolarIceCap.label>極地冰蓋</DepthRim_PolarIceCap.label>
+  <DepthRim_PolarIceCap.description>封在數公里極地冰層下的無光海洋。寒冷、礦藏豐富，就在冰架底下，升降井到得了。</DepthRim_PolarIceCap.description>
+  <DepthRim_KelpForest.label>海藻林</DepthRim_KelpForest.label>
+  <DepthRim_KelpForest.description>長滿高大海藻的涼爽近岸海域。淤泥海床肥沃，海藻可以採收當作食物。</DepthRim_KelpForest.description>
+  <DepthRim_ShallowReef.label>淺珊瑚礁</DepthRim_ShallowReef.label>
+  <DepthRim_ShallowReef.description>溫暖淺水裡綿延的珊瑚礁。淺色的珊瑚脊可以開採成建材。</DepthRim_ShallowReef.description>
+  <DepthRim_DeepReef.label>深珊瑚礁</DepthRim_DeepReef.label>
+  <DepthRim_DeepReef.description>日光照不到的冰冷幽暗水域，深色珊瑚在這裡緩慢長成巨大的丘塊。</DepthRim_DeepReef.description>
+  <DepthRim_SeabedPlain.label>海床平原</DepthRim_SeabedPlain.label>
+  <DepthRim_SeabedPlain.description>深海底一望無際的平坦沉積物，幾乎沒有岩石。</DepthRim_SeabedPlain.description>
+  <DepthRim_HydrothermalField.label>熱液噴口區</DepthRim_HydrothermalField.label>
+  <DepthRim_HydrothermalField.description>海床上的熱液噴口群。海水溫暖、岩層破碎，噴口可以用來地熱發電。</DepthRim_HydrothermalField.description>
+  <DepthRim_AbyssalTrench.label>深淵海溝</DepthRim_AbyssalTrench.label>
+  <DepthRim_AbyssalTrench.description>深淵海溝的邊緣。陡峭的崖壁直落進無底的黑暗。</DepthRim_AbyssalTrench.description>
+
+</LanguageData>

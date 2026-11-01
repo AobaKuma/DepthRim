@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Abyss.label>深淵</DepthRim_Abyss.label>
+  <DepthRim_Abyss.description>水深不見底的地方。看不到地面，只有往下的黑暗。</DepthRim_Abyss.description>
+
+  <DepthRim_Seabed_Gravel.label>海床碎石</DepthRim_Seabed_Gravel.label>
+  <DepthRim_Seabed_Gravel.description>冰層下海底的碎石沉積。</DepthRim_Seabed_Gravel.description>
+
+  <DepthRim_Seabed_Sand.label>海床細沙</DepthRim_Seabed_Sand.label>
+  <DepthRim_Seabed_Sand.description>被海流推到冰層下海底的細沙。</DepthRim_Seabed_Sand.description>
+  <DepthRim_Seabed_Silt.label>海床淤泥</DepthRim_Seabed_Silt.label>
+  <DepthRim_Seabed_Silt.description>富含有機物的柔軟深色淤泥，海藻會在上面扎根。</DepthRim_Seabed_Silt.description>
+
+</LanguageData>

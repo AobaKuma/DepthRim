@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 環境水壓抗性（設計稿 §4.2）：需求 = 水深層級（淺海 0、變溫層 1、深海 2、海床 3）。
+       沒入水中且抗性不足時累積水壓傷害。由潛水裝備、之後的義體或基因提供。 -->
+  <StatDef>
+    <defName>DepthRim_PressureResistance</defName>
+    <label>water pressure resistance</label>
+    <description>How much water pressure this creature can withstand while submerged.\n\n0: shallows only\n1: down to the thermocline\n2: the deep sea\n3: the abyssal seabed</description>
+    <category>BasicsPawn</category>
+    <defaultBaseValue>0</defaultBaseValue>
+    <minValue>0</minValue>
+    <toStringStyle>Integer</toStringStyle>
+    <showOnAnimals>false</showOnAnimals>
+    <showOnMechanoids>true</showOnMechanoids>
+    <displayPriorityInCategory>2000</displayPriorityInCategory>
+  </StatDef>
+
+</Defs>

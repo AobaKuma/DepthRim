@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 涉水：嚴重度 = 所在格水位（每 250 ticks 由 DepthRim.FloodingPawnEffects 設定）。 -->
+  <HediffDef>
+    <defName>DepthRim_Wading</defName>
+    <label>in water</label>
+    <description>Standing in or swimming through water. Movement is slowed.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.5, 0.75, 1)</defaultLabelColor>
+    <isBad>false</isBad>
+    <initialSeverity>0.1</initialSeverity>
+    <maxSeverity>1</maxSeverity>
+    <comps>
+      <!-- 離開水下地圖後不再更新，靠自然衰減消失（水中每次更新都會重設嚴重度，衰減不影響） -->
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-10</severityPerDay>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>ankle-deep</label>
+        <minSeverity>0</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.05</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>waist-deep</label>
+        <minSeverity>0.4</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.25</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>swimming</label>
+        <minSeverity>0.75</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.45</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.2</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- 溺水：沒入水中且沒有氧氣時累積，約 1 小時致死；離開水面後消退。 -->
+  <HediffDef>
+    <defName>DepthRim_Drowning</defName>
+    <label>drowning</label>
+    <description>Unable to breathe underwater. Get out of the water or into a diving suit before it is too late.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9, 0.3, 0.3)</defaultLabelColor>
+    <makesSickThought>false</makesSickThought>
+    <lethalSeverity>1</lethalSeverity>
+    <initialSeverity>0.1</initialSeverity>
+    <comps>
+      <!-- 離開水面後每小時恢復約 0.5（水中的累積量已扣掉這個衰減） -->
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-12</severityPerDay>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>holding breath</label>
+        <minSeverity>0</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.05</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>choking</label>
+        <minSeverity>0.3</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.3</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.2</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>drowning</label>
+        <minSeverity>0.6</minSeverity>
+        <lifeThreatening>true</lifeThreatening>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <setMax>0.1</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- 水壓傷害：環境水壓抗性低於水深層級需求時累積。 -->
+  <HediffDef>
+    <defName>DepthRim_Barotrauma</defName>
+    <label>barotrauma</label>
+    <description>Crushing water pressure beyond what this body or its equipment can withstand.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9, 0.5, 0.3)</defaultLabelColor>
+    <lethalSeverity>1</lethalSeverity>
+    <initialSeverity>0.02</initialSeverity>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-1.2</severityPerDay>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>minor</label>
+        <minSeverity>0</minSeverity>
+        <painOffset>0.1</painOffset>
+      </li>
+      <li>
+        <label>serious</label>
+        <minSeverity>0.3</minSeverity>
+        <painOffset>0.3</painOffset>
+        <capMods>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>-0.3</offset>
+          </li>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.2</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>critical</label>
+        <minSeverity>0.7</minSeverity>
+        <lifeThreatening>true</lifeThreatening>
+        <painOffset>0.5</painOffset>
+        <capMods>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>-0.6</offset>
+          </li>
+          <li>
+            <capacity>Consciousness</capacity>
+            <setMax>0.3</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+</Defs>

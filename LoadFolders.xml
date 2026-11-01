@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<loadFolders>
+	<!-- 只支援 1.7：所有內容（Defs、Languages、Textures、Assemblies）都在 1.7/。 -->
+	<v1.7>
+		<li>/</li>
+		<li>1.7</li>
+	</v1.7>
+</loadFolders>

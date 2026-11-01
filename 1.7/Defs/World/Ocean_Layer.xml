@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 海洋圖層（原本的地下冰洋擴充成多生態區）。由 DepthRim.Patch_WorldGrid_CreateRequiredLayers 自動加入每個世界；
+       每一格的生態區依正上方的地表格決定（DepthRim.WorldGenStep_OceanTiles）。 -->
+  <PlanetLayerDef>
+    <defName>DepthRim_Ocean</defName>
+    <label>ocean</label>
+    <gerundLabel>in</gerundLabel>
+    <defaultBiome>DepthRim_SeabedPlain</defaultBiome>
+    <defaultMapWorldObject>DepthRim_OceanSite</defaultMapWorldObject>
+    <elevationString>under the sea</elevationString>
+    <isSpace>false</isSpace>
+    <canFormCaravans>false</canFormCaravans>
+    <alwaysRaycastable>false</alwaysRaycastable>
+    <obstructsExpandingIcons>false</obstructsExpandingIcons>
+    <ignoreNoBuildArea>true</ignoreNoBuildArea>
+    <!-- 襲擊與事件只走白名單：DepthRim 之後依「主動聲納」條件自行加入 -->
+    <onlyAllowWhitelistedIncidents>true</onlyAllowWhitelistedIncidents>
+    <onlyAllowWhitelistedGameConditions>true</onlyAllowWhitelistedGameConditions>
+    <onlyAllowWhitelistedArrivals>true</onlyAllowWhitelistedArrivals>
+    <onlyAllowWhitelistedArrivalModes>true</onlyAllowWhitelistedArrivalModes>
+    <onlyAllowWhitelistedQuests>true</onlyAllowWhitelistedQuests>
+    <settlementsPer100kTiles>0~0</settlementsPer100kTiles>
+    <lineColor>(90, 170, 230)</lineColor>
+    <lineWidthFactor>2</lineWidthFactor>
+    <viewGizmoOnlyVisibleWithDirectConnection>false</viewGizmoOnlyVisibleWithDirectConnection>
+    <!-- TODO: 專用圖示 -->
+    <viewGizmoTexPath>UI/Commands/ViewOrbit</viewGizmoTexPath>
+    <viewGizmoTooltip>View the ocean beneath the surface.</viewGizmoTooltip>
+    <worldDrawLayers>
+      <li>WorldDrawLayer_ClosestTile</li>
+    </worldDrawLayers>
+    <worldGenSteps>
+      <li>DepthRim_OceanTiles</li>
+    </worldGenSteps>
+    <worldTabs>
+      <li>WITab_Planet</li>
+    </worldTabs>
+    <!-- TODO（潛艇原型）：加上 DMSE.TransferEnvironmentExtension 讓轉移飛行能在海洋層起飛。
+         現在先不加：海洋地圖的海床是碎石／沙地而不是虛空，結構樁會把整片海床當成船體帶走。
+         要先決定船塢的地形規則（例如潛艇只能蓋在船塢平台上、虛空 = 開放水域），再設定 voidTerrain 等欄位。 -->
+  </PlanetLayerDef>
+
+  <!-- 半徑略小於地表（100），代表海面之下；格子比地表少（地表 10 次細分）。 -->
+  <PlanetLayerSettingsDef>
+    <defName>DepthRim_Ocean_Settings</defName>
+    <label>ocean</label>
+    <settings>
+      <radius>97</radius>
+      <subdivisions>7</subdivisions>
+      <useSurfaceViewAngle>true</useSurfaceViewAngle>
+    </settings>
+  </PlanetLayerSettingsDef>
+
+  <WorldGenStepDef>
+    <defName>DepthRim_OceanTiles</defName>
+    <order>5</order>
+    <worldGenStep Class="DepthRim.WorldGenStep_OceanTiles" />
+  </WorldGenStepDef>
+
+</Defs>

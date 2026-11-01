@@ -1,0 +1,13 @@
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\1.7\Assemblies\DepthRim.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\DepthRim.csproj.AssemblyReference.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\DepthRim.GeneratedMSBuildEditorConfig.editorconfig
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\DepthRim.AssemblyInfoInputs.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\DepthRim.AssemblyInfo.cs
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\DepthRim.csproj.CoreCompileInputs.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\DepthRim.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\refint\DepthRim.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\ref\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\D--Steam-steamapps-common-RimWorld-Mods--DepthRim\47de2061-9ea9-4491-bdce-2119c9cdabca\scratchpad\depthrim-tests\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\depthrim-tests\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\D--Steam-steamapps-common-RimWorld-Mods--DepthRim\47de2061-9ea9-4491-bdce-2119c9cdabca\scratchpad\unit_out\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\D--Steam-steamapps-common-RimWorld-Mods--DepthRim\47de2061-9ea9-4491-bdce-2119c9cdabca\scratchpad\build_out\DepthRim.dll

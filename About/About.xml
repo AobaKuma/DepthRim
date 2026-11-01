@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<name>DepthRim</name>
+	<!-- TODO: 填入作者名稱 -->
+	<author>DepthRim</author>
+	<packageId>DepthRim.Core</packageId>
+	<modVersion IgnoreIfNoMatchingField="true">0.0.1</modVersion>
+	<supportedVersions>
+		<li>1.7</li>
+	</supportedVersions>
+	<modDependencies>
+		<li>
+			<packageId>brrainz.harmony</packageId>
+			<displayName>Harmony</displayName>
+			<steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+		</li>
+		<li>
+			<packageId>Ludeon.RimWorld.Odyssey</packageId>
+			<displayName>Odyssey</displayName>
+		</li>
+		<li>
+			<packageId>Aoba.DeadManSwitch.Core</packageId>
+			<displayName>Dead Man Switch</displayName>
+			<steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3121742525</steamWorkshopUrl>
+		</li>
+		<li>
+			<packageId>Aoba.DeadManSwitch.Expedition</packageId>
+			<displayName>The Dead Man's Switch - Expedition</displayName>
+		</li>
+	</modDependencies>
+	<loadAfter>
+		<li>brrainz.harmony</li>
+		<li>Ludeon.RimWorld.Odyssey</li>
+		<li>Aoba.DeadManSwitch.Core</li>
+		<li>Aoba.DeadManSwitch.Expedition</li>
+	</loadAfter>
+	<description>Deep-sea survival beneath the polar ice. Your submarine is the only shelter in the abyss.</description>
+</ModMetaData>

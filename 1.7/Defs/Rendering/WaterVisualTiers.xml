@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    水體視覺分層（設計稿 §3.3、實作指南 C.1／C.5）：每個水深層級一組參數。
+    材質由 DepthRim.WaterTierMaterials 依這裡的數值建立；改這裡的數字不需要重新編譯。
+    rippleScale：波紋取樣尺度，1 / 尺度 = 重複週期（格）。0.03 = 每 33.3 格重複一次。
+    ambientReach：日光能穿多深（0–1）。淺海 1 = 有日光就算有光；越深越小，深海白天也不會變透明。
+    snowSpeed / rippleScale 以外的強度值都是 0–1。
+  -->
+
+  <DepthRim.WaterVisualTierDef>
+    <defName>DepthRim_WaterTier_Shallow</defName>
+    <label>shallow water</label>
+    <description>Ice shelf edge, sunlight still reaches the bottom through the ice. Large slow ripples and light shafts.</description>
+    <tier>Shallow</tier>
+    <waterColor>(0.06, 0.24, 0.40)</waterColor>
+    <deepColor>(0.03, 0.12, 0.22)</deepColor>
+    <fogColor>(0.015, 0.05, 0.11)</fogColor>
+    <clearAlpha>0.40</clearAlpha>
+    <murkAlpha>0.85</murkAlpha>
+    <ambientReach>1.0</ambientReach>
+    <rippleScale>0.03</rippleScale>
+    <rippleStrength>0.8</rippleStrength>
+    <causticStrength>0.30</causticStrength>
+    <lightShaftStrength>0.15</lightShaftStrength>
+    <snowDensity>0</snowDensity>
+    <snowSpeed>1</snowSpeed>
+    <biolumDensity>0</biolumDensity>
+    <biolumColor>(0.35, 0.90, 0.85)</biolumColor>
+    <hazeStrength>0</hazeStrength>
+    <wobbleStrength>0</wobbleStrength>
+    <compartmentEffects>false</compartmentEffects>
+  </DepthRim.WaterVisualTierDef>
+
+  <DepthRim.WaterVisualTierDef>
+    <defName>DepthRim_WaterTier_Thermocline</defName>
+    <label>thermocline</label>
+    <description>Where cold and warmer water meet: the surface seems to sway, and a faint shimmer of drifting particles appears.</description>
+    <tier>Thermocline</tier>
+    <waterColor>(0.07, 0.18, 0.26)</waterColor>
+    <deepColor>(0.03, 0.09, 0.14)</deepColor>
+    <fogColor>(0.015, 0.04, 0.07)</fogColor>
+    <clearAlpha>0.45</clearAlpha>
+    <murkAlpha>0.88</murkAlpha>
+    <ambientReach>0.55</ambientReach>
+    <rippleScale>0.03</rippleScale>
+    <rippleStrength>0.25</rippleStrength>
+    <causticStrength>0.08</causticStrength>
+    <lightShaftStrength>0</lightShaftStrength>
+    <snowDensity>0.2</snowDensity>
+    <snowSpeed>1</snowSpeed>
+    <biolumDensity>0.05</biolumDensity>
+    <biolumColor>(0.35, 0.90, 0.85)</biolumColor>
+    <hazeStrength>0</hazeStrength>
+    <wobbleStrength>0.6</wobbleStrength>
+    <compartmentEffects>false</compartmentEffects>
+  </DepthRim.WaterVisualTierDef>
+
+  <DepthRim.WaterVisualTierDef>
+    <defName>DepthRim_WaterTier_Deep</defName>
+    <label>deep sea</label>
+    <description>No daylight at all. A lamp lights up drifting marine snow; without one, only sparse bioluminescence remains.</description>
+    <tier>Deep</tier>
+    <waterColor>(0.02, 0.07, 0.15)</waterColor>
+    <deepColor>(0.01, 0.035, 0.08)</deepColor>
+    <fogColor>(0.005, 0.015, 0.04)</fogColor>
+    <clearAlpha>0.50</clearAlpha>
+    <murkAlpha>0.92</murkAlpha>
+    <ambientReach>0.25</ambientReach>
+    <rippleScale>0.03</rippleScale>
+    <rippleStrength>0</rippleStrength>
+    <causticStrength>0</causticStrength>
+    <lightShaftStrength>0</lightShaftStrength>
+    <snowDensity>0.6</snowDensity>
+    <snowSpeed>1</snowSpeed>
+    <biolumDensity>0.25</biolumDensity>
+    <biolumColor>(0.35, 0.90, 0.85)</biolumColor>
+    <hazeStrength>0</hazeStrength>
+    <wobbleStrength>0</wobbleStrength>
+    <compartmentEffects>true</compartmentEffects>
+  </DepthRim.WaterVisualTierDef>
+
+  <DepthRim.WaterVisualTierDef>
+    <defName>DepthRim_WaterTier_Seabed</defName>
+    <label>abyssal seabed</label>
+    <description>The bottom of the ocean: fine sediment hangs in the water and hides the ground, lit only by drifting sparks of light.</description>
+    <tier>Seabed</tier>
+    <waterColor>(0.02, 0.07, 0.08)</waterColor>
+    <deepColor>(0.01, 0.035, 0.04)</deepColor>
+    <fogColor>(0.005, 0.02, 0.025)</fogColor>
+    <clearAlpha>0.50</clearAlpha>
+    <murkAlpha>0.93</murkAlpha>
+    <ambientReach>0.12</ambientReach>
+    <rippleScale>0.03</rippleScale>
+    <rippleStrength>0</rippleStrength>
+    <causticStrength>0</causticStrength>
+    <lightShaftStrength>0</lightShaftStrength>
+    <snowDensity>0.4</snowDensity>
+    <snowSpeed>1</snowSpeed>
+    <biolumDensity>0.35</biolumDensity>
+    <biolumColor>(0.35, 0.90, 0.85)</biolumColor>
+    <hazeStrength>0.5</hazeStrength>
+    <wobbleStrength>0</wobbleStrength>
+    <compartmentEffects>true</compartmentEffects>
+  </DepthRim.WaterVisualTierDef>
+
+</Defs>

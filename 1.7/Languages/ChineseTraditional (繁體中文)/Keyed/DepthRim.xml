@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim.DepthTier.Shallow>淺海</DepthRim.DepthTier.Shallow>
+  <DepthRim.DepthTier.Thermocline>變溫層</DepthRim.DepthTier.Thermocline>
+  <DepthRim.DepthTier.Deep>深海</DepthRim.DepthTier.Deep>
+  <DepthRim.DepthTier.Seabed>深海海床</DepthRim.DepthTier.Seabed>
+
+  <DepthRim.Pump.OpenWater>無法排水：這裡和外海相通。</DepthRim.Pump.OpenWater>
+  <DepthRim.Pump.RoomLevel>艙室水位：{0}</DepthRim.Pump.RoomLevel>
+  <DepthRim.DivingAir.Label>氧氣存量</DepthRim.DivingAir.Label>
+  <DepthRim.DivingAir.Inspect>氧氣：{0}（{1}）</DepthRim.DivingAir.Inspect>
+  <DepthRim.Overlay.Toggle>顯示水位。</DepthRim.Overlay.Toggle>
+
+  <DepthRim.Debug.WaterTier>水體視覺層級：{0}</DepthRim.Debug.WaterTier>
+  <DepthRim.Debug.WaterMaterialsReset>已重建水體材質。</DepthRim.Debug.WaterMaterialsReset>
+
+  <DepthRim.Settings.Category>DepthRim</DepthRim.Settings.Category>
+  <DepthRim.Settings.Particles>懸浮物效果</DepthRim.Settings.Particles>
+  <DepthRim.Settings.ParticlesTip>海洋雪、生物光、海床沉積霧氣。關掉可以省效能，水色與波紋不受影響。</DepthRim.Settings.ParticlesTip>
+  <DepthRim.Settings.Hints>暗處己方提示</DepthRim.Settings.Hints>
+  <DepthRim.Settings.HintsTip>己方角色在濃濁的水裡時，畫一層淡青色輪廓（敵人與野生生物沒有）。</DepthRim.Settings.HintsTip>
+  <DepthRim.Settings.HintOpacity>提示強度：{0}</DepthRim.Settings.HintOpacity>
+  <DepthRim.Settings.Murk>混濁度：{0}</DepthRim.Settings.Murk>
+  <DepthRim.Settings.Ambient>日光穿透：{0}</DepthRim.Settings.Ambient>
+  <DepthRim.Settings.LampRadius>頭燈半徑：{0}</DepthRim.Settings.LampRadius>
+  <DepthRim.Settings.LampRadiusDef>依裝備設定</DepthRim.Settings.LampRadiusDef>
+  <DepthRim.Settings.AudioHeader>水中音效</DepthRim.Settings.AudioHeader>
+  <DepthRim.Settings.Muffle>水中悶音強度：{0}</DepthRim.Settings.Muffle>
+  <DepthRim.Settings.Breathing>潛水呼吸與氣泡聲</DepthRim.Settings.Breathing>
+  <DepthRim.Settings.HullCreak>船殼承壓聲頻率：{0}</DepthRim.Settings.HullCreak>
+  <DepthRim.WatertightDoor.Sealed>淹水側（{0}）：沒有潛水服的殖民者不會通過</DepthRim.WatertightDoor.Sealed>
+  <DepthRim.WatertightDoor.Open>兩側都可通行（最深 {0}）</DepthRim.WatertightDoor.Open>
+  <DepthRim.IceShaft.TooDeep>下方的海洋是{0}（{1}）：升降井到不了這麼深。潛水服只撐得住淺海與變溫層。</DepthRim.IceShaft.TooDeep>
+  <DepthRim.IceShaft.Below>下方海洋：{0}</DepthRim.IceShaft.Below>
+  <DepthRim.Readout.WaterLevel>水位（{0}）</DepthRim.Readout.WaterLevel>
+  <DepthRim.Readout.WaterLevelOpen>開放水域（{0}）</DepthRim.Readout.WaterLevelOpen>
+
+</LanguageData>

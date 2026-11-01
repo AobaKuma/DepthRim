@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 艙室層著色器（DepthRim.SectionLayer_WaterVolume，只畫密閉艙室裡的積水）。1.7（Waylith）從 1.7/Shaders 讀 GLSL 原始碼並在執行期編譯；
+       檔名全域共用，所以加 DepthRim_ 前綴。頂點著色器直接沿用原版 MapWorldUV.vert.glsl（世界座標 UV）。
+       開深度測試、不寫深度：岩體與牆（Building 高度，比水高）會擋住水，Pawn 也畫在水上面。 -->
+  <ShaderDef>
+    <defName>DepthRim_WaterVolume</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MapWorldUV.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>DepthRim_WaterVolume.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>2950</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_RippleTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+
+  <ShaderTypeDef>
+    <defName>DepthRim_WaterVolume</defName>
+    <shaderPath>Map/DepthRim_WaterVolume</shaderPath>
+  </ShaderTypeDef>
+
+  <!-- 外海層著色器（DepthRim.SectionLayer_WaterOuter）。排在原版迷霧（FogOfWar 3175）之後、光照暗化（Darkness 3180）之前：
+       蓋住迷霧，但夜色與燈光仍會套用在水上。關閉深度測試，開放水域裡的岩體、建築、Pawn 都被水蒙住。 -->
+  <ShaderDef>
+    <defName>DepthRim_WaterOuter</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MapWorldUV.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>DepthRim_WaterOuter.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthTest>false</depthTest>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3177</renderQueue>
+      <textureWrapOverrides>
+        <li>
+          <key>_RippleTex</key>
+          <value>Repeat</value>
+        </li>
+      </textureWrapOverrides>
+    </shaderProgram>
+  </ShaderDef>
+
+  <ShaderTypeDef>
+    <defName>DepthRim_WaterOuter</defName>
+    <shaderPath>Map/DepthRim_WaterOuter</shaderPath>
+  </ShaderTypeDef>
+
+  <!-- 水位或房間改變時標記需要重建的區塊。 -->
+  <MapMeshFlagDef>
+    <defName>DepthRim_Water</defName>
+  </MapMeshFlagDef>
+
+  <!-- 深淵背景著色器（二期 P2-10，DepthRim.SectionLayer_AbyssBackdrop）。
+       畫在地形之下（BelowTerrain），不透明：深淵格沒有地形貼圖，看到的就是這一層。
+       不寫深度、不加深度測試，讓上方的水、崖壁與 Pawn 正常蓋過去。
+       **defName 必須等於 GLSL 檔名（去掉 .frag.glsl）**：Waylith 用檔名註冊、用 defName 查詢
+       （實測 defName = DepthRim_AbyssBackdrop、檔名 DepthRim_Abyss 時會噴
+        「shader 'DepthRim_Abyss' not registered」並退回預設著色器）。
+       與同名地形 DepthRim_Abyss 不衝突：Def 的型別不同，查詢時用 DefDatabase<ShaderTypeDef>。 -->
+  <ShaderDef>
+    <defName>DepthRim_Abyss</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MapWorldUV.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>DepthRim_Abyss.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>false</transparent>
+      <depthTest>false</depthTest>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>2600</renderQueue>
+    </shaderProgram>
+  </ShaderDef>
+
+  <ShaderTypeDef>
+    <defName>DepthRim_Abyss</defName>
+    <shaderPath>Map/DepthRim_Abyss</shaderPath>
+  </ShaderTypeDef>
+
+</Defs>

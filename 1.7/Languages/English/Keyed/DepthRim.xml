@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim.DepthTier.Shallow>shallows</DepthRim.DepthTier.Shallow>
+  <DepthRim.DepthTier.Thermocline>thermocline</DepthRim.DepthTier.Thermocline>
+  <DepthRim.DepthTier.Deep>deep sea</DepthRim.DepthTier.Deep>
+  <DepthRim.DepthTier.Seabed>abyssal seabed</DepthRim.DepthTier.Seabed>
+
+  <DepthRim.Pump.OpenWater>Cannot drain: this area is open to the ocean.</DepthRim.Pump.OpenWater>
+  <DepthRim.Pump.RoomLevel>Compartment water level: {0}</DepthRim.Pump.RoomLevel>
+  <DepthRim.DivingAir.Label>Air supply</DepthRim.DivingAir.Label>
+  <DepthRim.DivingAir.Inspect>Air: {0} ({1})</DepthRim.DivingAir.Inspect>
+  <DepthRim.Overlay.Toggle>Show water levels.</DepthRim.Overlay.Toggle>
+
+  <DepthRim.Debug.WaterTier>Water visual tier: {0}</DepthRim.Debug.WaterTier>
+  <DepthRim.Debug.WaterMaterialsReset>Water materials rebuilt.</DepthRim.Debug.WaterMaterialsReset>
+
+  <DepthRim.Settings.Category>DepthRim</DepthRim.Settings.Category>
+  <DepthRim.Settings.Particles>Suspended particles</DepthRim.Settings.Particles>
+  <DepthRim.Settings.ParticlesTip>Marine snow, bioluminescence and seabed sediment haze. Turning this off saves frame time; water colour and ripples are unaffected.</DepthRim.Settings.ParticlesTip>
+  <DepthRim.Settings.Hints>Dark-water hints</DepthRim.Settings.Hints>
+  <DepthRim.Settings.HintsTip>Draw a pale cyan outline for your own pawns standing in murky water (enemies and wild animals never get one).</DepthRim.Settings.HintsTip>
+  <DepthRim.Settings.HintOpacity>Hint strength: {0}</DepthRim.Settings.HintOpacity>
+  <DepthRim.Settings.Murk>Murkiness: {0}</DepthRim.Settings.Murk>
+  <DepthRim.Settings.Ambient>Daylight reach: {0}</DepthRim.Settings.Ambient>
+  <DepthRim.Settings.LampRadius>Head lamp radius: {0}</DepthRim.Settings.LampRadius>
+  <DepthRim.Settings.LampRadiusDef>per apparel</DepthRim.Settings.LampRadiusDef>
+  <DepthRim.Settings.AudioHeader>Underwater audio</DepthRim.Settings.AudioHeader>
+  <DepthRim.Settings.Muffle>Underwater muffling: {0}</DepthRim.Settings.Muffle>
+  <DepthRim.Settings.Breathing>Diver breathing and bubbles</DepthRim.Settings.Breathing>
+  <DepthRim.Settings.HullCreak>Hull creak frequency: {0}</DepthRim.Settings.HullCreak>
+  <DepthRim.WatertightDoor.Sealed>Flooded side ({0}): colonists without a diving suit will not pass</DepthRim.WatertightDoor.Sealed>
+  <DepthRim.WatertightDoor.Open>Both sides passable (deepest {0})</DepthRim.WatertightDoor.Open>
+  <DepthRim.IceShaft.TooDeep>The ocean below is {0} ({1}): too deep for an ice shaft. Diving suits only handle shallow and mid-depth water.</DepthRim.IceShaft.TooDeep>
+  <DepthRim.IceShaft.Below>Ocean below: {0}</DepthRim.IceShaft.Below>
+  <DepthRim.Readout.WaterLevel>Water level ({0})</DepthRim.Readout.WaterLevel>
+  <DepthRim.Readout.WaterLevelOpen>Open water ({0})</DepthRim.Readout.WaterLevelOpen>
+
+</LanguageData>

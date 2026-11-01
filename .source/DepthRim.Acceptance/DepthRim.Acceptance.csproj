@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    DepthRim 遊戲內驗收測試（RimWorld 1.7），做法比照 DMSE.BVRAcceptance。
+    建置成獨立組件，只在 run.ps1 執行期間複製進 1.7/Assemblies，結束後移除。
+    遊戲沒有以 -depthrim-acceptance=<輸出資料夾> 啟動時什麼都不做。這個 DLL 絕對不要隨模組發佈。
+  -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>DepthRim.Acceptance</RootNamespace>
+    <AssemblyName>DepthRim.Acceptance</AssemblyName>
+    <OutputPath>$(MSBuildThisFileDirectory)bin\</OutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <LangVersion>10.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <DebugType>none</DebugType>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <RimWorldDir Condition="'$(RimWorldDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\..\</RimWorldDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="3.0.0-rc.2" ExcludeAssets="runtime" />
+    <Reference Include="DepthRim">
+      <HintPath>$(MSBuildThisFileDirectory)..\..\1.7\Assemblies\DepthRim.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DMSE">
+      <HintPath>$(RimWorldDir)Mods\_Dead-Man-Switch-Expedition\1.7\Assemblies\DMSE.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(RimWorldDir)Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityStubs">
+      <HintPath>$(RimWorldDir)UnityStubs.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Waylith">
+      <HintPath>$(RimWorldDir)Waylith.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

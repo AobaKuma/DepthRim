@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 排水泵（設計稿 §4.3）：抽乾所在的密閉艙室。原型借用原版貼圖。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_BilgePump</defName>
+    <label>bilge pump</label>
+    <description>An electric pump that drains water out of the sealed compartment it stands in. It cannot drain open water.</description>
+    <graphicData>
+      <texPath>Things/Building/Misc/MoisturePump</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <size>(1,1)</size>
+    <rotatable>false</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <fillPercent>0.3</fillPercent>
+    <designationCategory>Misc</designationCategory>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <costList>
+      <Steel>60</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>150</MaxHitPoints>
+      <WorkToBuild>1500</WorkToBuild>
+      <Flammability>0</Flammability>
+      <Mass>15</Mass>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>250</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="DepthRim.CompProperties_FloodPump">
+        <cellsPerSecond>2</cellsPerSecond>
+      </li>
+    </comps>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+  </ThingDef>
+
+  <!--
+    水密門：門的任一側水深到會淹過站著的人時，沒有潛水氣瓶、而且自己站在乾處的角色不會穿過去（徵召中不受限）。
+    關著時受損滲水只有一般牆的 1/4。原型借用原版自動門貼圖，染成冷灰。
+  -->
+  <ThingDef ParentName="DoorBase">
+    <defName>DepthRim_WatertightDoor</defName>
+    <label>watertight door</label>
+    <description>A heavy, gasketed steel door. When one side is flooded deeper than a person's head, colonists without a working diving suit will not walk through it on their own (drafted colonists still can). A damaged watertight door leaks far less than an ordinary wall.</description>
+    <thingClass>DepthRim.Building_WatertightDoor</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Door/Autodoor_Mover</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <color>(0.62, 0.68, 0.74)</color>
+      <damageData>
+        <enabled>false</enabled>
+      </damageData>
+    </graphicData>
+    <uiIconPath>Things/Building/Door/Autodoor_MenuIcon</uiIconPath>
+    <stuffCategories Inherit="False" />
+    <useStuffTerrainAffordance>false</useStuffTerrainAffordance>
+    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+    <costList>
+      <Steel>75</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>400</MaxHitPoints>
+      <WorkToBuild>1800</WorkToBuild>
+      <Flammability>0</Flammability>
+    </statBases>
+    <modExtensions>
+      <li Class="DepthRim.LeakResistanceExtension">
+        <leakFactor>0.25</leakFactor>
+        <pressureRating>Thermocline</pressureRating>
+      </li>
+    </modExtensions>
+  </ThingDef>
+
+  <!--
+    抗壓水密牆（貼圖 Textures/Thing/ShipHull，4×4 連接圖集）：鋼與塑鋼構成的厚牆，耐打、受損時滲水只有一般牆的 1/10。
+    之後潛艇的耐壓船殼會讀 pressureRating。
+  -->
+  <ThingDef ParentName="Wall">
+    <defName>DepthRim_PressureHullWall</defName>
+    <label>pressure hull wall</label>
+    <description>A thick, ribbed wall of steel and plasteel built to hold back the sea. It barely leaks even when damaged, and can take a great deal of punishment.</description>
+    <graphicData>
+      <texPath>Thing/ShipHull</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <color>(205,210,216)</color>
+    </graphicData>
+    <uiIconPath>Things/Building/Linked/WallSmooth_MenuIcon</uiIconPath>
+    <uiIconPathsStuff Inherit="False" />
+    <stuffCategories Inherit="False" />
+    <costStuffCount>0</costStuffCount>
+    <costList>
+      <Steel>12</Steel>
+      <Plasteel>3</Plasteel>
+    </costList>
+    <useStuffTerrainAffordance>false</useStuffTerrainAffordance>
+    <statBases>
+      <MaxHitPoints>900</MaxHitPoints>
+      <WorkToBuild>600</WorkToBuild>
+      <Flammability>0</Flammability>
+    </statBases>
+    <building>
+      <isStuffableAirtight>false</isStuffableAirtight>
+      <isAirtight>true</isAirtight>
+      <paintable>false</paintable>
+      <relatedBuildCommands Inherit="False">
+        <li>DepthRim_WatertightDoor</li>
+        <li>DepthRim_BilgePump</li>
+      </relatedBuildCommands>
+    </building>
+    <modExtensions>
+      <li Class="DepthRim.LeakResistanceExtension">
+        <leakFactor>0.1</leakFactor>
+        <pressureRating>Seabed</pressureRating>
+      </li>
+    </modExtensions>
+  </ThingDef>
+
+  <!-- 潛水服（設計稿 §4.2）：氧氣 12 小時，降低工作與移動效率，水壓抗性 +1。原型借用 Odyssey 真空服貼圖。 -->
+  <ThingDef ParentName="ApparelBase">
+    <defName>DepthRim_DivingSuit</defName>
+    <label>diving suit</label>
+    <description>A sealed, insulated diving suit with an integrated air tank. It keeps the wearer alive under the ice, but it is heavy and clumsy. The tank refills automatically whenever the wearer is out of the water.</description>
+    <techLevel>Industrial</techLevel>
+    <graphicData>
+      <texPath>Things/Pawn/Humanlike/Apparel/Vacsuit/Vacsuit</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.9</drawSize>
+    </graphicData>
+    <apparel>
+      <bodyPartGroups>
+        <li>FullHead</li>
+        <li>Torso</li>
+        <li>Neck</li>
+        <li>Shoulders</li>
+        <li>Arms</li>
+        <li>Legs</li>
+      </bodyPartGroups>
+      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/Vacsuit/Vacsuit</wornGraphicPath>
+      <layers>
+        <li>Middle</li>
+        <li>Shell</li>
+        <li>Overhead</li>
+      </layers>
+      <tags>
+        <li>DepthRim_Diving</li>
+      </tags>
+      <soundWear>Wear_PowerArmor</soundWear>
+      <soundRemove>Remove_PowerArmor</soundRemove>
+    </apparel>
+    <costList>
+      <Steel>70</Steel>
+      <Cloth>40</Cloth>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>160</MaxHitPoints>
+      <WorkToMake>18000</WorkToMake>
+      <Mass>14</Mass>
+      <Flammability>0.4</Flammability>
+      <ArmorRating_Sharp>0.15</ArmorRating_Sharp>
+      <ArmorRating_Blunt>0.15</ArmorRating_Blunt>
+      <Insulation_Cold>60</Insulation_Cold>
+      <EquipDelay>10</EquipDelay>
+    </statBases>
+    <equippedStatOffsets>
+      <MoveSpeed>-0.8</MoveSpeed>
+      <WorkSpeedGlobal>-0.25</WorkSpeedGlobal>
+      <DepthRim_PressureResistance>1</DepthRim_PressureResistance>
+    </equippedStatOffsets>
+    <comps>
+      <li Class="DepthRim.CompProperties_DivingAir">
+        <capacityTicks>30000</capacityTicks>
+        <refillPerTick>10</refillPerTick>
+      </li>
+      <!-- 頭燈（實作指南 B.3）：穿著者在水下時在腳下註冊原版自訂光源，水體外海層據此提亮 -->
+      <li Class="DepthRim.CompProperties_SuitLamp">
+        <glowRadius>4.5</glowRadius>
+        <glowColor>(200,225,255)</glowColor>
+        <overlightRadius>1.5</overlightRadius>
+        <downedOffTicks>600</downedOffTicks>
+      </li>
+    </comps>
+    <recipeMaker>
+      <unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+      <workSkill>Crafting</workSkill>
+      <effectWorking>Smith</effectWorking>
+      <soundWorking>Recipe_Smith</soundWorking>
+      <recipeUsers>
+        <li>TableMachining</li>
+      </recipeUsers>
+    </recipeMaker>
+    <thingCategories>
+      <li>ApparelArmor</li>
+    </thingCategories>
+  </ThingDef>
+
+</Defs>

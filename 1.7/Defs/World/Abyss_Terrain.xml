@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    深淵地板（二期 P2-10）：不畫地形貼圖，露出地板之下的深淵背景（SectionLayer_AbyssBackdrop）。
+    原版 SectionLayer_Terrain 會跳過 dontRender 的格子，所以這裡不需要 texturePath。
+    崖壁邊緣：原版 SectionLayer_TerrainEdges 會在「有 spaceEdgeGraphicData 的地形」與 dontRender 格的交界畫崖壁。
+    原版岩石地形（TerrainDefGenerator_Stone）已經自動帶有 Odyssey 小行星崖壁；冰洋海床改用下面兩個
+    DepthRim 自己的海床地形，同樣接上 Odyssey 的崖壁貼圖（不 patch 原版碎石／沙地，避免影響地表地圖）。
+  -->
+  <TerrainDef>
+    <defName>DepthRim_Abyss</defName>
+    <label>abyss</label>
+    <description>A drop with no visible bottom. There is no ground here, only darkness going down.</description>
+    <dontRender>true</dontRender>
+    <color>(0.02, 0.03, 0.05)</color>
+    <!-- 原版 ErrorCheckAllDefs 要求每個 TerrainDef 都有 fertility（沒有會噴 Config error）；深淵不可能種東西。 -->
+    <fertility>0</fertility>
+    <passability>Impassable</passability>
+    <natural>true</natural>
+    <holdSnowOrSand>false</holdSnowOrSand>
+    <avoidWander>true</avoidWander>
+    <exposesToVacuum>false</exposesToVacuum>
+    <affordances>
+      <li>Bridgeable</li>
+    </affordances>
+    <tags>
+      <li>DepthRim_Abyss</li>
+    </tags>
+  </TerrainDef>
+
+  <!-- 冰洋海床（二期 P2-10）：外觀沿用原版碎石／沙地，另外帶 Odyssey 小行星的崖壁貼圖，
+       所以緊鄰深淵時會畫出往下的崖壁。不能直接繼承原版 Gravel／Sand（它們沒有 Name 屬性可繼承，
+       而且改原版會連地表地圖一起改到）。 -->
+  <TerrainDef Name="DepthRim_SeabedBase" ParentName="NaturalTerrainBase" Abstract="True">
+    <edgeType>FadeRough</edgeType>
+    <statBases>
+      <Beauty>-3</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+      <Cleanliness>-1</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>Diggable</li>
+    </affordances>
+    <takeFootprints>True</takeFootprints>
+    <spaceEdgeGraphicData>
+      <OShapeTexPath>Terrain/Surfaces/Asteroid/BorderInside/AsteroidBorderInside_OShape</OShapeTexPath>
+      <UShapeTexPath>Terrain/Surfaces/Asteroid/BorderInside/AsteroidBorderInside_UShape</UShapeTexPath>
+      <CornerInnerTexPath>Terrain/Surfaces/Asteroid/BorderInside/AsteroidBorderInside_CornerInner</CornerInnerTexPath>
+      <CornerOuterTexPath>Terrain/Surfaces/Asteroid/BorderInside/AsteroidBorderInside_CornerOuter</CornerOuterTexPath>
+      <FlatTexPath>Terrain/Surfaces/Asteroid/BorderInside/AsteroidBorderInside_Flat</FlatTexPath>
+      <LoopLeftTexPath>Terrain/Surfaces/Asteroid/AsteroidEdge_Left</LoopLeftTexPath>
+      <LoopRightTexPath>Terrain/Surfaces/Asteroid/AsteroidEdge_Right</LoopRightTexPath>
+      <LoopSingleTexPath>Terrain/Surfaces/Asteroid/AsteroidEdge_Single</LoopSingleTexPath>
+      <LoopTexPaths>
+        <li>Terrain/Surfaces/Asteroid/Loop/AsteroidEdge_Loop1</li>
+        <li>Terrain/Surfaces/Asteroid/Loop/AsteroidEdge_Loop2</li>
+        <li>Terrain/Surfaces/Asteroid/Loop/AsteroidEdge_Loop3</li>
+        <li>Terrain/Surfaces/Asteroid/Loop/AsteroidEdge_Loop4</li>
+        <li>Terrain/Surfaces/Asteroid/Loop/AsteroidEdge_Loop5</li>
+      </LoopTexPaths>
+      <!-- 崖壁偏冷、偏暗，和水下的色調一致 -->
+      <overrideColor>(0.62, 0.68, 0.74)</overrideColor>
+    </spaceEdgeGraphicData>
+  </TerrainDef>
+
+  <TerrainDef ParentName="DepthRim_SeabedBase">
+    <defName>DepthRim_Seabed_Gravel</defName>
+    <label>seabed gravel</label>
+    <description>Stony sediment on the ocean floor beneath the ice.</description>
+    <texturePath>Terrain/Surfaces/Gravel</texturePath>
+    <renderPrecedence>320</renderPrecedence>
+    <pathCost>2</pathCost>
+    <scatterType>Rocky</scatterType>
+    <fertility>0</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="DepthRim_SeabedBase">
+    <defName>DepthRim_Seabed_Sand</defName>
+    <label>seabed sand</label>
+    <description>Fine sand drifted across the ocean floor.</description>
+    <texturePath>Terrain/Surfaces/Sand</texturePath>
+    <renderPrecedence>350</renderPrecedence>
+    <pathCost>4</pathCost>
+    <scatterType>SoftDry</scatterType>
+    <fertility>0</fertility>
+  </TerrainDef>
+
+  <!-- 海床淤泥：海藻林與珊瑚礁的肥沃底質（海藻長在上面）。 -->
+  <TerrainDef ParentName="DepthRim_SeabedBase">
+    <defName>DepthRim_Seabed_Silt</defName>
+    <label>seabed silt</label>
+    <description>Soft, dark silt rich in organic matter. Kelp takes root in it.</description>
+    <texturePath>Terrain/Surfaces/Soil</texturePath>
+    <color>(0.62, 0.66, 0.62)</color>
+    <renderPrecedence>340</renderPrecedence>
+    <pathCost>6</pathCost>
+    <scatterType>SoftDry</scatterType>
+    <fertility>1.0</fertility>
+  </TerrainDef>
+
+</Defs>

@@ -1,0 +1,9 @@
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\bin\DepthRim.Acceptance.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\DepthRim.Acceptance.csproj.AssemblyReference.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\DepthRim.Acceptance.GeneratedMSBuildEditorConfig.editorconfig
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\DepthRim.Acceptance.AssemblyInfoInputs.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\DepthRim.Acceptance.AssemblyInfo.cs
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\DepthRim.Acceptance.csproj.CoreCompileInputs.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\DepthRim.Acceptance.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\refint\DepthRim.Acceptance.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Acceptance\obj\Release\ref\DepthRim.Acceptance.dll

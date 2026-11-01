@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海洋層的七種生態區（使用者定案：依正上方地表決定，見 DepthRim.OceanBiomeSelector）。
+    共同點：室外就是水（WaterMapExtension 啟用 MapComponent_Flooding）、沒有天光（地下天氣）、不能走出地圖。
+    各自的水深層級（depthTier）決定水壓、水體視覺與深淵；升降井只能通到淺海與變溫層的生態區。
+  -->
+  <BiomeDef Name="DepthRim_OceanBiomeBase" ParentName="Biome_Underground" Abstract="True">
+    <workerClass>DepthRim.BiomeWorker_Ocean</workerClass>
+    <generatesNaturally>false</generatesNaturally>
+    <canAutoChoose>false</canAutoChoose>
+    <canExitMap>false</canExitMap>
+    <allowRoads>false</allowRoads>
+    <allowRivers>false</allowRivers>
+    <allowFarmingCamps>false</allowFarmingCamps>
+    <hasVirtualPlants>false</hasVirtualPlants>
+    <wildAnimalsCanWanderInto>false</wildAnimalsCanWanderInto>
+    <noAmbientWind>true</noAmbientWind>
+    <soundsAmbient>
+      <li>DepthRim_Ambient_Shallow</li>
+      <li>DepthRim_Ambient_Thermocline</li>
+      <li>DepthRim_Ambient_Deep</li>
+      <li>DepthRim_Ambient_Seabed</li>
+    </soundsAmbient>
+    <hasBedrock>true</hasBedrock>
+    <animalDensity>0</animalDensity>
+    <maxFishPopulation>0</maxFishPopulation>
+    <!-- 海底天氣（數值同原版地下天氣，只是名稱顯示「海底」） -->
+    <baseWeatherCommonalities Inherit="False">
+      <DepthRim_Undersea>1</DepthRim_Undersea>
+    </baseWeatherCommonalities>
+    <diseases Inherit="False" />
+  </BiomeDef>
+
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_PolarIceCap</defName>
+    <label>polar ice cap</label>
+    <description>A lightless ocean sealed beneath kilometers of polar ice. Cold and mineral-rich, it lies just under the ice shelf, within reach of an ice shaft.</description>
+    <constantOutdoorTemperature>-2</constantOutdoorTemperature>
+    <plantDensity>0</plantDensity>
+    <forceRockTypes>
+      <li>Granite</li>
+      <li>Slate</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>-999</min>
+        <max>0.45</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>0.45</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Shallow</depthTier>
+        <hilliness>
+          <li>LargeHills</li>
+          <li>Mountainous</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_KelpForest</defName>
+    <label>kelp forest</label>
+    <description>Cool coastal water thick with towering kelp. The silt floor is fertile, and the kelp can be harvested for food.</description>
+    <constantOutdoorTemperature>8</constantOutdoorTemperature>
+    <plantDensity>0.55</plantDensity>
+    <wildPlants>
+      <DepthRim_Kelp>1</DepthRim_Kelp>
+    </wildPlants>
+    <forceRockTypes>
+      <li>Sandstone</li>
+      <li>Granite</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>-999</min>
+        <max>0.3</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Silt</terrain>
+        <min>0.3</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Shallow</depthTier>
+        <hilliness>
+          <li>SmallHills</li>
+          <li>LargeHills</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_ShallowReef</defName>
+    <label>shallow coral reef</label>
+    <description>Warm, shallow water over a sprawling coral reef. Pale coral ridges can be quarried for building stone.</description>
+    <constantOutdoorTemperature>24</constantOutdoorTemperature>
+    <plantDensity>0.12</plantDensity>
+    <wildPlants>
+      <DepthRim_Kelp>0.3</DepthRim_Kelp>
+    </wildPlants>
+    <forceRockTypes>
+      <li>DepthRim_CoralRock</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>-999</min>
+        <max>0.55</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Silt</terrain>
+        <min>0.55</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Shallow</depthTier>
+        <hilliness>
+          <li>LargeHills</li>
+          <li>Mountainous</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_DeepReef</defName>
+    <label>deep coral reef</label>
+    <description>Cold, dim water where dark coral grows in slow, massive mounds below the reach of sunlight.</description>
+    <constantOutdoorTemperature>6</constantOutdoorTemperature>
+    <plantDensity>0</plantDensity>
+    <forceRockTypes>
+      <li>DepthRim_DarkCoralRock</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>-999</min>
+        <max>0.55</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Silt</terrain>
+        <min>0.55</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Thermocline</depthTier>
+        <hilliness>
+          <li>LargeHills</li>
+          <li>Mountainous</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_SeabedPlain</defName>
+    <label>seabed plain</label>
+    <description>A vast, flat expanse of sediment on the deep sea floor. Few rocks break the silence.</description>
+    <constantOutdoorTemperature>3</constantOutdoorTemperature>
+    <plantDensity>0</plantDensity>
+    <forceRockTypes>
+      <li>Marble</li>
+      <li>Slate</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>-999</min>
+        <max>0.45</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>0.45</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Deep</depthTier>
+        <hilliness>
+          <li>Flat</li>
+          <li>SmallHills</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_HydrothermalField</defName>
+    <label>hydrothermal vent field</label>
+    <description>A field of hydrothermal vents on the sea floor. The water is warm, the rock is fractured, and the vents can be tapped for geothermal power.</description>
+    <constantOutdoorTemperature>18</constantOutdoorTemperature>
+    <plantDensity>0</plantDensity>
+    <forceRockTypes>
+      <li>Slate</li>
+      <li>Granite</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>-999</min>
+        <max>0.45</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>0.45</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Seabed</depthTier>
+        <hilliness>
+          <li>LargeHills</li>
+          <li>Mountainous</li>
+        </hilliness>
+        <hydrothermalVents>2~4</hydrothermalVents>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_AbyssalTrench</defName>
+    <label>abyssal trench</label>
+    <description>The edge of an abyssal trench. Sheer cliffs fall away into bottomless dark.</description>
+    <constantOutdoorTemperature>2</constantOutdoorTemperature>
+    <plantDensity>0</plantDensity>
+    <forceRockTypes>
+      <li>Slate</li>
+      <li>Granite</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>-999</min>
+        <max>0.45</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>0.45</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Seabed</depthTier>
+        <hilliness>
+          <li>Mountainous</li>
+        </hilliness>
+        <abyssBias>0.15</abyssBias>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+
+</Defs>

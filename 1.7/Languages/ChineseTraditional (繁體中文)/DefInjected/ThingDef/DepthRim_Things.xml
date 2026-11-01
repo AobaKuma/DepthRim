@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_IceShaft.label>升降井</DepthRim_IceShaft.label>
+  <DepthRim_IceShaft.description>裝有貨運升降機的深井，通往地表之下的海洋。只能通到淺海或變溫層。</DepthRim_IceShaft.description>
+
+  <DepthRim_IceShaftBottom.label>井底著陸點</DepthRim_IceShaftBottom.label>
+  <DepthRim_IceShaftBottom.description>升降井的井底平台。籠子會升回地表基地。</DepthRim_IceShaftBottom.description>
+
+  <DepthRim_WatertightDoor.label>水密門</DepthRim_WatertightDoor.label>
+  <DepthRim_WatertightDoor.description>加了密封墊的厚重鋼門。門的任一側水深超過頭頂時，沒有可用潛水服的殖民者不會自己走過去（徵召中仍然可以）。受損的水密門滲水量遠低於一般牆。</DepthRim_WatertightDoor.description>
+  <DepthRim_BilgePump.label>艙底排水泵</DepthRim_BilgePump.label>
+  <DepthRim_BilgePump.description>把所在密閉艙室的積水抽出去的電動泵。抽不了和外海相通的開放水域。</DepthRim_BilgePump.description>
+
+  <DepthRim_DivingSuit.label>潛水服</DepthRim_DivingSuit.label>
+  <DepthRim_DivingSuit.description>密封隔熱的潛水服，附整合式氧氣瓶。讓穿著者在冰層下活下來，但笨重遲緩。離開水面時氧氣瓶會自動回充。</DepthRim_DivingSuit.description>
+
+  <DepthRim_PressureHullWall.label>抗壓水密牆</DepthRim_PressureHullWall.label>
+  <DepthRim_PressureHullWall.description>鋼與塑鋼構成的厚實肋牆，專門用來擋住海水。即使受損也幾乎不滲水，而且非常耐打。</DepthRim_PressureHullWall.description>
+  <DepthRim_CoralRock.label>珊瑚岩</DepthRim_CoralRock.label>
+  <DepthRim_CoralRock.description>淺色礁珊瑚經過數百年長成的堅硬岩脊。可以開採並切成輕巧、好看的石磚。</DepthRim_CoralRock.description>
+  <DepthRim_ChunkCoral.label>珊瑚石塊</DepthRim_ChunkCoral.label>
+  <DepthRim_ChunkCoral.description>一塊礁珊瑚。可以切成珊瑚磚。</DepthRim_ChunkCoral.description>
+  <DepthRim_BlocksCoral.label>珊瑚磚</DepthRim_BlocksCoral.label>
+  <DepthRim_BlocksCoral.description>切好的礁珊瑚磚。輕巧好看，但比真正的石頭軟。</DepthRim_BlocksCoral.description>
+  <DepthRim_BlocksCoral.stuffProps.stuffAdjective>珊瑚</DepthRim_BlocksCoral.stuffProps.stuffAdjective>
+  <DepthRim_DarkCoralRock.label>深色珊瑚岩</DepthRim_DarkCoralRock.label>
+  <DepthRim_DarkCoralRock.description>生長緩慢的冷水珊瑚堆成的巨大丘塊，像玄武岩一樣深色而緻密。可以開採並切成厚重的石磚。</DepthRim_DarkCoralRock.description>
+  <DepthRim_ChunkDarkCoral.label>深色珊瑚石塊</DepthRim_ChunkDarkCoral.label>
+  <DepthRim_ChunkDarkCoral.description>一塊緻密的深色珊瑚。可以切成厚重的珊瑚磚。</DepthRim_ChunkDarkCoral.description>
+  <DepthRim_BlocksDarkCoral.label>深色珊瑚磚</DepthRim_BlocksDarkCoral.label>
+  <DepthRim_BlocksDarkCoral.description>緻密冷水珊瑚切成的石磚。很重，也非常堅固。</DepthRim_BlocksDarkCoral.description>
+  <DepthRim_BlocksDarkCoral.stuffProps.stuffAdjective>深色珊瑚</DepthRim_BlocksDarkCoral.stuffProps.stuffAdjective>
+  <DepthRim_Kelp.label>海藻</DepthRim_Kelp.label>
+  <DepthRim_Kelp.description>扎根在淤泥裡、隨水擺動的高大海藻。不需要日光也能在冰冷的近岸海水裡生長，可以採收當作食物。</DepthRim_Kelp.description>
+  <DepthRim_RawKelp.label>生海藻</DepthRim_RawKelp.label>
+  <DepthRim_RawKelp.description>剛採收的海藻。又鹹又有嚼勁，生吃可以，煮過更好。</DepthRim_RawKelp.description>
+
+</LanguageData>

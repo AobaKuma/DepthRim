@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_WaterTier_Shallow.label>淺海</DepthRim_WaterTier_Shallow.label>
+  <DepthRim_WaterTier_Shallow.description>冰棚邊緣，陽光還穿得透冰層照到海底。大而緩慢的波紋與光柱。</DepthRim_WaterTier_Shallow.description>
+
+  <DepthRim_WaterTier_Thermocline.label>變溫層</DepthRim_WaterTier_Thermocline.label>
+  <DepthRim_WaterTier_Thermocline.description>冷水與暖水交會的地方：水面像在搖晃，隱約有漂浮物的微光。</DepthRim_WaterTier_Thermocline.description>
+
+  <DepthRim_WaterTier_Deep.label>深海</DepthRim_WaterTier_Deep.label>
+  <DepthRim_WaterTier_Deep.description>日光完全到不了。開燈照得到飄落的海洋雪；不開燈只剩稀疏的生物光。</DepthRim_WaterTier_Deep.description>
+
+  <DepthRim_WaterTier_Seabed.label>深海海床</DepthRim_WaterTier_Seabed.label>
+  <DepthRim_WaterTier_Seabed.description>海的最底部：細沉積物懸在水裡、幾乎看不到地面，只有幾點漂動的冷光。</DepthRim_WaterTier_Seabed.description>
+
+</LanguageData>

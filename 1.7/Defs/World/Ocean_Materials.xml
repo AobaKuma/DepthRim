@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海洋生態區的材料：珊瑚岩（天然岩體，使用者定案）、海床淤泥、海藻。
+    珊瑚岩只由生態區的 forceRockTypes 生成（mineablePreventNaturalRockOnSurface = 不會隨機出現在地表地圖）。
+    貼圖：Textures/Thing/coralWall（淺色，淺珊瑚礁）、coralWallDark（深色，深珊瑚礁），4×4 連接圖集，灰階由 color 上色。
+  -->
+
+  <!-- ================ 淺色珊瑚岩 ================ -->
+
+  <ThingDef ParentName="RockBase" Name="DepthRim_CoralRockBase">
+    <defName>DepthRim_CoralRock</defName>
+    <label>coral rock</label>
+    <description>A ridge of pale reef coral, grown over centuries into solid stone. It can be quarried and cut into light, decorative blocks.</description>
+    <graphicData>
+      <texPath>Thing/coralWall</texPath>
+      <color>(232,178,160)</color>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>500</MaxHitPoints>
+      <Beauty>1</Beauty>
+    </statBases>
+    <building>
+      <mineableThing>DepthRim_ChunkCoral</mineableThing>
+      <mineableDropChance>0.25</mineableDropChance>
+      <mineableYieldWasteable>false</mineableYieldWasteable>
+      <mineablePreventNaturalRockOnSurface>true</mineablePreventNaturalRockOnSurface>
+    </building>
+  </ThingDef>
+
+  <ThingDef ParentName="ChunkRockBase">
+    <defName>DepthRim_ChunkCoral</defName>
+    <label>coral chunk</label>
+    <description>A chunk of reef coral. Can be cut into usable coral blocks.</description>
+    <graphicData>
+      <color>(232,178,160)</color>
+    </graphicData>
+    <statBases>
+      <Mass>16</Mass>
+    </statBases>
+    <soundDrop>ChunkRock_Drop</soundDrop>
+    <butcherProducts>
+      <DepthRim_BlocksCoral>20</DepthRim_BlocksCoral>
+    </butcherProducts>
+  </ThingDef>
+
+  <ThingDef ParentName="StoneBlocksBase">
+    <defName>DepthRim_BlocksCoral</defName>
+    <label>coral blocks</label>
+    <description>Blocks of cut reef coral. Light and pretty, but softer than true stone.</description>
+    <graphicData>
+      <color>(232,178,160)</color>
+    </graphicData>
+    <statBases>
+      <Mass>0.8</Mass>
+      <Beauty>1</Beauty>
+    </statBases>
+    <stuffProps>
+      <color>(232,178,160)</color>
+      <soundImpactBullet>BulletImpact_Ground</soundImpactBullet>
+      <soundMeleeHitSharp>MeleeHit_Stone</soundMeleeHitSharp>
+      <soundMeleeHitBlunt>MeleeHit_Stone</soundMeleeHitBlunt>
+      <soundImpactMelee>Pawn_Melee_Punch_HitBuilding_Stone</soundImpactMelee>
+      <stuffAdjective>coral</stuffAdjective>
+      <statFactors>
+        <MaxHitPoints>1.2</MaxHitPoints>
+        <Beauty>1.3</Beauty>
+        <WorkToBuild>0.9</WorkToBuild>
+      </statFactors>
+      <canSuggestUseDefaultStuff>true</canSuggestUseDefaultStuff>
+    </stuffProps>
+  </ThingDef>
+
+  <RecipeDef ParentName="MakeStoneBlocksBase">
+    <defName>DepthRim_Make_BlocksCoral</defName>
+    <label>make coral blocks</label>
+    <description>Cuts coral chunks into usable blocks.</description>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>DepthRim_ChunkCoral</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>DepthRim_ChunkCoral</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <DepthRim_BlocksCoral>20</DepthRim_BlocksCoral>
+    </products>
+  </RecipeDef>
+
+  <!-- ================ 深色珊瑚岩 ================ -->
+
+  <ThingDef ParentName="RockBase">
+    <defName>DepthRim_DarkCoralRock</defName>
+    <label>dark coral rock</label>
+    <description>A massive mound of slow-growing cold-water coral, dark and dense as basalt. It can be quarried and cut into heavy blocks.</description>
+    <graphicData>
+      <texPath>Thing/coralWallDark</texPath>
+      <color>(150,118,140)</color>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>800</MaxHitPoints>
+    </statBases>
+    <building>
+      <mineableThing>DepthRim_ChunkDarkCoral</mineableThing>
+      <mineableDropChance>0.25</mineableDropChance>
+      <mineableYieldWasteable>false</mineableYieldWasteable>
+      <mineablePreventNaturalRockOnSurface>true</mineablePreventNaturalRockOnSurface>
+    </building>
+  </ThingDef>
+
+  <ThingDef ParentName="ChunkRockBase">
+    <defName>DepthRim_ChunkDarkCoral</defName>
+    <label>dark coral chunk</label>
+    <description>A chunk of dense, dark coral. Can be cut into heavy coral blocks.</description>
+    <graphicData>
+      <color>(150,118,140)</color>
+    </graphicData>
+    <statBases>
+      <Mass>24</Mass>
+    </statBases>
+    <soundDrop>ChunkRock_Drop</soundDrop>
+    <butcherProducts>
+      <DepthRim_BlocksDarkCoral>20</DepthRim_BlocksDarkCoral>
+    </butcherProducts>
+  </ThingDef>
+
+  <ThingDef ParentName="StoneBlocksBase">
+    <defName>DepthRim_BlocksDarkCoral</defName>
+    <label>dark coral blocks</label>
+    <description>Blocks of dense cold-water coral. Heavy and very tough.</description>
+    <graphicData>
+      <color>(150,118,140)</color>
+    </graphicData>
+    <statBases>
+      <Mass>1.2</Mass>
+    </statBases>
+    <stuffProps>
+      <color>(150,118,140)</color>
+      <soundImpactBullet>BulletImpact_Ground</soundImpactBullet>
+      <soundMeleeHitSharp>MeleeHit_Stone</soundMeleeHitSharp>
+      <soundMeleeHitBlunt>MeleeHit_Stone</soundMeleeHitBlunt>
+      <soundImpactMelee>Pawn_Melee_Punch_HitBuilding_Stone</soundImpactMelee>
+      <stuffAdjective>dark coral</stuffAdjective>
+      <statFactors>
+        <MaxHitPoints>1.7</MaxHitPoints>
+        <WorkToBuild>1.1</WorkToBuild>
+      </statFactors>
+      <canSuggestUseDefaultStuff>true</canSuggestUseDefaultStuff>
+    </stuffProps>
+  </ThingDef>
+
+  <RecipeDef ParentName="MakeStoneBlocksBase">
+    <defName>DepthRim_Make_BlocksDarkCoral</defName>
+    <label>make dark coral blocks</label>
+    <description>Cuts dark coral chunks into usable blocks.</description>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>DepthRim_ChunkDarkCoral</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>DepthRim_ChunkDarkCoral</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <DepthRim_BlocksDarkCoral>20</DepthRim_BlocksDarkCoral>
+    </products>
+  </RecipeDef>
+
+  <!-- ================ 海藻 ================ -->
+  <!-- 原型借用原版草的貼圖並上色；TODO：專用海藻貼圖。光照下限 0：水下沒有天光也能長。 -->
+
+  <ThingDef ParentName="PlantBase">
+    <defName>DepthRim_Kelp</defName>
+    <label>kelp</label>
+    <description>Tall, swaying strands of kelp anchored to the silt. It grows without sunlight in the cold coastal water and can be harvested for food.</description>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <Nutrition>0.3</Nutrition>
+      <Beauty>2</Beauty>
+      <BeautyOutdoors>2</BeautyOutdoors>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Plant/Grass</texPath>
+      <graphicClass>Graphic_Random</graphicClass>
+      <color>(96,140,82)</color>
+    </graphicData>
+    <pathCost>14</pathCost>
+    <ingestible />
+    <plant>
+      <fertilityMin>0.3</fertilityMin>
+      <fertilitySensitivity>0.6</fertilitySensitivity>
+      <growDays>6</growDays>
+      <growMinGlow>0</growMinGlow>
+      <growOptimalGlow>0</growOptimalGlow>
+      <neverBlightable>true</neverBlightable>
+      <harvestWork>120</harvestWork>
+      <harvestYield>8</harvestYield>
+      <harvestTag>Standard</harvestTag>
+      <harvestedThingDef>DepthRim_RawKelp</harvestedThingDef>
+      <maxMeshCount>4</maxMeshCount>
+      <visualSizeRange>0.9~1.4</visualSizeRange>
+      <topWindExposure>0.3</topWindExposure>
+      <wildOrder>1</wildOrder>
+      <wildClusterRadius>4</wildClusterRadius>
+      <wildClusterWeight>15</wildClusterWeight>
+      <minGrowthTemperature>-2</minGrowthTemperature>
+      <maxGrowthTemperature>40</maxGrowthTemperature>
+      <purpose>Food</purpose>
+    </plant>
+  </ThingDef>
+
+  <ThingDef ParentName="PlantFoodRawBase">
+    <defName>DepthRim_RawKelp</defName>
+    <label>raw kelp</label>
+    <description>Freshly harvested kelp. Salty and chewy, but edible raw and better cooked.</description>
+    <possessionCount>10</possessionCount>
+    <graphicData>
+      <texPath>Things/Item/Resource/PlantFoodRaw/RawFungus</texPath>
+      <color>(110,150,90)</color>
+    </graphicData>
+    <statBases>
+      <MarketValue>0.9</MarketValue>
+    </statBases>
+    <ingestible>
+      <foodType>VegetableOrFruit</foodType>
+    </ingestible>
+    <comps>
+      <li Class="CompProperties_Rottable">
+        <daysToRotStart>10</daysToRotStart>
+        <rotDestroys>true</rotDestroys>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- 進水效果：受損牆或打開的門往艙室內側噴的水花（借用原版泡沫貼圖，染成淺青白）。 -->
+  <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+    <defName>DepthRim_LeakSpray</defName>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>Things/Mote/FoamSpray/Foam_A</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <color>(0.70, 0.88, 1.0, 0.85)</color>
+        <renderInstanced>true</renderInstanced>
+      </li>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>Things/Mote/FoamSpray/Foam_B</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <color>(0.70, 0.88, 1.0, 0.85)</color>
+        <renderInstanced>true</renderInstanced>
+      </li>
+    </randomGraphics>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.05</fadeInTime>
+    <solidTime>0.35</solidTime>
+    <fadeOutTime>0.45</fadeOutTime>
+    <growthRate>0.6</growthRate>
+  </FleckDef>
+</Defs>

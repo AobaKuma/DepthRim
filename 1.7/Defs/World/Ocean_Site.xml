@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 海洋層上的地圖：升降井下方的水下基地，或之後潛艇下錨的海床。
+       WorldObject_OceanSite 繼承 SpaceMapParent（本身沒有真空語意，真空來自生態區 inVacuum），
+       並在還有升降井出口或玩家建築時保留地圖。 -->
+  <WorldObjectDef>
+    <defName>DepthRim_OceanSite</defName>
+    <label>ocean site</label>
+    <description>A location on the ocean floor.</description>
+    <worldObjectClass>DepthRim.WorldObject_OceanSite</worldObjectClass>
+    <mapGenerator>DepthRim_Ocean</mapGenerator>
+    <canBePlayerHome>true</canBePlayerHome>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/Gravship</expandingIconTexture>
+    <expandingIconPriority>60</expandingIconPriority>
+    <!-- 必填：這個 WorldObjectDef 沒有 texture（沒有 Material），原版 ExpandingIconColor 會退回讀 Material.color 而 NullReference。
+         Odyssey 的 SpaceMapParent 定義也標註 required。 -->
+    <expandingIconColor>(140,210,240,255)</expandingIconColor>
+    <neverMultiSelect>true</neverMultiSelect>
+    <inspectorTabs>
+      <li>WITab_Terrain</li>
+      <li>WITab_Planet</li>
+    </inspectorTabs>
+  </WorldObjectDef>
+
+  <!-- 海底岩體與礦脈。用一般的 RocksFromGrid（只有岩體上方有岩頂），開放水域沒有屋頂：
+       冰層遠在上方，這些水域與外海相通（MapComponent_Flooding 視為開放水域）。
+       玩家要圍牆並蓋上人造屋頂才能形成密閉艙室。
+       不能設 isUnderground：原版會把整張地圖鋪滿厚岩頂、高度全設為 1（整片岩體），玩家永遠蓋不出密閉艙室。
+       沒有天光改由生態區的 Underground 天氣處理。
+       迷霧用 DepthRim_OceanFog（原版 Fog 需要玩家起點，非開局地圖會報錯）。 -->
+  <MapGeneratorDef>
+    <defName>DepthRim_Ocean</defName>
+    <label>ocean</label>
+    <forceCaves>true</forceCaves>
+    <disableCallAid>true</disableCallAid>
+    <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+    <genSteps>
+      <li>ElevationFertility</li>
+      <li>Terrain</li>
+      <li>RockChunks</li>
+      <li>RocksFromGrid</li>
+      <li>DepthRim_AbyssCarve</li>
+      <li>DepthRim_OceanVents</li>
+      <li>Plants</li>
+      <li>DepthRim_OceanFog</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <!-- 深淵區域（二期 P2-10）：順序排在岩石之後、迷霧之前，這樣迷霧是照「挖完之後」的地形揭開的。
+       只在深海／海床層級的地圖作用。 -->
+  <GenStepDef>
+    <defName>DepthRim_AbyssCarve</defName>
+    <order>1450</order>
+    <genStep Class="DepthRim.GenStep_AbyssCarve" />
+  </GenStepDef>
+
+  <!-- 熱液噴口區的熱液泉（數量來自生態區的 WaterMapExtension.hydrothermalVents，其他生態區為 0）。 -->
+  <GenStepDef>
+    <defName>DepthRim_OceanVents</defName>
+    <order>1460</order>
+    <genStep Class="DepthRim.GenStep_OceanVents" />
+  </GenStepDef>
+
+  <GenStepDef>
+    <defName>DepthRim_OceanFog</defName>
+    <order>1500</order>
+    <genStep Class="DepthRim.GenStep_OceanFog" />
+  </GenStepDef>
+
+</Defs>

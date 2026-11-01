@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 海底的「天氣」：沿用原版地下天氣的所有數值（無天空、無降水），只換名稱，右側讀數顯示「海底」而不是「地底」。 -->
+  <WeatherDef ParentName="Weather_Underground">
+    <defName>DepthRim_Undersea</defName>
+    <label>undersea</label>
+    <description>There is no weather on the sea floor, only the cold, dark water.</description>
+  </WeatherDef>
+
+</Defs>

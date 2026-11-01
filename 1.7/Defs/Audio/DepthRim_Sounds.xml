@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!--
+    DepthRim underwater audio (phase 2, P2-11). Clips live under Sounds/DepthRim/, sources and CC0 licences in Sounds/CREDITS.md.
+    Positional sounds keep canVacuumDampen = true (the default): DepthRim muffles them underwater the same way vanilla muffles them in vacuum.
+  -->
+
+  <!-- Hull under pressure: metal sheet hits pitched far down so they groan. -->
+  <SoundDef>
+    <defName>DepthRim_HullCreak</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>2</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/HullCreak</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>30~42</volumeRange>
+        <pitchRange>0.5~0.7</pitchRange>
+        <distRange>12~60</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <!-- A sealed compartment opened to the sea. -->
+  <SoundDef>
+    <defName>DepthRim_Breach</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>2</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/Breach</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>55~65</volumeRange>
+        <pitchRange>0.7~0.85</pitchRange>
+        <distRange>15~70</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <!-- Exhaled bubbles from a submerged diver. -->
+  <SoundDef>
+    <defName>DepthRim_DiverBubbles</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>2</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/Bubbles</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>14~20</volumeRange>
+        <pitchRange>0.85~1.1</pitchRange>
+        <distRange>6~28</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <!-- Short, fast bubbles when the diver's tank is below 20%. -->
+  <SoundDef>
+    <defName>DepthRim_DiverLowAir</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>2</maxSimultaneous>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/Bubbles</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>24~30</volumeRange>
+        <pitchRange>1.45~1.6</pitchRange>
+        <distRange>6~32</distRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <!-- Water pouring in through a damaged wall or open door. -->
+  <SoundDef>
+    <defName>DepthRim_FloodLoop</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <maxVoices>4</maxVoices>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/FloodLoop</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>26~26</volumeRange>
+        <pitchRange>0.85~0.85</pitchRange>
+        <distRange>5~35</distRange>
+        <sustainAttack>0.6</sustainAttack>
+        <sustainRelease>0.8</sustainRelease>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <!-- Bilge pump draining a compartment. -->
+  <SoundDef>
+    <defName>DepthRim_PumpLoop</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <maxVoices>4</maxVoices>
+    <subSounds>
+      <li>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/PumpLoop</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>20~20</volumeRange>
+        <pitchRange>0.6~0.6</pitchRange>
+        <distRange>5~30</distRange>
+        <sustainAttack>0.6</sustainAttack>
+        <sustainRelease>0.8</sustainRelease>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <!-- Tier ambiences: all four are on the ice ocean biome; SoundParamSource_DepthTier lets only the current tier play. -->
+  <SoundDef>
+    <defName>DepthRim_Ambient_Shallow</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <name>Main</name>
+        <onCamera>True</onCamera>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>DepthRim/Ambient/UnderwaterPad</clipPath>
+          </li>
+        </grains>
+        <volumeRange>22~22</volumeRange>
+        <pitchRange>1.0~1.0</pitchRange>
+        <sustainAttack>1.5</sustainAttack>
+        <sustainRelease>1.5</sustainRelease>
+        <paramMappings>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_DepthTier">
+              <tier>Shallow</tier>
+            </inParam>
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_CameraInCompartment" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 1)</li>
+                <li>(1, 0.45)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="SoundParamSource_AmbientVolume" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+        </paramMappings>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>DepthRim_Ambient_Thermocline</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <name>Main</name>
+        <onCamera>True</onCamera>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>DepthRim/Ambient/UnderwaterPad</clipPath>
+          </li>
+        </grains>
+        <volumeRange>22~22</volumeRange>
+        <pitchRange>0.92~0.92</pitchRange>
+        <sustainAttack>1.5</sustainAttack>
+        <sustainRelease>1.5</sustainRelease>
+        <paramMappings>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_DepthTier">
+              <tier>Thermocline</tier>
+            </inParam>
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_CameraInCompartment" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 1)</li>
+                <li>(1, 0.45)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="SoundParamSource_AmbientVolume" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+        </paramMappings>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>DepthRim_Ambient_Deep</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <name>Main</name>
+        <onCamera>True</onCamera>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>DepthRim/Ambient/UnderwaterPad</clipPath>
+          </li>
+        </grains>
+        <volumeRange>24~24</volumeRange>
+        <pitchRange>0.8~0.8</pitchRange>
+        <sustainAttack>1.5</sustainAttack>
+        <sustainRelease>1.5</sustainRelease>
+        <paramMappings>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_DepthTier">
+              <tier>Deep</tier>
+            </inParam>
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_CameraInCompartment" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 1)</li>
+                <li>(1, 0.45)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="SoundParamSource_AmbientVolume" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+        </paramMappings>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <SoundDef>
+    <defName>DepthRim_Ambient_Seabed</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <subSounds>
+      <li>
+        <name>Main</name>
+        <onCamera>True</onCamera>
+        <grains>
+          <li Class="AudioGrain_Clip">
+            <clipPath>DepthRim/Ambient/UnderwaterPad</clipPath>
+          </li>
+        </grains>
+        <volumeRange>26~26</volumeRange>
+        <pitchRange>0.68~0.68</pitchRange>
+        <sustainAttack>1.5</sustainAttack>
+        <sustainRelease>1.5</sustainRelease>
+        <paramMappings>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_DepthTier">
+              <tier>Seabed</tier>
+            </inParam>
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="DepthRim.SoundParamSource_CameraInCompartment" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 1)</li>
+                <li>(1, 0.45)</li>
+              </points>
+            </curve>
+          </li>
+          <li>
+            <inParam Class="SoundParamSource_AmbientVolume" />
+            <outParam Class="SoundParamTarget_Volume" />
+            <paramUpdateMode>Constant</paramUpdateMode>
+            <curve>
+              <points>
+                <li>(0, 0)</li>
+                <li>(1, 1)</li>
+              </points>
+            </curve>
+          </li>
+        </paramMappings>
+      </li>
+    </subSounds>
+  </SoundDef>
+</Defs>

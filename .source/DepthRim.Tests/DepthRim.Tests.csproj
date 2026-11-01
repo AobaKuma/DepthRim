@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    DepthRim 單元測試（RimWorld 1.7），做法比照 DMSE.BVRTests：
+    用真實的 DepthRim 組件與遊戲參考組件跑，不啟動遊戲。需要遊戲迴圈的部分在 DepthRim.Acceptance。
+    以 -p:OutputPath=<暫存資料夾> 執行，避免測試用 DLL 混進模組的 Assemblies 資料夾（見 README.md）。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <RimWorldDir Condition="'$(RimWorldDir)' == ''">$(MSBuildThisFileDirectory)..\..\..\..\</RimWorldDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../DepthRim/DepthRim.csproj" />
+    <!-- DepthRim 只在編譯時參考 Harmony；測試要用反射檢查 [HarmonyPatch]，所以這裡帶上執行期組件 -->
+    <PackageReference Include="Lib.Harmony" Version="3.0.0-rc.2" />
+    <Reference Include="Assembly-CSharp"><HintPath>$(RimWorldDir)Assembly-CSharp.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="UnityStubs"><HintPath>$(RimWorldDir)UnityStubs.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="Waylith"><HintPath>$(RimWorldDir)Waylith.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="DMSE"><HintPath>$(RimWorldDir)Mods\_Dead-Man-Switch-Expedition\1.7\Assemblies\DMSE.dll</HintPath><Private>true</Private></Reference>
+  </ItemGroup>
+
+</Project>

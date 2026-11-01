@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 冰層升降井（設計稿 §4.2）。原型：借用原版深層鑽機貼圖；之後換成專用貼圖、研究前置與建造條件（限冰蓋）。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_IceShaft</defName>
+    <label>ice shaft elevator</label>
+    <description>A deep drilled shaft fitted with a cargo elevator. It leads down to the ocean beneath the surface. It can only reach shallow or mid-depth water.</description>
+    <thingClass>DepthRim.Building_IceShaft</thingClass>
+    <!-- 只能通到淺海與變溫層的海洋生態區（目前的潛水服只撐得住水壓 1） -->
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_IceShaft</li>
+    </placeWorkers>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/Production/DeepDrill</texPath>
+      <drawSize>(3,3)</drawSize>
+      <drawRotated>false</drawRotated>
+    </graphicData>
+    <size>(3,3)</size>
+    <rotatable>false</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.5</fillPercent>
+    <tickerType>Normal</tickerType>
+    <designationCategory>Misc</designationCategory>
+    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+    <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+    <costList>
+      <Steel>300</Steel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>1000</MaxHitPoints>
+      <WorkToBuild>20000</WorkToBuild>
+      <Flammability>0</Flammability>
+      <Beauty>-20</Beauty>
+    </statBases>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+      <isEdifice>true</isEdifice>
+    </building>
+    <portal>
+      <pocketMapGenerator>DepthRim_Ocean</pocketMapGenerator>
+      <exitDef>DepthRim_IceShaftBottom</exitDef>
+      <enteredLetterLabel>Under the ice</enteredLetterLabel>
+      <enteredLetterText>{PAWN_nameDef} has ridden the elevator down into the ice ocean.\n\nThe water out here is lightless and freezing. Enclose an area, pump it dry and keep life support running before more colonists follow.</enteredLetterText>
+      <enteredLetterDef>NeutralEvent</enteredLetterDef>
+    </portal>
+  </ThingDef>
+
+  <!-- 井底出口：由升降井在冰洋地圖上自動生成，不可建造。旗標比照原版 CaveExit。 -->
+  <ThingDef ParentName="PocketMapExit">
+    <defName>DepthRim_IceShaftBottom</defName>
+    <label>ice shaft landing</label>
+    <description>The bottom landing of an ice shaft elevator. The cage rises back to the surface base.</description>
+    <thingClass>PocketMapExit</thingClass>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <texPath>Things/Building/Production/DeepDrill</texPath>
+      <drawSize>(3,3)</drawSize>
+      <drawRotated>false</drawRotated>
+    </graphicData>
+    <size>(3,3)</size>
+    <rotatable>false</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Standable</passability>
+    <tickerType>Normal</tickerType>
+    <useHitPoints>false</useHitPoints>
+    <destroyable>false</destroyable>
+    <selectable>true</selectable>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases>
+      <Flammability>0</Flammability>
+    </statBases>
+    <building>
+      <deconstructible>false</deconstructible>
+      <isTargetable>false</isTargetable>
+      <isInert>true</isInert>
+      <claimable>false</claimable>
+      <expandHomeArea>false</expandHomeArea>
+    </building>
+    <comps>
+      <li Class="CompProperties_Glower">
+        <glowRadius>8</glowRadius>
+        <glowColor>(120,170,220,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

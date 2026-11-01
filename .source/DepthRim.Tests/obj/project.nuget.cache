@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "96nWcNs4/vs=",
+  "success": true,
+  "projectFilePath": "D:\\Steam\\steamapps\\common\\RimWorld\\Mods\\_DepthRim\\.source\\DepthRim.Tests\\DepthRim.Tests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\lib.harmony\\3.0.0-rc.2\\lib.harmony.3.0.0-rc.2.nupkg.sha512"
+  ],
+  "logs": []
+}

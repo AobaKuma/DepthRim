@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Ocean.label>海洋</DepthRim_Ocean.label>
+  <DepthRim_Ocean.elevationString>海面之下</DepthRim_Ocean.elevationString>
+  <DepthRim_Ocean.viewGizmoTooltip>檢視地表之下的海洋。</DepthRim_Ocean.viewGizmoTooltip>
+
+</LanguageData>
