@@ -34,7 +34,7 @@ namespace DepthRim
         }
     }
 
-    public class CompTorpedoPointDefense : ThingComp, IAirEffector
+    public class CompTorpedoPointDefense : ThingComp, IAirEffector, IDomainAwareEffector
     {
         public int cooldownUntil;
 
@@ -62,9 +62,12 @@ namespace DepthRim
 
         public bool CanFire(int now) => Armed && now >= cooldownUntil;
 
+        /// <summary>只打水下領域（DMSE 的 <see cref="CombatDomain"/>）。</summary>
+        public bool Engages(CombatDomain domain) => domain == CombatDomain.Underwater;
+
         public bool CanEngage(AirEngagement engagement)
         {
-            if (engagement == null || !parent.Spawned || !TorpedoUtility.IsTorpedoTrack(engagement.TargetObject))
+            if (engagement == null || !parent.Spawned || (CombatDomain)engagement.Domain != CombatDomain.Underwater)
             {
                 return false;
             }

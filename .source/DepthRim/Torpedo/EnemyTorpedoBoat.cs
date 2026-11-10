@@ -52,27 +52,6 @@ namespace DepthRim
         }
     }
 
-    /// <summary>掛在魚雷艇的 WorldObjectDef 上：每次發射隨機選一種導引頭（DMSE 的陣地只會用彈體的預設部件）。</summary>
-    public class EnemyTorpedoLoadoutExtension : DefModExtension
-    {
-        public List<MissilePartDef> guidance = new List<MissilePartDef>();
-    }
-
-    [HarmonyPatch(typeof(WorldObjectComp_MissileBase), nameof(WorldObjectComp_MissileBase.BuildFireConfig))]
-    public static class Patch_EnemyTorpedoLoadout
-    {
-        [HarmonyPostfix]
-        public static void Postfix(WorldObjectComp_MissileBase __instance, MissileConfig __result)
-        {
-            EnemyTorpedoLoadoutExtension ext = __instance.parent?.def?.GetModExtension<EnemyTorpedoLoadoutExtension>();
-            if (__result == null || ext == null || ext.guidance.NullOrEmpty())
-            {
-                return;
-            }
-            __result.SetPart(MissilePartCategory.Guidance, ext.guidance.RandomElement());
-        }
-    }
-
     /// <summary>
     /// 選址與生成：在玩家海洋地圖的海路 <see cref="EnemyTorpedoBoatIncidentExtension.seaDistance"/> 格內找一格沒人的海洋格。
     /// 獨立出來給事件與驗收測試共用。

@@ -8,7 +8,7 @@
     - 邊框與下方側面由 SectionLayer_HullPlatformProps 畫（比照 Odyssey 的 SectionLayer_SubstructureProps），見下方 modExtensions。
     - 船體要蓋水密隔牆與水密艙門（都需要 Heavy），所以和 DMSE 的輕型平台不同，這裡承載 Heavy。
     - 拆除沿用 DMSE 的「拆除平台」指令（RemovablePlatformExtension）；DMSE 拆完會改回太空虛空，
-      DepthRim 的 Patch_PlatformRemoval 在海洋地圖上改回深淵。
+      DMSE 依海洋層的 TransferEnvironmentExtension.voidTerrain 改回深淵。
   -->
   <TerrainAffordanceDef>
     <defName>DepthRim_OpenAbyss</defName>

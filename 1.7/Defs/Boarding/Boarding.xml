@@ -75,6 +75,8 @@
       <li Class="DMSE.BVRTargetProps">
         <distanceLevel>0.4</distanceLevel>
         <stealthLevel>0</stealthLevel>
+        <!-- 水下領域：火控聲納＋反魚雷魚雷可以攔它，DMSE 的防空不打它 -->
+        <domain>Underwater</domain>
         <speed>8</speed>
         <altitude>1000</altitude>
       </li>

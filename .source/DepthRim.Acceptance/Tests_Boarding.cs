@@ -101,6 +101,22 @@ namespace DepthRim.Acceptance
             ctx.Require(Sub(parms), "the boarding raid can fire on this map");
             parms.forced = true;
             ctx.Require(incident.Worker.TryExecute(parms), "the boarding raid started");
+            // 有主動聲納：DMSE 的地圖層攔截把突擊艇收進波次。它是水下領域；聲納遠遠聽到時只是「未知聲納接觸」
+            MapComponent_BVRCombat bvr = map.GetComponent<MapComponent_BVRCombat>();
+            BVRTarget held = bvr.Waves.SelectMany(w => w.targets).FirstOrDefault(t => (t.Payload as Skyfaller)?.innerContainer.FirstOrDefault() is Building_BoardingCraft);
+            if (held != null)
+            {
+                int waveLeft = bvr.WaveOf(held).tickToImpact - Find.TickManager.TicksGame;
+                ctx.Note($"craft held in a BVR wave, {waveLeft} ticks to impact, alert label '{held.DisplayLabel(waveLeft)}'");
+                ctx.Check(held.domain == CombatDomain.Underwater, "the incoming craft is an underwater target");
+                ctx.Check(waveLeft <= Building_BoardingCraft.ClassifyTicksBeforeImpact
+                    || held.DisplayLabel(waveLeft) == "DepthRim.Sonar.UnknownContact".Translate().ToString(), "far out, the alert lists it as an unknown sonar contact");
+                ctx.Check(held.DisplayLabel(0) == BoardingDefOf.DepthRim_BoardingCraft.label, "close in, it is classified as a boarding craft");
+            }
+            else
+            {
+                ctx.Note("the craft was not held in a BVR wave (no defender radar resolved)");
+            }
             Building_BoardingCraft craft = null;
             yield return new WaitUntil(() =>
             {

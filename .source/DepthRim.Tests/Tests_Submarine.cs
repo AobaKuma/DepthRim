@@ -243,7 +243,34 @@ static partial class Test
         XElement baseComp = boat.Element("comps").Elements("li").Single(e => (string)e.Attribute("Class") == "DMSE.CompProperties_MissileBase");
         Check((string)baseComp.Element("missileBody") == "DepthRim_TorpedoBody" && (string)Def("WorldObjectDef", (string)baseComp.Element("incomingWorldObjectDef")).Element("worldObjectClass") == "DMSE.WorldObject_IncomingMissile", "the enemy boat fires torpedo tracks of the class DMSE's missile base creates");
         Check(int.Parse((string)baseComp.Element("range")) <= range, "the enemy boat's range does not exceed the torpedo's");
-        Check(boat.Descendants("guidance").Elements("li").All(e => Def("DMSE.MissilePartDef", e.Value) != null), "the enemy boat's guidance parts exist");
+        // DMSE 擴充點（DMSE_調整計畫.md）：陣地的部件選項、離開信件、魚雷的水下領域與交戰判定、火控聲納的領域、海洋層的轉移 worker
+        foreach (string enemyDef in new[] { "DepthRim_EnemyTorpedoBoat", "DepthRim_PirateSubmarine" })
+        {
+            XElement mb = Def("WorldObjectDef", enemyDef).Element("comps").Elements("li").Single(e => (string)e.Attribute("Class") == "DMSE.CompProperties_MissileBase");
+            List<string> guidanceParts = mb.Element("partOptions").Elements("li").Where(o => (string)o.Element("category") == "Guidance")
+                .SelectMany(o => o.Element("parts").Elements("li")).Select(e => e.Value).ToList();
+            Check(guidanceParts.Count >= 2 && guidanceParts.All(n => Def("DMSE.MissilePartDef", n).Element("compatibleBodies").Elements("li").Any(b => b.Value == "DepthRim_TorpedoBody")),
+                $"{enemyDef} picks a torpedo seeker from DMSE partOptions ({guidanceParts.Count})");
+            string labelKey = (string)mb.Element("relocatedLetterLabelKey");
+            Check(labelKey != null && File.ReadAllText(Path.Combine(ModRoot, "1.7", "Languages", "English", "Keyed", "DepthRim.xml")).Contains("<" + labelKey + ">"),
+                $"{enemyDef} has its own 'left the area' letter ({labelKey})");
+            Check((string)Def("WorldObjectDef", (string)mb.Element("incomingWorldObjectDef")).Element("worldObjectClass") == "DMSE.WorldObject_IncomingMissile",
+                $"{enemyDef} fires the world object class DMSE's missile base needs");
+        }
+        Check((string)body.Element("domain") == "Underwater" && (string)body.Element("engageWorker")?.Attribute("Class") == "DepthRim.TorpedoEngageWorker",
+            "torpedoes are underwater-domain and only travel by sea (DMSE engageWorker)");
+        Check((string)Def("DMSE.MissileBodyDef", "DepthRim_AntiTorpedoBody").Element("domain") == "Underwater", "anti-torpedo torpedoes only engage the underwater domain");
+        Check(Def("ThingDef", "DepthRim_FireControlSonar").Descendants("domains").Elements("li").Select(e => e.Value).SequenceEqual(new[] { "Underwater" }),
+            "the fire-control sonar only guides underwater interceptors");
+        Check(Def("ThingDef", "DepthRim_BoardingCraftIncoming").Descendants("domain").Any(e => e.Value == "Underwater"), "an incoming boarding craft is an underwater target");
+        Check((string)Def("WorldObjectDef", "DepthRim_PirateSubmarine").Descendants("ignoreNetworkResearch").Single() == "true",
+            "pirate subs defend themselves without DMSE's radar network research");
+        XElement env = Def("PlanetLayerDef", "DepthRim_Ocean").Element("modExtensions").Elements("li").Single(e => (string)e.Attribute("Class") == "DMSE.TransferEnvironmentExtension");
+        Check((string)env.Element("routeWorker")?.Attribute("Class") == "DepthRim.OceanRouteWorker"
+            && (string)env.Element("energyWorker")?.Attribute("Class") == "DepthRim.SubmarineEnergyWorker"
+            && (string)env.Element("landingWorker")?.Attribute("Class") == "DepthRim.SubmarineLandingWorker",
+            "the ocean layer routes, charges and lands submarines through DMSE's transfer workers");
+        Check((string)env.Element("voidTerrain") == "DepthRim_Abyss", "removed hull platforms leave the abyss (DMSE reads voidTerrain)");
         XElement incident = Def("IncidentDef", "DepthRim_EnemyTorpedoBoat");
         string seaDist = (string)incident.Descendants("seaDistance").Single();
         Check(int.Parse(seaDist.Split('~')[1]) <= int.Parse((string)baseComp.Element("range")), $"the boat spawns within its own range ({seaDist})");

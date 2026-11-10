@@ -183,7 +183,7 @@ namespace DepthRim.Acceptance
             ctx.Note($"estimate: {estimate.totalHours:0.#} h, need {estimate.fuelRequired:0.#} Wd of {estimate.fuelAvailable:0} Wd, range {estimate.maxDistance} tiles");
             ctx.Check(Mathf.Abs(estimate.fuelRequired - expectNeed) < 0.5f, $"the energy needed is the thruster draw over the voyage ({estimate.fuelRequired:0.#} vs {expectNeed:0.#})");
             int expectRange = VoyageMath.RangeTiles(estimate.fuelAvailable, thrusterWatts, estimate.burnHours + estimate.arrivalBurnHours, TransferFlightMath.Tuning.coastHoursPerTile);
-            ctx.Check(estimate.maxDistance == Mathf.Min(expectRange, Patch_SubmarineEnergy_Estimate.MaxRangeTiles), $"the range is how far the batteries can run the thrusters ({estimate.maxDistance} vs {expectRange})");
+            ctx.Check(estimate.maxDistance == Mathf.Min(expectRange, SubmarineEnergyWorker.MaxRangeTiles), $"the range is how far the batteries can run the thrusters ({estimate.maxDistance} vs {expectRange})");
             ctx.Check(estimate.maxDistance >= seaDistance, "the destination is within battery range");
             float chargeBefore = batteryComp.StoredEnergy;
 

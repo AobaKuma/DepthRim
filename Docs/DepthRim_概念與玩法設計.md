@@ -173,7 +173,7 @@
 
 | 類別 | 項目 | 功能 |
 |---|---|---|
-| 結構 | 船體平台（`DepthRim_HullPlatform`，已實作） | 潛艇的基礎甲板，比照 DMSE 軌道平台：只能鋪在深淵上、承載 Heavy（水密隔牆與水密艙門都能蓋）、邊框與下方側面由 `SectionLayer_HullPlatformProps` 畫（比照 Odyssey 的 `SectionLayer_SubstructureProps`，貼圖 `Textures/Thing/DR_LightPlatform`，路徑在 `HullPlatformPropsExtension`）：側面只畫進深淵格，往下第二格是實地時只畫上半。不用原版 `spaceEdgeGraphicData`，因為原版側面一律畫滿兩格、靠地形蓋掉落在實地上的部分，和不透明的深淵背景互相衝突。拆除沿用 DMSE 的「拆除平台」，海洋層上拆完改回深淵（`Patch_PlatformRemoval`），返還一半鋼材 |
+| 結構 | 船體平台（`DepthRim_HullPlatform`，已實作） | 潛艇的基礎甲板，比照 DMSE 軌道平台：只能鋪在深淵上、承載 Heavy（水密隔牆與水密艙門都能蓋）、邊框與下方側面由 `SectionLayer_HullPlatformProps` 畫（比照 Odyssey 的 `SectionLayer_SubstructureProps`，貼圖 `Textures/Thing/DR_LightPlatform`，路徑在 `HullPlatformPropsExtension`）：側面只畫進深淵格，往下第二格是實地時只畫上半。不用原版 `spaceEdgeGraphicData`，因為原版側面一律畫滿兩格、靠地形蓋掉落在實地上的部分，和不透明的深淵背景互相衝突。拆除沿用 DMSE 的「拆除平台」，海洋層上拆完露出深淵（DMSE 讀海洋層 `TransferEnvironmentExtension` 的 `voidTerrain`），返還一半鋼材 |
 | 結構 | 水密隔牆 | 船殼不分等級，水密隔牆可撐到淵底；水壓損傷依牆兩側壓力差判定（§5.1） |
 | 結構 | 水密艙門 / 隔艙 | 把進水限制在單一艙室 |
 | 動力 | 反應爐 / 電池組 | 推進、照明、維生 |
@@ -220,7 +220,7 @@
 
 **下錨**（2026-11-09）：下錨就是 DMSE 的降落。潛艇抵達後（不在航行中），「下錨」指令在旁邊一格（沒有世界物件、海床深度相同的海洋格）建立海洋地點，生成那裡的海床地圖，玩家選位後船體搬進去、潛艇世界物件移除；艙外從此看得見，穿潛水裝備的人員可以走下甲板。
 
-- **深度規則**（`DiveMath.CanAnchor`）：只有淺海或深海海床有能下錨的底（變溫層、深海不行），而且潛艇要正停在那個深度（巡航深度等於海床、沒有在換層）。降落到既有的海洋地點（例如開回自己的基地）也守同樣的規則（`Patch_SubmarineLanding`）。
+- **深度規則**（`DiveMath.CanAnchor`）：只有淺海或深海海床有能下錨的底（變溫層、深海不行），而且潛艇要正停在那個深度（巡航深度等於海床、沒有在換層）。降落到既有的海洋地點（例如開回自己的基地）也守同樣的規則（`SubmarineLandingWorker`：DMSE 轉移飛行的降落 worker，掛在海洋層）。
 - **海床記憶**（`MapComponent_SeabedMemory`）：船塢只能蓋在深淵上，但下錨可以停在海床上。平台蓋過海床時記下原本的地形；之後潛艇再離港（DMSE 把船體範圍設成深淵）或平台被拆掉，那格會換回原本的海床，不會留下深淵洞。
 - 下錨地點用自己的格子會撞到潛艇本身的地圖，所以一定是旁邊一格。
 
@@ -228,7 +228,7 @@
 
 - **推進器要一直運作才會前進**（`VoyageMath`、`WorldObject_Submarine.ApplyThrust`）：DMSE 的航程進度完全由時間決定（起飛時刻 + 點火／滑行時長），推進器只在分離那一刻檢查。潛艇每 60 ticks 重新勘查一次可用推力（通電、開著、沒壞的推進器），和出航時的推力相比；不足的部分把航程時鐘往後推，等於那段時間沒有前進。推力剩一半就以一半的速度前進；全部停擺時潛艇停在海中漂流（發一則訊息），推進器恢復後繼續。電池沒電、推進器故障、被關掉都會讓航程停下來。
 - **就地停船**（`StopHere`）：航行中潛艇與艦橋上都有「就地停船」指令，結束航程，停在目前所在的格子，推進器回到待機。之後可以下錨，或從那裡重新規劃航程。
-- **航程成本只有推進器的耗電**（`Patch_SubmarineEnergy.cs`、`CompThrusterDraw`）：DMSE 出航時一次扣掉整趟的燃料；潛艇不扣。出航檢查與分離在海洋層上執行時 `TransferFlightMath.FuelRequired` 回傳 0。推進器只有在航行中才全速耗電，其他時候（船塢、停泊、停船後）待機 10%。規劃畫面的「所需／可用」改成推進器功率 × 航行時間 對 電池儲電，最大航程 = 電池能讓推進器跑多久（`VoyageMath.RangeTiles`，上限 500 格），超出就不能選。估算只算推進器，艦橋、照明等其他用電也會吃電池；航行中沒電就會停在海中，充電或接上發電機後繼續。
+- **航程成本只有推進器的耗電**（`SubmarineEnergyWorker`：DMSE 轉移飛行的能源 worker，掛在海洋層；`CompThrusterDraw`）：DMSE 出航時一次扣掉整趟的燃料；潛艇不扣，海洋層上的 `TransferFlightMath.FuelRequired(survey, distance)` 回傳 0。推進器只有在航行中才全速耗電，其他時候（船塢、停泊、停船後）待機 10%。規劃畫面的「所需／可用」改成推進器功率 × 航行時間 對 電池儲電，最大航程 = 電池能讓推進器跑多久（`VoyageMath.RangeTiles`，上限 500 格），超出就不能選。估算只算推進器，艦橋、照明等其他用電也會吃電池；航行中沒電就會停在海中，充電或接上發電機後繼續。
 
 **還沒做**：見 §11 實作計劃的 M4 起。
 
@@ -444,7 +444,7 @@
 ### M3 潛艇航行 ✅
 研究路線（水下生存 → 耐壓工程 → 潛航器建造 → 深淵潛航）、牆體水壓損傷（§5.1）、船體平台與專屬建造分頁、DMSE 轉移飛行換皮的潛艇：船塢、海路、巡航深度、船殼耐壓、下錨與海床記憶、推進器驅動的航程、就地停船、以推進器耗電為唯一成本（§4.8）。
 
-### M4 聲納 ✅（襲擊條件待 M6）
+### M4 聲納 ✅
 BVR 的「偵測」換皮，戰鬥之前先讓潛艇看得見周圍。
 
 | 步驟 | 內容 | 狀態 |
@@ -452,7 +452,7 @@ BVR 的「偵測」換皮，戰鬥之前先讓潛艇看得見周圍。
 | 4.1 | 研究 DMSE `CompSearchRadar` 與 `WorldComponent_BVRNetwork`：任何有搜索雷達的地圖（包括航行中的潛艇）都是 BVR 節點，偵測半徑取最大值，選取時世界地圖畫偵測圈 | ✅ |
 | 4.2 | 主動聲納 `DepthRim_ActiveSonar`（3×3、400 W、偵測 6 格，反隱身 1 實際 7.5 格）：會暴露位置 | ✅ |
 | 4.3 | 被動聲納 `DepthRim_PassiveSonar`（2×2、100 W、偵測 3 格）：`immuneToAntiRadiationSeeker`。「聽見推進器噪音」等敵方潛艇（M7）做出來再加 | ✅ |
-| 4.4 | 溫躍層遮蔽（`SonarMath.LayerFactor`、`Patch_SonarLayer` postfix `BVRNode.DetectionRange`）：分在溫躍層兩側 ×0.5、一方在層內 ×0.75。只對自己提供深度（`IDepthTierProvider`）的目標生效，等 M5 的魚雷才有實際目標 | ✅ |
+| 4.4 | 溫躍層遮蔽（`SonarMath.LayerFactor`、`SonarLayerModifier`：註冊在 DMSE 的全域修正鏈 `AirDefensePipeline`，只改世界層的偵測值）：分在溫躍層兩側 ×0.5、一方在層內 ×0.75。只對自己提供深度（`IDepthTierProvider`）的目標生效，等 M5 的魚雷才有實際目標 | ✅ |
 | 4.5 | 襲擊條件：只有開著主動聲納（`SonarUtility.HasActiveSonar`）的玩家海洋地圖會被跳幫襲擊（M6 6.5） | ✅ |
 | 4.6 | 研究「水下戰鬥」（2400，接在潛航器建造後）解鎖聲納；單元測試（層級係數、內容）與遊戲內 N1 | ✅ |
 
@@ -462,18 +462,18 @@ BVR 的「交戰」換皮。整條飛彈鏈沿用 DMSE：裝配（`MissileBodyDe
 | 步驟 | 內容 | 狀態 |
 |---|---|---|
 | 5.1 | 魚雷彈體 `DepthRim_TorpedoBody`（Light 級、世界速度 0.3、射程 10 格）、魚雷物品 `DepthRim_Torpedo`（機械加工台製作）、魚雷發射管 `DepthRim_TorpedoTube`（DMSE 軌道發射器換皮，裝 2 枚、200 W），研究「水下戰鬥」解鎖。航跡世界物件 `DepthRim_WorldObject_Torpedo`；發射與來襲的視覺、貼圖暫用 DMSE 輕型導彈 | ✅ |
-| 5.2 | 只走海路（`Patch_TorpedoEngage` prefix `MissileWorldUtility.CanEngage`）：兩端都要在海洋層、目標是海洋格、海路到得了，射程以海路距離計。打陸地、離開海洋層都不行 | ✅ |
+| 5.2 | 只走海路（魚雷彈體的 `engageWorker`：`TorpedoEngageWorker`，DMSE 的 `MissileEngageWorker`）：兩端都要在海洋層、目標是海洋格、海路到得了，射程以海路距離計。打陸地、離開海洋層都不行 | ✅ |
 | 5.3 | 魚雷的深度（`MissileBehavior_Torpedo`，存檔）：發射時記下發射地圖的層級；溫躍層遮蔽由 `TorpedoBehaviorProps.ModifyDefenseAsTarget` 經 DMSE 修正鏈套用 `SonarMath.LayerFactor` | ✅ |
 | 5.4 | 導引部件：直航（DMSE 慣性：落在地圖中央附近的隨機點）、被動歸向（DMSE 反輻射：找開著的敵方主動聲納，被動聲納豁免）、線導（DMSE 反艦）；戰鬥部高爆 | ✅ |
 | 5.5 | 聲學誘餌：酬載槽的噪音彈（DMSE 箔條欄位 `jamStrength` 0.3、`chaffCharges` 1）。只做了內容，斷鎖要等有敵方攔截才看得到 | ✅ |
 | 5.6 | 遊戲內 T1：從海路 2 格外的海洋地點發射裝被動歸向導引頭的魚雷，打冰洋地圖上藏著敵方主動聲納的密閉艙室：落點在聲納旁、11 面牆被炸毀、艙室水位升到 64% | ✅ |
 | 5.7a | 反魚雷魚雷：彈體 `DepthRim_AntiTorpedoBody`（標記 `AntiTorpedoExtension`、世界速度 0.5，攔截時再 ×3）、物品 `DepthRim_AntiTorpedo`（用途 Interceptor）。裝在魚雷發射管（發射管加掛 DMSE 攔截發射器，用途過濾讓攻擊魚雷不會被拿去攔截），由火控聲納 `DepthRim_FireControlSonar`（DMSE 火控雷達換皮，2 通道、命中上限 0.7）指派 | ✅ |
-| 5.7b | 攔截分工：魚雷只會被海洋層上的節點接戰（`Patch_TorpedoInterceptors` postfix `BVRNode.PolicyAllows`）；DMSE 攔截發射器裝著反魚雷魚雷才打魚雷、裝別的就不打魚雷（`Patch_TorpedoInterceptorLaunchers` postfix `CanEngage`）。沒有用高度分層：負高度會讓 DMSE 的偵測係數變 0 | ✅ |
+| 5.7b | 攔截分工：用 DMSE 的交戰領域 `CombatDomain`。魚雷與反魚雷魚雷的彈體是 `Underwater`，火控聲納只導引 `Underwater`；DMSE 的防空火控、攔截彈與 CIWS 預設只打 `Air`。所以魚雷只會被火控聲納＋反魚雷魚雷與近防砲接戰，反魚雷魚雷也不會打空中飛彈。原本的兩個補丁（`PolicyAllows`、攔截發射器 `CanEngage`）已拿掉 | ✅ |
 | 5.7c | 近防：超空泡近防砲 `DepthRim_SupercavitatingGun`（`CompTorpedoPointDefense`，DMSE 世界層點防禦效果器：不用火控、不佔通道、瞬間結算）。只打以本圖為目的地、剩 600 tick 內抵達的魚雷，每輪 35%、冷卻 240 tick、每輪 10 鋼。要有聲納聽得到 | ✅ |
 | 5.7d | 敵方魚雷來襲：敵方魚雷艇 `WorldObject_EnemyTorpedoBoat`（海洋層、沒有地圖，掛 DMSE `CompProperties_MissileBase`：每 1～2 天射 1～2 枚、射程 10、4～8 天後離開）。巡航深度隨機、不超過海床，魚雷帶著這個深度；導引頭每發在被動歸向／線導之間隨機（`EnemyTorpedoLoadoutExtension`）。事件 `DepthRim_EnemyTorpedoBoat`（ThreatBig、World 目標、研究水下戰鬥後才會發生）在玩家海洋地圖的海路 4～8 格內選址 | ✅ |
 | 5.7e | 遊戲內 T2：冰洋地圖被海路 2～3 格外的敵方魚雷艇攻擊；第一輪由火控聲納射出反魚雷魚雷、第二輪由近防砲開火；另驗陸地層節點不接戰魚雷、攻擊魚雷不被當攔截彈。結果 30 項全過：火控聲納射出 1 枚反魚雷魚雷（這次沒命中，魚雷照樣落地）；近防砲在最後一段開火（彈藥 60→50）。DMSE 的陣地元件只認 `WorldObject_IncomingMissile`，所以魚雷艇用自己的航跡 Def `DepthRim_WorldObject_EnemyTorpedo` | ✅ |
 
-5.7 的限制：魚雷艇沒有地圖，玩家還不能反擊它（等 M6／M7）；DMSE 地圖層末端 CIWS（防空砲）理論上也會打抵達地圖的魚雷；火控聲納也能導引 DMSE 防空飛彈打空中目標（沒有限制）；魚雷艇「離開」時沿用 DMSE 陣地轉移的信件文字。
+5.7 的限制：魚雷艇沒有地圖，不能跳幫，只能用魚雷擊沉（一發就沉，M7 7.2）；DMSE 地圖層末端 CIWS（防空砲）理論上也會打抵達地圖的魚雷；火控聲納也能導引 DMSE 防空飛彈打空中目標（沒有限制）；魚雷艇「離開」時沿用 DMSE 陣地轉移的信件文字。
 
 ### M6 跳幫突擊艇 ✅（主動跳幫敵方潛艇要等 M7 有敵方潛艇地圖）
 敵方的跳幫襲擊：突擊艇切入艙室但不破壞密閉，打完撤回艇上離開（§6.2、§6.3）。貼圖暫時直接複製 DMS 的軌道運輸艇（`HeavyTransportLifter`）。
@@ -483,11 +483,11 @@ BVR 的「交戰」換皮。整條飛彈鏈沿用 DMSE：裝配（`MissileBodyDe
 | 6.1 | 突擊艇 `DepthRim_BoardingCraft`（`Building_BoardingCraft`，3×2、900 HP、不能佔領／拆解）。艇上的人放在自己的容器：不用 `CompTransporter`，因為它離場時會倒出內容物，也不能在 skyfaller 裡存非世界 pawn。來襲 skyfaller 的 `hitRoof` 關掉，所以穿入艙室不破屋頂、不進水；落地 120 tick 後放人 | ✅ |
 | 6.2 | 撤退：`LordJob_BoardingRaid`，先 `LordToil_AssaultColony`；損失一半、打夠了（殖民地損失 25～35%）、26000～38000 tick 或不再敵對時換成 `LordToil_ReturnToCraft`。每人的 duty 指向自己的艇，登艇時離開 lord；艇等到外面沒有還站著的人（或等 5000 tick）就換成向上飛的 skyfaller，飛出畫面時把艇上的人送回世界。不走地圖邊（`AddFleeToil` 關掉），倒地的人留下。艇被毀，裡面的人掉出來，外面的人只能繼續打 | ✅ |
 | 6.3 | 降落點：優先選玩家的密閉艙室（有屋頂、不碰地圖邊、有玩家建築、放得下 3×2）；沒有就降在玩家建築附近的開放海床（§6.3 下錨時的襲擊：艙外放下潛水的突擊隊）。人形襲擊者都穿潛水服，機械族不用 | ✅ |
-| 6.4 | 聲納攔截（[DMSE_對接研究.md](DMSE_對接研究.md) §3.4 第 1 點的答案）：來襲突擊艇經 `SkyfallerMaker.SpawnSkyfaller`，DMSE 的地圖層 BVR 會接手。`Patch_BoardingCraftPawns` 讓 `BVRDetection.PawnsIn` 認得艇上的人；沒被攔下時 DMSE 重新投放同一個 skyfaller，所以子類別與 `hitRoof` 都保留。艇很安靜（`distanceLevel` 0.4）：主動聲納的預警窗口約 2900 tick（48 遊戲分鐘） | ✅ |
+| 6.4 | 聲納攔截（[DMSE_對接研究.md](DMSE_對接研究.md) §3.4 第 1 點的答案）：來襲突擊艇經 `SkyfallerMaker.SpawnSkyfaller`，DMSE 的地圖層 BVR 會接手。突擊艇實作 DMSE 的 `IBVRPayloadHolder`，`BVRDetection.PawnsIn` 就認得艇上的人；目標屬性是水下領域（`domain` Underwater），火控聲納＋反魚雷魚雷能攔，DMSE 防空不打；沒被攔下時 DMSE 重新投放同一個 skyfaller，所以子類別與 `hitRoof` 都保留。艇很安靜（`distanceLevel` 0.4）：主動聲納的預警窗口約 2900 tick（48 遊戲分鐘） | ✅ |
 | 6.5 | 事件與說書人（解 4.5）：`DepthRim_BoardingRaid`（ThreatBig、海洋層白名單、`DepthRim_OceanMap` 標籤），只有開著主動聲納的玩家海洋地圖會被襲擊（`BoardingUtility.RaidableOceanMap`）。陣營由 DepthRim 自己挑（敵對、人形、工業以上），因為原版的篩選會看陣營的抵達圖層白名單。原版說書人的循環不會挑它（baseChance 0），由 `StorytellerComp_BoardingRaids` 另外排：每個說書人都 patch 一個，第 10 天起，每張符合條件的地圖平均 12 天一次 | ✅ |
 | 6.6 | 遊戲內 B1：冰洋地圖上排乾的 5×5 艙室＋一台主動聲納。聲納關著時不會被襲擊；開了就會。DMSE 認得艇上的陣營；摧毀停著的艇，船員會掉出來。襲擊時艇落在艙室裡，屋頂完好，水位仍是 1%，人形襲擊者穿潛水服。送撤退訊號後，艇約 2400 tick 後帶著 5 人離開，屋頂仍完好。31 項全過 | ✅ |
 | 6.7a | 俘虜與戰利品：撤退時沒扛東西的人先扛起 12 格內倒地的殖民者（原版 `KidnapAIUtility`），否則扛值 200 以上的物品，再上艇（`JobGiver_CarryToCraft`、`JobDriver_CarryToCraft`）。艇飛走時，殖民者成為該陣營的俘虜（原版的綁架追蹤，之後可贖回），物品就沒了 | ✅ |
-| 6.7b | 沉沒（[DMSE_對接研究.md](DMSE_對接研究.md) §3.4 第 3 點）：`Patch_BoardingCraftSinks` 攔下 DMSE 的 `BVRTarget.SpawnDebris`。艇上人員照 DMSE 的規則（玩家的人失蹤，其他人陣亡），遺體與兩塊鋼渣沉到 8 格內沒有屋頂的海床，冒水泡，發一則訊息；不用 DMSE 的殘骸空投艙 | ✅ |
+| 6.7b | 沉沒（[DMSE_對接研究.md](DMSE_對接研究.md) §3.4 第 3 點）：突擊艇實作 DMSE 的 `IInterceptResolver`，`BVRTarget.SpawnDebris` 交給它處理。艇上人員照 DMSE 的規則（玩家的人失蹤，其他人陣亡），遺體與兩塊鋼渣沉到 8 格內沒有屋頂的海床，冒水泡，發一則訊息；不用 DMSE 的殘骸空投艙 | ✅ |
 | 6.7c | 艙外破牆：降落點不在密閉艙室裡（`BoardingUtility.IsInsideCompartment`），襲擊就從原版的 `LordToil_AssaultColonyBreaching` 開始，打穿外殼後走既有的進水；撤退的轉換同樣從破牆階段生效。氣閘沒有特別處理：門與牆都是破牆目標 | ✅ |
 | 6.7d | 玩家的突擊艇：月池 `DepthRim_MoonPool`（5×4、非 edifice 的地面建築，貼圖暫用船體平台），突擊艇 `DepthRim_PlayerBoardingCraft` 只能造在月池上（`PlaceWorker_OnMoonPool`，同一個 `Building_BoardingCraft` 類別）。殖民者右鍵「登上」（`FloatMenuOptionProvider_BoardCraft`）；「出發」選海路 8 格內的海洋格（不能是原地，也不能是有非據點物件的格），飛出畫面後變成世界航跡 `WorldObject_TravelingBoardingCraft`，每格 250 tick。抵達時沒有地圖就開一個玩家的海洋地點；降落點優先切入目標陣營的密閉艙室，否則降在海床上，落地後放人。「卸下」把人和東西放出來 | ✅ |
 | 6.7e | 遊戲內 B2（32 項）：俘虜被綁走、銀子被帶走；擊落的艇沉沒，遺體在 12 格內的海床、多了鋼渣、沒有空投艙；破牆與直接突擊的起始狀態；突擊艇不能造在月池外，能造在月池上；登艇後出發到海路 2 格外，約 500 tick 抵達，開出新地圖、降落、殖民者下艇 | ✅ |
@@ -500,10 +500,10 @@ BVR 的「交戰」換皮。整條飛彈鏈沿用 DMSE：裝配（`MissileBodyDe
 
 | 步驟 | 內容 | 狀態 |
 |---|---|---|
-| 7.1 | 海盜潛艇 `WorldObject_PirateSubmarine`：海洋層上會移動的 MapParent，每 2500 tick 移一格，保持在玩家海洋地圖海路 3～9 格內，巡航深度不超過海床。掛 DMSE 導彈陣地元件，每 1～3 天發射 1～2 枚魚雷，導引頭在被動歸向與線導間隨機。掛 DMSE 抽象防空：4 枚反魚雷魚雷，每天補 2 枚，用火控聲納的參數。DMSE 的 NPC 世界節點要玩家研究雷達網才建立，`Patch_PirateSubmarineNodes` 在 `RebuildNodes` 之後自己把海盜潛艇加成節點。事件 `DepthRim_PirateSubmarine`（ThreatBig、World、水下戰鬥後）在玩家海洋地圖海路 5～9 格處放一艘，最多 2 艘 | ✅ |
+| 7.1 | 海盜潛艇 `WorldObject_PirateSubmarine`：海洋層上會移動的 MapParent，每 2500 tick 移一格，保持在玩家海洋地圖海路 3～9 格內，巡航深度不超過海床。掛 DMSE 導彈陣地元件，每 1～3 天發射 1～2 枚魚雷，導引頭在被動歸向與線導間隨機。掛 DMSE 抽象防空：4 枚反魚雷魚雷，每天補 2 枚，用火控聲納的參數。DMSE 的 NPC 世界節點要玩家研究雷達網才建立；海盜潛艇的抽象防空設了 `ignoreNetworkResearch`，不等研究就建立節點。事件 `DepthRim_PirateSubmarine`（ThreatBig、World、水下戰鬥後）在玩家海洋地圖海路 5～9 格處放一艘，最多 2 艘 | ✅ |
 | 7.2 | 魚雷打沒有地圖的目標：`MissileBehavior_Torpedo.PreArrive`。海盜潛艇扣船殼（400；高爆魚雷每發 110，4 發沉沒，發信件）；敵方魚雷艇一發就沉 | ✅ |
 | 7.3 | 跳幫海盜潛艇：玩家突擊艇的航跡記住目的地上的據點，抵達時它走了就改航追過去。抵達時生成 75×75 的船體地圖（`GenStep_PirateSubHull`）：深淵上一塊 23×11 的船體平台，耐壓牆圍出三個艙室，艙壁中間是水密門，全部有屋頂。水位初始化時設成乾的：新增的 `MapComponent_Flooding.MarkDry`，因為水位陣列比 GenStep 晚建立。船員穿潛水服守船（`LordJob_DefendPoint`），最後一個艙室放銀子與零件。被跳幫時潛艇停住；地圖生成後 2500 tick 內不移除（突擊艇還在降落）；船員清空後玩家離開就鑿沉，船員還在就保留潛艇 | ✅ |
-| 7.4 | 聲納目標分類（`SonarContacts`）：玩家聲納節點在偵測半徑一半以內才分得出是什麼，否則名稱與檢視都是「未知聲納接觸」。對象有海盜潛艇、敵方魚雷艇、魚群。魚群 `WorldObject_FishSchool` 是無害的接觸，和海盜潛艇用同一個紅色圖示，每小時漂一格，2～5 天後消失；事件 `DepthRim_FishSchool`（Misc、World） | ✅ |
+| 7.4 | 聲納目標分類（`SonarContacts`）：玩家聲納節點在偵測半徑一半以內才分得出是什麼，否則名稱與檢視都是「未知聲納接觸」。對象有海盜潛艇、敵方魚雷艇、魚群。魚群 `WorldObject_FishSchool` 是無害的接觸，和海盜潛艇用同一個紅色圖示，每小時漂一格，2～5 天後消失；事件 `DepthRim_FishSchool`（Misc、World）。地圖層來襲的突擊艇也分類：實作 DMSE 的 `IBVRContactLabel`，抵達前 1200 tick 以外在警報裡顯示「未知聲納接觸」 | ✅ |
 | 7.5 | 之後：海盜基地（固定據點，抽象防空＋基地地圖）、奪船（清空船員後收為己用）、魚雷命中已生成地圖的潛艇改打船體 | ⬜ |
 | 7.6 | 遊戲內 X1（38 項）：抽象節點、未分類到分類、巡弋、魚雷命中（400→290）與 4 發沉沒、突擊艇改航追擊、船體地圖（三個乾的密閉艙室 63／54／54 格、船員穿潛水服守船、戰利品、降落點切入艙室）、被跳幫時不動、地圖保留與鑿沉、魚群、魚雷艇一發沉 | ✅ |
 
@@ -512,3 +512,5 @@ BVR 的「交戰」換皮。整條飛彈鏈沿用 DMSE：裝配（`MissileBodyDe
 
 ### 雜項 ⬜
 航行音效；龍骨、艦橋、推進器的正式貼圖（目前是 DMSE 的複製品）；深海科研點數；航程估算計入推進器以外的用電與船上發電機。
+
+所有待補的貼圖、音效、功能與已知限制整理在 [待補內容清單.md](待補內容清單.md)。

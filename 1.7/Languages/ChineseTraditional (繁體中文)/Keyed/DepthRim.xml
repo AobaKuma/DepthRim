@@ -113,4 +113,8 @@
   <DepthRim.Sonar.UnknownContact>未知聲納接觸</DepthRim.Sonar.UnknownContact>
   <DepthRim.Sonar.UnknownInspect>有東西在那裡移動。讓聲納更靠近（偵測半徑一半以內）才分得出是什麼。</DepthRim.Sonar.UnknownInspect>
   <DepthRim.Sonar.FishInspect>一大群魚。無害。</DepthRim.Sonar.FishInspect>
+  <DepthRim.Enemy.BoatLeftLabel>魚雷艇離開</DepthRim.Enemy.BoatLeftLabel>
+  <DepthRim.Enemy.BoatLeft>敵方魚雷艇悄悄離開了，你的海洋地圖暫時不在它的射程內。</DepthRim.Enemy.BoatLeft>
+  <DepthRim.Enemy.SubLeftLabel>海盜潛艇離開</DepthRim.Enemy.SubLeftLabel>
+  <DepthRim.Enemy.SubLeft>海盜潛艇離開了這片海域，聲納失去了接觸。</DepthRim.Enemy.SubLeft>
 </LanguageData>

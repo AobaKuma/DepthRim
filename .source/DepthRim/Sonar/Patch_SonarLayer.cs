@@ -1,4 +1,6 @@
 using DMSE;
+using Fortified;
+using RimWorld.Planet;
 using HarmonyLib;
 using RimWorld;
 using Verse;
@@ -44,23 +46,69 @@ namespace DepthRim
         }
     }
 
-    /// <summary>溫躍層遮蔽：海洋層上的節點偵測有深度的目標時，依兩者的層級打折（<see cref="SonarMath.LayerFactor"/>）。</summary>
-    [HarmonyPatch(typeof(BVRNode), nameof(BVRNode.DetectionRange))]
-    public static class Patch_SonarLayer
+    /// <summary>
+    /// 溫躍層遮蔽：海洋層上的節點偵測有深度的目標時，依兩者的層級打折（<see cref="SonarMath.LayerFactor"/>）。
+    /// 走 DMSE 的全域修正鏈（<see cref="AirDefensePipeline"/>），所以涵蓋圈、首次偵測與攔截都一致；
+    /// 觀測方是地圖就看地圖的層級，沒有地圖的節點（海盜潛艇的抽象防空）看它自己的巡航深度。
+    /// 目標的深度：自己提供層級的世界物件（潛艇），或魚雷航跡帶的深度（<see cref="MissileBehavior_Torpedo"/>）。
+    /// </summary>
+    public class SonarLayerModifier : AirDefenseModifier
     {
-        [HarmonyPostfix]
-        public static void Postfix(BVRNode __instance, IBVRTrack track, ref float __result)
+        public static readonly SonarLayerModifier Instance = new SonarLayerModifier();
+
+        public static bool TryObserverTier(AirDefenseQuery query, out DepthTier tier)
         {
-            if (__result <= 0f || track == null || __instance?.parent == null || !__instance.parent.HasMap)
+            tier = DepthTier.Shallow;
+            Map map = query.Map ?? (query.Site != null && query.Site.HasMap ? query.Site.Map : null);
+            if (map != null)
+            {
+                if (!OceanRouting.IsOcean(map.Tile))
+                {
+                    return false;
+                }
+                tier = FloodingUtility.DepthTierOf(map);
+                return true;
+            }
+            if (query.Site is IDepthTierProvider provider && OceanRouting.IsOcean(query.Site.Tile))
+            {
+                tier = provider.CurrentDepthTier;
+                return true;
+            }
+            return false;
+        }
+
+        public static bool TryTargetTier(AirDefenseQuery query, out DepthTier tier)
+        {
+            WorldObject target = query.Track?.Self ?? query.TargetObject;
+            MissileBehavior_Torpedo torpedo = TorpedoUtility.BehaviorOf(target);
+            if (torpedo != null)
+            {
+                tier = torpedo.depth;
+                return true;
+            }
+            return SonarUtility.TryTargetTier(target, out tier);
+        }
+
+        public override void Modify(AirDefenseQuery query, ref float value)
+        {
+            if (query.Stat != AirDefenseStat.Detection || query.Layer != AirCombatLayer.World || value <= 0f)
             {
                 return;
             }
-            Map map = __instance.parent.Map;
-            if (!OceanRouting.IsOcean(map.Tile) || !SonarUtility.TryTargetTier(track, out DepthTier target))
+            if (!TryObserverTier(query, out DepthTier observer) || !TryTargetTier(query, out DepthTier target))
             {
                 return;
             }
-            __result *= SonarMath.LayerFactor(FloodingUtility.DepthTierOf(map), target);
+            value *= SonarMath.LayerFactor(observer, target);
+        }
+    }
+
+    [StaticConstructorOnStartup]
+    public static class SonarLayerRegistration
+    {
+        static SonarLayerRegistration()
+        {
+            AirDefensePipeline.Add(SonarLayerModifier.Instance);
         }
     }
 }

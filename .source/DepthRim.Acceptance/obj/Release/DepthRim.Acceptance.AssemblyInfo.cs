@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DepthRim.Acceptance")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2a8dbc3260de8653de3966c3c4ca1ae48b3cc26")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f670bd00a78981513a4729495c0a66f88c8646d")]
 [assembly: System.Reflection.AssemblyProductAttribute("DepthRim.Acceptance")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DepthRim.Acceptance")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

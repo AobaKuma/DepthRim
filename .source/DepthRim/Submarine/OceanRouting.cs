@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DMSE;
-using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
@@ -152,72 +151,34 @@ namespace DepthRim
         }
     }
 
-    /// <summary>海洋層上的轉移距離：只走海洋格的格數（到不了時是一個很大的數，超過任何航程）。</summary>
-    [HarmonyPatch(typeof(TransferFlightMath), nameof(TransferFlightMath.Distance))]
-    public static class Patch_TransferFlightMath_Distance
+    /// <summary>
+    /// 海洋層的轉移航線（DMSE 的 <see cref="TransferRouteWorker"/>，掛在海洋層的 <c>TransferEnvironmentExtension</c>）：
+    /// 距離是只走海洋格的格數（到不了時是一個很大的數，超過任何航程）、航線繞過陸地、目的地不能是陸地也要有海路到得了。
+    /// </summary>
+    public class OceanRouteWorker : TransferRouteWorker
     {
-        [HarmonyPrefix]
-        public static bool Prefix(PlanetTile from, PlanetTile to, ref int __result)
+        public override int Distance(PlanetTile from, PlanetTile to)
         {
-            if (!OceanRouting.IsOcean(from))
-            {
-                return true;
-            }
-            __result = OceanRouting.Distance(from, to);
-            return false;
+            return OceanRouting.Distance(from, to);
         }
-    }
 
-    /// <summary>海洋層上的航線：繞過陸地的最短路徑。</summary>
-    [HarmonyPatch(typeof(WorldObject_TransferShip), nameof(WorldObject_TransferShip.BuildPath))]
-    public static class Patch_TransferShip_BuildPath
-    {
-        [HarmonyPrefix]
-        public static bool Prefix(PlanetTile from, PlanetTile to, ref List<PlanetTile> __result)
+        /// <summary>到不了時回傳 null（目的地檢查應該已經擋下），退回 DMSE 的直線，至少不會卡住。</summary>
+        public override List<PlanetTile> BuildPath(PlanetTile from, PlanetTile to)
         {
-            if (!OceanRouting.IsOcean(from))
-            {
-                return true;
-            }
-            List<PlanetTile> path = OceanRouting.Path(from, to);
-            if (path == null)
-            {
-                return true; // 到不了（目的地檢查應該已經擋下）：退回 DMSE 的直線，至少不會卡住
-            }
-            __result = path;
-            return false;
+            return OceanRouting.Path(from, to);
         }
-    }
 
-    /// <summary>海洋層上的目的地：不能是陸地，也要有海路到得了。</summary>
-    [HarmonyPatch(typeof(TransferPlanningUtility), nameof(TransferPlanningUtility.ValidateDestination))]
-    public static class Patch_TransferPlanning_ValidateDestination
-    {
-        [HarmonyPostfix]
-        public static void Postfix(PlanetTile origin, PlanetTile tile, bool showMessage, ref bool __result)
+        public override string DestinationBlockReason(PlanetTile origin, PlanetTile tile)
         {
-            if (!__result || !OceanRouting.IsOcean(tile))
-            {
-                return;
-            }
-            string reason = null;
             if (!OceanRouting.Navigable(tile))
             {
-                reason = "DepthRim.Route.Land";
+                return "DepthRim.Route.Land".Translate();
             }
-            else if (OceanRouting.Distance(origin, tile) >= OceanRouting.Unreachable)
+            if (OceanRouting.Distance(origin, tile) >= OceanRouting.Unreachable)
             {
-                reason = "DepthRim.Route.Unreachable";
+                return "DepthRim.Route.Unreachable".Translate();
             }
-            if (reason == null)
-            {
-                return;
-            }
-            __result = false;
-            if (showMessage)
-            {
-                Messages.Message(reason.Translate(), MessageTypeDefOf.RejectInput, historical: false);
-            }
+            return null;
         }
     }
 }

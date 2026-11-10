@@ -4,7 +4,7 @@
   <!--
     敵方勢力（設計稿 §11 M7）。
     海盜潛艇：海洋層上會移動的 MapParent，巡弋、發射魚雷（DMSE 導彈陣地元件）、用反魚雷魚雷攔截（DMSE 抽象防空，
-    DepthRim.Patch_PirateSubmarineNodes 不經 DMSE 的雷達網研究就把它加成節點）。被魚雷打中扣船殼；跳幫時生成船體地圖。
+    ignoreNetworkResearch：不經 DMSE 的雷達網研究就建立節點）。被魚雷打中扣船殼；跳幫時生成船體地圖。
     聲納分類：遠處只是「未知聲納接觸」（DepthRim.SonarContacts）。
   -->
   <WorldObjectDef>
@@ -28,6 +28,17 @@
         <relocationDays>30~60</relocationDays>
         <missileBody>DepthRim_TorpedoBody</missileBody>
         <incomingWorldObjectDef>DepthRim_WorldObject_EnemyTorpedo</incomingWorldObjectDef>
+        <partOptions>
+          <li>
+            <category>Guidance</category>
+            <parts>
+              <li>DepthRim_Torpedo_Guidance_PassiveHoming</li>
+              <li>DepthRim_Torpedo_Guidance_Wire</li>
+            </parts>
+          </li>
+        </partOptions>
+        <relocatedLetterLabelKey>DepthRim.Enemy.SubLeftLabel</relocatedLetterLabelKey>
+        <relocatedLetterTextKey>DepthRim.Enemy.SubLeft</relocatedLetterTextKey>
       </li>
       <li Class="DMSE.CompProperties_WorldAirDefense">
         <worldDetectionRange>5</worldDetectionRange>
@@ -39,15 +50,11 @@
         <interceptorBody>DepthRim_AntiTorpedoBody</interceptorBody>
         <interceptorWarhead>DepthRim_AntiTorpedo_Warhead_Proximity</interceptorWarhead>
         <launchCooldownTicks>300</launchCooldownTicks>
+        <!-- 海洋層的核心敵人：不等玩家研究 DMSE 的雷達網就建立抽象防空節點 -->
+        <ignoreNetworkResearch>true</ignoreNetworkResearch>
       </li>
     </comps>
     <modExtensions>
-      <li Class="DepthRim.EnemyTorpedoLoadoutExtension">
-        <guidance>
-          <li>DepthRim_Torpedo_Guidance_PassiveHoming</li>
-          <li>DepthRim_Torpedo_Guidance_Wire</li>
-        </guidance>
-      </li>
       <li Class="DepthRim.PirateSubmarineExtension">
         <hullPoints>400</hullPoints>
         <stalkDistance>3~9</stalkDistance>

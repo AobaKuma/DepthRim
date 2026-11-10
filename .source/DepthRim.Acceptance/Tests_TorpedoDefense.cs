@@ -122,8 +122,15 @@ namespace DepthRim.Acceptance
                 AirEngagement engagement = homeNode.EngagementFor(salvo[0], salvo[0], salvo[0].PositionAt(0), salvo[0].TicksToArrival, salvo[0].AltitudeAt(0));
                 ctx.Check(launcher.CanEngage(engagement), "anti-torpedo torpedoes may engage an incoming torpedo");
                 ctx.Check(homeNode.PolicyAllows(salvo[0]), "the ocean node engages the torpedo");
-                BVRNode landNode = new BVRNode { parent = DepthRimFixture.Home.Parent, faction = Faction.OfPlayer };
-                ctx.Check(!landNode.PolicyAllows(salvo[0]), "a surface-layer node does not engage torpedoes");
+                // 領域分工（DMSE 的 CombatDomain）：魚雷是水下領域；火控聲納只導引水下，DMSE 的防空火控與 CIWS 只打空中
+                ctx.Check(CombatDomainUtility.Of(salvo[0]) == CombatDomain.Underwater, "an enemy torpedo is an underwater-domain track");
+                ctx.Check(homeNode.CoversDomain(CombatDomain.Underwater) && !homeNode.CoversDomain(CombatDomain.Air),
+                    "the fire-control sonar guides underwater interceptors and never air ones");
+                ctx.Check(!launcher.Engages(CombatDomain.Air), "anti-torpedo torpedoes are not fired at air targets");
+                CompProperties_FireControlRadar airFc = ThingDef.Named("DMSE_EarlyFireControlRadar").GetCompProperties<CompProperties_FireControlRadar>();
+                ctx.Check(airFc != null && !airFc.Covers(CombatDomain.Underwater), "DMSE's air fire-control radar does not guide at torpedoes");
+                CompProperties_TerminalCIWS flak = ThingDef.Named("DMSE_Turret_LegacyFlak").GetCompProperties<CompProperties_TerminalCIWS>();
+                ctx.Check(flak != null && !CombatDomainUtility.Covers(flak.domains, CombatDomain.Underwater), "DMSE's flak CIWS does not shoot at torpedoes");
 
                 int heldBefore = held.Count;
                 bool attempted = false;

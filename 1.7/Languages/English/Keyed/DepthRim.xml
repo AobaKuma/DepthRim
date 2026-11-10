@@ -113,4 +113,8 @@
   <DepthRim.Sonar.UnknownContact>unknown sonar contact</DepthRim.Sonar.UnknownContact>
   <DepthRim.Sonar.UnknownInspect>Something is moving out there. Bring a sonar closer (within half its range) to tell what it is.</DepthRim.Sonar.UnknownInspect>
   <DepthRim.Sonar.FishInspect>A large school of fish. Harmless.</DepthRim.Sonar.FishInspect>
+  <DepthRim.Enemy.BoatLeftLabel>Torpedo boat gone</DepthRim.Enemy.BoatLeftLabel>
+  <DepthRim.Enemy.BoatLeft>The enemy torpedo boat has slipped away. Your ocean maps are out of its reach for now.</DepthRim.Enemy.BoatLeft>
+  <DepthRim.Enemy.SubLeftLabel>Pirate submarine gone</DepthRim.Enemy.SubLeftLabel>
+  <DepthRim.Enemy.SubLeft>The pirate submarine has left the area. Your sonar has lost contact.</DepthRim.Enemy.SubLeft>
 </LanguageData>

@@ -142,6 +142,10 @@
         <stealthMissFactor>0.6</stealthMissFactor>
         <lockOnTicks>240</lockOnTicks>
         <supportsStrikeGuidance>false</supportsStrikeGuidance>
+        <!-- 只導引水下領域（魚雷、突擊艇）：不會拿去導引 DMSE 的防空飛彈打空中目標 -->
+        <domains>
+          <li>Underwater</li>
+        </domains>
       </li>
     </comps>
     <uiOrder>2212</uiOrder>

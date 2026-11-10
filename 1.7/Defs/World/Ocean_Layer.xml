@@ -59,6 +59,10 @@
         <voidTerrain>DepthRim_Abyss</voidTerrain>
         <shipMapGenerator>DepthRim_SubmarineHull</shipMapGenerator>
         <shipWorldObject>DepthRim_Submarine</shipWorldObject>
+        <!-- 只走海路、只算推進器耗電、下錨守深度規則 -->
+        <routeWorker Class="DepthRim.OceanRouteWorker" />
+        <energyWorker Class="DepthRim.SubmarineEnergyWorker" />
+        <landingWorker Class="DepthRim.SubmarineLandingWorker" />
       </li>
     </modExtensions>
   </PlanetLayerDef>

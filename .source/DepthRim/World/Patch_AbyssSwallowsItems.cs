@@ -11,7 +11,7 @@ namespace DepthRim
     /// 石塊先散在海床上，之後才挖出深淵，於是深淵上留著石塊。之後在深淵上鋪船體平台，石塊會原封不動地留在平台上，
     /// 而且擋住站立（2026-11-09 驗收 H1 發現）。</para>
     ///
-    /// <para>掛在 <see cref="TerrainGrid.SetTerrain"/> 上，所以挖洞、拆平台（<see cref="Patch_PlatformRemoval"/>）、
+    /// <para>掛在 <see cref="TerrainGrid.SetTerrain"/> 上，所以挖洞、拆平台（DMSE 依 voidTerrain 換回深淵）、
     /// 以後任何把格子變成深淵的方式都適用。Pawn 與建築不動（它們有自己的規則）；植物、石塊、碎屑、一般物品都沉下去。</para>
     /// </summary>
     [HarmonyPatch(typeof(TerrainGrid), nameof(TerrainGrid.SetTerrain))]

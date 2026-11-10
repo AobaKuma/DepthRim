@@ -3,7 +3,7 @@
 
   <!--
     魚雷：DMSE 飛彈換皮（設計稿 §11 M5）。裝配、發射、世界航跡、攔截、落點爆炸全部沿用 DMSE；
-    DepthRim 只補：只走海路（DepthRim.Patch_TorpedoEngage）與魚雷的深度／溫躍層遮蔽（DepthRim.TorpedoBehaviorProps）。
+    DepthRim 只補：只走海路（彈體的 engageWorker：DepthRim.TorpedoEngageWorker）與魚雷的深度／溫躍層遮蔽（DepthRim.TorpedoBehaviorProps）。
     爆炸打壞艙壁就走既有的進水系統。發射、來襲的視覺與貼圖暫時沿用 DMSE 輕型導彈。
   -->
 
@@ -25,6 +25,10 @@
     <baseScatter>2</baseScatter>
     <!-- 慢：輕型導彈 0.75，魚雷 0.3 -->
     <baseWorldSpeedFactor>0.3</baseWorldSpeedFactor>
+    <!-- 水下領域：只有打水下的火控（火控聲納）、攔截彈（反魚雷魚雷）與近防砲接戰；DMSE 的防空不打它 -->
+    <domain>Underwater</domain>
+    <!-- 只走海路、射程用海路距離 -->
+    <engageWorker Class="DepthRim.TorpedoEngageWorker" />
     <baseRange>0</baseRange>
     <terminalUpdates>1</terminalUpdates>
     <!-- 射程：40 × 2.5 × 0.1 = 10 格（以海路距離計） -->
@@ -311,7 +315,7 @@
 
   <!-- ==================== 反魚雷魚雷（5.7） ====================
        DMSE 攔截彈的換皮：裝進魚雷發射管，由火控聲納指派去攔截來襲的魚雷。
-       只打魚雷、也只有它和近防砲打得到魚雷（DepthRim.Patch_TorpedoInterceptors）。 -->
+       彈體是水下領域（DMSE 的 CombatDomain）：只打魚雷與突擊艇，DMSE 的防空攔截彈也不打魚雷。 -->
   <DMSE.MissileBodyDef>
     <defName>DepthRim_AntiTorpedoBody</defName>
     <label>anti-torpedo torpedo body</label>
@@ -329,6 +333,8 @@
     <baseScatter>1</baseScatter>
     <!-- 魚雷 0.3；攔截時再乘 DMSE 的 interceptorSpeedMultiplier 3 -->
     <baseWorldSpeedFactor>0.5</baseWorldSpeedFactor>
+    <!-- 當攔截彈時只打水下領域（魚雷、突擊艇） -->
+    <domain>Underwater</domain>
     <baseRange>0</baseRange>
     <terminalUpdates>0</terminalUpdates>
     <baseFuel>20</baseFuel>
@@ -493,7 +499,7 @@
 
   <!-- ==================== 敵方魚雷艇（5.7） ====================
        海洋層上沒有地圖的敵方物件，掛 DMSE 導彈陣地元件定時對海路射程內的玩家海洋地圖發射魚雷。
-       導引頭每發隨機（DepthRim.EnemyTorpedoLoadoutExtension）；陣地轉移＝艇離開。 -->
+       導引頭每發隨機（DMSE 陣地元件的 partOptions）；陣地轉移＝艇離開（信件改成 DepthRim 的文字）。 -->
   <WorldObjectDef>
     <defName>DepthRim_EnemyTorpedoBoat</defName>
     <label>enemy torpedo boat</label>
@@ -513,16 +519,19 @@
         <relocationDays>4~8</relocationDays>
         <missileBody>DepthRim_TorpedoBody</missileBody>
         <incomingWorldObjectDef>DepthRim_WorldObject_EnemyTorpedo</incomingWorldObjectDef>
+        <partOptions>
+          <li>
+            <category>Guidance</category>
+            <parts>
+              <li>DepthRim_Torpedo_Guidance_PassiveHoming</li>
+              <li>DepthRim_Torpedo_Guidance_Wire</li>
+            </parts>
+          </li>
+        </partOptions>
+        <relocatedLetterLabelKey>DepthRim.Enemy.BoatLeftLabel</relocatedLetterLabelKey>
+        <relocatedLetterTextKey>DepthRim.Enemy.BoatLeft</relocatedLetterTextKey>
       </li>
     </comps>
-    <modExtensions>
-      <li Class="DepthRim.EnemyTorpedoLoadoutExtension">
-        <guidance>
-          <li>DepthRim_Torpedo_Guidance_PassiveHoming</li>
-          <li>DepthRim_Torpedo_Guidance_Wire</li>
-        </guidance>
-      </li>
-    </modExtensions>
   </WorldObjectDef>
 
   <IncidentDef>

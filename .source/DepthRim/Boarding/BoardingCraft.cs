@@ -40,7 +40,7 @@ namespace DepthRim
     /// 玩家：殖民者右鍵登艇，按「出發」選一格海路到得了的海洋格，飛過去後一樣切入對方艙室。
     /// 艇上的人放在自己的容器（不用 CompTransporter：它在離場時會倒出內容物，也不能在 skyfaller 裡存非世界 pawn）。
     /// </summary>
-    public class Building_BoardingCraft : Building, IThingHolder
+    public class Building_BoardingCraft : Building, IThingHolder, IBVRPayloadHolder, IInterceptResolver, IBVRContactLabel
     {
         public const int EjectDelayTicks = 120;
 
@@ -76,6 +76,60 @@ namespace DepthRim
         }
 
         public IEnumerable<Pawn> Aboard => aboard.OfType<Pawn>();
+
+        /// <summary>聲納分類（§11 M7 7.4）：來襲的突擊艇在抵達前這麼多 tick 內才分得出來，之前只是「未知聲納接觸」。</summary>
+        public const int ClassifyTicksBeforeImpact = 1200;
+
+        public string ContactLabel(BVRTarget target, int ticksToImpact)
+        {
+            return ticksToImpact > ClassifyTicksBeforeImpact && !IsPlayerCraft ? "DepthRim.Sonar.UnknownContact".Translate().ToString() : def.label;
+        }
+
+        /// <summary>DMSE 的地圖層攔截用來判定陣營、擊落時處理艇上人員。</summary>
+        public IEnumerable<Pawn> PawnsAboard => new List<Pawn>(Aboard);
+
+        /// <summary>
+        /// 被擊落的突擊艇在水下是「沉沒」（§3.4 第 3 點）：不用 DMSE 的殘骸空投，艇身碎片與遺體直接沉到落點附近的海床，
+        /// 發一則訊息。艇上人員照 DMSE 的規則處理（玩家的人失蹤，其他人陣亡）。
+        /// </summary>
+        public bool TryResolveIntercept(BVRTarget target, Map map, IntVec3 debrisCell)
+        {
+            if (map == null)
+            {
+                return false;
+            }
+            int crew = Aboard.Count();
+            bool player = IsPlayerCraft;
+            List<Pawn> dead = target.HandleInterceptedPawns();
+            List<Thing> sinking = new List<Thing>();
+            foreach (Pawn pawn in dead)
+            {
+                Corpse corpse = pawn.Corpse ?? pawn.MakeCorpse(null, null);
+                if (corpse == null)
+                {
+                    continue;
+                }
+                corpse.holdingOwner?.Remove(corpse);
+                sinking.Add(corpse);
+            }
+            target.Discard();
+            IntVec3 cell = BoardingUtility.SeabedNear(map, debrisCell.IsValid && debrisCell.InBounds(map) ? debrisCell : target.position);
+            for (int i = 0; i < 2; i++)
+            {
+                sinking.Add(ThingMaker.MakeThing(ThingDefOf.ChunkSlagSteel));
+            }
+            foreach (Thing t in sinking)
+            {
+                GenPlace.TryPlaceThing(t, cell, map, ThingPlaceMode.Near);
+            }
+            for (int i = 0; i < 6; i++)
+            {
+                FleckMaker.ThrowDustPuffThick(cell.ToVector3Shifted() + Gen.RandomHorizontalVector(1.5f), map, 2f, new Color(0.6f, 0.7f, 0.8f, 0.8f));
+            }
+            Messages.Message("DepthRim.Boarding.CraftSunk".Translate(crew), new LookTargets(cell, map),
+                player ? MessageTypeDefOf.NegativeEvent : MessageTypeDefOf.PositiveEvent);
+            return true;
+        }
 
         public int AboardCount => aboard.Count(t => t is Pawn p && raiders.Contains(p));
 
@@ -491,66 +545,6 @@ namespace DepthRim
             {
                 craftHolder ??= new ThingOwner<Building_BoardingCraft>(this);
             }
-        }
-    }
-
-    /// <summary>讓 DMSE 的地圖層攔截認得突擊艇上的人（判定陣營、被擊落時一起處理）。</summary>
-    [HarmonyPatch(typeof(BVRDetection), nameof(BVRDetection.PawnsIn))]
-    public static class Patch_BoardingCraftPawns
-    {
-        [HarmonyPostfix]
-        public static void Postfix(Thing innerThing, ref IEnumerable<Pawn> __result)
-        {
-            if (innerThing is Building_BoardingCraft craft)
-            {
-                __result = __result.Concat(new List<Pawn>(craft.Aboard));
-            }
-        }
-    }
-
-    /// <summary>
-    /// 被擊落的突擊艇在水下是「沉沒」（§3.4 第 3 點）：不用 DMSE 的殘骸空投，艇身碎片與遺體直接沉到落點附近的海床，
-    /// 發一則訊息。艇上人員照 DMSE 的規則處理（玩家的人失蹤，其他人陣亡）。
-    /// </summary>
-    [HarmonyPatch(typeof(BVRTarget), nameof(BVRTarget.SpawnDebris), new[] { typeof(Map), typeof(IntVec3) })]
-    public static class Patch_BoardingCraftSinks
-    {
-        [HarmonyPrefix]
-        public static bool Prefix(BVRTarget __instance, Map map, IntVec3 debrisCell)
-        {
-            if (!(__instance.Skyfaller?.innerContainer.FirstOrDefault() is Building_BoardingCraft craft) || map == null)
-            {
-                return true;
-            }
-            int crew = craft.Aboard.Count();
-            List<Pawn> dead = __instance.HandleInterceptedPawns();
-            List<Thing> sinking = new List<Thing>();
-            foreach (Pawn pawn in dead)
-            {
-                Corpse corpse = pawn.Corpse ?? pawn.MakeCorpse(null, null);
-                if (corpse == null)
-                {
-                    continue;
-                }
-                corpse.holdingOwner?.Remove(corpse);
-                sinking.Add(corpse);
-            }
-            __instance.Discard();
-            IntVec3 cell = BoardingUtility.SeabedNear(map, debrisCell.IsValid && debrisCell.InBounds(map) ? debrisCell : __instance.position);
-            for (int i = 0; i < 2; i++)
-            {
-                sinking.Add(ThingMaker.MakeThing(ThingDefOf.ChunkSlagSteel));
-            }
-            foreach (Thing t in sinking)
-            {
-                GenPlace.TryPlaceThing(t, cell, map, ThingPlaceMode.Near);
-            }
-            for (int i = 0; i < 6; i++)
-            {
-                FleckMaker.ThrowDustPuffThick(cell.ToVector3Shifted() + Gen.RandomHorizontalVector(1.5f), map, 2f, new Color(0.6f, 0.7f, 0.8f, 0.8f));
-            }
-            Messages.Message("DepthRim.Boarding.CraftSunk".Translate(crew), new LookTargets(cell, map), craft.IsPlayerCraft ? MessageTypeDefOf.NegativeEvent : MessageTypeDefOf.PositiveEvent);
-            return false;
         }
     }
 }

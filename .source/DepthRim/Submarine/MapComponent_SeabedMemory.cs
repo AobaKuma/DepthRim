@@ -7,7 +7,7 @@ namespace DepthRim
     /// <summary>
     /// 下錨在海床上的船體平台底下原本是什麼地形。船塢只能蓋在深淵上，但下錨（DMSE 降落）可以停在海床上：
     /// 降落時平台蓋過海床，這裡記下被蓋掉的地形；之後潛艇離開（DMSE 把船體範圍設成虛空 = 深淵）或平台被拆掉
-    /// （拆完也是深淵，見 <see cref="Patch_PlatformRemoval"/>），就把海床還回去，不會在海床上留下一個深淵洞。
+    /// （拆完露出圖層的虛空：DMSE 讀海洋層的 <c>TransferEnvironmentExtension.voidTerrain</c>，也就是深淵），就把海床還回去，不會在海床上留下一個深淵洞。
     /// </summary>
     public class MapComponent_SeabedMemory : MapComponent
     {

@@ -176,36 +176,6 @@ namespace DepthRim
     }
 
     /// <summary>
-    /// DMSE 的 NPC 世界節點要玩家研究了雷達網才建立（<c>WorldComponent_FactionAirDefenseAlert.Enabled</c>）。
-    /// 海盜潛艇的抽象防空是海洋層的玩法核心，不跟著那個研究：每次重建節點後，自己把還沒在清單裡的海盜潛艇加進去。
-    /// </summary>
-    [HarmonyPatch(typeof(WorldComponent_BVRNetwork), "RebuildNodes")]
-    public static class Patch_PirateSubmarineNodes
-    {
-        private static readonly AccessTools.FieldRef<WorldComponent_BVRNetwork, List<BVRNode>> Nodes =
-            AccessTools.FieldRefAccess<WorldComponent_BVRNetwork, List<BVRNode>>("nodes");
-
-        [HarmonyPostfix]
-        public static void Postfix(WorldComponent_BVRNetwork __instance)
-        {
-            List<BVRNode> nodes = Nodes(__instance);
-            foreach (WorldObject o in Find.WorldObjects.AllWorldObjects)
-            {
-                if (!(o is WorldObject_PirateSubmarine sub) || sub.Destroyed)
-                {
-                    continue;
-                }
-                WorldObjectComp_AirDefense comp = sub.GetComponent<WorldObjectComp_AirDefense>();
-                if (comp == null || !comp.Available || nodes.Any(n => n.parent == sub))
-                {
-                    continue;
-                }
-                nodes.Add(new BVRNode { parent = sub, faction = sub.Faction, defense = new WorldAirDefenseAdapter(comp) });
-            }
-        }
-    }
-
-    /// <summary>
     /// 聲納目標分類（§11 M7 7.4）：玩家的聲納節點在偵測半徑一半以內聽到，才分得出是什麼；否則只是「未知聲納接觸」。
     /// </summary>
     public static class SonarContacts
