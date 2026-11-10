@@ -8,12 +8,16 @@
   <DepthRim_ShallowReef.label>淺珊瑚礁</DepthRim_ShallowReef.label>
   <DepthRim_ShallowReef.description>溫暖淺水裡綿延的珊瑚礁。淺色的珊瑚脊可以開採成建材。</DepthRim_ShallowReef.description>
   <DepthRim_DeepReef.label>深珊瑚礁</DepthRim_DeepReef.label>
-  <DepthRim_DeepReef.description>日光照不到的冰冷幽暗水域，深色珊瑚在這裡緩慢長成巨大的丘塊。</DepthRim_DeepReef.description>
+  <DepthRim_DeepReef.description>大陸坡上或海山頂上日光照不到的冰冷幽暗水域，深色珊瑚在這裡緩慢長成巨大的丘塊。</DepthRim_DeepReef.description>
   <DepthRim_SeabedPlain.label>海床平原</DepthRim_SeabedPlain.label>
   <DepthRim_SeabedPlain.description>深海底一望無際的平坦沉積物，幾乎沒有岩石。</DepthRim_SeabedPlain.description>
   <DepthRim_HydrothermalField.label>熱液噴口區</DepthRim_HydrothermalField.label>
-  <DepthRim_HydrothermalField.description>海床上的熱液噴口群。海水溫暖、岩層破碎，噴口可以用來地熱發電。</DepthRim_HydrothermalField.description>
+  <DepthRim_HydrothermalField.description>中洋脊軸線上的熱液噴口群。海水溫暖、年輕的火山岩層破碎，噴口可以用來地熱發電。</DepthRim_HydrothermalField.description>
   <DepthRim_AbyssalTrench.label>深淵海溝</DepthRim_AbyssalTrench.label>
-  <DepthRim_AbyssalTrench.description>深淵海溝的邊緣。陡峭的崖壁直落進無底的黑暗。</DepthRim_AbyssalTrench.description>
+  <DepthRim_AbyssalTrench.description>隱沒帶海溝的邊緣：海床沿著斷層插進大陸底下。陡峭的崖壁直落進無底的黑暗。</DepthRim_AbyssalTrench.description>
+  <DepthRim_MidOceanRidge.label>中洋脊</DepthRim_MidOceanRidge.label>
+  <DepthRim_MidOceanRidge.description>沿著洋盆正中央延伸的海底火山山脈，新的海床在這裡誕生。黑色的岩石很年輕，被裂谷切得支離破碎。</DepthRim_MidOceanRidge.description>
+  <DepthRim_Landmass.label>陸塊</DepthRim_Landmass.label>
+  <DepthRim_Landmass.description>堅實的大陸岩層。陸地之下沒有海洋。</DepthRim_Landmass.description>
 
 </LanguageData>

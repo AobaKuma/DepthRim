@@ -49,6 +49,11 @@ static partial class Test
         {
             defTypes[t.Name] = t;
         }
+        // DMSE 的 Def 型別（魚雷用的 MissileBodyDef／MissilePartDef）
+        foreach (Type t in typeof(DMSE.MissileBodyDef).Assembly.GetTypes().Where(t => typeof(Verse.Def).IsAssignableFrom(t)))
+        {
+            if (!defTypes.ContainsKey(t.Name)) { defTypes[t.Name] = t; }
+        }
         int checkedDefs = 0;
         foreach (string file in DefFiles)
         {
@@ -447,7 +452,22 @@ static partial class Test
             if (attr == null) { continue; }
             patches++;
             Type declaring = attr.info.declaringType;
-            MethodBase target = AccessTools.Method(declaring, attr.info.methodName, attr.info.argumentTypes);
+            MethodBase target;
+            MethodInfo targetMethod = declaring == null ? AccessTools.Method(type, "TargetMethod") : null;
+            if (targetMethod != null)
+            {
+                // [HarmonyPatch] 加 TargetMethod()：目標是非公開型別上的方法
+                target = targetMethod.Invoke(null, null) as MethodBase;
+                declaring = target?.DeclaringType;
+                Check(target != null, $"{type.Name}: TargetMethod() finds its target");
+                if (target == null) { continue; }
+            }
+            else
+            {
+                target = attr.info.methodType == MethodType.Getter
+                    ? AccessTools.PropertyGetter(declaring, attr.info.methodName)
+                    : AccessTools.Method(declaring, attr.info.methodName, attr.info.argumentTypes);
+            }
             Check(target != null, $"{type.Name}: target {declaring?.Name}.{attr.info.methodName} exists");
             if (target == null) { continue; }
             HashSet<string> targetParams = new HashSet<string>(target.GetParameters().Select(p => p.Name));

@@ -19,6 +19,10 @@
          Odyssey 的 SpaceMapParent 定義也標註 required。 -->
     <expandingIconColor>(140,210,240,255)</expandingIconColor>
     <neverMultiSelect>true</neverMultiSelect>
+    <!-- 只給 DepthRim 自己的海洋事件（例如巨物經過）用；原版說書人不會挑這個標籤。 -->
+    <IncidentTargetTags>
+      <li>DepthRim_OceanMap</li>
+    </IncidentTargetTags>
     <inspectorTabs>
       <li>WITab_Terrain</li>
       <li>WITab_Planet</li>

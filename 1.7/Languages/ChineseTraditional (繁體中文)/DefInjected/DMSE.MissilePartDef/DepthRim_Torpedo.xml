@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_Torpedo_Warhead_HE.label>魚雷高爆戰鬥部</DepthRim_Torpedo_Warhead_HE.label>
+  <DepthRim_Torpedo_Warhead_HE.description>重型高爆裝藥。在水下，爆炸會撕開船殼板，被打穿的地方就開始進水。</DepthRim_Torpedo_Warhead_HE.description>
+  <DepthRim_Torpedo_Guidance_Straight.label>直航陀螺儀</DepthRim_Torpedo_Guidance_Straight.label>
+  <DepthRim_Torpedo_Guidance_Straight.description>讓魚雷保持航向的陀螺儀。沒有導引頭：抵達目標區中央附近，打到什麼算什麼。</DepthRim_Torpedo_Guidance_Straight.description>
+  <DepthRim_Torpedo_Guidance_PassiveHoming.label>被動歸向導引頭</DepthRim_Torpedo_Guidance_PassiveHoming.label>
+  <DepthRim_Torpedo_Guidance_PassiveHoming.description>聆聽最響的敵方主動聲納並直衝過去的水聽器導引頭。被動聲納不發聲，它找不到；沒有主動聲納可以追時，改打耗電最大的建築，再不然就直航。</DepthRim_Torpedo_Guidance_PassiveHoming.description>
+  <DepthRim_Torpedo_Guidance_Wire.label>線導</DepthRim_Torpedo_Guidance_Wire.label>
+  <DepthRim_Torpedo_Guidance_Wire.description>拉著導線連回發射艇，乘員能在發射後操縱魚雷追擊移動中的潛艇。瞄準船上最堅固的敵方結構，其次是最大的生物。</DepthRim_Torpedo_Guidance_Wire.description>
+  <DepthRim_Torpedo_Payload_None.label>無酬載</DepthRim_Torpedo_Payload_None.label>
+  <DepthRim_Torpedo_Payload_None.description>沒有次級裝藥。</DepthRim_Torpedo_Payload_None.description>
+  <DepthRim_Torpedo_Payload_Noisemaker.label>聲學誘餌</DepthRim_Torpedo_Payload_Noisemaker.label>
+  <DepthRim_Torpedo_Payload_Noisemaker.description>被敵方鎖定時放出的噪音彈。這陣聲響可以打斷一次火控鎖定，之後就用完了。</DepthRim_Torpedo_Payload_Noisemaker.description>
+  <DepthRim_AntiTorpedo_Warhead_Proximity.label>聲學近炸裝藥</DepthRim_AntiTorpedo_Warhead_Proximity.label>
+  <DepthRim_AntiTorpedo_Warhead_Proximity.description>小型裝藥，配聲學近炸引信：聽到目標魚雷從近處經過就引爆。</DepthRim_AntiTorpedo_Warhead_Proximity.description>
+</LanguageData>

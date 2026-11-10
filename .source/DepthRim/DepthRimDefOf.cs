@@ -12,6 +12,9 @@ namespace DepthRim
 
         public static WorldObjectDef DepthRim_OceanSite;
 
+        /// <summary>海洋層的陸塊：大陸下方，沒有海洋。</summary>
+        public static BiomeDef DepthRim_Landmass;
+
         // ── 水位系統 ──
         public static HediffDef DepthRim_Wading;
 
@@ -48,6 +51,11 @@ namespace DepthRim
         public static ThingDef DepthRim_WatertightDoor;
 
         public static FleckDef DepthRim_LeakSpray;
+
+        // ── 中層水域（地形下方經過的生物）──
+        public static ShaderTypeDef DepthRim_Midwater;
+
+        public static IncidentDef DepthRim_GiantPasses;
 
         static DepthRimDefOf()
         {

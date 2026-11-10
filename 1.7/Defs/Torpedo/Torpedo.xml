@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    魚雷：DMSE 飛彈換皮（設計稿 §11 M5）。裝配、發射、世界航跡、攔截、落點爆炸全部沿用 DMSE；
+    DepthRim 只補：只走海路（DepthRim.Patch_TorpedoEngage）與魚雷的深度／溫躍層遮蔽（DepthRim.TorpedoBehaviorProps）。
+    爆炸打壞艙壁就走既有的進水系統。發射、來襲的視覺與貼圖暫時沿用 DMSE 輕型導彈。
+  -->
+
+  <!-- ==================== 彈體 ==================== -->
+  <DMSE.MissileBodyDef>
+    <defName>DepthRim_TorpedoBody</defName>
+    <label>torpedo body</label>
+    <expandingIconPath>UI/DMSE/TravelingMissile_Expanding_Ballistic</expandingIconPath>
+    <designWord>Torpedo</designWord>
+    <namer>DMSE_Namer_Light</namer>
+    <description>A heavyweight torpedo hull with an electric motor. Slow, so the target has time to hear it coming, but it only travels by sea and keeps to the depth it was fired at.\n\nHas slots for a warhead, guidance and payload.</description>
+    <sizeClass>Light</sizeClass>
+    <launchMode>Tilt</launchMode>
+    <customizeLocation>Item</customizeLocation>
+    <payloadCapacity>3</payloadCapacity>
+    <baseExplosionRadius>3</baseExplosionRadius>
+    <baseDamageDef>Bomb</baseDamageDef>
+    <baseDamageAmount>110</baseDamageAmount>
+    <baseScatter>2</baseScatter>
+    <!-- 慢：輕型導彈 0.75，魚雷 0.3 -->
+    <baseWorldSpeedFactor>0.3</baseWorldSpeedFactor>
+    <baseRange>0</baseRange>
+    <terminalUpdates>1</terminalUpdates>
+    <!-- 射程：40 × 2.5 × 0.1 = 10 格（以海路距離計） -->
+    <baseFuel>40</baseFuel>
+    <baseSpecificImpulse>2.5</baseSpecificImpulse>
+    <rangePerFuelImpulse>0.1</rangePerFuelImpulse>
+    <incomingSkyfaller>DMSE_Incoming_LightMissile</incomingSkyfaller>
+    <launchProjectile>DMSE_Launch_Light</launchProjectile>
+    <slots>
+      <li>Warhead</li>
+      <li>Guidance</li>
+      <li>Payload</li>
+    </slots>
+    <defaultParts>
+      <li>DepthRim_Torpedo_Warhead_HE</li>
+      <li>DepthRim_Torpedo_Guidance_Straight</li>
+      <li>DepthRim_Torpedo_Payload_None</li>
+    </defaultParts>
+    <behaviors>
+      <li Class="DepthRim.TorpedoBehaviorProps" />
+    </behaviors>
+    <modExtensions>
+      <li Class="DepthRim.TorpedoExtension" />
+    </modExtensions>
+  </DMSE.MissileBodyDef>
+
+  <!-- ==================== 部件 ==================== -->
+  <DMSE.MissilePartDef>
+    <defName>DepthRim_Torpedo_Warhead_HE</defName>
+    <label>torpedo HE warhead</label>
+    <designWord>HE</designWord>
+    <description>A heavy high-explosive charge. Underwater the blast tears open hull plating, and whatever it breaches starts to flood.</description>
+    <category>Warhead</category>
+    <compatibleBodies><li>DepthRim_TorpedoBody</li></compatibleBodies>
+    <explosionRadiusOffset>1</explosionRadiusOffset>
+    <damageAmountOffset>40</damageAmountOffset>
+    <damageDefOverride>Bomb</damageDefOverride>
+    <costList>
+      <Steel>20</Steel>
+      <Chemfuel>20</Chemfuel>
+    </costList>
+  </DMSE.MissilePartDef>
+
+  <DMSE.MissilePartDef>
+    <defName>DepthRim_Torpedo_Guidance_Straight</defName>
+    <label>straight-running gyro</label>
+    <omitFromDesignName>true</omitFromDesignName>
+    <description>A gyroscope that holds the torpedo on its course. No seeker: it arrives near the middle of the target area and hits whatever is there.</description>
+    <category>Guidance</category>
+    <compatibleBodies><li>DepthRim_TorpedoBody</li></compatibleBodies>
+    <guidanceType Class="DMSE.GuidanceType_Inertial" />
+    <scatterOffset>0</scatterOffset>
+  </DMSE.MissilePartDef>
+
+  <DMSE.MissilePartDef>
+    <defName>DepthRim_Torpedo_Guidance_PassiveHoming</defName>
+    <label>passive homing seeker</label>
+    <designWord>Homing</designWord>
+    <description>A hydrophone seeker that listens for the loudest enemy active sonar and steers straight for it. Passive sonar emits nothing and is invisible to it; without an active sonar to home on, it hits the building drawing the most power, then falls back to running straight.</description>
+    <category>Guidance</category>
+    <compatibleBodies><li>DepthRim_TorpedoBody</li></compatibleBodies>
+    <guidanceType Class="DMSE.GuidanceType_AntiRadiation" />
+    <scatterOffset>-1</scatterOffset>
+    <costList>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costList>
+  </DMSE.MissilePartDef>
+
+  <DMSE.MissilePartDef>
+    <defName>DepthRim_Torpedo_Guidance_Wire</defName>
+    <label>wire guidance</label>
+    <designWord>Wire</designWord>
+    <description>A spool of guidance wire back to the launching boat, so the crew can steer the torpedo after a moving submarine. It aims for the sturdiest enemy structure aboard, then the largest creature.</description>
+    <category>Guidance</category>
+    <compatibleBodies><li>DepthRim_TorpedoBody</li></compatibleBodies>
+    <guidanceType Class="DMSE.GuidanceType_AntiShip" />
+    <scatterOffset>-1.5</scatterOffset>
+    <costList>
+      <ComponentIndustrial>4</ComponentIndustrial>
+      <Steel>10</Steel>
+    </costList>
+  </DMSE.MissilePartDef>
+
+  <DMSE.MissilePartDef>
+    <defName>DepthRim_Torpedo_Payload_None</defName>
+    <label>no payload</label>
+    <omitFromDesignName>true</omitFromDesignName>
+    <description>No secondary charge.</description>
+    <category>Payload</category>
+    <compatibleBodies><li>DepthRim_TorpedoBody</li></compatibleBodies>
+    <payloadEffect Class="DMSE.PayloadEffect_None" />
+  </DMSE.MissilePartDef>
+
+  <DMSE.MissilePartDef>
+    <defName>DepthRim_Torpedo_Payload_Noisemaker</defName>
+    <label>acoustic decoy</label>
+    <designWord>Decoy</designWord>
+    <description>A noisemaker that the torpedo releases when an enemy locks on to it. The burst of sound can break one fire-control lock, then it is spent.</description>
+    <category>Payload</category>
+    <compatibleBodies><li>DepthRim_TorpedoBody</li></compatibleBodies>
+    <payloadEffect Class="DMSE.PayloadEffect_None" />
+    <jamStrength>0.3</jamStrength>
+    <chaffCharges>1</chaffCharges>
+    <costList>
+      <Steel>10</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+  </DMSE.MissilePartDef>
+
+  <!-- ==================== 魚雷物品 ==================== -->
+  <ThingDef ParentName="DMSE_ResourceBase">
+    <defName>DepthRim_Torpedo</defName>
+    <label>torpedo</label>
+    <description>A heavyweight torpedo, loaded into a torpedo tube and fired at targets beyond the map. It only travels by sea. Its warhead, guidance and payload can be swapped in the assembly tab.</description>
+    <descriptionHyperlinks>
+      <ThingDef>DepthRim_TorpedoTube</ThingDef>
+    </descriptionHyperlinks>
+    <graphicData>
+      <texPath>Things/Missile/Grison/skyFaller</texPath>
+      <drawSize>(1.49,1.49)</drawSize>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Standard_Drop</soundDrop>
+    <stackLimit>1</stackLimit>
+    <tickerType>Rare</tickerType>
+    <statBases>
+      <MaxHitPoints>120</MaxHitPoints>
+      <MarketValue>600</MarketValue>
+      <Mass>160</Mass>
+      <Flammability>0.3</Flammability>
+    </statBases>
+    <costList>
+      <Steel>80</Steel>
+      <Chemfuel>40</Chemfuel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <recipeMaker>
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+      <workSkill>Crafting</workSkill>
+      <effectWorking>Smith</effectWorking>
+      <soundWorking>Recipe_Smith</soundWorking>
+      <recipeUsers Inherit="False">
+        <li>TableMachining</li>
+      </recipeUsers>
+      <researchPrerequisite>DepthRim_UnderwaterCombat</researchPrerequisite>
+      <unfinishedThingDef>UnfinishedGun</unfinishedThingDef>
+      <workAmount>4000</workAmount>
+    </recipeMaker>
+    <modExtensions>
+      <li Class="DMSE.MissileRoleExtension">
+        <role>Strike</role>
+      </li>
+    </modExtensions>
+    <comps>
+      <li Class="DMSE.CompProperties_Renameable" />
+      <li Class="DMSE.CompProperties_MissileConfig">
+        <defaultBody>DepthRim_TorpedoBody</defaultBody>
+      </li>
+    </comps>
+    <inspectorTabs>
+      <li>DMSE.ITab_MissileAssembly</li>
+    </inspectorTabs>
+  </ThingDef>
+
+  <!-- ==================== 航跡世界物件 ==================== -->
+  <WorldObjectDef>
+    <defName>DepthRim_WorldObject_Torpedo</defName>
+    <label>torpedo</label>
+    <description>A torpedo running through the water.</description>
+    <worldObjectClass>DMSE.ScorerProjectile_WorldObject</worldObjectClass>
+    <texture>UI/DMSE/TravelingMissile</texture>
+    <rotateGraphicWhenTraveling>true</rotateGraphicWhenTraveling>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>UI/DMSE/TravelingMissile_Expanding</expandingIconTexture>
+    <expandingIconPriority>100</expandingIconPriority>
+    <expandMore>true</expandMore>
+    <allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
+    <validLaunchTarget>false</validLaunchTarget>
+  </WorldObjectDef>
+
+  <!-- 敵方魚雷艇發射的航跡：DMSE 的陣地元件只認 WorldObject_IncomingMissile（玩家發射管用的是 ScorerProjectile_WorldObject）。 -->
+  <WorldObjectDef>
+    <defName>DepthRim_WorldObject_EnemyTorpedo</defName>
+    <label>torpedo</label>
+    <description>A torpedo running through the water.</description>
+    <worldObjectClass>DMSE.WorldObject_IncomingMissile</worldObjectClass>
+    <texture>UI/DMSE/TravelingMissile</texture>
+    <rotateGraphicWhenTraveling>true</rotateGraphicWhenTraveling>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>UI/DMSE/TravelingMissile_Expanding</expandingIconTexture>
+    <expandingIconPriority>100</expandingIconPriority>
+    <expandMore>true</expandMore>
+    <validLaunchTarget>false</validLaunchTarget>
+  </WorldObjectDef>
+
+  <!-- ==================== 魚雷發射管 ==================== -->
+  <ThingDef ParentName="DMSE_TiltLauncherBase">
+    <defName>DepthRim_TorpedoTube</defName>
+    <label>torpedo tube</label>
+    <description>A pair of pressure-rated tubes that hold two torpedoes and fire them at targets beyond the map. Torpedoes only travel by sea, so the target must be reachable by water. Anti-torpedo torpedoes loaded here are fired by a fire-control sonar at incoming torpedoes.\n\nRequires power.</description>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <thingClass>DMSE.Building_MissileRack</thingClass>
+    <graphicData>
+      <texPath>Things/Building/MissileLauncher4X/building</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(4,5)</drawSize>
+    </graphicData>
+    <size>(1,3)</size>
+    <pathCost>80</pathCost>
+    <fillPercent>0.55</fillPercent>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <statBases>
+      <MaxHitPoints>350</MaxHitPoints>
+      <WorkToBuild>7000</WorkToBuild>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>200</Steel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <building>
+      <maxItemsInCell>1</maxItemsInCell>
+      <ignoreStoredThingsBeauty>true</ignoreStoredThingsBeauty>
+      <fixedStorageSettings>
+        <filter>
+          <thingDefs>
+            <li>DepthRim_Torpedo</li>
+            <li>DepthRim_AntiTorpedo</li>
+          </thingDefs>
+        </filter>
+      </fixedStorageSettings>
+      <defaultStorageSettings>
+        <priority>Important</priority>
+        <filter>
+          <thingDefs>
+            <li>DepthRim_Torpedo</li>
+            <li>DepthRim_AntiTorpedo</li>
+          </thingDefs>
+        </filter>
+      </defaultStorageSettings>
+    </building>
+    <modExtensions>
+      <li Class="DMSE.MissileLauncherExtension">
+        <sizeClass>Light</sizeClass>
+        <launchMode>Tilt</launchMode>
+        <capacity>2</capacity>
+      </li>
+    </modExtensions>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>200</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="DMSE.CompProperties_MissileRailLauncher">
+        <skyfaller>DMSE_SkyFaller_LightMissile</skyfaller>
+        <skyfallerIncoming>DMSE_Incoming_LightMissile</skyfallerIncoming>
+        <worldObjectDef>DepthRim_WorldObject_Torpedo</worldObjectDef>
+        <missileBody>DepthRim_TorpedoBody</missileBody>
+        <launchCooldownTicks>600</launchCooldownTicks>
+        <launchForwardCells>2</launchForwardCells>
+      </li>
+      <!-- 反魚雷魚雷：火控聲納指派時當攔截彈射出（DMSE 攔截發射架；用途過濾讓攻擊用魚雷不會被拿去攔截）。 -->
+      <li Class="DMSE.CompProperties_MissileLauncher">
+        <interceptorSkyfaller>DMSE_SkyFaller_Interceptor</interceptorSkyfaller>
+        <reloadCooldownTicks>300</reloadCooldownTicks>
+        <interceptorTravelTicks>300</interceptorTravelTicks>
+      </li>
+    </comps>
+    <inspectorTabs>
+      <li>RimWorld.ITab_Storage</li>
+      <li>DMSE.ITab_MissileInventory</li>
+      <li>DMSE.ITab_MissileAssembly</li>
+    </inspectorTabs>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterCombat</li>
+    </researchPrerequisites>
+    <uiOrder>2212</uiOrder>
+  </ThingDef>
+
+  <!-- ==================== 反魚雷魚雷（5.7） ====================
+       DMSE 攔截彈的換皮：裝進魚雷發射管，由火控聲納指派去攔截來襲的魚雷。
+       只打魚雷、也只有它和近防砲打得到魚雷（DepthRim.Patch_TorpedoInterceptors）。 -->
+  <DMSE.MissileBodyDef>
+    <defName>DepthRim_AntiTorpedoBody</defName>
+    <label>anti-torpedo torpedo body</label>
+    <expandingIconPath>UI/DMSE/TravelingMissile_Expanding_Ballistic</expandingIconPath>
+    <designWord>ATT</designWord>
+    <namer>DMSE_Namer_Light</namer>
+    <description>A short, fast torpedo built to meet an incoming torpedo and detonate beside it. It cannot hit anything else.\n\nHas a slot for a warhead.</description>
+    <sizeClass>Light</sizeClass>
+    <launchMode>Tilt</launchMode>
+    <customizeLocation>Item</customizeLocation>
+    <payloadCapacity>1</payloadCapacity>
+    <baseExplosionRadius>2</baseExplosionRadius>
+    <baseDamageDef>Bomb</baseDamageDef>
+    <baseDamageAmount>40</baseDamageAmount>
+    <baseScatter>1</baseScatter>
+    <!-- 魚雷 0.3；攔截時再乘 DMSE 的 interceptorSpeedMultiplier 3 -->
+    <baseWorldSpeedFactor>0.5</baseWorldSpeedFactor>
+    <baseRange>0</baseRange>
+    <terminalUpdates>0</terminalUpdates>
+    <baseFuel>20</baseFuel>
+    <baseSpecificImpulse>2.5</baseSpecificImpulse>
+    <rangePerFuelImpulse>0.1</rangePerFuelImpulse>
+    <assembleWorkAmount>400</assembleWorkAmount>
+    <interceptHitFactor>0.9</interceptHitFactor>
+    <incomingSkyfaller>DMSE_Incoming_LightMissile</incomingSkyfaller>
+    <slots>
+      <li>Warhead</li>
+    </slots>
+    <defaultParts>
+      <li>DepthRim_AntiTorpedo_Warhead_Proximity</li>
+    </defaultParts>
+    <modExtensions>
+      <li Class="DepthRim.AntiTorpedoExtension" />
+    </modExtensions>
+  </DMSE.MissileBodyDef>
+
+  <DMSE.MissilePartDef>
+    <defName>DepthRim_AntiTorpedo_Warhead_Proximity</defName>
+    <label>acoustic proximity charge</label>
+    <omitFromDesignName>true</omitFromDesignName>
+    <description>A small charge with an acoustic proximity fuze that goes off when it hears the target torpedo pass close by.</description>
+    <category>Warhead</category>
+    <compatibleBodies><li>DepthRim_AntiTorpedoBody</li></compatibleBodies>
+    <costList>
+      <Steel>10</Steel>
+      <Chemfuel>10</Chemfuel>
+    </costList>
+  </DMSE.MissilePartDef>
+
+  <ThingDef ParentName="DMSE_ResourceBase">
+    <defName>DepthRim_AntiTorpedo</defName>
+    <label>anti-torpedo torpedo</label>
+    <description>A short, fast interceptor torpedo. Loaded into a torpedo tube, it is fired automatically by a fire-control sonar at torpedoes heading for this map. It only engages torpedoes.</description>
+    <descriptionHyperlinks>
+      <ThingDef>DepthRim_TorpedoTube</ThingDef>
+      <ThingDef>DepthRim_FireControlSonar</ThingDef>
+    </descriptionHyperlinks>
+    <graphicData>
+      <texPath>Things/Weapons/DMSE_Projectile_Stinger</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.33,1.33)</drawSize>
+    </graphicData>
+    <soundInteract>Metal_Drop</soundInteract>
+    <soundDrop>Standard_Drop</soundDrop>
+    <stackLimit>1</stackLimit>
+    <tickerType>Rare</tickerType>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <MarketValue>350</MarketValue>
+      <Mass>60</Mass>
+      <Flammability>0.3</Flammability>
+    </statBases>
+    <costList>
+      <Steel>40</Steel>
+      <Chemfuel>20</Chemfuel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <recipeMaker>
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+      <workSkill>Crafting</workSkill>
+      <effectWorking>Smith</effectWorking>
+      <soundWorking>Recipe_Smith</soundWorking>
+      <recipeUsers Inherit="False">
+        <li>TableMachining</li>
+      </recipeUsers>
+      <researchPrerequisite>DepthRim_UnderwaterCombat</researchPrerequisite>
+      <unfinishedThingDef>UnfinishedGun</unfinishedThingDef>
+      <workAmount>2500</workAmount>
+    </recipeMaker>
+    <modExtensions>
+      <li Class="DMSE.MissileRoleExtension">
+        <role>Interceptor</role>
+      </li>
+    </modExtensions>
+    <comps>
+      <li Class="DMSE.CompProperties_Renameable" />
+      <li Class="DMSE.CompProperties_MissileConfig">
+        <defaultBody>DepthRim_AntiTorpedoBody</defaultBody>
+      </li>
+    </comps>
+    <inspectorTabs>
+      <li>DMSE.ITab_MissileAssembly</li>
+    </inspectorTabs>
+  </ThingDef>
+
+  <!-- ==================== 近防砲（5.7） ====================
+       超空泡機砲：DMSE CIWS 的換皮，但走世界層點防禦（DepthRim.CompTorpedoPointDefense）：
+       不用火控、不佔通道，只打以這張地圖為目的地、快抵達的魚雷。彈藥用鋼。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_SupercavitatingGun</defName>
+    <label>supercavitating point-defence gun</label>
+    <description>A rapid-fire gun whose darts ride in a bubble of vapour, so they keep their speed underwater. It fires on its own at torpedoes in the last moments before they arrive, as long as a sonar on this map can hear them. Each burst has a fair chance of destroying the torpedo.\n\nRequires power and steel darts. Does not need fire control.</description>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <graphicData>
+      <texPath>Things/Building/AA_Gun/AntiAirGun_Base</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(3,3)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <rotatable>true</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>0.6</fillPercent>
+    <pathCost>42</pathCost>
+    <tickerType>Normal</tickerType>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>8000</WorkToBuild>
+      <Mass>150</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>220</Steel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>300</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="CompProperties_Refuelable">
+        <fuelLabel>darts</fuelLabel>
+        <fuelGizmoLabel>darts</fuelGizmoLabel>
+        <outOfFuelMessage>Cannot fire: no darts.</outOfFuelMessage>
+        <fuelFilter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </fuelFilter>
+        <fuelCapacity>60</fuelCapacity>
+        <fuelMultiplier>1</fuelMultiplier>
+        <initialFuelPercent>0</initialFuelPercent>
+        <showFuelGizmo>true</showFuelGizmo>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+        <initialAllowAutoRefuel>true</initialAllowAutoRefuel>
+        <autoRefuelPercent>0.5</autoRefuelPercent>
+      </li>
+      <li Class="DepthRim.CompProperties_TorpedoPointDefense">
+        <hitChance>0.35</hitChance>
+        <engageEtaTicks>600</engageEtaTicks>
+        <cooldownTicks>240</cooldownTicks>
+        <fuelPerBurst>10</fuelPerBurst>
+        <fireSound>Shot_Autocannon</fireSound>
+      </li>
+    </comps>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterCombat</li>
+    </researchPrerequisites>
+    <uiOrder>2213</uiOrder>
+  </ThingDef>
+
+  <!-- ==================== 敵方魚雷艇（5.7） ====================
+       海洋層上沒有地圖的敵方物件，掛 DMSE 導彈陣地元件定時對海路射程內的玩家海洋地圖發射魚雷。
+       導引頭每發隨機（DepthRim.EnemyTorpedoLoadoutExtension）；陣地轉移＝艇離開。 -->
+  <WorldObjectDef>
+    <defName>DepthRim_EnemyTorpedoBoat</defName>
+    <label>enemy torpedo boat</label>
+    <description>A hostile attack boat lurking within torpedo range. It fires torpedoes at your ocean maps until it moves on.</description>
+    <worldObjectClass>DepthRim.WorldObject_EnemyTorpedoBoat</worldObjectClass>
+    <texture>World/WorldObjects/Caravan</texture>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/Caravan</expandingIconTexture>
+    <expandingIconPriority>60</expandingIconPriority>
+    <canHaveFaction>true</canHaveFaction>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <comps>
+      <li Class="DMSE.CompProperties_MissileBase">
+        <missileFireIntervalDays>1~2</missileFireIntervalDays>
+        <missilesPerSalvo>1~2</missilesPerSalvo>
+        <range>10</range>
+        <relocationDays>4~8</relocationDays>
+        <missileBody>DepthRim_TorpedoBody</missileBody>
+        <incomingWorldObjectDef>DepthRim_WorldObject_EnemyTorpedo</incomingWorldObjectDef>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="DepthRim.EnemyTorpedoLoadoutExtension">
+        <guidance>
+          <li>DepthRim_Torpedo_Guidance_PassiveHoming</li>
+          <li>DepthRim_Torpedo_Guidance_Wire</li>
+        </guidance>
+      </li>
+    </modExtensions>
+  </WorldObjectDef>
+
+  <IncidentDef>
+    <defName>DepthRim_EnemyTorpedoBoat</defName>
+    <label>enemy torpedo boat</label>
+    <category>ThreatBig</category>
+    <targetTags>
+      <li>World</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_EnemyTorpedoBoat</workerClass>
+    <baseChance>0.6</baseChance>
+    <minRefireDays>10</minRefireDays>
+    <letterLabel>Enemy torpedo boat</letterLabel>
+    <letterText>{0} has sent an attack boat to within torpedo range of {1}, {2} tiles away by sea. It will fire torpedoes at your ocean maps until it moves on.\n\nTorpedoes are slow and only travel by sea. Sonar hears them coming; a fire-control sonar guiding anti-torpedo torpedoes from a tube, or a supercavitating gun, can stop them.</letterText>
+    <letterDef>ThreatBig</letterDef>
+    <modExtensions>
+      <li Class="DepthRim.EnemyTorpedoBoatIncidentExtension">
+        <worldObjectDef>DepthRim_EnemyTorpedoBoat</worldObjectDef>
+        <seaDistance>4~8</seaDistance>
+        <maxActive>1</maxActive>
+        <requiredResearch>DepthRim_UnderwaterCombat</requiredResearch>
+      </li>
+    </modExtensions>
+  </IncidentDef>
+
+</Defs>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    中層水域（DepthRim.MapDrawLayer_Midwater）：從深淵底下經過的生物，只在無法下錨的變溫層與深海畫。
+    著色器畫在外海層（3177）之後、光照暗化（3180）之前，關閉深度測試（畫在外海層下面會被 85% 的水色蓋掉）；
+    用深淵遮罩把生物裁在已探索的深淵格裡，所以迷霧下不會洩漏。生物看起來是水面下的一片暗影。頂點著色器是自己的（要把世界座標傳給片段著色器查遮罩）。
+    defName 必須等於 GLSL 檔名（去掉 .frag.glsl），見 WaterVolume_Shader.xml 的說明。
+  -->
+  <ShaderDef>
+    <defName>DepthRim_Midwater</defName>
+    <shaderProgram>
+      <vertexShaderFileName>DepthRim_Midwater.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>DepthRim_Midwater.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthTest>false</depthTest>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3178</renderQueue>
+    </shaderProgram>
+  </ShaderDef>
+
+  <ShaderTypeDef>
+    <defName>DepthRim_Midwater</defName>
+    <shaderPath>Map/DepthRim_Midwater</shaderPath>
+  </ShaderTypeDef>
+
+  <!-- 只有 DepthRim 的海洋地圖帶這個標籤（WorldObjectDef DepthRim_OceanSite），原版說書人不會用它挑目標。 -->
+  <IncidentTargetTagDef>
+    <defName>DepthRim_OceanMap</defName>
+  </IncidentTargetTagDef>
+
+  <!-- 巨物經過：純演出。平常由 MapComponent_Midwater 依平均間隔（4 天）在變溫層與深海的地圖上自己觸發。 -->
+  <IncidentDef>
+    <defName>DepthRim_GiantPasses</defName>
+    <label>giant passes below</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>DepthRim_OceanMap</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_GiantPasses</workerClass>
+    <baseChance>0</baseChance>
+  </IncidentDef>
+
+  <!-- ── 巨物（只由事件叫出）── -->
+
+  <DepthRim.MidwaterCreatureDef>
+    <defName>DepthRim_Midwater_Whale</defName>
+    <label>whale</label>
+    <description>A whale gliding through the dark water far below.</description>
+    <texPath>DepthRim/Midwater/Whale</texPath>
+    <drawSize>(34, 12.75)</drawSize>
+    <color>(0.10, 0.14, 0.20, 0.78)</color>
+    <speed>2.2~3.0</speed>
+    <parallax>0.25</parallax>
+    <giant>true</giant>
+    <swimAmplitude>0.035</swimAmplitude>
+    <swimFrequency>3.5</swimFrequency>
+    <swimSpeed>1.2</swimSpeed>
+    <tiers>
+      <li>Thermocline</li>
+    </tiers>
+    <passMessage>A huge shape glides through the dark water below. A whale is passing.</passMessage>
+  </DepthRim.MidwaterCreatureDef>
+
+  <DepthRim.MidwaterCreatureDef>
+    <defName>DepthRim_Midwater_GiantSquid</defName>
+    <label>giant squid</label>
+    <description>A giant squid drifting through the abyss, its eyes catching the faintest light.</description>
+    <texPath>DepthRim/Midwater/GiantSquid</texPath>
+    <drawSize>(30, 11.25)</drawSize>
+    <color>(0.16, 0.10, 0.14, 0.80)</color>
+    <speed>1.6~2.4</speed>
+    <parallax>0.35</parallax>
+    <glowColor>(0.75, 0.92, 1.0, 0.9)</glowColor>
+    <giant>true</giant>
+    <swimAmplitude>0.05</swimAmplitude>
+    <swimFrequency>5</swimFrequency>
+    <swimSpeed>1.6</swimSpeed>
+    <tiers>
+      <li>Deep</li>
+    </tiers>
+    <passMessage>Something enormous drifts through the abyss below. Two pale eyes turn towards the light, then slide away into the dark.</passMessage>
+  </DepthRim.MidwaterCreatureDef>
+
+  <!-- ── 背景生物（持續補上，不存檔）── -->
+
+  <DepthRim.MidwaterCreatureDef>
+    <defName>DepthRim_Midwater_FishSchool</defName>
+    <label>school of fish</label>
+    <description>A school of small fish turning together in the dark.</description>
+    <texPath>DepthRim/Midwater/FishSchool</texPath>
+    <drawSize>(9, 9)</drawSize>
+    <color>(0.14, 0.20, 0.26, 0.45)</color>
+    <speed>1.5~2.5</speed>
+    <parallax>0.15</parallax>
+    <ambientWeight>1</ambientWeight>
+    <swimAmplitude>0.012</swimAmplitude>
+    <swimFrequency>14</swimFrequency>
+    <swimSpeed>4</swimSpeed>
+    <tiers>
+      <li>Thermocline</li>
+    </tiers>
+  </DepthRim.MidwaterCreatureDef>
+
+  <DepthRim.MidwaterCreatureDef>
+    <defName>DepthRim_Midwater_Jellyfish</defName>
+    <label>jellyfish</label>
+    <description>A faintly glowing jellyfish drifting in the deep.</description>
+    <texPath>DepthRim/Midwater/Jellyfish</texPath>
+    <drawSize>(3.2, 3.2)</drawSize>
+    <color>(0.30, 0.55, 0.62, 0.45)</color>
+    <speed>0.3~0.6</speed>
+    <parallax>0.3</parallax>
+    <glowColor>(0.45, 0.95, 1.0, 0.8)</glowColor>
+    <ambientWeight>1</ambientWeight>
+    <swimAmplitude>0.02</swimAmplitude>
+    <swimFrequency>4</swimFrequency>
+    <swimSpeed>1</swimSpeed>
+    <tiers>
+      <li>Thermocline</li>
+      <li>Deep</li>
+    </tiers>
+  </DepthRim.MidwaterCreatureDef>
+
+</Defs>

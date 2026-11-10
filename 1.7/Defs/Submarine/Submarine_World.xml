@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 潛艇：DMSE 轉移飛行分離出的船體地圖的父物件（海洋層的 shipWorldObject）。
+       以 ClaimableSpace 為基底（可當玩家據點、接收 Map_PlayerHome 事件），另外帶 DepthRim 的海洋事件標籤。
+       DepthRim.WorldObject_Submarine 繼承 DMSE.WorldObject_TransferShip，多了巡航深度與下潛／上浮。 -->
+  <WorldObjectDef ParentName="ClaimableSpace">
+    <defName>DepthRim_Submarine</defName>
+    <label>submarine</label>
+    <description>A submarine: a pressure hull carried off the shipyard platform by its keel network.</description>
+    <worldObjectClass>DepthRim.WorldObject_Submarine</worldObjectClass>
+    <expandingIconTexture>World/WorldObjects/Expanding/DepthRim_Submarine</expandingIconTexture>
+    <expandingIconColor>(140,210,240,255)</expandingIconColor>
+    <mapGenerator>DepthRim_SubmarineHull</mapGenerator>
+    <IncidentTargetTags>
+      <li>Map_PlayerHome</li>
+      <li>DepthRim_OceanMap</li>
+    </IncidentTargetTags>
+  </WorldObjectDef>
+
+  <!-- 船體地圖：只鋪深淵（分離時船體以相同座標搬進來，迷霧從原地圖逐格複製）。
+       不能用 SpaceMapGenerator：那是真空。 -->
+  <MapGeneratorDef>
+    <defName>DepthRim_SubmarineHull</defName>
+    <label>submarine</label>
+    <disableCallAid>true</disableCallAid>
+    <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+    <genSteps>
+      <li>DepthRim_FillAbyss</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <GenStepDef>
+    <defName>DepthRim_FillAbyss</defName>
+    <order>10</order>
+    <genStep Class="DepthRim.GenStep_FillAbyss" />
+  </GenStepDef>
+
+</Defs>

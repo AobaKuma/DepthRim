@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    潛艇船體平台：比照 DMSE 的軌道平台（DMS_OrbitalPlatform / DMS_LightPlatform），只是「虛空」換成深淵。
+    - 只能鋪在深淵上（深淵地形帶 DepthRim_OpenAbyss 承載力）。
+    - 是基底地形（非 foundation、非 layerable），拆除時才能直接換回深淵。
+    - 邊框與下方側面由 SectionLayer_HullPlatformProps 畫（比照 Odyssey 的 SectionLayer_SubstructureProps），見下方 modExtensions。
+    - 船體要蓋水密隔牆與水密艙門（都需要 Heavy），所以和 DMSE 的輕型平台不同，這裡承載 Heavy。
+    - 拆除沿用 DMSE 的「拆除平台」指令（RemovablePlatformExtension）；DMSE 拆完會改回太空虛空，
+      DepthRim 的 Patch_PlatformRemoval 在海洋地圖上改回深淵。
+  -->
+  <TerrainAffordanceDef>
+    <defName>DepthRim_OpenAbyss</defName>
+    <label>open abyss</label>
+    <order>2420</order>
+  </TerrainAffordanceDef>
+
+  <TerrainAffordanceDef>
+    <defName>DepthRim_HullPlatform</defName>
+    <label>hull platform</label>
+    <order>2430</order>
+  </TerrainAffordanceDef>
+
+  <TerrainDef>
+    <defName>DepthRim_HullPlatform</defName>
+    <researchPrerequisites>
+      <li>DepthRim_PressureEngineering</li>
+    </researchPrerequisites>
+    <label>hull platform</label>
+    <description>A pressure-rated lattice deck laid over open water. It is the base structure of a submarine: watertight walls, doors and machinery can all be built on it.\n\nIt can be taken apart with the 'remove platform' command, leaving the abyss below.</description>
+    <texturePath>Thing/DR_LightPlatform/Platform</texturePath>
+    <renderPrecedence>240</renderPrecedence>
+    <preventCraters>true</preventCraters>
+    <layerable>false</layerable>
+    <fertility>0</fertility>
+    <canEverTerraform>false</canEverTerraform>
+    <natural>true</natural>
+    <edgeType>Hard</edgeType>
+    <constructEffect>ConstructMetal</constructEffect>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>1010</uiOrder>
+    <costList>
+      <Steel>20</Steel>
+    </costList>
+    <statBases>
+      <WorkToBuild>5000</WorkToBuild>
+      <MarketValue>0</MarketValue>
+      <Beauty>-3</Beauty>
+      <Flammability>0</Flammability>
+    </statBases>
+    <filthAcceptanceMask>
+      <li>Unnatural</li>
+    </filthAcceptanceMask>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>Walkable</li>
+      <li>DepthRim_HullPlatform</li>
+    </affordances>
+    <terrainAffordanceNeeded>DepthRim_OpenAbyss</terrainAffordanceNeeded>
+    <modExtensions>
+      <!-- 邊框與下方側面由 DepthRim.SectionLayer_HullPlatformProps 畫（比照 Odyssey 的 SectionLayer_SubstructureProps），
+           不用原版 spaceEdgeGraphicData：原版側面一律畫滿兩格、靠地形把落在實地上的部分蓋掉，和不透明的深淵背景互相衝突。 -->
+      <li Class="DepthRim.HullPlatformPropsExtension">
+        <oShapeTexPath>Thing/DR_LightPlatform/BorderInside_OShape</oShapeTexPath>
+        <uShapeTexPath>Thing/DR_LightPlatform/BorderInside_UShape</uShapeTexPath>
+        <cornerInnerTexPath>Thing/DR_LightPlatform/BorderInside_CornerInner</cornerInnerTexPath>
+        <cornerOuterTexPath>Thing/DR_LightPlatform/BorderInside_CornerOuter</cornerOuterTexPath>
+        <flatTexPath>Thing/DR_LightPlatform/BorderInside_Flat</flatTexPath>
+        <sideLeftTexPath>Thing/DR_LightPlatform/Edge_Left</sideLeftTexPath>
+        <sideRightTexPath>Thing/DR_LightPlatform/Edge_Right</sideRightTexPath>
+        <sideSingleTexPath>Thing/DR_LightPlatform/Single</sideSingleTexPath>
+        <sideLoopTexPaths>
+          <li>Thing/DR_LightPlatform/Edge_Loop1</li>
+          <li>Thing/DR_LightPlatform/Edge_Loop2</li>
+          <li>Thing/DR_LightPlatform/Edge_Loop3</li>
+          <li>Thing/DR_LightPlatform/Edge_Loop4</li>
+          <li>Thing/DR_LightPlatform/Edge_Loop5</li>
+        </sideLoopTexPaths>
+      </li>
+      <li Class="DMSE.RemovablePlatformExtension">
+        <refundFraction>0.5</refundFraction>
+      </li>
+    </modExtensions>
+  </TerrainDef>
+
+</Defs>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- 跳幫襲擊（設計稿 §11 M6）：每個說書人都加一個元件，只對開著主動聲納的玩家海洋地圖排跳幫襲擊。
+       只加在非抽象的說書人上，避免繼承時重複。 -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/StorytellerDef[not(@Abstract="True")]/comps</xpath>
+    <value>
+      <li Class="DepthRim.StorytellerCompProperties_BoardingRaids">
+        <incident>DepthRim_BoardingRaid</incident>
+        <mtbDays>12</mtbDays>
+        <minDaysPassed>10</minDaysPassed>
+        <allowedTargetTags>
+          <li>DepthRim_OceanMap</li>
+        </allowedTargetTags>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

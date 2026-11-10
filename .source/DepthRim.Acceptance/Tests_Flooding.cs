@@ -15,7 +15,7 @@ namespace DepthRim.Acceptance
         private static WaitTicks Updates(int n) => new WaitTicks(Update * n + 5);
 
         /// <summary>圍出一間 5×5 的密閉艙室（7×7 牆圈）；回傳內部格子之一與牆。</summary>
-        private static Room BuildCompartment(TestContext ctx, out CellRect inner, out List<Thing> walls)
+        internal static Room BuildCompartment(TestContext ctx, out CellRect inner, out List<Thing> walls)
         {
             CellRect ring = DepthRimFixture.ClearOceanArea(7);
             walls = DepthRimFixture.BuildWallRing(ring);
@@ -27,7 +27,7 @@ namespace DepthRim.Acceptance
             return room;
         }
 
-        private static float Level(IntVec3 c) => DepthRimFixture.Flooding.LevelAt(c);
+        internal static float Level(IntVec3 c) => DepthRimFixture.Flooding.LevelAt(c);
 
         /// <summary>放一台通電的排水泵（下方一格放電線讓它接上電網）。</summary>
         private static CompFloodPump SpawnPump(IntVec3 cell, IntVec3 conduitCell)
@@ -37,7 +37,7 @@ namespace DepthRim.Acceptance
             return pump.TryGetComp<CompFloodPump>();
         }
 
-        private static IEnumerable<Wait> DrainCompartment(TestContext ctx, CellRect inner)
+        internal static IEnumerable<Wait> DrainCompartment(TestContext ctx, CellRect inner)
         {
             CompFloodPump pump = SpawnPump(inner.CenterCell, inner.CenterCell + IntVec3.North);
             WaitUntil powered = new WaitUntil(() => pump.Working, 1200);

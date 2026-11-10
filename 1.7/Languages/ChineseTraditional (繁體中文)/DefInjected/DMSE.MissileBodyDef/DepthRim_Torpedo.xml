@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_TorpedoBody.label>魚雷彈體</DepthRim_TorpedoBody.label>
+  <DepthRim_TorpedoBody.description>裝電動馬達的重型魚雷彈體。速度慢，目標有時間聽見它接近；只能走海路，而且保持在發射時的深度。\n\n有戰鬥部、導引與酬載三個槽位。</DepthRim_TorpedoBody.description>
+  <DepthRim_AntiTorpedoBody.label>反魚雷魚雷彈體</DepthRim_AntiTorpedoBody.label>
+  <DepthRim_AntiTorpedoBody.description>短而快的魚雷，專門迎上來襲的魚雷，在它旁邊引爆。打不了其他東西。\n\n有一個戰鬥部槽。</DepthRim_AntiTorpedoBody.description>
+</LanguageData>

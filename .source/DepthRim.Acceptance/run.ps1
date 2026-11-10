@@ -11,7 +11,7 @@
   並在 ModsConfig.xml 的 DMSE 後面加上 DepthRim，所以不會動到你自己的模組清單。
   指定 -SaveDataFolder 時改用那個資料夾的設定（自行確認 DepthRim 已啟用）。
 
-  用法：powershell -ExecutionPolicy Bypass -File .source/DepthRim.Acceptance/run.ps1 -OutDir <dir> [-TimeoutMinutes 20] [-Only F2,P1] [-SaveDataFolder <dir>]
+  用法：powershell -ExecutionPolicy Bypass -File .source/DepthRim.Acceptance/run.ps1 -OutDir <dir> [-TimeoutMinutes 20] [-Only F2,P1] [-SaveDataFolder <dir>] [-Coverage 1]
   RimWorld 不能正在執行（它會鎖住 1.7/Assemblies）。
 #>
 param(
@@ -19,7 +19,8 @@ param(
     [int]$TimeoutMinutes = 20,
     [string]$GameExe = '',
     [string]$Only = '',            # 以逗號分隔的測試 id，例如 'F2,P1'；空白 = 全部
-    [string]$SaveDataFolder = ''   # 選填：自備的 RimWorld -savedatafolder
+    [string]$SaveDataFolder = '',  # 選填：自備的 RimWorld -savedatafolder
+    [string]$Coverage = ''         # 選填：世界覆蓋率（0.05–1），quicktest 預設 0.3；例如 '1' 測 100% 覆蓋率
 )
 
 $ErrorActionPreference = 'Stop'
@@ -66,6 +67,7 @@ $started = Get-Date
 try {
     $gameArgs = @('-quicktest', "-depthrim-acceptance=$OutDir", "-savedatafolder=$SaveDataFolder")
     if ($Only -ne '') { $gameArgs += "-depthrim-only=$Only" }
+    if ($Coverage -ne '') { $gameArgs += "-depthrim-coverage=$Coverage" }
     $proc = Start-Process -FilePath $GameExe -ArgumentList $gameArgs -WorkingDirectory (Split-Path $GameExe) -PassThru
     Write-Output "RimWorld started (pid $($proc.Id)); waiting up to $TimeoutMinutes min..."
     $deadline = $started.AddMinutes($TimeoutMinutes)

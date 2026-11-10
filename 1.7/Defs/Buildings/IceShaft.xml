@@ -4,6 +4,9 @@
   <!-- 冰層升降井（設計稿 §4.2）。原型：借用原版深層鑽機貼圖；之後換成專用貼圖、研究前置與建造條件（限冰蓋）。 -->
   <ThingDef ParentName="BuildingBase">
     <defName>DepthRim_IceShaft</defName>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterSurvival</li>
+    </researchPrerequisites>
     <label>ice shaft elevator</label>
     <description>A deep drilled shaft fitted with a cargo elevator. It leads down to the ocean beneath the surface. It can only reach shallow or mid-depth water.</description>
     <thingClass>DepthRim.Building_IceShaft</thingClass>
@@ -24,7 +27,7 @@
     <pathCost>50</pathCost>
     <fillPercent>0.5</fillPercent>
     <tickerType>Normal</tickerType>
-    <designationCategory>Misc</designationCategory>
+    <designationCategory>DepthRim_Underwater</designationCategory>
     <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
     <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
     <costList>

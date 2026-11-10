@@ -54,6 +54,30 @@ namespace DepthRim
             Messages.Message("DepthRim.Debug.WaterMaterialsReset".Translate(), MessageTypeDefOf.SilentInput, historical: false);
         }
 
+        /// <summary>
+        /// 叫一隻中層水域的生物穿越目前的地圖（不檢查層級，方便在任何地圖上看效果）。
+        /// 牠只在深淵格露出來；畫面層只在變溫層與深海顯示，其他層級先用「Override water visual tier」切過去。
+        /// </summary>
+        [DebugAction("DepthRim", "Midwater creature passes", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void MidwaterCreaturePasses()
+        {
+            MapComponent_Midwater comp = Find.CurrentMap?.GetComponent<MapComponent_Midwater>();
+            if (comp == null)
+            {
+                return;
+            }
+            options.Clear();
+            foreach (MidwaterCreatureDef def in DefDatabase<MidwaterCreatureDef>.AllDefsListForReading)
+            {
+                MidwaterCreatureDef captured = def;
+                options.Add(new DebugMenuOption(captured.defName, DebugMenuOptionMode.Action, delegate
+                {
+                    comp.StartPass(captured);
+                }));
+            }
+            Find.WindowStack.Add(new Dialog_DebugOptionListLister(options, "Midwater creature"));
+        }
+
         private static void Apply(MapComponent_Flooding flooding, DepthTier? tier)
         {
             if (flooding == null || flooding.map == null)

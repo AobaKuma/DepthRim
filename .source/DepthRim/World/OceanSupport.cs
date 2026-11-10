@@ -70,6 +70,11 @@ namespace DepthRim
             {
                 return true;
             }
+            // 陸地正下方沒有海洋（陸塊）：升降井只能開在冰原、海冰等冰層之上
+            if (OceanWorldView.IsLandmass(below))
+            {
+                return "DepthRim.IceShaft.NoOcean".Translate();
+            }
             WaterMapExtension ext = below.GetModExtension<WaterMapExtension>();
             if (ext != null && !ext.ShaftAccessible)
             {
@@ -99,7 +104,7 @@ namespace DepthRim
             {
                 return null;
             }
-            PlanetTile tile = ocean.GetClosestTile_NewTemp(map.Tile);
+            PlanetTile tile = OceanWorldView.TileBelow(map.Tile, ocean);
             return tile.Valid ? tile.Tile.PrimaryBiome : null;
         }
     }

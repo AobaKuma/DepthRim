@@ -4,6 +4,9 @@
   <!-- 排水泵（設計稿 §4.3）：抽乾所在的密閉艙室。原型借用原版貼圖。 -->
   <ThingDef ParentName="BuildingBase">
     <defName>DepthRim_BilgePump</defName>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterSurvival</li>
+    </researchPrerequisites>
     <label>bilge pump</label>
     <description>An electric pump that drains water out of the sealed compartment it stands in. It cannot drain open water.</description>
     <graphicData>
@@ -17,7 +20,7 @@
     <passability>PassThroughOnly</passability>
     <pathCost>30</pathCost>
     <fillPercent>0.3</fillPercent>
-    <designationCategory>Misc</designationCategory>
+    <designationCategory>DepthRim_Underwater</designationCategory>
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
     <costList>
       <Steel>60</Steel>
@@ -51,6 +54,10 @@
   -->
   <ThingDef ParentName="DoorBase">
     <defName>DepthRim_WatertightDoor</defName>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterSurvival</li>
+    </researchPrerequisites>
+    <designationCategory>DepthRim_Underwater</designationCategory>
     <label>watertight door</label>
     <description>A heavy, gasketed steel door. When one side is flooded deeper than a person's head, colonists without a working diving suit will not walk through it on their own (drafted colonists still can). A damaged watertight door leaks far less than an ordinary wall.</description>
     <thingClass>DepthRim.Building_WatertightDoor</thingClass>
@@ -89,6 +96,10 @@
   -->
   <ThingDef ParentName="Wall">
     <defName>DepthRim_PressureHullWall</defName>
+    <researchPrerequisites>
+      <li>DepthRim_PressureEngineering</li>
+    </researchPrerequisites>
+    <designationCategory>DepthRim_Underwater</designationCategory>
     <label>pressure hull wall</label>
     <description>A thick, ribbed wall of steel and plasteel built to hold back the sea. It barely leaks even when damaged, and can take a great deal of punishment.</description>
     <graphicData>
@@ -193,6 +204,7 @@
       </li>
     </comps>
     <recipeMaker>
+      <researchPrerequisite>DepthRim_UnderwaterSurvival</researchPrerequisite>
       <unfinishedThingDef>UnfinishedTechArmor</unfinishedThingDef>
       <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
       <workSkill>Crafting</workSkill>

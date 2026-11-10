@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_GiantPasses.label>巨物從下方經過</DepthRim_GiantPasses.label>
+
+  <DepthRim_EnemyTorpedoBoat.label>敵方魚雷艇</DepthRim_EnemyTorpedoBoat.label>
+  <DepthRim_EnemyTorpedoBoat.letterLabel>敵方魚雷艇</DepthRim_EnemyTorpedoBoat.letterLabel>
+  <DepthRim_EnemyTorpedoBoat.letterText>{0}派出一艘攻擊艇，潛伏在{1}的魚雷射程內，海路 {2} 格外。在它離開之前，會不斷朝你的海洋地圖發射魚雷。\n\n魚雷很慢，而且只走海路。聲納聽得到它們過來；火控聲納引導發射管裡的反魚雷魚雷，或超空泡近防砲，都能攔下它們。</DepthRim_EnemyTorpedoBoat.letterText>
+  <DepthRim_BoardingRaid.label>跳幫襲擊</DepthRim_BoardingRaid.label>
+  <DepthRim_PirateSubmarine.label>海盜潛艇</DepthRim_PirateSubmarine.label>
+  <DepthRim_PirateSubmarine.letterLabel>海盜潛艇</DepthRim_PirateSubmarine.letterLabel>
+  <DepthRim_PirateSubmarine.letterText>聲納員回報：一艘海盜潛艇在{0}附近的航道上巡弋，會朝你的海洋地圖發射魚雷。\n\n它自己帶著反魚雷魚雷。用幾發魚雷把船殼打穿讓它沉沒，或從月池派突擊艇強攻。</DepthRim_PirateSubmarine.letterText>
+  <DepthRim_FishSchool.label>魚群</DepthRim_FishSchool.label>
+</LanguageData>

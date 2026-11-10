@@ -84,7 +84,7 @@ namespace DepthRim.Acceptance
             Map home = Home;
             // 測試世界的開局地點是隨機的，正下方可能是深海生態區（有水壓、會挖深淵）。既有的測試都假設井底是淺海，
             // 所以把正下方那一格固定成極地冰蓋（只改測試世界的格子資料）。
-            PlanetTile below = OceanLayer.GetClosestTile_NewTemp(home.Tile);
+            PlanetTile below = OceanWorldView.TileBelow(home.Tile, OceanLayer);
             if (below.Valid)
             {
                 below.Tile.PrimaryBiome = DefDatabase<BiomeDef>.GetNamed("DepthRim_PolarIceCap");

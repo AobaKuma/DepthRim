@@ -25,6 +25,7 @@ namespace DepthRim.Acceptance
             ctx.Require(ocean != null, "ocean layer exists");
             foreach (OceanBiome kind in System.Enum.GetValues(typeof(OceanBiome)))
             {
+                if (kind == OceanBiome.Landmass) { continue; } // 陸塊沒有海洋，不生成地圖
                 BiomeDef biome = DefDatabase<BiomeDef>.GetNamedSilentFail(OceanBiomeSelector.DefName(kind));
                 if (!ctx.Check(biome != null, $"{kind}: BiomeDef loaded")) { continue; }
                 WaterMapExtension ext = biome.GetModExtension<WaterMapExtension>();
@@ -72,7 +73,19 @@ namespace DepthRim.Acceptance
                 int abyss = map.AllCells.Count(c => c.GetTerrain(map) == DepthRimDefOf.DepthRim_Abyss);
                 float abyssFraction = abyss / (float)map.cellIndices.NumGridCells;
                 ctx.Note($"{kind}: abyss {abyssFraction:P1}");
-                if (!FloodingMath.CarvesAbyss(ext.depthTier)) { ctx.Check(abyss == 0, $"{kind}: shallow biomes have no abyss"); }
+                if (!FloodingMath.CarvesAbyss(ext.depthTier))
+                {
+                    if (ext.abyssPockets.max > 0)
+                    {
+                        // 極地冰蓋：只有給潛艇船塢的幾個深淵坑（每個半徑最多 13 × 1.2 格）
+                        float pocketMax = ext.abyssPockets.max * Mathf.PI * Mathf.Pow(ext.abyssPocketRadius.max * 1.2f, 2f);
+                        ctx.Check(abyss > 0 && abyss <= pocketMax, $"{kind}: only a few abyss pockets for a shipyard ({abyss} cells, max {pocketMax:0})");
+                    }
+                    else
+                    {
+                        ctx.Check(abyss == 0, $"{kind}: shallow biomes have no abyss");
+                    }
+                }
                 if (kind == OceanBiome.AbyssalTrench) { ctx.Check(abyssFraction > 0.08f, $"{kind}: the trench is mostly abyss ({abyssFraction:P1})"); }
 
                 if (kind != OceanBiome.PolarIceCap && kind != OceanBiome.SeabedPlain)
@@ -152,7 +165,7 @@ namespace DepthRim.Acceptance
 
             // 升降井：淺海（極地冰蓋，固定在測試世界）可以蓋；把正下方換成海床平原（深海）就不行
             Map home = DepthRimFixture.Home;
-            PlanetTile below = DepthRimFixture.OceanLayer.GetClosestTile_NewTemp(home.Tile);
+            PlanetTile below = OceanWorldView.TileBelow(home.Tile, DepthRimFixture.OceanLayer);
             ctx.Require(below.Valid, "found the ocean tile below the colony");
             PlaceWorker_IceShaft worker = new PlaceWorker_IceShaft();
             IntVec3 spot = DepthRimFixture.Pad.CenterCell;
@@ -164,6 +177,9 @@ namespace DepthRim.Acceptance
             ctx.Check(!deep.Accepted && !deep.Reason.NullOrEmpty(), $"shaft refused over a seabed plain (deep): {deep.Reason}");
             below.Tile.PrimaryBiome = DefDatabase<BiomeDef>.GetNamed("DepthRim_DeepReef");
             ctx.Check(worker.AllowsPlacing(DepthRimFixture.IceShaft, spot, Rot4.North, home).Accepted, "shaft allowed over a deep coral reef (thermocline)");
+            below.Tile.PrimaryBiome = DepthRimDefOf.DepthRim_Landmass;
+            AcceptanceReport land = worker.AllowsPlacing(DepthRimFixture.IceShaft, spot, Rot4.North, home);
+            ctx.Check(!land.Accepted && !land.Reason.NullOrEmpty(), $"shaft refused over dry land (no ocean below): {land.Reason}");
             below.Tile.PrimaryBiome = original;
         }
     }

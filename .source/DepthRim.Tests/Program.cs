@@ -18,6 +18,15 @@ static partial class Test
         Run("AudioMath", AudioMath);
         Run("WatertightDoor", WatertightDoor);
         Run("OceanBiomes", OceanBiomes);
+        Run("MidwaterMath", MidwaterMathTests);
+        Run("ContentMidwater", ContentMidwater);
+        Run("ContentHullPlatform", ContentHullPlatform);
+        Run("ContentDesignationCategory", ContentDesignationCategory);
+        Run("SubmarineDive", SubmarineDive);
+        Run("SubmarineRouting", SubmarineRouting);
+        Run("SubmarinePockets", SubmarinePockets);
+        Run("ContentSubmarine", ContentSubmarine);
+        Run("WallPressure", WallPressure);
         Run("ContentXml", ContentXml);
         Run("ContentOcean", ContentOcean);
         Run("ContentSounds", ContentSounds);

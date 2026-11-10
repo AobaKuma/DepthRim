@@ -134,9 +134,9 @@
 
 ### 3.4 待確認
 
-1. 漏網的突擊艇落地時（`ResolveWave` → `TryDrop`），是不是保留我們自訂的 Skyfaller 子類別？這決定突擊艇能不能「不破壞密閉性」穿入船艙。
-2. 下錨時的襲擊：突擊艇要降在艙外海床，放下重裝潛水兵，所以落點選擇要另外處理。
-3. CIWS 擊落時會用 `SpawnDebris` 殺死艙內所有 pawn，要確認這在水下是否合理（例如改成「沉沒」演出）。
+1. ✅ 漏網的突擊艇落地時（`ResolveWave` → `TryDrop`），是不是保留我們自訂的 Skyfaller 子類別？**會**：DMSE 重新投放的是同一個 skyfaller，def（包括 `hitRoof` false）都保留。前提是 `BVRDetection.PawnsIn` 認得艇上的人（DepthRim 有 postfix）。見設計稿 §11 M6。
+2. ✅ 下錨時的襲擊：突擊艇要降在艙外海床，放下重裝潛水兵，所以落點選擇要另外處理。DepthRim 自己選落點：沒有放得下的艙室，就降在玩家建築附近的開放海床（`BoardingUtility.TryFindLandingCell`）。
+3. ✅ CIWS 擊落時會用 `SpawnDebris` 殺死艙內所有 pawn，要確認這在水下是否合理（例如改成「沉沒」演出）。突擊艇改成沉沒：DepthRim 的 prefix 讓遺體與碎片沉到附近的海床，不用殘骸空投（設計稿 §11 M6 6.7b）。
 4. DMSE 文件記載「未測：軌道圖層、玩家移動船」。DepthRim 的核心情境就是玩家移動船，可能會先踩到這些沒測過的路徑。
 
 ---
@@ -159,8 +159,10 @@ v0.3 設計稿建議用 `PocketMapParent` 做地下冰洋，但研究 DMSE 之�
 
 ## 5. 建議的下一步
 
-1. **決定 DMSE 抽象層由誰改：** 直接改 DMSE（建議，符合未來統一框架的方向），還是 DepthRim 自己用 Harmony patch。
-2. **原型 1：** 自訂 `PlanetLayerDef`（冰洋層）＋ 自訂 Tile（水深層級）＋ 升降井 `MapPortal`，驗證地表到冰洋的連結。
-3. **原型 2：** `MapComponent_Flooding`（每間艙室一個水位值），不依賴 DMSE，可以和原型 1 並行開發。
-4. **原型 3：** 加上 §2.3 的抽象層後，讓一艘最簡單的潛艇從冰洋層地圖分離、航行、抵達。
-5. **原型 4：** BVR 換皮（聲納、魚雷、誘餌）與跳幫突擊艇。
+1. ✅ **決定 DMSE 抽象層由誰改：** 直接改 DMSE（建議，符合未來統一框架的方向），還是 DepthRim 自己用 Harmony patch。
+2. ✅ **原型 1：** 自訂 `PlanetLayerDef`（冰洋層）＋ 自訂 Tile（水深層級）＋ 升降井 `MapPortal`，驗證地表到冰洋的連結。
+3. ✅ **原型 2：** `MapComponent_Flooding`（每間艙室一個水位值），不依賴 DMSE，可以和原型 1 並行開發。
+4. ✅ **原型 3：** 加上 §2.3 的抽象層後，讓一艘最簡單的潛艇從冰洋層地圖分離、航行、抵達。
+5. 🔶 **原型 4：** BVR 換皮（聲納、魚雷、誘餌）與跳幫突擊艇。分成設計稿 §11 的 M4 聲納、M5 魚雷、M6 跳幫突擊艇。
+
+> 2026-11-10：原型 1～3 都已完成（潛艇見設計稿 §4.8），DepthRim 以 Harmony patch 和 DMSE 的擴充點對接，沒有改 DMSE。進度以設計稿 §11 為準。

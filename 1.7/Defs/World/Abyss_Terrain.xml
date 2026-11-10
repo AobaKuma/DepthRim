@@ -23,6 +23,8 @@
     <exposesToVacuum>false</exposesToVacuum>
     <affordances>
       <li>Bridgeable</li>
+      <!-- 潛艇船體平台（DepthRim_HullPlatform）只能鋪在深淵上 -->
+      <li>DepthRim_OpenAbyss</li>
     </affordances>
     <tags>
       <li>DepthRim_Abyss</li>

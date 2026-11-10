@@ -48,6 +48,30 @@ namespace DepthRim
         private bool updatedOnce;
 
         /// <summary>
+        /// 地圖生成時要乾著的格子（例如生成的海盜潛艇艙室，§11 M7）：水位陣列在 <see cref="FinalizeInit"/> 才建立，
+        /// 比 GenStep 晚，所以 GenStep 先登記在這裡，建立水位時設成 0。不存檔（只在第一次初始化用）。
+        /// </summary>
+        private List<IntVec3> dryOnInit;
+
+        /// <summary>給地圖生成用：這些格子在水位初始化時設成乾的。地圖已經初始化過就直接設。</summary>
+        public void MarkDry(IEnumerable<IntVec3> cells)
+        {
+            if (levels != null)
+            {
+                foreach (IntVec3 c in cells)
+                {
+                    if (c.InBounds(map))
+                    {
+                        levels[map.cellIndices.CellToIndex(c)] = 0;
+                    }
+                }
+                return;
+            }
+            dryOnInit ??= new List<IntVec3>();
+            dryOnInit.AddRange(cells);
+        }
+
+        /// <summary>
         /// 這張地圖上「穿著中的潛水服頭燈」追蹤清單（二期 P2-3）。存在這裡而不是靜態欄位，
         /// 所以地圖卸除時可以整份清掉，不會跨地圖殘留。
         /// </summary>
@@ -179,10 +203,21 @@ namespace DepthRim
                 {
                     levels[i] = b;
                 }
+                if (dryOnInit != null)
+                {
+                    foreach (IntVec3 c in dryOnInit)
+                    {
+                        if (c.InBounds(map))
+                        {
+                            levels[map.cellIndices.CellToIndex(c)] = 0;
+                        }
+                    }
+                }
             }
+            dryOnInit = null;
             // 原版在地圖生成時就建好區塊網格，那時這個元件還沒啟用（水體網格是空的）；開放水域的水位之後也不會再變，
-            // 所以啟用後整張地圖重建一次水體網格
-            map.mapDrawer.WholeMapChanged(DepthRimDefOf.DepthRim_Water);
+            // 所以啟用後整張地圖重建一次水體網格（地圖還在生成中時跳過，之後的整張重建會照啟用後的狀態畫）
+            FloodingUtility.WaterChanged(map);
         }
 
         // ── 查詢 ─────────────────────────────────────────────────────────────

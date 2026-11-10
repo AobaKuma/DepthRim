@@ -22,7 +22,7 @@ namespace DepthRim
                 Log.Error("[DepthRim] Ice shaft could not find the ice ocean planet layer.");
                 return null;
             }
-            PlanetTile tile = ocean.GetClosestTile_NewTemp(Map.Tile);
+            PlanetTile tile = OceanWorldView.TileBelow(Map.Tile, ocean);
             if (Find.WorldObjects.MapParentAt(tile) == null)
             {
                 MapParent site = (MapParent)WorldObjectMaker.MakeWorldObject(DepthRimDefOf.DepthRim_OceanSite);
@@ -43,6 +43,9 @@ namespace DepthRim
         /// 由 <see cref="MapPortal"/> 的 GeneratePocketMap 呼叫，期間 currentlyGeneratingPortal 指向本井，
         /// 所以出口的 <see cref="PocketMapExit.SpawnSetup"/> 會自動接上入口。
         /// </summary>
+        /// <summary>出口周圍填回的海床。</summary>
+        private static TerrainDef ExitFloor => DefDatabase<TerrainDef>.GetNamed("DepthRim_Seabed_Gravel");
+
         private void SpawnExit(Map oceanMap)
         {
             ThingDef exitDef = def.portal?.exitDef;
@@ -63,6 +66,11 @@ namespace DepthRim
                 if (edifice != null && edifice.def.mineable)
                 {
                     edifice.Destroy(DestroyMode.Vanish);
+                }
+                // 極地冰蓋有深淵坑（潛艇船塢）：井底出口周圍不能是深淵，鋪回海床
+                if (oceanMap.terrainGrid.TerrainAt(c) == DepthRimDefOf.DepthRim_Abyss)
+                {
+                    oceanMap.terrainGrid.SetTerrain(c, ExitFloor);
                 }
             }
             GenSpawn.Spawn(exitDef, cell, oceanMap, WipeMode.Vanish);

@@ -4,4 +4,19 @@
   <DepthRim_OceanSite.label>海洋地點</DepthRim_OceanSite.label>
   <DepthRim_OceanSite.description>海床上的一個地點。</DepthRim_OceanSite.description>
 
+  <DepthRim_Submarine.label>潛艇</DepthRim_Submarine.label>
+  <DepthRim_Submarine.description>潛艇：由龍骨網路從船塢平台上帶走的耐壓船體。</DepthRim_Submarine.description>
+
+  <DepthRim_WorldObject_Torpedo.label>魚雷</DepthRim_WorldObject_Torpedo.label>
+  <DepthRim_WorldObject_Torpedo.description>在水中航行的魚雷。</DepthRim_WorldObject_Torpedo.description>
+  <DepthRim_EnemyTorpedoBoat.label>敵方魚雷艇</DepthRim_EnemyTorpedoBoat.label>
+  <DepthRim_EnemyTorpedoBoat.description>潛伏在魚雷射程內的敵方攻擊艇。在它離開之前，會不斷朝你的海洋地圖發射魚雷。</DepthRim_EnemyTorpedoBoat.description>
+  <DepthRim_WorldObject_EnemyTorpedo.label>魚雷</DepthRim_WorldObject_EnemyTorpedo.label>
+  <DepthRim_WorldObject_EnemyTorpedo.description>在水中航行的魚雷。</DepthRim_WorldObject_EnemyTorpedo.description>
+  <DepthRim_TravelingBoardingCraft.label>突擊艇</DepthRim_TravelingBoardingCraft.label>
+  <DepthRim_TravelingBoardingCraft.description>在水中航行的突擊艇。</DepthRim_TravelingBoardingCraft.description>
+  <DepthRim_PirateSubmarine.label>海盜潛艇</DepthRim_PirateSubmarine.label>
+  <DepthRim_PirateSubmarine.description>在航道上巡弋的海盜攻擊潛艇。它會朝你的海洋地圖發射魚雷，也會用自己的攔截彈擊落來襲的魚雷。用魚雷把它的船殼打穿讓它沉沒，或派突擊艇強攻。</DepthRim_PirateSubmarine.description>
+  <DepthRim_FishSchool.label>魚群</DepthRim_FishSchool.label>
+  <DepthRim_FishSchool.description>一大群魚。在聲納上聽起來和潛艇很像，要靠近才分得出來。</DepthRim_FishSchool.description>
 </LanguageData>

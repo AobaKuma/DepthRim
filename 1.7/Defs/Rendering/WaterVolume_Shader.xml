@@ -62,7 +62,11 @@
 
   <!-- 深淵背景著色器（二期 P2-10，DepthRim.SectionLayer_AbyssBackdrop）。
        畫在地形之下（BelowTerrain），不透明：深淵格沒有地形貼圖，看到的就是這一層。
-       不寫深度、不加深度測試，讓上方的水、崖壁與 Pawn 正常蓋過去。
+       不寫深度，但要做深度測試：平台與海床崖壁往下垂的側面（SectionLayer_TerrainEdges 的 Loop 貼圖，原版 TerrainEdge
+       著色器，renderQueue 1999、會寫深度、高度在 TerrainEdges）掛在深淵格上，深淵背景必須留住它們，不能整片蓋掉。
+       不能把側面改成排在背景之後：原版靠「側面先畫、地形後畫」把側面落在實地上的那一半蓋掉（樓梯狀的崖邊最明顯），
+       側面排在地形之後就會整塊浮在海床上（2026-11-09 實測）。
+       上方的水、Pawn 都排在後面，照樣蓋過背景。
        **defName 必須等於 GLSL 檔名（去掉 .frag.glsl）**：Waylith 用檔名註冊、用 defName 查詢
        （實測 defName = DepthRim_AbyssBackdrop、檔名 DepthRim_Abyss 時會噴
         「shader 'DepthRim_Abyss' not registered」並退回預設著色器）。
@@ -74,7 +78,7 @@
       <fragmentShaderFileName>DepthRim_Abyss.frag.glsl</fragmentShaderFileName>
       <flipTextureST>false</flipTextureST>
       <transparent>false</transparent>
-      <depthTest>false</depthTest>
+      <depthTest>true</depthTest>
       <depthWrite>false</depthWrite>
       <cullMode>None</cullMode>
       <renderQueue>2600</renderQueue>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    潛艇建築（DMSE 轉移飛行換皮）：龍骨樁界定船體、艦橋控制航行與下潛、電動推進器靠船上的電池供能。
+    貼圖暫時從 DMSE 複製改名（Textures/Thing/DR_Keel、DR_Helm、DR_Thruster）。
+    - 龍骨樁的 allowedTerrains 只有船體平台：船體 = 樁覆蓋範圍內的船體平台格（與上面的東西），海床不會被帶走；
+      樁本身也只能蓋在船體平台上，而船體平台只能鋪在深淵上，所以潛艇只能在深淵上建造。
+    - 推進器沒有尾焰區（exclusionAreaSize 0），不會燒人，只冒氣泡；燃料由 DepthRim.BatteryFuelSource 以船上電池的儲電充當。
+  -->
+
+  <ThingDef ParentName="BuildingBase" Name="DepthRim_KeelBase" Abstract="True">
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <rotatable>false</rotatable>
+    <passability>Impassable</passability>
+    <fillPercent>1</fillPercent>
+    <holdsRoof>true</holdsRoof>
+    <blockWind>true</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.5</staticSunShadowHeight>
+    <canOverlapZones>false</canOverlapZones>
+    <terrainAffordanceNeeded>DepthRim_HullPlatform</terrainAffordanceNeeded>
+    <statBases>
+      <Flammability>0</Flammability>
+      <Beauty>-4</Beauty>
+    </statBases>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <placeWorkers>
+      <li>DMSE.PlaceWorker_StructuralPile</li>
+    </placeWorkers>
+    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_KeelBase">
+    <defName>DepthRim_Keel</defName>
+    <researchPrerequisites>
+      <li>DepthRim_SubmarineConstruction</li>
+    </researchPrerequisites>
+    <label>keel frame</label>
+    <description>A massive pressure frame that ties a section of hull platform into one rigid body. Keel frames joined by steel girders form a submarine: everything on the hull platform within their reach leaves with it. Small keel frames can be built within its link range.\n\nCan only be built on a hull platform.</description>
+    <graphicData>
+      <texPath>Thing/DR_Keel/Keel</texPath>
+      <drawSize>(5,5)</drawSize>
+    </graphicData>
+    <size>(3,3)</size>
+    <statBases>
+      <MaxHitPoints>800</MaxHitPoints>
+      <WorkToBuild>4000</WorkToBuild>
+      <Mass>150</Mass>
+    </statBases>
+    <costList>
+      <Steel>150</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="DMSE.CompProperties_StructuralPile">
+        <coverageRadius>11</coverageRadius>
+        <linkRange>23</linkRange>
+        <circularRange>true</circularRange>
+        <spaceMapOnly>true</spaceMapOnly>
+        <allowedTerrains>
+          <li>DepthRim_HullPlatform</li>
+        </allowedTerrains>
+        <maxLinks>4</maxLinks>
+        <massWeight>4</massWeight>
+        <beamCostPerCell>
+          <Steel>5</Steel>
+        </beamCostPerCell>
+        <beamWorkPerCell>120</beamWorkPerCell>
+        <beamDismantleWorkFactor>0.5</beamDismantleWorkFactor>
+        <beamDismantleRefund>0.5</beamDismantleRefund>
+      </li>
+    </comps>
+    <uiOrder>2205</uiOrder>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_KeelBase">
+    <defName>DepthRim_KeelSmall</defName>
+    <researchPrerequisites>
+      <li>DepthRim_SubmarineConstruction</li>
+    </researchPrerequisites>
+    <label>small keel frame</label>
+    <description>A lighter pressure frame for a smaller section of hull platform. It has no link range of its own: it must be built within the link range of a keel frame and can only be joined to one.\n\nCan only be built on a hull platform.</description>
+    <graphicData>
+      <texPath>Thing/DR_Keel/KeelSmall</texPath>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(1,1)</size>
+    <statBases>
+      <MaxHitPoints>400</MaxHitPoints>
+      <WorkToBuild>2000</WorkToBuild>
+      <Mass>50</Mass>
+    </statBases>
+    <costList>
+      <Steel>50</Steel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="DMSE.CompProperties_StructuralPile">
+        <coverageRadius>7</coverageRadius>
+        <linkRange>0</linkRange>
+        <spaceMapOnly>true</spaceMapOnly>
+        <allowedTerrains>
+          <li>DepthRim_HullPlatform</li>
+        </allowedTerrains>
+        <maxLinks>4</maxLinks>
+        <massWeight>1</massWeight>
+        <beamCostPerCell>
+          <Steel>5</Steel>
+        </beamCostPerCell>
+        <beamWorkPerCell>120</beamWorkPerCell>
+        <beamDismantleWorkFactor>0.5</beamDismantleWorkFactor>
+        <beamDismantleRefund>0.5</beamDismantleRefund>
+      </li>
+    </comps>
+    <uiOrder>2206</uiOrder>
+  </ThingDef>
+
+  <!-- 艦橋：DMSE 轉移控制台換皮，必須在船體範圍內。另外掛 DepthRim 的下潛控制（選擇巡航深度）。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_Helm</defName>
+    <researchPrerequisites>
+      <li>DepthRim_SubmarineConstruction</li>
+    </researchPrerequisites>
+    <label>submarine helm</label>
+    <description>Navigation and dive controls for the submarine it stands on. Plan a voyage, check battery charge and readiness, set the cruising depth, and give the order to cast off.</description>
+    <graphicData>
+      <texPath>Thing/DR_Helm/Helm</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(4,3)</drawSize>
+    </graphicData>
+    <size>(3,2)</size>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.5</fillPercent>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.3</staticSunShadowHeight>
+    <canOverlapZones>false</canOverlapZones>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <statBases>
+      <MaxHitPoints>250</MaxHitPoints>
+      <WorkToBuild>4000</WorkToBuild>
+      <Mass>40</Mass>
+      <Flammability>0.5</Flammability>
+    </statBases>
+    <costList>
+      <Steel>150</Steel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <inspectorTabs>
+      <li>DMSE.ITab_TransferShip</li>
+    </inspectorTabs>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>300</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="DMSE.CompProperties_TransferConsole">
+        <operateTicks>1250</operateTicks>
+        <countdownTicks>600</countdownTicks>
+      </li>
+      <li Class="DepthRim.CompProperties_DiveControl" />
+    </comps>
+    <uiOrder>2199</uiOrder>
+  </ThingDef>
+
+  <!-- 推進器：沿用 DMSE 的轉移引擎基底，但沒有尾焰區、不噴火，只冒氣泡；要接電。 -->
+  <ThingDef ParentName="DMSE_TransferEngineBase" Name="DepthRim_ThrusterBase" Abstract="True">
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(3,4)</drawSize>
+    </graphicData>
+    <size>(2,3)</size>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_ThrusterBase">
+    <defName>DepthRim_Thruster</defName>
+    <researchPrerequisites>
+      <li>DepthRim_SubmarineConstruction</li>
+    </researchPrerequisites>
+    <label>underwater thruster</label>
+    <description>An electric propeller pod mounted on the hull. Low thrust, but simple and easy to repair. It draws its full power from the batteries aboard only while the submarine is under way, and its noise can be heard by passive sonar.</description>
+    <graphicData>
+      <texPath>Thing/DR_Thruster/Thruster</texPath>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>400</MaxHitPoints>
+      <WorkToBuild>6000</WorkToBuild>
+      <Mass>60</Mass>
+    </statBases>
+    <costList>
+      <Steel>150</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>150</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="DMSE.CompProperties_TransferEngine">
+        <thrust>3</thrust>
+        <fuelFactor>1</fuelFactor>
+        <exclusionAreaSize>(0, 0, 0)</exclusionAreaSize>
+        <exclusionAreaOffset>(0, 0, 0)</exclusionAreaOffset>
+        <flameSize>0</flameSize>
+        <exhaustSettings>
+          <exhaustFleckDef>AirPuff</exhaustFleckDef>
+          <emissionsPerSecond>12.0</emissionsPerSecond>
+          <spawnRadiusRange>0.0~0.6</spawnRadiusRange>
+          <velocity>(0.0,0.0,-3.0)</velocity>
+          <velocityRotationRange>-20.0~20.0</velocityRotationRange>
+          <velocityMultiplierRange>0.6~1.2</velocityMultiplierRange>
+          <rotationOverTimeRange>-90.0~90.0</rotationOverTimeRange>
+          <scaleRange>0.6~1.2</scaleRange>
+        </exhaustSettings>
+      </li>
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="DepthRim.CompProperties_ThrusterDraw" />
+    </comps>
+    <uiOrder>2201</uiOrder>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_ThrusterBase">
+    <defName>DepthRim_AdvancedThruster</defName>
+    <researchPrerequisites>
+      <li>DepthRim_AbyssalNavigation</li>
+    </researchPrerequisites>
+    <label>advanced underwater thruster</label>
+    <description>A magnetohydrodynamic drive with no moving parts: it pushes seawater directly with electromagnetic force. Much stronger and more efficient than a propeller pod, and almost silent.</description>
+    <graphicData>
+      <texPath>Thing/DR_Thruster/AdvancedThruster</texPath>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>500</MaxHitPoints>
+      <WorkToBuild>12000</WorkToBuild>
+      <Mass>80</Mass>
+    </statBases>
+    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
+    <costList>
+      <Steel>200</Steel>
+      <Plasteel>60</Plasteel>
+      <ComponentSpacer>3</ComponentSpacer>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>300</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="DMSE.CompProperties_TransferEngine">
+        <thrust>8</thrust>
+        <fuelFactor>0.5</fuelFactor>
+        <exclusionAreaSize>(0, 0, 0)</exclusionAreaSize>
+        <exclusionAreaOffset>(0, 0, 0)</exclusionAreaOffset>
+        <flameSize>0</flameSize>
+        <exhaustSettings>
+          <exhaustFleckDef>AirPuff</exhaustFleckDef>
+          <emissionsPerSecond>4.0</emissionsPerSecond>
+          <spawnRadiusRange>0.0~0.4</spawnRadiusRange>
+          <velocity>(0.0,0.0,-4.0)</velocity>
+          <velocityRotationRange>-10.0~10.0</velocityRotationRange>
+          <velocityMultiplierRange>0.8~1.2</velocityMultiplierRange>
+          <rotationOverTimeRange>-90.0~90.0</rotationOverTimeRange>
+          <scaleRange>0.4~0.8</scaleRange>
+        </exhaustSettings>
+      </li>
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="DepthRim.CompProperties_ThrusterDraw" />
+    </comps>
+    <uiOrder>2202</uiOrder>
+  </ThingDef>
+
+</Defs>

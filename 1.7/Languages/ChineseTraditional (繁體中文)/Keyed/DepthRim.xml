@@ -32,8 +32,85 @@
   <DepthRim.WatertightDoor.Sealed>淹水側（{0}）：沒有潛水服的殖民者不會通過</DepthRim.WatertightDoor.Sealed>
   <DepthRim.WatertightDoor.Open>兩側都可通行（最深 {0}）</DepthRim.WatertightDoor.Open>
   <DepthRim.IceShaft.TooDeep>下方的海洋是{0}（{1}）：升降井到不了這麼深。潛水服只撐得住淺海與變溫層。</DepthRim.IceShaft.TooDeep>
+  <DepthRim.IceShaft.NoOcean>陸地正下方沒有海洋。升降井只能挖穿冰原或海冰。</DepthRim.IceShaft.NoOcean>
   <DepthRim.IceShaft.Below>下方海洋：{0}</DepthRim.IceShaft.Below>
   <DepthRim.Readout.WaterLevel>水位（{0}）</DepthRim.Readout.WaterLevel>
   <DepthRim.Readout.WaterLevelOpen>開放水域（{0}）</DepthRim.Readout.WaterLevelOpen>
 
+  <!-- 潛艇 -->
+  <DepthRim.Sub.Cruise>巡航深度：{0}</DepthRim.Sub.Cruise>
+  <DepthRim.Sub.CruiseNone>巡航深度</DepthRim.Sub.CruiseNone>
+  <DepthRim.Sub.CruiseDesc>設定這艘潛艇的巡航深度，每換一個層級要一小時。不能潛得比腳下的海床更深，船殼也必須撐得住那個深度。\n\n此處海床：{0}\n船殼耐壓：{1}</DepthRim.Sub.CruiseDesc>
+  <DepthRim.Sub.WeakestPiece>（最弱：{0}）</DepthRim.Sub.WeakestPiece>
+  <DepthRim.Sub.NotAboard>只有在已經離開船塢的潛艇上才能使用。</DepthRim.Sub.NotAboard>
+  <DepthRim.Sub.Block.AlreadyThere>已經是這個深度</DepthRim.Sub.Block.AlreadyThere>
+  <DepthRim.Sub.Block.BelowSeafloor>比這裡的海床還深</DepthRim.Sub.Block.BelowSeafloor>
+  <DepthRim.Sub.Block.HullTooWeak>船殼撐不住</DepthRim.Sub.Block.HullTooWeak>
+  <DepthRim.Sub.DepthReached>{0}已抵達{1}。</DepthRim.Sub.DepthReached>
+  <DepthRim.Sub.InspectDepth>深度：{0}</DepthRim.Sub.InspectDepth>
+  <DepthRim.Sub.InspectDiving>深度：{0}（正前往{1}）</DepthRim.Sub.InspectDiving>
+  <DepthRim.Route.Land>潛艇不能開到陸地上。</DepthRim.Route.Land>
+  <DepthRim.Route.Unreachable>沒有海路能到那裡。</DepthRim.Route.Unreachable>
+
+  <DepthRim.Pressure.Crushing>{0}正被水壓慢慢壓壞。這個深度要用水密隔牆。</DepthRim.Pressure.Crushing>
+
+  <DepthRim.Anchor.Label>下錨</DepthRim.Anchor.Label>
+  <DepthRim.Anchor.Desc>停到旁邊的海床上。船體會降落到一張完整的海床地圖：艙外看得見，穿潛水裝備的人員也能出艙。只能在淺海，或觸底停在深海海床時下錨。</DepthRim.Anchor.Desc>
+  <DepthRim.Anchor.InFlight>航行中不能下錨。</DepthRim.Anchor.InFlight>
+  <DepthRim.Anchor.Block.NoBottom>這個深度（{0}）沒有能下錨的底。</DepthRim.Anchor.Block.NoBottom>
+  <DepthRim.Anchor.Block.NotAtBottom>先把潛艇下潛或上浮到海床的深度（{0}）。</DepthRim.Anchor.Block.NotAtBottom>
+  <DepthRim.Anchor.NoSpot>這附近沒有空著的海床可以停。</DepthRim.Anchor.NoSpot>
+
+  <DepthRim.Voyage.Stop>就地停船</DepthRim.Voyage.Stop>
+  <DepthRim.Voyage.StopDesc>放棄這趟航程，讓潛艇停在現在的位置。推進器會回到待機。</DepthRim.Voyage.StopDesc>
+  <DepthRim.Voyage.Stopped>{0}在航程中途停船了。</DepthRim.Voyage.Stopped>
+  <DepthRim.Voyage.Stalled>{0}沒有運作中的推進器，正停在海中漂流。讓推進器重新通電就能繼續航行。</DepthRim.Voyage.Stalled>
+  <DepthRim.Voyage.Resumed>{0}的推進器重新運轉了。</DepthRim.Voyage.Resumed>
+  <DepthRim.Voyage.InspectThrust>推力：{0}</DepthRim.Voyage.InspectThrust>
+  <DepthRim.Voyage.InspectStalled>推力：無（漂流中）</DepthRim.Voyage.InspectStalled>
+  <DepthRim.Voyage.ThrusterStandby>待機中（只有航行時才全速耗電）</DepthRim.Voyage.ThrusterStandby>
+
+
+  <!-- 魚雷 -->
+  <DepthRim.Torpedo.SeaOnly>魚雷只能走海路，打海洋格。</DepthRim.Torpedo.SeaOnly>
+  <DepthRim.Torpedo.NoSeaRoute>沒有海路到得了那一格。</DepthRim.Torpedo.NoSeaRoute>
+  <DepthRim.Torpedo.OutOfRange>海路距離超出射程（射程 {0} 格）。</DepthRim.Torpedo.OutOfRange>
+  <DepthRim.PointDefense.Ready>近防：待命</DepthRim.PointDefense.Ready>
+  <DepthRim.PointDefense.Cycling>近防：循環中（{0}）</DepthRim.PointDefense.Cycling>
+  <DepthRim.PointDefense.NoAmmo>近防：沒有彈鏢</DepthRim.PointDefense.NoAmmo>
+  <DepthRim.EnemyBoat.Depth>巡航深度：{0}</DepthRim.EnemyBoat.Depth>
+
+  <!-- 跳幫 -->
+  <DepthRim.Boarding.CraftLeft>一艘跳幫突擊艇載著 {0} 人離開了。</DepthRim.Boarding.CraftLeft>
+  <DepthRim.Boarding.InspectAboard>艇上：{0} 人</DepthRim.Boarding.InspectAboard>
+  <DepthRim.Boarding.InspectWaiting>等待離開：艇上 {0} 人，還有 {1} 人在外</DepthRim.Boarding.InspectWaiting>
+  <DepthRim.Boarding.RetreatLosses>{1}的{0}損失慘重，正撤回跳幫突擊艇。</DepthRim.Boarding.RetreatLosses>
+  <DepthRim.Boarding.RetreatTimeout>{1}的{0}放棄了，正撤回跳幫突擊艇。</DepthRim.Boarding.RetreatTimeout>
+  <DepthRim.Boarding.RetreatSatisfied>{1}的{0}破壞得夠了，正撤回跳幫突擊艇。</DepthRim.Boarding.RetreatSatisfied>
+  <DepthRim.Boarding.TookAway>跳幫者帶走了 {0} 名俘虜和價值 {1} 的戰利品。</DepthRim.Boarding.TookAway>
+  <DepthRim.Boarding.CraftSunk>一艘跳幫突擊艇被擊中，載著 {0} 人沉沒了。</DepthRim.Boarding.CraftSunk>
+  <DepthRim.Boarding.Launch>出發</DepthRim.Boarding.Launch>
+  <DepthRim.Boarding.LaunchDesc>選一格海路 {0} 格內的海洋格。突擊艇會切入對方的密閉艙室而不破壞密閉；沒有艙室就降在海床上。</DepthRim.Boarding.LaunchDesc>
+  <DepthRim.Boarding.NoCrew>艇上沒有人。</DepthRim.Boarding.NoCrew>
+  <DepthRim.Boarding.Unload>卸下</DepthRim.Boarding.Unload>
+  <DepthRim.Boarding.UnloadDesc>讓艇上所有的人和東西出來。</DepthRim.Boarding.UnloadDesc>
+  <DepthRim.Boarding.SameTile>突擊艇已經在這裡了。</DepthRim.Boarding.SameTile>
+  <DepthRim.Boarding.Occupied>那一格有別的東西。</DepthRim.Boarding.Occupied>
+  <DepthRim.Boarding.SeaDistance>海路 {0} 格</DepthRim.Boarding.SeaDistance>
+  <DepthRim.Boarding.Arrived>突擊艇抵達{0}。</DepthRim.Boarding.Arrived>
+  <DepthRim.Boarding.CannotBoard>無法登艇</DepthRim.Boarding.CannotBoard>
+  <DepthRim.Boarding.BoardOption>登上{0}</DepthRim.Boarding.BoardOption>
+  <DepthRim.Boarding.NeedsMoonPool>必須造在月池上。</DepthRim.Boarding.NeedsMoonPool>
+
+  <!-- 敵方勢力 -->
+  <DepthRim.Pirate.SubHit>魚雷命中{0}：船殼剩 {1} / {2}。</DepthRim.Pirate.SubHit>
+  <DepthRim.Pirate.SubSunkLabel>擊沉海盜潛艇</DepthRim.Pirate.SubSunkLabel>
+  <DepthRim.Pirate.SubSunk>你的魚雷打穿了海盜潛艇的船殼，它連同全體船員沉了下去；{0}得另外找一艘船了。</DepthRim.Pirate.SubSunk>
+  <DepthRim.Pirate.BoardedLabel>跳幫海盜潛艇</DepthRim.Pirate.BoardedLabel>
+  <DepthRim.Pirate.Boarded>你的突擊艇切入了{0}。船員會死守每一個艙室。\n\n清空船員、拿走想要的東西；你的人離開後，這艘船會被鑿沉。</DepthRim.Pirate.Boarded>
+  <DepthRim.Pirate.SubInspect>船殼：{0} / {1}\n深度：{2}</DepthRim.Pirate.SubInspect>
+  <DepthRim.Pirate.BoatSunk>一枚魚雷擊沉了{0}的攻擊艇。</DepthRim.Pirate.BoatSunk>
+  <DepthRim.Sonar.UnknownContact>未知聲納接觸</DepthRim.Sonar.UnknownContact>
+  <DepthRim.Sonar.UnknownInspect>有東西在那裡移動。讓聲納更靠近（偵測半徑一半以內）才分得出是什麼。</DepthRim.Sonar.UnknownInspect>
+  <DepthRim.Sonar.FishInspect>一大群魚。無害。</DepthRim.Sonar.FishInspect>
 </LanguageData>

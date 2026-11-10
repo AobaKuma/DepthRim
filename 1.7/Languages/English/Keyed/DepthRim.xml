@@ -32,8 +32,85 @@
   <DepthRim.WatertightDoor.Sealed>Flooded side ({0}): colonists without a diving suit will not pass</DepthRim.WatertightDoor.Sealed>
   <DepthRim.WatertightDoor.Open>Both sides passable (deepest {0})</DepthRim.WatertightDoor.Open>
   <DepthRim.IceShaft.TooDeep>The ocean below is {0} ({1}): too deep for an ice shaft. Diving suits only handle shallow and mid-depth water.</DepthRim.IceShaft.TooDeep>
+  <DepthRim.IceShaft.NoOcean>There is no ocean under dry land. An ice shaft has to be dug through an ice sheet or sea ice.</DepthRim.IceShaft.NoOcean>
   <DepthRim.IceShaft.Below>Ocean below: {0}</DepthRim.IceShaft.Below>
   <DepthRim.Readout.WaterLevel>Water level ({0})</DepthRim.Readout.WaterLevel>
   <DepthRim.Readout.WaterLevelOpen>Open water ({0})</DepthRim.Readout.WaterLevelOpen>
 
+  <!-- 潛艇 -->
+  <DepthRim.Sub.Cruise>Cruising depth: {0}</DepthRim.Sub.Cruise>
+  <DepthRim.Sub.CruiseNone>Cruising depth</DepthRim.Sub.CruiseNone>
+  <DepthRim.Sub.CruiseDesc>Set the depth this submarine cruises at. Each depth tier takes an hour to reach. It can never go deeper than the seafloor below, and the hull must be rated for the depth.\n\nSeafloor here: {0}\nHull rating: {1}</DepthRim.Sub.CruiseDesc>
+  <DepthRim.Sub.WeakestPiece> (weakest: {0})</DepthRim.Sub.WeakestPiece>
+  <DepthRim.Sub.NotAboard>Only works aboard a submarine that has cast off from the shipyard.</DepthRim.Sub.NotAboard>
+  <DepthRim.Sub.Block.AlreadyThere>already set</DepthRim.Sub.Block.AlreadyThere>
+  <DepthRim.Sub.Block.BelowSeafloor>below the seafloor here</DepthRim.Sub.Block.BelowSeafloor>
+  <DepthRim.Sub.Block.HullTooWeak>the hull is not rated for it</DepthRim.Sub.Block.HullTooWeak>
+  <DepthRim.Sub.DepthReached>{0} has reached the {1}.</DepthRim.Sub.DepthReached>
+  <DepthRim.Sub.InspectDepth>Depth: {0}</DepthRim.Sub.InspectDepth>
+  <DepthRim.Sub.InspectDiving>Depth: {0} (heading to {1})</DepthRim.Sub.InspectDiving>
+  <DepthRim.Route.Land>A submarine cannot travel to dry land.</DepthRim.Route.Land>
+  <DepthRim.Route.Unreachable>No sea route reaches that point.</DepthRim.Route.Unreachable>
+
+  <DepthRim.Pressure.Crushing>{0} is being crushed by the water pressure. Use pressure hull walls at this depth.</DepthRim.Pressure.Crushing>
+
+  <DepthRim.Anchor.Label>Anchor</DepthRim.Anchor.Label>
+  <DepthRim.Anchor.Desc>Settle on the seafloor right next to here. The hull lands on a full map of the sea floor: the outside becomes visible and divers can leave the hull. Only possible in the shallows, or on the seabed while resting at the bottom.</DepthRim.Anchor.Desc>
+  <DepthRim.Anchor.InFlight>Cannot anchor while under way.</DepthRim.Anchor.InFlight>
+  <DepthRim.Anchor.Block.NoBottom>There is no bottom to anchor on at this depth ({0}).</DepthRim.Anchor.Block.NoBottom>
+  <DepthRim.Anchor.Block.NotAtBottom>Bring the submarine down to the seafloor ({0}) first.</DepthRim.Anchor.Block.NotAtBottom>
+  <DepthRim.Anchor.NoSpot>There is no free stretch of seafloor next to here.</DepthRim.Anchor.NoSpot>
+
+  <DepthRim.Voyage.Stop>Stop here</DepthRim.Voyage.Stop>
+  <DepthRim.Voyage.StopDesc>Abandon the voyage and stop the submarine where it is now. The thrusters drop back to standby.</DepthRim.Voyage.StopDesc>
+  <DepthRim.Voyage.Stopped>{0} has stopped mid-voyage.</DepthRim.Voyage.Stopped>
+  <DepthRim.Voyage.Stalled>{0} has no working thrusters and is drifting in place. Power them back up to continue the voyage.</DepthRim.Voyage.Stalled>
+  <DepthRim.Voyage.Resumed>{0}'s thrusters are running again.</DepthRim.Voyage.Resumed>
+  <DepthRim.Voyage.InspectThrust>Thrust: {0}</DepthRim.Voyage.InspectThrust>
+  <DepthRim.Voyage.InspectStalled>Thrust: none (drifting)</DepthRim.Voyage.InspectStalled>
+  <DepthRim.Voyage.ThrusterStandby>Standby (full power draw only while under way)</DepthRim.Voyage.ThrusterStandby>
+
+
+  <!-- 魚雷 -->
+  <DepthRim.Torpedo.SeaOnly>Torpedoes can only travel by sea, to an ocean tile.</DepthRim.Torpedo.SeaOnly>
+  <DepthRim.Torpedo.NoSeaRoute>No sea route reaches that tile.</DepthRim.Torpedo.NoSeaRoute>
+  <DepthRim.Torpedo.OutOfRange>Out of range by sea (range {0} tiles).</DepthRim.Torpedo.OutOfRange>
+  <DepthRim.PointDefense.Ready>Point defence: ready</DepthRim.PointDefense.Ready>
+  <DepthRim.PointDefense.Cycling>Point defence: cycling ({0})</DepthRim.PointDefense.Cycling>
+  <DepthRim.PointDefense.NoAmmo>Point defence: out of darts</DepthRim.PointDefense.NoAmmo>
+  <DepthRim.EnemyBoat.Depth>Cruising depth: {0}</DepthRim.EnemyBoat.Depth>
+
+  <!-- 跳幫 -->
+  <DepthRim.Boarding.CraftLeft>A boarding craft has left with {0} aboard.</DepthRim.Boarding.CraftLeft>
+  <DepthRim.Boarding.InspectAboard>Aboard: {0}</DepthRim.Boarding.InspectAboard>
+  <DepthRim.Boarding.InspectWaiting>Waiting to leave: {0} aboard, {1} still out</DepthRim.Boarding.InspectWaiting>
+  <DepthRim.Boarding.RetreatLosses>The {0} of {1} have taken heavy losses and are falling back to their boarding craft.</DepthRim.Boarding.RetreatLosses>
+  <DepthRim.Boarding.RetreatTimeout>The {0} of {1} have given up and are falling back to their boarding craft.</DepthRim.Boarding.RetreatTimeout>
+  <DepthRim.Boarding.RetreatSatisfied>The {0} of {1} are satisfied with the damage and are falling back to their boarding craft.</DepthRim.Boarding.RetreatSatisfied>
+  <DepthRim.Boarding.TookAway>The boarders got away with {0} captive(s) and {1} in loot.</DepthRim.Boarding.TookAway>
+  <DepthRim.Boarding.CraftSunk>A boarding craft was hit and sank with {0} aboard.</DepthRim.Boarding.CraftSunk>
+  <DepthRim.Boarding.Launch>Launch</DepthRim.Boarding.Launch>
+  <DepthRim.Boarding.LaunchDesc>Choose an ocean tile within {0} tiles by sea. The craft cuts into the target's sealed compartments without breaking the seal, or settles on the seabed if there are none.</DepthRim.Boarding.LaunchDesc>
+  <DepthRim.Boarding.NoCrew>Nobody is aboard.</DepthRim.Boarding.NoCrew>
+  <DepthRim.Boarding.Unload>Unload</DepthRim.Boarding.Unload>
+  <DepthRim.Boarding.UnloadDesc>Let everyone and everything out of the craft.</DepthRim.Boarding.UnloadDesc>
+  <DepthRim.Boarding.SameTile>The craft is already here.</DepthRim.Boarding.SameTile>
+  <DepthRim.Boarding.Occupied>Something else is at that tile.</DepthRim.Boarding.Occupied>
+  <DepthRim.Boarding.SeaDistance>{0} tiles by sea</DepthRim.Boarding.SeaDistance>
+  <DepthRim.Boarding.Arrived>The boarding craft has arrived at {0}.</DepthRim.Boarding.Arrived>
+  <DepthRim.Boarding.CannotBoard>Cannot board</DepthRim.Boarding.CannotBoard>
+  <DepthRim.Boarding.BoardOption>Board {0}</DepthRim.Boarding.BoardOption>
+  <DepthRim.Boarding.NeedsMoonPool>Must be built on a moon pool.</DepthRim.Boarding.NeedsMoonPool>
+
+  <!-- 敵方勢力 -->
+  <DepthRim.Pirate.SubHit>Torpedo hit on {0}: hull at {1} / {2}.</DepthRim.Pirate.SubHit>
+  <DepthRim.Pirate.SubSunkLabel>Pirate submarine sunk</DepthRim.Pirate.SubSunkLabel>
+  <DepthRim.Pirate.SubSunk>Your torpedoes have broken the pirate submarine's hull. It went down with all hands; {0} will have to find another boat.</DepthRim.Pirate.SubSunk>
+  <DepthRim.Pirate.BoardedLabel>Boarding the pirate submarine</DepthRim.Pirate.BoardedLabel>
+  <DepthRim.Pirate.Boarded>Your boarding craft has cut into {0}. Its crew will fight for every compartment.\n\nClear the crew and take what you want; when your people leave, the boat will be scuttled.</DepthRim.Pirate.Boarded>
+  <DepthRim.Pirate.SubInspect>Hull: {0} / {1}\nDepth: {2}</DepthRim.Pirate.SubInspect>
+  <DepthRim.Pirate.BoatSunk>A torpedo sank an attack boat of {0}.</DepthRim.Pirate.BoatSunk>
+  <DepthRim.Sonar.UnknownContact>unknown sonar contact</DepthRim.Sonar.UnknownContact>
+  <DepthRim.Sonar.UnknownInspect>Something is moving out there. Bring a sonar closer (within half its range) to tell what it is.</DepthRim.Sonar.UnknownInspect>
+  <DepthRim.Sonar.FishInspect>A large school of fish. Harmless.</DepthRim.Sonar.FishInspect>
 </LanguageData>

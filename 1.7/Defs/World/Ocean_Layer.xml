@@ -9,7 +9,8 @@
     <gerundLabel>in</gerundLabel>
     <defaultBiome>DepthRim_SeabedPlain</defaultBiome>
     <defaultMapWorldObject>DepthRim_OceanSite</defaultMapWorldObject>
-    <elevationString>under the sea</elevationString>
+    <!-- 格子高度是負的海床深度（WaterMapExtension.seafloorDepth），例如 -4200m -->
+    <elevationString>{0}m</elevationString>
     <isSpace>false</isSpace>
     <canFormCaravans>false</canFormCaravans>
     <alwaysRaycastable>false</alwaysRaycastable>
@@ -28,8 +29,22 @@
     <!-- TODO: 專用圖示 -->
     <viewGizmoTexPath>UI/Commands/ViewOrbit</viewGizmoTexPath>
     <viewGizmoTooltip>View the ocean beneath the surface.</viewGizmoTooltip>
+    <!-- 世界地圖上的海床地形：生態區貼圖（BiomeDef.texture）與地勢圖示。
+         海洋層在地表裡面，DepthRim 的地形／地勢層只在選到海洋層時畫，那時地表整層藏起來（Patch_PlanetLayer_Visible）。 -->
     <worldDrawLayers>
+      <li>WorldDrawLayer_CurrentMapTile</li>
+      <li>WorldDrawLayer_SelectedTile</li>
+      <li>WorldDrawLayer_MouseTile</li>
       <li>WorldDrawLayer_ClosestTile</li>
+      <li>DepthRim.WorldDrawLayer_OceanUngenerated</li>
+      <li>WorldDrawLayer_WorldObjects_Expandable</li>
+      <li>WorldDrawLayer_WorldObjects_NonExpandable</li>
+      <li>DepthRim.WorldDrawLayer_OceanHills</li>
+      <!-- 水深著色：淺水亮青、深海暗藍，蓋在生態區貼圖上（DepthRim.Bathymetry） -->
+      <li>DepthRim.WorldDrawLayer_OceanBathymetry</li>
+      <!-- 陸塊格（大陸下方）畫成正上方的地表生態區，所以看得出大陸與海岸線 -->
+      <li>DepthRim.WorldDrawLayer_OceanLand</li>
+      <li>DepthRim.WorldDrawLayer_OceanTerrain</li>
     </worldDrawLayers>
     <worldGenSteps>
       <li>DepthRim_OceanTiles</li>
@@ -37,18 +52,24 @@
     <worldTabs>
       <li>WITab_Planet</li>
     </worldTabs>
-    <!-- TODO（潛艇原型）：加上 DMSE.TransferEnvironmentExtension 讓轉移飛行能在海洋層起飛。
-         現在先不加：海洋地圖的海床是碎石／沙地而不是虛空，結構樁會把整片海床當成船體帶走。
-         要先決定船塢的地形規則（例如潛艇只能蓋在船塢平台上、虛空 = 開放水域），再設定 voidTerrain 等欄位。 -->
+    <!-- 潛艇（DMSE 轉移飛行）：海洋層可以起飛。虛空 = 深淵；龍骨樁只把船體平台算進船體（allowedTerrains），
+         所以海床不會被帶走，潛艇只能在深淵上的平台建造。船體地圖只鋪深淵，父物件是 DepthRim 的潛艇。 -->
+    <modExtensions>
+      <li Class="DMSE.TransferEnvironmentExtension">
+        <voidTerrain>DepthRim_Abyss</voidTerrain>
+        <shipMapGenerator>DepthRim_SubmarineHull</shipMapGenerator>
+        <shipWorldObject>DepthRim_Submarine</shipWorldObject>
+      </li>
+    </modExtensions>
   </PlanetLayerDef>
 
-  <!-- 半徑略小於地表（100），代表海面之下；格子比地表少（地表 10 次細分）。 -->
+  <!-- 半徑略小於地表（100），代表海面之下。細分和地表一樣（10）：每個海洋格正好在一個地表格下方，海岸線才不會鋸齒狀（2026-11-09 之前是 7，舊存檔保留存檔裡的細分）。 -->
   <PlanetLayerSettingsDef>
     <defName>DepthRim_Ocean_Settings</defName>
     <label>ocean</label>
     <settings>
       <radius>97</radius>
-      <subdivisions>7</subdivisions>
+      <subdivisions>10</subdivisions>
       <useSurfaceViewAngle>true</useSurfaceViewAngle>
     </settings>
   </PlanetLayerSettingsDef>

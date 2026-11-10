@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Midwater_Whale.label>鯨魚</DepthRim_Midwater_Whale.label>
+  <DepthRim_Midwater_Whale.description>在遠遠下方的黑暗水中滑行的鯨魚。</DepthRim_Midwater_Whale.description>
+  <DepthRim_Midwater_Whale.passMessage>一個巨大的影子從下方的黑暗水中緩緩滑過。有鯨魚經過。</DepthRim_Midwater_Whale.passMessage>
+
+  <DepthRim_Midwater_GiantSquid.label>大王魷魚</DepthRim_Midwater_GiantSquid.label>
+  <DepthRim_Midwater_GiantSquid.description>在深淵中漂過的大王魷魚，眼睛映著最微弱的光。</DepthRim_Midwater_GiantSquid.description>
+  <DepthRim_Midwater_GiantSquid.passMessage>某個龐然大物從下方的深淵漂過。兩隻蒼白的眼睛朝光轉了過來，又滑回黑暗裡。</DepthRim_Midwater_GiantSquid.passMessage>
+
+  <DepthRim_Midwater_FishSchool.label>魚群</DepthRim_Midwater_FishSchool.label>
+  <DepthRim_Midwater_FishSchool.description>在黑暗中一齊轉向的小魚群。</DepthRim_Midwater_FishSchool.description>
+
+  <DepthRim_Midwater_Jellyfish.label>水母</DepthRim_Midwater_Jellyfish.label>
+  <DepthRim_Midwater_Jellyfish.description>在深水中漂流、微微發光的水母。</DepthRim_Midwater_Jellyfish.description>
+
+</LanguageData>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- DepthRim 自己的建築分頁「水下」：冰層升降井、排水、水密結構與潛艇船體平台。
+       排在 DMSE 的超視距作戰（295）之後、雜項（250）之前。拆除平台沿用 DMSE 的指令（船體平台在海洋層拆完會改回深淵）。 -->
+  <DesignationCategoryDef>
+    <defName>DepthRim_Underwater</defName>
+    <label>underwater</label>
+    <description>Ice shafts, drainage, watertight structures and submarine hull platforms for living under the ocean.</description>
+    <order>280</order>
+    <specialDesignatorClasses>
+      <li>Designator_Cancel</li>
+      <li>Designator_Deconstruct</li>
+      <li>DMSE.Designator_RemovePlatform</li>
+    </specialDesignatorClasses>
+  </DesignationCategoryDef>
+
+</Defs>

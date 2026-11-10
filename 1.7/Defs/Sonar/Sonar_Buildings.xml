@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    聲納：DMSE 搜索雷達（CompSearchRadar）換皮（設計稿 §11 M4、DMSE_對接研究.md §3.2）。
+    有運作中聲納的地圖（基地或航行中的潛艇）就是 BVR 節點：偵測來襲目標、世界地圖選取時畫出偵測圈。
+    主動聲納範圍大但會暴露位置（被動歸向魚雷／反輻射導引會找上它）；被動聲納範圍小、不會被找到。
+    溫躍層遮蔽見 DepthRim.Patch_SonarLayer。貼圖暫時是 DMSE 雷達的複製品。
+  -->
+  <ThingDef ParentName="BuildingBase" Name="DepthRim_SonarBase" Abstract="True">
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>0.5</fillPercent>
+    <pathCost>42</pathCost>
+    <tickerType>Normal</tickerType>
+    <rotatable>false</rotatable>
+    <castEdgeShadows>false</castEdgeShadows>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <canOverlapZones>false</canOverlapZones>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterCombat</li>
+    </researchPrerequisites>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_SonarBase">
+    <defName>DepthRim_ActiveSonar</defName>
+    <label>active sonar</label>
+    <description>A hull-mounted transducer array that sends out powerful sound pulses and listens for the echoes. It sees far, but every ping announces where you are: passive homing torpedoes steer for the loudest active sonar they can hear.\n\nThe thermocline bends sound: targets on the other side of the layer are only heard at half range, and anything hiding inside the layer at three quarters.</description>
+    <graphicData>
+      <texPath>Thing/DR_Sonar/ActiveSonar</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(3.5,3.5)</drawSize>
+    </graphicData>
+    <size>(3,3)</size>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>9000</WorkToBuild>
+      <Mass>120</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>180</Steel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>400</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="DMSE.CompProperties_SearchRadar">
+        <worldDetectionRange>6</worldDetectionRange>
+        <searchDistance>120</searchDistance>
+        <powerLevel>2</powerLevel>
+        <antiStealthLevel>1</antiStealthLevel>
+        <ticksPerDistance>10</ticksPerDistance>
+      </li>
+    </comps>
+    <uiOrder>2210</uiOrder>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_SonarBase">
+    <defName>DepthRim_PassiveSonar</defName>
+    <label>passive sonar</label>
+    <description>A hydrophone array that only listens. It emits nothing, so homing torpedoes cannot find it, but it only hears what is close and loud, such as thrusters and incoming torpedoes.\n\nThe thermocline bends sound for passive sonar too.</description>
+    <graphicData>
+      <texPath>Thing/DR_Sonar/PassiveSonar</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2.5,2.5)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <WorkToBuild>5000</WorkToBuild>
+      <Mass>60</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>100</Steel>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>100</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="DMSE.CompProperties_SearchRadar">
+        <worldDetectionRange>3</worldDetectionRange>
+        <searchDistance>60</searchDistance>
+        <powerLevel>1</powerLevel>
+        <antiStealthLevel>0</antiStealthLevel>
+        <ticksPerDistance>10</ticksPerDistance>
+        <immuneToAntiRadiationSeeker>true</immuneToAntiRadiationSeeker>
+      </li>
+    </comps>
+    <uiOrder>2211</uiOrder>
+  </ThingDef>
+
+  <!-- 火控聲納（5.7）：DMSE 火控雷達的換皮。導引魚雷發射管裡的反魚雷魚雷去攔截來襲的魚雷。 -->
+  <ThingDef ParentName="DepthRim_SonarBase">
+    <defName>DepthRim_FireControlSonar</defName>
+    <label>fire-control sonar</label>
+    <description>A narrow-beam sonar that tracks an incoming torpedo closely enough to steer an anti-torpedo torpedo onto it, two at a time. It needs anti-torpedo torpedoes loaded in a torpedo tube, and a search sonar (active or passive) on the same map to hear the torpedo coming.</description>
+    <graphicData>
+      <texPath>Thing/DR_Sonar/PassiveSonar</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(3.5,3.5)</drawSize>
+    </graphicData>
+    <size>(3,3)</size>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>9000</WorkToBuild>
+      <Mass>120</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>200</Steel>
+      <ComponentIndustrial>8</ComponentIndustrial>
+    </costList>
+    <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>600</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="DMSE.CompProperties_FireControlRadar">
+        <maxTargets>2</maxTargets>
+        <powerLevel>1</powerLevel>
+        <guidanceAccuracyTime>900</guidanceAccuracyTime>
+        <maxRangeTicks>4000</maxRangeTicks>
+        <maxHitChance>0.7</maxHitChance>
+        <stealthMissFactor>0.6</stealthMissFactor>
+        <lockOnTicks>240</lockOnTicks>
+        <supportsStrikeGuidance>false</supportsStrikeGuidance>
+      </li>
+    </comps>
+    <uiOrder>2212</uiOrder>
+  </ThingDef>
+
+</Defs>

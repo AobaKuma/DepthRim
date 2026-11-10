@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_BoardingArrival.textEnemy>一群來自{1}的{0}正搭著跳幫突擊艇切穿船殼登艦！</DepthRim_BoardingArrival.textEnemy>
+  <DepthRim_BoardingArrival.textFriendly>一群來自{1}的友善{0}正搭著跳幫突擊艇登艦。</DepthRim_BoardingArrival.textFriendly>
+  <DepthRim_BoardingArrival.textWillArrive>{0_pawnsPluralDef}會搭跳幫突擊艇登艦。</DepthRim_BoardingArrival.textWillArrive>
+</LanguageData>

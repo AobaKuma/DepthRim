@@ -36,4 +36,39 @@
   <DepthRim_RawKelp.label>生海藻</DepthRim_RawKelp.label>
   <DepthRim_RawKelp.description>剛採收的海藻。又鹹又有嚼勁，生吃可以，煮過更好。</DepthRim_RawKelp.description>
 
+  <!-- 潛艇 -->
+  <DepthRim_Keel.label>龍骨框架</DepthRim_Keel.label>
+  <DepthRim_Keel.description>把一段船體平台綁成一個整體的巨型耐壓框架。以鋼樑相連的龍骨框架構成一艘潛艇：覆蓋範圍內船體平台上的一切都會跟著離開。小型龍骨框架可以蓋在它的連結範圍內。\n\n只能蓋在船體平台上。</DepthRim_Keel.description>
+  <DepthRim_KeelSmall.label>小型龍骨框架</DepthRim_KeelSmall.label>
+  <DepthRim_KeelSmall.description>用於較小一段船體平台的輕型耐壓框架。本身沒有連結範圍：必須蓋在龍骨框架的連結範圍內，也只能連到龍骨框架。\n\n只能蓋在船體平台上。</DepthRim_KeelSmall.description>
+  <DepthRim_Helm.label>潛艇艦橋</DepthRim_Helm.label>
+  <DepthRim_Helm.description>所在潛艇的航行與下潛控制台。在這裡規劃航程、確認電池存量與整備狀態、設定巡航深度，並下令離港。</DepthRim_Helm.description>
+  <DepthRim_Thruster.label>水下推進器</DepthRim_Thruster.label>
+  <DepthRim_Thruster.description>裝在潛艇船體上的電動螺旋槳推進器。推力不大，但構造簡單、容易維修。只有潛艇航行時才從船上的電池全速取電，運轉時的噪音會被被動聲納聽見。</DepthRim_Thruster.description>
+  <DepthRim_AdvancedThruster.label>先進水下推進器</DepthRim_AdvancedThruster.label>
+  <DepthRim_AdvancedThruster.description>以磁流體推進的推進器，沒有任何轉動部件，直接以電磁力推動海水。推力與效率都遠勝螺旋槳，運轉時幾乎不發出聲音。</DepthRim_AdvancedThruster.description>
+
+  <DepthRim_ActiveSonar.label>主動聲納</DepthRim_ActiveSonar.label>
+  <DepthRim_ActiveSonar.description>裝在船體上的換能器陣列，發出強力聲脈衝再聆聽回波。看得很遠，但每一次發聲都在告訴別人你在哪裡：被動歸向魚雷會朝聽得到的最響的主動聲納衝過去。\n\n溫躍層會折射聲波：溫躍層另一側的目標只能在一半距離內聽見，躲在溫躍層裡的則是四分之三。</DepthRim_ActiveSonar.description>
+  <DepthRim_PassiveSonar.label>被動聲納</DepthRim_PassiveSonar.label>
+  <DepthRim_PassiveSonar.description>只聽不發的水聽器陣列。不發出任何聲音，歸向魚雷找不到它，但只聽得到近處的響亮聲音，例如推進器與來襲的魚雷。\n\n溫躍層對被動聲納一樣有遮蔽效果。</DepthRim_PassiveSonar.description>
+
+  <DepthRim_Torpedo.label>魚雷</DepthRim_Torpedo.label>
+  <DepthRim_Torpedo.description>重型魚雷，裝進魚雷發射管後射向地圖外的目標。只能走海路。戰鬥部、導引與酬載可以在裝配分頁更換。</DepthRim_Torpedo.description>
+  <DepthRim_TorpedoTube.label>魚雷發射管</DepthRim_TorpedoTube.label>
+  <DepthRim_TorpedoTube.description>一對耐壓發射管，可裝兩枚魚雷，射向地圖外的目標。魚雷只能走海路，所以目標要從海上到得了。裝在這裡的反魚雷魚雷，會由火控聲納射向來襲的魚雷。\n\n需要電力。</DepthRim_TorpedoTube.description>
+  <DepthRim_AntiTorpedo.label>反魚雷魚雷</DepthRim_AntiTorpedo.label>
+  <DepthRim_AntiTorpedo.description>短而快的攔截魚雷。裝進魚雷發射管後，火控聲納會自動把它射向朝這張地圖來的魚雷。只打魚雷。</DepthRim_AntiTorpedo.description>
+  <DepthRim_SupercavitatingGun.label>超空泡近防砲</DepthRim_SupercavitatingGun.label>
+  <DepthRim_SupercavitatingGun.description>速射砲，彈鏢包在一層蒸氣泡裡，在水中也不減速。魚雷快抵達的最後一段，只要這張地圖上有聲納聽得到，它就會自己開火；每輪射擊都有不小的機會擊毀魚雷。\n\n需要電力與鋼製彈鏢。不需要火控。</DepthRim_SupercavitatingGun.description>
+  <DepthRim_FireControlSonar.label>火控聲納</DepthRim_FireControlSonar.label>
+  <DepthRim_FireControlSonar.description>窄波束聲納，能把來襲的魚雷追得夠緊，引導反魚雷魚雷撞上去，一次兩枚。需要魚雷發射管裡裝著反魚雷魚雷，同一張地圖上也要有搜索聲納（主動或被動）先聽到魚雷。</DepthRim_FireControlSonar.description>
+  <DepthRim_BoardingCraft.label>跳幫突擊艇</DepthRim_BoardingCraft.label>
+  <DepthRim_BoardingCraft.description>矮胖的突擊艇，切穿船殼時不會破壞密閉，然後放出跳幫小隊。它會等他們回來；襲擊撤退時，存活的人爬回艇上，艇就離開。\n\n摧毀它，跳幫的人就回不了家。</DepthRim_BoardingCraft.description>
+  <DepthRim_BoardingCraftIncoming.label>跳幫突擊艇（來襲中）</DepthRim_BoardingCraftIncoming.label>
+  <DepthRim_BoardingCraftLeaving.label>跳幫突擊艇（離開中）</DepthRim_BoardingCraftLeaving.label>
+  <DepthRim_MoonPool.label>月池</DepthRim_MoonPool.label>
+  <DepthRim_MoonPool.description>甲板上一口密封的井，底下直通大海，可以在這裡建造、停靠與放出突擊艇。在上面建一艘突擊艇吧。</DepthRim_MoonPool.description>
+  <DepthRim_PlayerBoardingCraft.label>突擊艇</DepthRim_PlayerBoardingCraft.label>
+  <DepthRim_PlayerBoardingCraft.description>你自己的突擊艇。殖民者從右鍵選單登艇，然後選海路 8 格內的任一海洋格出發。它會切入目標的密閉艙室而不破壞密閉；沒有艙室就降在海床上，再放出船員。\n\n必須造在月池上。</DepthRim_PlayerBoardingCraft.description>
 </LanguageData>

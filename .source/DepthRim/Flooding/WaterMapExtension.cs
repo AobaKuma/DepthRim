@@ -23,11 +23,33 @@ namespace DepthRim
         /// <summary>加在深淵雜訊上的偏移：越大挖得越多（深淵海溝用）。0 = 依層級的預設門檻。</summary>
         public float abyssBias = 0f;
 
+        /// <summary>
+        /// 不挖深淵的層級（淺海、變溫層）上，另外挖幾個圓形的深淵坑：潛艇只能在深淵上的船體平台建造，
+        /// 升降井通到的極地冰蓋需要有地方當船塢。0 = 不挖。
+        /// </summary>
+        public IntRange abyssPockets = IntRange.Zero;
+
+        /// <summary>深淵坑的半徑（格）。</summary>
+        public FloatRange abyssPocketRadius = new FloatRange(9f, 13f);
+
         /// <summary>地圖生成時散佈的熱液泉數量（熱液噴口區；之後接 P2-7 的專用熱液泉）。</summary>
         public IntRange hydrothermalVents = IntRange.Zero;
 
         /// <summary>世界格子的地勢候選：決定岩體與礦脈多寡（海床平原平坦、珊瑚礁與海溝起伏大）。</summary>
         public List<Hilliness> hilliness = new List<Hilliness> { Hilliness.LargeHills, Hilliness.Mountainous };
+
+        /// <summary>
+        /// 世界格子的海床深度（公尺，海面以下）。世界生成依深度雜訊在範圍內取值，存成負的 <c>Tile.elevation</c>：
+        /// 地形分頁的「高度」顯示例如 −4200m，世界地圖的地形也照這個高度著色。
+        /// </summary>
+        public FloatRange seafloorDepth = new FloatRange(200f, 600f);
+
+        /// <summary>深度雜訊 t（0–1）對應的格子高度：海面以下，所以是負數。</summary>
+        public float ElevationAt(float t)
+        {
+            t = t < 0f ? 0f : t > 1f ? 1f : t;
+            return -(seafloorDepth.min + (seafloorDepth.max - seafloorDepth.min) * t);
+        }
 
         /// <summary>升降井能不能通到這個生態區：只有淺海與變溫層（目前的潛水服只撐得住水壓 1）。</summary>
         public bool ShaftAccessible => depthTier <= DepthTier.Thermocline;
@@ -41,6 +63,19 @@ namespace DepthRim
 
     public static class FloodingUtility
     {
+        /// <summary>
+        /// 整張地圖的水體網格重建。地圖還在生成中（繪製器的區塊還沒建立，例如 DMSE 起飛時新建的潛艇地圖）就跳過：
+        /// 原版 <c>MapDrawer.WholeMapChanged</c> 不檢查這種情況會丟 NullReferenceException，而之後的整張重建本來就會照新狀態畫。
+        /// </summary>
+        public static void WaterChanged(Map map)
+        {
+            if (map?.mapDrawer?.GlobalLayers == null)
+            {
+                return;
+            }
+            map.mapDrawer.WholeMapChanged(DepthRimDefOf.DepthRim_Water);
+        }
+
         public static bool IsWaterMap(Map map)
         {
             return map?.Biome != null && map.Biome.HasModExtension<WaterMapExtension>();

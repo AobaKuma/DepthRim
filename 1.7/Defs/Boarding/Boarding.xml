@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    跳幫突擊艇（設計稿 §6.2、§6.3、§11 M6）。貼圖暫時直接複製 DMS 的軌道運輸艇（Things/Skyfaller/HeavyTransportLifter）。
+    降落不破壞屋頂（hitRoof false），所以穿入艙室不會打破密閉；有主動聲納時 DMSE 的地圖層 BVR 會接手攔截
+    （DepthRim.Patch_BoardingCraftPawns 讓它認得艇上的人）。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_BoardingCraft</defName>
+    <label>boarding craft</label>
+    <description>A squat assault craft that cuts its way into a hull without breaking the seal, then lets its boarding party out. It waits for them; when the raid falls back, the survivors climb back aboard and it leaves.\n\nDestroy it and the boarders have no way home.</description>
+    <thingClass>DepthRim.Building_BoardingCraft</thingClass>
+    <graphicData>
+      <texPath>Thing/DR_Boarding/BoardingCraft</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(4.2,3)</drawSize>
+      <shadowData>
+        <volume>(2.6, 0.8, 1.4)</volume>
+      </shadowData>
+    </graphicData>
+    <size>(3,2)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <fillPercent>0.8</fillPercent>
+    <blockWind>true</blockWind>
+    <rotatable>false</rotatable>
+    <tickerType>Normal</tickerType>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <selectable>true</selectable>
+    <canOverlapZones>true</canOverlapZones>
+    <preventSkyfallersLandingOn>true</preventSkyfallersLandingOn>
+    <statBases>
+      <MaxHitPoints>900</MaxHitPoints>
+      <Flammability>0</Flammability>
+    </statBases>
+    <building>
+      <claimable>false</claimable>
+      <deconstructible>false</deconstructible>
+      <isInert>true</isInert>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <killedLeavings>
+      <Steel>60</Steel>
+      <ComponentIndustrial>3</ComponentIndustrial>
+      <ChunkSlagSteel>2</ChunkSlagSteel>
+    </killedLeavings>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+  </ThingDef>
+
+  <ThingDef ParentName="SkyfallerBase">
+    <defName>DepthRim_BoardingCraftIncoming</defName>
+    <label>boarding craft (incoming)</label>
+    <thingClass>Skyfaller</thingClass>
+    <size>(3,2)</size>
+    <graphicData>
+      <texPath>Thing/DR_Boarding/BoardingCraft</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(4.2,3)</drawSize>
+    </graphicData>
+    <skyfaller>
+      <movementType>Decelerate</movementType>
+      <hitRoof>false</hitRoof>
+      <shadow>Things/Skyfaller/SkyfallerShadowDropPod</shadow>
+      <shadowSize>(3, 2)</shadowSize>
+      <ticksToImpactRange>160~220</ticksToImpactRange>
+      <anticipationSound>DropPod_Fall</anticipationSound>
+      <anticipationSoundTicks>100</anticipationSoundTicks>
+      <impactSound>DropPod_Impact</impactSound>
+      <motesPerCell>1</motesPerCell>
+    </skyfaller>
+    <!-- 聲納預警：突擊艇安靜，主動聲納的窗口 7200 × 0.4 ≈ 2900 tick（約 48 遊戲分鐘）；DMSE 的攔截彈與近防可以在窗口內打它。 -->
+    <modExtensions>
+      <li Class="DMSE.BVRTargetProps">
+        <distanceLevel>0.4</distanceLevel>
+        <stealthLevel>0</stealthLevel>
+        <speed>8</speed>
+        <altitude>1000</altitude>
+      </li>
+    </modExtensions>
+  </ThingDef>
+
+  <ThingDef ParentName="SkyfallerBase">
+    <defName>DepthRim_BoardingCraftLeaving</defName>
+    <label>boarding craft (leaving)</label>
+    <thingClass>DepthRim.BoardingCraftLeaving</thingClass>
+    <size>(3,2)</size>
+    <graphicData>
+      <texPath>Thing/DR_Boarding/BoardingCraft</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(4.2,3)</drawSize>
+    </graphicData>
+    <skyfaller>
+      <movementType>Accelerate</movementType>
+      <reversed>true</reversed>
+      <hitRoof>false</hitRoof>
+      <shadow>Things/Skyfaller/SkyfallerShadowDropPod</shadow>
+      <shadowSize>(3, 2)</shadowSize>
+      <ticksToDiscardInReverse>200~200</ticksToDiscardInReverse>
+      <anticipationSound>DropPod_Leaving</anticipationSound>
+      <anticipationSoundTicks>-10</anticipationSoundTicks>
+    </skyfaller>
+  </ThingDef>
+
+  <JobDef>
+    <defName>DepthRim_BoardCraft</defName>
+    <driverClass>DepthRim.JobDriver_BoardCraft</driverClass>
+    <reportString>boarding TargetA.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>DepthRim_CarryToCraft</defName>
+    <driverClass>DepthRim.JobDriver_CarryToCraft</driverClass>
+    <reportString>carrying TargetA to TargetB.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <DutyDef>
+    <defName>DepthRim_ReturnToCraft</defName>
+    <alwaysShowWeapon>true</alwaysShowWeapon>
+    <thinkNode Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="DepthRim.JobGiver_CarryToCraft" />
+        <li Class="DepthRim.JobGiver_BoardCraft" />
+        <li Class="JobGiver_AIFightEnemies">
+          <targetAcquireRadius>30</targetAcquireRadius>
+          <targetKeepRadius>35</targetKeepRadius>
+        </li>
+        <li Class="JobGiver_AIGotoNearestHostile" />
+      </subNodes>
+    </thinkNode>
+  </DutyDef>
+
+  <PawnsArrivalModeDef>
+    <defName>DepthRim_BoardingArrival</defName>
+    <workerClass>DepthRim.PawnsArrivalModeWorker_BoardingCraft</workerClass>
+    <minTechLevel>Industrial</minTechLevel>
+    <layerWhitelist>
+      <li>DepthRim_Ocean</li>
+    </layerWhitelist>
+    <selectionWeightCurve>
+      <points>
+        <li>(0, 1)</li>
+      </points>
+    </selectionWeightCurve>
+    <textEnemy>A group of {0} from {1} are cutting their way aboard in boarding craft!</textEnemy>
+    <textFriendly>A group of friendly {0} from {1} are coming aboard in boarding craft.</textFriendly>
+    <textWillArrive>{0_pawnsPluralDef} will come aboard in boarding craft.</textWillArrive>
+  </PawnsArrivalModeDef>
+
+  <RaidStrategyDef>
+    <defName>DepthRim_Boarding</defName>
+    <workerClass>DepthRim.RaidStrategyWorker_Boarding</workerClass>
+    <letterLabelEnemy>Boarding raid</letterLabelEnemy>
+    <letterLabelFriendly>Friendlies</letterLabelFriendly>
+    <arrivalTextEnemy>They will fight through the compartments, then fall back to their craft and leave. Destroy the craft and they cannot leave.</arrivalTextEnemy>
+    <arrivalTextFriendly>They are moving in to help you.</arrivalTextFriendly>
+    <arriveModes>
+      <li>DepthRim_BoardingArrival</li>
+    </arriveModes>
+    <layerWhitelist>
+      <li>DepthRim_Ocean</li>
+    </layerWhitelist>
+    <pointsFactorCurve>
+      <points>
+        <li>0, 1</li>
+      </points>
+    </pointsFactorCurve>
+    <selectionWeightPerPointsCurve>
+      <points>
+        <li>(0, 1)</li>
+      </points>
+    </selectionWeightPerPointsCurve>
+  </RaidStrategyDef>
+
+  <!-- baseChance 0：原版說書人的循環不會挑它，由 DepthRim.StorytellerComp_BoardingRaids 另外排（只排開著主動聲納的海洋地圖）。 -->
+  <IncidentDef>
+    <defName>DepthRim_BoardingRaid</defName>
+    <label>boarding raid</label>
+    <category>ThreatBig</category>
+    <targetTags>
+      <li>DepthRim_OceanMap</li>
+    </targetTags>
+    <layerWhitelist>
+      <li>DepthRim_Ocean</li>
+    </layerWhitelist>
+    <workerClass>DepthRim.IncidentWorker_BoardingRaid</workerClass>
+    <baseChance>0</baseChance>
+    <minRefireDays>3</minRefireDays>
+    <pointsScaleable>true</pointsScaleable>
+    <tale>Raid</tale>
+  </IncidentDef>
+
+  <!-- ==================== 玩家的突擊艇（6.7） ====================
+       月池：艙底對海開的井（非 edifice 的地面建築）；玩家的突擊艇只能造在月池上（DepthRim.PlaceWorker_OnMoonPool）。
+       殖民者右鍵登艇，「出發」選一格海路 8 格內的海洋格；抵達後切入對方的密閉艙室（敵方地圖）或降在海床上。
+       月池貼圖暫用船體平台。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_MoonPool</defName>
+    <label>moon pool</label>
+    <description>A sealed well in the deck, open to the sea below, where a boarding craft can be built, docked and launched. Build a boarding craft on top of it.</description>
+    <graphicData>
+      <texPath>Thing/DR_LightPlatform/Platform</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(5,4)</drawSize>
+      <color>(110,140,160)</color>
+    </graphicData>
+    <size>(5,4)</size>
+    <altitudeLayer>FloorEmplacement</altitudeLayer>
+    <passability>Standable</passability>
+    <rotatable>false</rotatable>
+    <useHitPoints>true</useHitPoints>
+    <canOverlapZones>false</canOverlapZones>
+    <clearBuildingArea>false</clearBuildingArea>
+    <building>
+      <isEdifice>false</isEdifice>
+      <canPlaceOverImpassablePlant>false</canPlaceOverImpassablePlant>
+    </building>
+    <statBases>
+      <MaxHitPoints>400</MaxHitPoints>
+      <WorkToBuild>6000</WorkToBuild>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>150</Steel>
+    </costList>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterCombat</li>
+    </researchPrerequisites>
+    <uiOrder>2220</uiOrder>
+  </ThingDef>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_PlayerBoardingCraft</defName>
+    <label>boarding craft</label>
+    <description>Your own boarding craft. Colonists board it from the right-click menu, then launch it at any ocean tile within 8 tiles by sea. It cuts into the target's sealed compartments without breaking the seal, or settles on the seabed if there are none, and lets the crew out.
+
+Must be built on a moon pool.</description>
+    <thingClass>DepthRim.Building_BoardingCraft</thingClass>
+    <graphicData>
+      <texPath>Thing/DR_Boarding/BoardingCraft</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(4.2,3)</drawSize>
+      <shadowData>
+        <volume>(2.6, 0.8, 1.4)</volume>
+      </shadowData>
+    </graphicData>
+    <size>(3,2)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <fillPercent>0.8</fillPercent>
+    <rotatable>false</rotatable>
+    <tickerType>Normal</tickerType>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <canOverlapZones>true</canOverlapZones>
+    <preventSkyfallersLandingOn>true</preventSkyfallersLandingOn>
+    <statBases>
+      <MaxHitPoints>900</MaxHitPoints>
+      <WorkToBuild>14000</WorkToBuild>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>220</Steel>
+      <ComponentIndustrial>8</ComponentIndustrial>
+    </costList>
+    <constructionSkillPrerequisite>7</constructionSkillPrerequisite>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_OnMoonPool</li>
+    </placeWorkers>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterCombat</li>
+    </researchPrerequisites>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <uiOrder>2221</uiOrder>
+  </ThingDef>
+
+  <WorldObjectDef>
+    <defName>DepthRim_TravelingBoardingCraft</defName>
+    <label>boarding craft</label>
+    <description>A boarding craft running through the water.</description>
+    <worldObjectClass>DepthRim.WorldObject_TravelingBoardingCraft</worldObjectClass>
+    <texture>World/WorldObjects/Caravan</texture>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/Caravan</expandingIconTexture>
+    <expandingIconPriority>70</expandingIconPriority>
+    <canHaveFaction>true</canHaveFaction>
+  </WorldObjectDef>
+
+</Defs>

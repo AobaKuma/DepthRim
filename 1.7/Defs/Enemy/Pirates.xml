@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    敵方勢力（設計稿 §11 M7）。
+    海盜潛艇：海洋層上會移動的 MapParent，巡弋、發射魚雷（DMSE 導彈陣地元件）、用反魚雷魚雷攔截（DMSE 抽象防空，
+    DepthRim.Patch_PirateSubmarineNodes 不經 DMSE 的雷達網研究就把它加成節點）。被魚雷打中扣船殼；跳幫時生成船體地圖。
+    聲納分類：遠處只是「未知聲納接觸」（DepthRim.SonarContacts）。
+  -->
+  <WorldObjectDef>
+    <defName>DepthRim_PirateSubmarine</defName>
+    <label>pirate submarine</label>
+    <description>A pirate attack submarine prowling the sea lanes. It fires torpedoes at your ocean maps and shoots down incoming torpedoes with its own interceptors. Wear its hull down with torpedoes until it sinks, or send a boarding craft to take it.</description>
+    <worldObjectClass>DepthRim.WorldObject_PirateSubmarine</worldObjectClass>
+    <mapGenerator>DepthRim_PirateSubHull</mapGenerator>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/DepthRim_Submarine</expandingIconTexture>
+    <expandingIconColor>(200,90,80,255)</expandingIconColor>
+    <expandingIconPriority>65</expandingIconPriority>
+    <canHaveFaction>true</canHaveFaction>
+    <allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
+    <comps>
+      <li Class="DMSE.CompProperties_MissileBase">
+        <missileFireIntervalDays>1~3</missileFireIntervalDays>
+        <missilesPerSalvo>1~2</missilesPerSalvo>
+        <range>10</range>
+        <relocationDays>30~60</relocationDays>
+        <missileBody>DepthRim_TorpedoBody</missileBody>
+        <incomingWorldObjectDef>DepthRim_WorldObject_EnemyTorpedo</incomingWorldObjectDef>
+      </li>
+      <li Class="DMSE.CompProperties_WorldAirDefense">
+        <worldDetectionRange>5</worldDetectionRange>
+        <antiStealthLevel>1</antiStealthLevel>
+        <fireControlDef>DepthRim_FireControlSonar</fireControlDef>
+        <channels>1</channels>
+        <interceptorStock>4</interceptorStock>
+        <restockPerDay>2</restockPerDay>
+        <interceptorBody>DepthRim_AntiTorpedoBody</interceptorBody>
+        <interceptorWarhead>DepthRim_AntiTorpedo_Warhead_Proximity</interceptorWarhead>
+        <launchCooldownTicks>300</launchCooldownTicks>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="DepthRim.EnemyTorpedoLoadoutExtension">
+        <guidance>
+          <li>DepthRim_Torpedo_Guidance_PassiveHoming</li>
+          <li>DepthRim_Torpedo_Guidance_Wire</li>
+        </guidance>
+      </li>
+      <li Class="DepthRim.PirateSubmarineExtension">
+        <hullPoints>400</hullPoints>
+        <stalkDistance>3~9</stalkDistance>
+        <ticksPerTile>2500</ticksPerTile>
+        <crewPoints>500</crewPoints>
+        <mapSize>(75,1,75)</mapSize>
+      </li>
+    </modExtensions>
+  </WorldObjectDef>
+
+  <MapGeneratorDef>
+    <defName>DepthRim_PirateSubHull</defName>
+    <label>pirate submarine</label>
+    <disableCallAid>true</disableCallAid>
+    <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+    <genSteps>
+      <li>DepthRim_FillAbyss</li>
+      <li>DepthRim_PirateSubHull</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <GenStepDef>
+    <defName>DepthRim_PirateSubHull</defName>
+    <order>20</order>
+    <genStep Class="DepthRim.GenStep_PirateSubHull" />
+  </GenStepDef>
+
+  <IncidentDef>
+    <defName>DepthRim_PirateSubmarine</defName>
+    <label>pirate submarine</label>
+    <category>ThreatBig</category>
+    <targetTags>
+      <li>World</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_PirateSubmarine</workerClass>
+    <baseChance>0.5</baseChance>
+    <minRefireDays>12</minRefireDays>
+    <letterLabel>Pirate submarine</letterLabel>
+    <letterText>Your sonar operators report a pirate submarine prowling the sea lanes near {0}. It will fire torpedoes at your ocean maps.\n\nIt carries anti-torpedo torpedoes of its own. Wear its hull down with a few torpedo hits until it sinks, or send a boarding craft from a moon pool to storm it.</letterText>
+    <letterDef>ThreatBig</letterDef>
+    <modExtensions>
+      <li Class="DepthRim.PirateSubmarineIncidentExtension">
+        <worldObjectDef>DepthRim_PirateSubmarine</worldObjectDef>
+        <seaDistance>5~9</seaDistance>
+        <maxActive>2</maxActive>
+        <requiredResearch>DepthRim_UnderwaterCombat</requiredResearch>
+      </li>
+    </modExtensions>
+  </IncidentDef>
+
+  <!-- 魚群：無害的聲納接觸，遠處和潛艇一樣是「未知聲納接觸」。 -->
+  <WorldObjectDef>
+    <defName>DepthRim_FishSchool</defName>
+    <label>fish school</label>
+    <description>A large school of fish. On sonar it sounds much like a submarine until you are close enough to tell.</description>
+    <worldObjectClass>DepthRim.WorldObject_FishSchool</worldObjectClass>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/DepthRim_Submarine</expandingIconTexture>
+    <expandingIconColor>(200,90,80,255)</expandingIconColor>
+    <expandingIconPriority>40</expandingIconPriority>
+  </WorldObjectDef>
+
+  <IncidentDef>
+    <defName>DepthRim_FishSchool</defName>
+    <label>fish school</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>World</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_FishSchool</workerClass>
+    <baseChance>1.5</baseChance>
+    <modExtensions>
+      <li Class="DepthRim.PirateSubmarineIncidentExtension">
+        <worldObjectDef>DepthRim_FishSchool</worldObjectDef>
+        <seaDistance>3~9</seaDistance>
+      </li>
+    </modExtensions>
+  </IncidentDef>
+
+</Defs>
