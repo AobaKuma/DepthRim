@@ -32,7 +32,7 @@
   <DepthRim.WatertightDoor.Sealed>Flooded side ({0}): colonists without a diving suit will not pass</DepthRim.WatertightDoor.Sealed>
   <DepthRim.WatertightDoor.Open>Both sides passable (deepest {0})</DepthRim.WatertightDoor.Open>
   <DepthRim.IceShaft.TooDeep>The ocean below is {0} ({1}): too deep for an ice shaft. Diving suits only handle shallow and mid-depth water.</DepthRim.IceShaft.TooDeep>
-  <DepthRim.IceShaft.NoOcean>There is no ocean under dry land. An ice shaft has to be dug through an ice sheet or sea ice.</DepthRim.IceShaft.NoOcean>
+  <DepthRim.IceShaft.NoOcean>There is no ocean under land, ice sheets included. An ice shaft has to be dug through sea ice.</DepthRim.IceShaft.NoOcean>
   <DepthRim.IceShaft.Below>Ocean below: {0}</DepthRim.IceShaft.Below>
   <DepthRim.Readout.WaterLevel>Water level ({0})</DepthRim.Readout.WaterLevel>
   <DepthRim.Readout.WaterLevelOpen>Open water ({0})</DepthRim.Readout.WaterLevelOpen>
@@ -117,4 +117,11 @@
   <DepthRim.Enemy.BoatLeft>The enemy torpedo boat has slipped away. Your ocean maps are out of its reach for now.</DepthRim.Enemy.BoatLeft>
   <DepthRim.Enemy.SubLeftLabel>Pirate submarine gone</DepthRim.Enemy.SubLeftLabel>
   <DepthRim.Enemy.SubLeft>The pirate submarine has left the area. Your sonar has lost contact.</DepthRim.Enemy.SubLeft>
+  <DepthRim.OceanTab.Landmass>Solid rock under a continent. There is no sea here.</DepthRim.OceanTab.Landmass>
+  <DepthRim.OceanTab.SeafloorDepth>Seafloor depth</DepthRim.OceanTab.SeafloorDepth>
+  <DepthRim.OceanTab.Meters>{0} m</DepthRim.OceanTab.Meters>
+  <DepthRim.OceanTab.DepthTier>Depth zone</DepthRim.OceanTab.DepthTier>
+  <DepthRim.OceanTab.Anchor>Anchoring</DepthRim.OceanTab.Anchor>
+  <DepthRim.OceanTab.AnchorYes>Possible (there is a bottom to settle on)</DepthRim.OceanTab.AnchorYes>
+  <DepthRim.OceanTab.AnchorNo>Not possible (no reachable bottom)</DepthRim.OceanTab.AnchorNo>
 </LanguageData>

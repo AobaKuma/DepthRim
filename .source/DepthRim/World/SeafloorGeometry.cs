@@ -93,6 +93,9 @@ namespace DepthRim
 
         public readonly int[] ridgeDistance;
 
+        /// <summary>最近的中洋脊軸線格（沒有中洋脊時 -1）：脊寬雜訊在軸線格取樣，脊的兩側才對稱。</summary>
+        public readonly int[] nearestRidge;
+
         public readonly bool[] activeMargin;
 
         public int RidgeAxisTiles { get; private set; }
@@ -106,6 +109,7 @@ namespace DepthRim
             nearestCoast = new int[count];
             ridgeAxis = new bool[count];
             ridgeDistance = new int[count];
+            nearestRidge = new int[count];
             activeMargin = new bool[count];
             List<PlanetTile> neighbors = new List<PlanetTile>();
 
@@ -232,6 +236,7 @@ namespace DepthRim
             for (int i = 0; i < count; i++)
             {
                 ridgeDistance[i] = ridgeAxis[i] ? 0 : OceanBiomeSelector.NoRidge;
+                nearestRidge[i] = ridgeAxis[i] ? i : -1;
                 if (ridgeAxis[i])
                 {
                     open.Enqueue(i);
@@ -251,6 +256,7 @@ namespace DepthRim
                     if (ridgeDistance[j] > ridgeDistance[i] + 1)
                     {
                         ridgeDistance[j] = ridgeDistance[i] + 1;
+                        nearestRidge[j] = nearestRidge[i];
                         open.Enqueue(j);
                     }
                 }

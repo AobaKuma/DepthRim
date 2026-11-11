@@ -46,6 +46,7 @@ namespace DepthRim.Acceptance
                 new AcceptanceTest("S2", "Submarine voyage: shipyard deck on the abyss, cast off, hull and cargo aboard, sea route, depth and hull rating", Tests_Submarine.S2_SubmarineVoyage),
                 new AcceptanceTest("S3", "Submarine anchoring: depth rule, anchorage site next door, hull settles on the seafloor map, the seabed comes back", Tests_Submarine.S3_SubmarineAnchoring),
                 new AcceptanceTest("S4", "Submarine thrust: the voyage only advances while thrusters run; stalls and resumes; stop here mid-voyage", Tests_Submarine.S4_SubmarineThrust),
+                new AcceptanceTest("S5", "Submarine voyage visuals: warm-up, cast-off cutscene, the submarine map under way and on the world map (screenshots)", Tests_Submarine.S5_SubmarineVoyageVisuals),
                 new AcceptanceTest("T1", "Torpedo strike: sea-only targeting, torpedo track keeps its depth, the blast breaches a hull and it floods", Tests_Torpedo.T1_TorpedoStrike),
                 new AcceptanceTest("T2", "Torpedo defence: an enemy torpedo boat fires; anti-torpedo torpedoes and the point-defence gun engage; only ocean nodes engage torpedoes", Tests_TorpedoDefense.T2_TorpedoDefense),
                 new AcceptanceTest("B1", "Boarding raid: the craft cuts into a sealed compartment without breaching it, boarders in diving suits, fall back and leave by craft", Tests_Boarding.B1_BoardingRaid),

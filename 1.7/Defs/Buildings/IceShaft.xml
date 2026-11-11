@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!-- 冰層升降井（設計稿 §4.2）。原型：借用原版深層鑽機貼圖；之後換成專用貼圖、研究前置與建造條件（限冰蓋）。 -->
+  <!-- 冰層升降井（設計稿 §4.2）。原型：借用原版深層鑽機貼圖；之後換成專用貼圖、研究前置與建造條件（限冰海：只有海冰下有地下冰洋）。 -->
   <ThingDef ParentName="BuildingBase">
     <defName>DepthRim_IceShaft</defName>
     <researchPrerequisites>

@@ -28,7 +28,13 @@ namespace DepthRim
         /// <summary>目前的日光強度（0–1），每幀設給材質的 <c>_SkyLight</c>；和 <see cref="FloodingMath.CombineLight"/> 的日光項同一個公式。</summary>
         public static float SkyLevel(Map map, float ambientReach)
         {
-            return map == null ? 0f : FloodingMath.CombineLight(map.skyManager.CurSkyGlow, ambientReach * DepthRimModSettings.Current.ambientScale, new UnityEngine.Color32(0, 0, 0, 0), false);
+            return map == null ? 0f : FloodingMath.CombineLight(OceanDaylight.Uncapped(map), ambientReach * DepthRimModSettings.Current.ambientScale, new UnityEngine.Color32(0, 0, 0, 0), false);
+        }
+
+        /// <summary>這張地圖在海冰底下（地下冰洋任一層）：日光幾乎透不進來（天氣 DepthRim_UnderIce 的 maxGlow），也沒有焦散與光柱。</summary>
+        public static bool UnderIce(Map map)
+        {
+            return map?.Biome != null && OceanBiomeSelector.IsSubglacial(map.Biome.defName);
         }
 
         /// <summary>某一格的光照（0–1）。<paramref name="ambientReach"/> 來自該層級的 Def，會再乘上玩家設定。</summary>
@@ -39,7 +45,7 @@ namespace DepthRim
                 return 0f;
             }
             return FloodingMath.CombineLight(
-                map.skyManager.CurSkyGlow,
+                OceanDaylight.Uncapped(map),
                 ambientReach * DepthRimModSettings.Current.ambientScale,
                 map.glowGrid.VisualGlowAt(c),
                 map.roofGrid.Roofed(c));

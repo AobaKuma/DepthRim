@@ -14,3 +14,5 @@ C:\Users\user\AppData\Local\Temp\claude\D--Steam-steamapps-common-RimWorld-Mods-
 C:\Users\user\AppData\Local\Temp\claude\8a4b34743e0765cb\b39f6324-786e-47dc-845f-38b99ce547a8\scratchpad\ut\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\b39f6324-786e-47dc-845f-38b99ce547a8\scratchpad\ut\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\b39f6324-786e-47dc-845f-38b99ce547a8\scratchpad\utest\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\b39f6324-786e-47dc-845f-38b99ce547a8\scratchpad\unitout\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\b39f6324-786e-47dc-845f-38b99ce547a8\scratchpad\drtests\DepthRim.dll

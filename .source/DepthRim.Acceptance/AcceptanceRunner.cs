@@ -412,12 +412,16 @@ namespace DepthRim.Acceptance
             quitAt = Time.realtimeSinceStartup + 3f;
         }
 
+        /// <summary>A test that wants a modal window to stay open (for example a cutscene it screenshots) sets this to that window type.</summary>
+        public static Type KeepWindowOpen;
+
         /// <summary>Close dialogs that would block input (scenario intro, mod popups); keep everything else.</summary>
         private static void CloseBlockingWindows()
         {
             List<Window> windows = Find.WindowStack.Windows.ToList();
             foreach (Window w in windows)
             {
+                if (KeepWindowOpen != null && KeepWindowOpen.IsInstanceOfType(w)) { continue; }
                 if (w.layer == WindowLayer.Dialog || w.layer == WindowLayer.SubSuper || w.layer == WindowLayer.Super)
                 {
                     if (w is Dialog_MessageBox || w is Dialog_NodeTree || w.forcePause || w.absorbInputAroundWindow)

@@ -79,7 +79,7 @@ namespace DepthRim
         {
             base.MapComponentUpdate();
             // 跟著右下角的水體顯示開關；關掉水體時也不畫提示
-            if (!FloodingOverlay.Show || Find.CurrentMap != map || !WorldRendererUtility.DrawingMap)
+            if (!FloodingOverlay.Drawing || Find.CurrentMap != map || !WorldRendererUtility.DrawingMap)
             {
                 return;
             }

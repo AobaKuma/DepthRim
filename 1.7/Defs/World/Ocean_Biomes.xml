@@ -33,13 +33,19 @@
     <diseases Inherit="False" />
   </BiomeDef>
 
+  <!-- 地下冰洋（2026-11-11 由「極地冰蓋」改名）：冰海（海冰）下必定是它、別處不會有；冰原算陸地。
+       同日使用者要求分深淺層：冰海下的深度照一般海底地形（大陸棚、大陸坡、洋盆、中洋脊、海溝），再依深度分成四個生態區，
+       各自的水深層級決定水壓、深淵、潛艇與升降井（OceanBiomeSelector.SubglacialFor）。
+       淺層沿用 defName DepthRim_PolarIceCap（舊存檔相容）。 -->
   <BiomeDef ParentName="DepthRim_OceanBiomeBase">
     <defName>DepthRim_PolarIceCap</defName>
-    <label>polar ice cap</label>
-    <description>A lightless ocean sealed beneath kilometers of polar ice. Cold and mineral-rich, it lies just under the ice shelf, within reach of an ice shaft.</description>
+    <label>subglacial ocean (shallows)</label>
+    <description>A dark, cold ocean sealed under the frozen sea, shallow here over the continental shelf. Mineral-rich, and within reach of an ice shaft dug through the sea ice.</description>
     <texture>World/Biomes/DepthRim/PolarIceCap</texture>
-    <constantOutdoorTemperature>-2</constantOutdoorTemperature>
     <plantDensity>0</plantDensity>
+    <baseWeatherCommonalities Inherit="False">
+      <DepthRim_UnderIce>1</DepthRim_UnderIce>
+    </baseWeatherCommonalities>
     <forceRockTypes>
       <li>Granite</li>
       <li>Slate</li>
@@ -59,12 +65,124 @@
     <modExtensions>
       <li Class="DepthRim.WaterMapExtension">
         <depthTier>Shallow</depthTier>
-        <seafloorDepth>50~800</seafloorDepth>
+        <seafloorDepth>3~200</seafloorDepth>
         <!-- 冰架下的深坑：升降井的地圖只有這裡，潛艇船塢（深淵上的船體平台）要有地方蓋 -->
         <abyssPockets>1~2</abyssPockets>
         <abyssPocketRadius>9~13</abyssPocketRadius>
         <hilliness>
           <li>LargeHills</li>
+          <li>Mountainous</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_SubglacialThermocline</defName>
+    <label>subglacial ocean (thermocline)</label>
+    <description>Cold, dark water under the sea ice, a few hundred meters to two kilometers deep over the continental slope. An ice shaft can still reach it.</description>
+    <texture>World/Biomes/DepthRim/PolarIceCap</texture>
+    <plantDensity>0</plantDensity>
+    <baseWeatherCommonalities Inherit="False">
+      <DepthRim_UnderIce>1</DepthRim_UnderIce>
+    </baseWeatherCommonalities>
+    <forceRockTypes>
+      <li>Granite</li>
+      <li>Slate</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>-999</min>
+        <max>0.45</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>0.45</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Thermocline</depthTier>
+        <seafloorDepth>200~2000</seafloorDepth>
+        <!-- 冰架下的深坑：升降井的地圖只有這裡，潛艇船塢（深淵上的船體平台）要有地方蓋 -->
+        <abyssPockets>1~2</abyssPockets>
+        <abyssPocketRadius>9~13</abyssPocketRadius>
+        <hilliness>
+          <li>LargeHills</li>
+          <li>Mountainous</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_SubglacialDeep</defName>
+    <label>subglacial ocean (deep sea)</label>
+    <description>The deep polar basin beneath the sea ice: kilometers of black, near-freezing water over a quiet sea floor. Too deep for an ice shaft.</description>
+    <texture>World/Biomes/DepthRim/PolarIceCap</texture>
+    <plantDensity>0</plantDensity>
+    <baseWeatherCommonalities Inherit="False">
+      <DepthRim_UnderIce>1</DepthRim_UnderIce>
+    </baseWeatherCommonalities>
+    <forceRockTypes>
+      <li>Granite</li>
+      <li>Slate</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>-999</min>
+        <max>0.45</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>0.45</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Deep</depthTier>
+        <seafloorDepth>2100~6000</seafloorDepth>
+        <hilliness>
+          <li>Flat</li>
+          <li>SmallHills</li>
+          <li>Mountainous</li>
+        </hilliness>
+      </li>
+    </modExtensions>
+  </BiomeDef>
+  <BiomeDef ParentName="DepthRim_OceanBiomeBase">
+    <defName>DepthRim_SubglacialSeabed</defName>
+    <label>subglacial ocean (abyssal seabed)</label>
+    <description>A trench beneath the sea ice, where the polar sea floor plunges under a continent. Crushing pressure, total darkness, and ice overhead.</description>
+    <texture>World/Biomes/DepthRim/PolarIceCap</texture>
+    <plantDensity>0</plantDensity>
+    <baseWeatherCommonalities Inherit="False">
+      <DepthRim_UnderIce>1</DepthRim_UnderIce>
+    </baseWeatherCommonalities>
+    <forceRockTypes>
+      <li>Granite</li>
+      <li>Slate</li>
+    </forceRockTypes>
+    <terrainsByFertility>
+      <li>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>-999</min>
+        <max>0.45</max>
+      </li>
+      <li>
+        <terrain>DepthRim_Seabed_Sand</terrain>
+        <min>0.45</min>
+        <max>999</max>
+      </li>
+    </terrainsByFertility>
+    <modExtensions>
+      <li Class="DepthRim.WaterMapExtension">
+        <depthTier>Seabed</depthTier>
+        <seafloorDepth>6000~11000</seafloorDepth>
+        <abyssBias>0.15</abyssBias>
+        <hilliness>
           <li>Mountainous</li>
         </hilliness>
       </li>
@@ -76,7 +194,6 @@
     <label>kelp forest</label>
     <description>Cool coastal water thick with towering kelp. The silt floor is fertile, and the kelp can be harvested for food.</description>
     <texture>World/Biomes/DepthRim/KelpForest</texture>
-    <constantOutdoorTemperature>8</constantOutdoorTemperature>
     <plantDensity>0.55</plantDensity>
     <wildPlants>
       <DepthRim_Kelp>1</DepthRim_Kelp>
@@ -114,7 +231,6 @@
     <label>shallow coral reef</label>
     <description>Warm, shallow water over a sprawling coral reef. Pale coral ridges can be quarried for building stone.</description>
     <texture>World/Biomes/DepthRim/ShallowReef</texture>
-    <constantOutdoorTemperature>24</constantOutdoorTemperature>
     <plantDensity>0.12</plantDensity>
     <wildPlants>
       <DepthRim_Kelp>0.3</DepthRim_Kelp>
@@ -151,7 +267,6 @@
     <label>deep coral reef</label>
     <description>Cold, dim water on the continental slope or atop a seamount, where dark coral grows in slow, massive mounds below the reach of sunlight.</description>
     <texture>World/Biomes/DepthRim/DeepReef</texture>
-    <constantOutdoorTemperature>6</constantOutdoorTemperature>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>DepthRim_DarkCoralRock</li>
@@ -185,7 +300,6 @@
     <label>seabed plain</label>
     <description>A vast, flat expanse of sediment on the deep sea floor. Few rocks break the silence.</description>
     <texture>World/Biomes/DepthRim/SeabedPlain</texture>
-    <constantOutdoorTemperature>3</constantOutdoorTemperature>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Marble</li>
@@ -220,7 +334,6 @@
     <label>hydrothermal vent field</label>
     <description>A field of hydrothermal vents on the axis of a mid-ocean ridge. The water is warm, the young volcanic rock is fractured, and the vents can be tapped for geothermal power.</description>
     <texture>World/Biomes/DepthRim/HydrothermalField</texture>
-    <constantOutdoorTemperature>18</constantOutdoorTemperature>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Slate</li>
@@ -256,7 +369,6 @@
     <label>abyssal trench</label>
     <description>The edge of an ocean trench, where the sea floor plunges beneath a continent along a subduction fault. Sheer cliffs fall away into bottomless dark.</description>
     <texture>World/Biomes/DepthRim/AbyssalTrench</texture>
-    <constantOutdoorTemperature>2</constantOutdoorTemperature>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Slate</li>
@@ -294,7 +406,6 @@
     <label>mid-ocean ridge</label>
     <description>A volcanic mountain range running down the middle of the ocean basin, where new sea floor is born. The black rock is young and broken by rift valleys.</description>
     <texture>World/Biomes/DepthRim/MidOceanRidge</texture>
-    <constantOutdoorTemperature>4</constantOutdoorTemperature>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Slate</li>
@@ -323,7 +434,7 @@
     </modExtensions>
   </BiomeDef>
 
-  <!-- 陸塊（2026-11-09，使用者定案：處於陸地的地圖格不會有海洋）。正上方是陸地（冰原、海冰除外）的海洋格子用這個：
+  <!-- 陸塊（2026-11-09，使用者定案：處於陸地的地圖格不會有海洋）。正上方是陸地（含冰原；海冰是冰海，不算）的海洋格子用這個：
        沒有海洋、不能進入（impassable、不能蓋基地、沒有 WaterMapExtension，升降井也不會通到這裡）。
        世界地圖上由 DepthRim.WorldDrawLayer_OceanLand 畫成正上方的地表生態區；這裡的 texture 只是退路。 -->
   <BiomeDef>

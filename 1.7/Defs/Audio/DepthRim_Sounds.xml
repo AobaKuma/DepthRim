@@ -363,4 +363,57 @@
       </li>
     </subSounds>
   </SoundDef>
+
+  <!-- Submarine propeller (2026-11-11, replaces the gravship retro-thruster loop): the pump motor, pitched down. Warm-up, under way and the cast-off cutscene. -->
+  <SoundDef>
+    <defName>DepthRim_PropellerLoop</defName>
+    <sustain>True</sustain>
+    <context>MapOnly</context>
+    <priorityMode>PrioritizeNearest</priorityMode>
+    <maxVoices>2</maxVoices>
+    <subSounds>
+      <li>
+        <onCamera>True</onCamera>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/PumpLoop</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>22~22</volumeRange>
+        <pitchRange>0.38~0.38</pitchRange>
+        <sustainAttack>1.2</sustainAttack>
+        <sustainRelease>1.5</sustainRelease>
+      </li>
+    </subSounds>
+  </SoundDef>
+
+  <!-- Casting off (2026-11-11, replaces the gravship launch roar): the hull groans free and a rush of bubbles. -->
+  <SoundDef>
+    <defName>DepthRim_CastOff</defName>
+    <context>MapOnly</context>
+    <maxSimultaneous>1</maxSimultaneous>
+    <subSounds>
+      <li>
+        <onCamera>True</onCamera>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/HullCreak</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>40~48</volumeRange>
+        <pitchRange>0.45~0.55</pitchRange>
+      </li>
+      <li>
+        <onCamera>True</onCamera>
+        <grains>
+          <li Class="AudioGrain_Folder">
+            <clipFolderPath>DepthRim/Bubbles</clipFolderPath>
+          </li>
+        </grains>
+        <volumeRange>30~36</volumeRange>
+        <pitchRange>0.6~0.75</pitchRange>
+      </li>
+    </subSounds>
+  </SoundDef>
+
 </Defs>

@@ -45,7 +45,7 @@ namespace DepthRim
             get
             {
                 MapComponent_Midwater c = Comp;
-                return c != null && MidwaterMath.ShowsMidwater(c.RenderTier);
+                return c != null && MidwaterMath.ShowsMidwater(c.RenderTier) && !GravshipCapturer.IsGravshipRenderInProgress;
             }
         }
 

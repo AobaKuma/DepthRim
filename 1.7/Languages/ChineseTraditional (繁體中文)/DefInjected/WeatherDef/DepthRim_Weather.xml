@@ -4,4 +4,7 @@
   <DepthRim_Undersea.label>海底</DepthRim_Undersea.label>
   <DepthRim_Undersea.description>海床上沒有天氣，只有冰冷黑暗的海水。</DepthRim_Undersea.description>
 
+  <DepthRim_UnderIce.label>冰下</DepthRim_UnderIce.label>
+  <DepthRim_UnderIce.description>頭頂被海冰封住，幾乎透不進日光；沒有燈就近乎伸手不見五指。</DepthRim_UnderIce.description>
+
 </LanguageData>

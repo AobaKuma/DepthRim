@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Submarine wording for DMSE's transfer-flight texts. On the ocean layer, DMSE.Transfer.X is looked up as
+       DepthRim.Submarine.X first (TransferPresentation.textKeyPrefix); keys missing here fall back to DMSE's. -->
+
+  <!-- Helm -->
+  <DepthRim.Submarine.Console.Plan>Plan voyage</DepthRim.Submarine.Console.Plan>
+  <DepthRim.Submarine.Console.PlanDesc>Choose a destination and review power, voyage time and readiness.</DepthRim.Submarine.Console.PlanDesc>
+  <DepthRim.Submarine.Console.Abort>Abort voyage</DepthRim.Submarine.Console.Abort>
+  <DepthRim.Submarine.Console.AbortDesc>Discard the current voyage plan.</DepthRim.Submarine.Console.AbortDesc>
+  <DepthRim.Submarine.Console.ShowFootprintDesc>Keep showing this submarine's hull and the thrusters' wash zones.</DepthRim.Submarine.Console.ShowFootprintDesc>
+  <DepthRim.Submarine.Console.AlreadyLaunching>The submarine is already casting off.</DepthRim.Submarine.Console.AlreadyLaunching>
+  <DepthRim.Submarine.Console.NotOnShip>Not aboard a submarine.</DepthRim.Submarine.Console.NotOnShip>
+  <DepthRim.Submarine.Console.Primary>Main helm</DepthRim.Submarine.Console.Primary>
+  <DepthRim.Submarine.Console.Backup>Backup helm</DepthRim.Submarine.Console.Backup>
+  <DepthRim.Submarine.Console.ShipSummary>Submarine: {0} keel frames, {1} working thrusters, thrust/mass {2}, power {3}</DepthRim.Submarine.Console.ShipSummary>
+  <DepthRim.Submarine.Console.PlanSummary>Voyage planned: to tile {0} ({1} tiles)</DepthRim.Submarine.Console.PlanSummary>
+  <DepthRim.Submarine.Console.Launch>Cast off</DepthRim.Submarine.Console.Launch>
+  <DepthRim.Submarine.Console.LaunchDesc>Begin casting off. Once a colonist mans this helm, the submarine counts down and leaves the shipyard.</DepthRim.Submarine.Console.LaunchDesc>
+  <DepthRim.Submarine.Console.AwaitingOperatorMsg>Casting off: waiting for a helmsman.</DepthRim.Submarine.Console.AwaitingOperatorMsg>
+  <DepthRim.Submarine.Console.StateAwaitingOperator>Waiting for a helmsman.</DepthRim.Submarine.Console.StateAwaitingOperator>
+  <DepthRim.Submarine.Console.StateCountdown>Casting off in {0}.</DepthRim.Submarine.Console.StateCountdown>
+  <DepthRim.Submarine.Console.Rename>Name submarine</DepthRim.Submarine.Console.Rename>
+  <DepthRim.Submarine.Console.RenameDesc>Name this submarine. The name is kept on every helm aboard and used on every voyage.</DepthRim.Submarine.Console.RenameDesc>
+  <DepthRim.Submarine.Console.Unnamed>Unnamed (named when it casts off)</DepthRim.Submarine.Console.Unnamed>
+  <DepthRim.Submarine.Separating>Casting off</DepthRim.Submarine.Separating>
+
+  <DepthRim.Submarine.Abort.NoPlan>No voyage plan.</DepthRim.Submarine.Abort.NoPlan>
+  <DepthRim.Submarine.Abort.NoFreeTile>No free water to put out into.</DepthRim.Submarine.Abort.NoFreeTile>
+  <DepthRim.Submarine.Abort.NetworkChanged>The keel changed during the countdown.</DepthRim.Submarine.Abort.NetworkChanged>
+
+  <DepthRim.Submarine.Letter.AbortedLabel>Voyage aborted</DepthRim.Submarine.Letter.AbortedLabel>
+  <DepthRim.Submarine.Letter.AbortedText>Casting off was aborted: {0}\n\nThe plan has been kept.</DepthRim.Submarine.Letter.AbortedText>
+  <DepthRim.Submarine.Letter.SeparatedLabel>Submarine cast off</DepthRim.Submarine.Letter.SeparatedLabel>
+  <DepthRim.Submarine.Letter.SeparatedText>{0} has cast off from the shipyard and is under way.</DepthRim.Submarine.Letter.SeparatedText>
+  <DepthRim.Submarine.Letter.Destroyed>Destroyed at the hull's edge:</DepthRim.Submarine.Letter.Destroyed>
+  <DepthRim.Submarine.Letter.LeftBehind>Left behind at the shipyard:</DepthRim.Submarine.Letter.LeftBehind>
+  <DepthRim.Submarine.Letter.BrokenLinks>Keel beams broken: {0}. Construction orders cancelled: {1}.</DepthRim.Submarine.Letter.BrokenLinks>
+  <DepthRim.Submarine.Letter.OriginAbandoned>The shipyard has been abandoned.</DepthRim.Submarine.Letter.OriginAbandoned>
+
+  <DepthRim.Submarine.Ship.DefaultName>Submarine {0}</DepthRim.Submarine.Ship.DefaultName>
+  <DepthRim.Submarine.Ship.Inspect>Keel frames: {0}, keel networks: {1}</DepthRim.Submarine.Ship.Inspect>
+  <DepthRim.Submarine.Ship.Abandon>Scuttle submarine</DepthRim.Submarine.Ship.Abandon>
+  <DepthRim.Submarine.Ship.AbandonDesc>Abandon this submarine and everything aboard.</DepthRim.Submarine.Ship.AbandonDesc>
+  <DepthRim.Submarine.Ship.AbandonHasColonists>There are still colonists aboard.</DepthRim.Submarine.Ship.AbandonHasColonists>
+
+  <DepthRim.Submarine.Alert.PawnsOutside>People outside a departing submarine</DepthRim.Submarine.Alert.PawnsOutside>
+  <DepthRim.Submarine.Alert.PawnsOutsideDesc>These people are outside a submarine that is about to cast off and will be left behind.</DepthRim.Submarine.Alert.PawnsOutsideDesc>
+  <DepthRim.Submarine.Alert.CountdownDesc>A submarine is counting down to cast off.</DepthRim.Submarine.Alert.CountdownDesc>
+
+  <DepthRim.Submarine.Dest.OtherLayer>Must be in the same ocean.</DepthRim.Submarine.Dest.OtherLayer>
+  <DepthRim.Submarine.Dest.OutOfRange>Out of range ({0} tiles).</DepthRim.Submarine.Dest.OutOfRange>
+  <DepthRim.Submarine.Dest.Occupied>That tile is taken, and there is no free water nearby.</DepthRim.Submarine.Dest.Occupied>
+
+  <DepthRim.Submarine.Dialog.Title>Voyage plan</DepthRim.Submarine.Dialog.Title>
+  <DepthRim.Submarine.Dialog.PlanSet>Voyage planned.</DepthRim.Submarine.Dialog.PlanSet>
+
+  <!-- Voyage panel -->
+  <DepthRim.Submarine.UI.NetworkHeader>Keel</DepthRim.Submarine.UI.NetworkHeader>
+  <DepthRim.Submarine.UI.Piles>Keel frames</DepthRim.Submarine.UI.Piles>
+  <DepthRim.Submarine.UI.Beams>Keel beams</DepthRim.Submarine.UI.Beams>
+  <DepthRim.Submarine.UI.TornApart>Structures across the hull's edge (destroyed when casting off)</DepthRim.Submarine.UI.TornApart>
+  <DepthRim.Submarine.UI.UnlinkedPiles>Unlinked keel frames nearby</DepthRim.Submarine.UI.UnlinkedPiles>
+  <DepthRim.Submarine.UI.PendingOrders>Keel frames with beam orders</DepthRim.Submarine.UI.PendingOrders>
+  <DepthRim.Submarine.UI.NoEngines>This submarine has no thrusters.</DepthRim.Submarine.UI.NoEngines>
+  <DepthRim.Submarine.UI.FuelHeader>Power</DepthRim.Submarine.UI.FuelHeader>
+  <DepthRim.Submarine.UI.NoFuelSources>This submarine has no power storage.</DepthRim.Submarine.UI.NoFuelSources>
+  <DepthRim.Submarine.UI.EstimateHeader>Voyage capability</DepthRim.Submarine.UI.EstimateHeader>
+  <DepthRim.Submarine.UI.ParkedAtNeighbor>The destination is taken; the submarine will stop alongside.</DepthRim.Submarine.UI.ParkedAtNeighbor>
+  <DepthRim.Submarine.UI.MassWeightValue>{0} ({1} keel frames)</DepthRim.Submarine.UI.MassWeightValue>
+  <DepthRim.Submarine.UI.TWR>Thrust/mass (min {0})</DepthRim.Submarine.UI.TWR>
+  <DepthRim.Submarine.UI.Eta>Power use multiplier</DepthRim.Submarine.UI.Eta>
+  <DepthRim.Submarine.UI.FuelAvailable>Stored power</DepthRim.Submarine.UI.FuelAvailable>
+  <DepthRim.Submarine.UI.CannotDepart>Cannot cast off</DepthRim.Submarine.UI.CannotDepart>
+  <DepthRim.Submarine.UI.BurnTime>Acceleration</DepthRim.Submarine.UI.BurnTime>
+  <DepthRim.Submarine.UI.FuelRequired>Power needed</DepthRim.Submarine.UI.FuelRequired>
+  <DepthRim.Submarine.UI.CoastTime>Cruise</DepthRim.Submarine.UI.CoastTime>
+  <DepthRim.Submarine.UI.TotalTime>Total voyage time</DepthRim.Submarine.UI.TotalTime>
+  <DepthRim.Submarine.UI.FlightHeader>Under way: {0}</DepthRim.Submarine.UI.FlightHeader>
+  <DepthRim.Submarine.UI.FlightProgress>Voyage progress</DepthRim.Submarine.UI.FlightProgress>
+  <DepthRim.Submarine.UI.GracePeriod>Unnoticed after arrival</DepthRim.Submarine.UI.GracePeriod>
+
+  <DepthRim.Submarine.Issue.NotInSpace>The submarine must be at sea.</DepthRim.Submarine.Issue.NotInSpace>
+  <DepthRim.Submarine.Issue.ConsoleNotOnShip>The helm is not aboard the submarine.</DepthRim.Submarine.Issue.ConsoleNotOnShip>
+  <DepthRim.Submarine.Issue.ConsoleUnavailable>The helm is unpowered, switched off or broken.</DepthRim.Submarine.Issue.ConsoleUnavailable>
+  <DepthRim.Submarine.Issue.NoEngines>No working thrusters.</DepthRim.Submarine.Issue.NoEngines>
+  <DepthRim.Submarine.Issue.LowTWR>Thrust/mass {0} is below {1}.</DepthRim.Submarine.Issue.LowTWR>
+  <DepthRim.Submarine.Issue.NotEnoughFuel>Not enough stored power ({0}/{1}).</DepthRim.Submarine.Issue.NotEnoughFuel>
+  <DepthRim.Submarine.Issue.OtherShipDeparting>Another submarine is already casting off here.</DepthRim.Submarine.Issue.OtherShipDeparting>
+  <DepthRim.Submarine.Issue.PawnsLeftBehind>{0} outside the hull will be left behind.</DepthRim.Submarine.Issue.PawnsLeftBehind>
+  <DepthRim.Submarine.Issue.NearbyUnlinkedPiles>{0} keel frames nearby are not linked to this submarine.</DepthRim.Submarine.Issue.NearbyUnlinkedPiles>
+  <DepthRim.Submarine.Issue.Contested>Will take {0} cells from another submarine ({1} structures, {2} keel frames).</DepthRim.Submarine.Issue.Contested>
+  <DepthRim.Submarine.Issue.PendingBeamOrders>{0} keel frames have unfinished beams.</DepthRim.Submarine.Issue.PendingBeamOrders>
+  <DepthRim.Submarine.Issue.InFlight>The submarine is under way.</DepthRim.Submarine.Issue.InFlight>
+
+  <!-- Thrusters -->
+  <DepthRim.Submarine.Engine.Stats>Thrust {0}, power use multiplier {1}</DepthRim.Submarine.Engine.Stats>
+  <DepthRim.Submarine.Engine.Status.NotOnShip>Not aboard a submarine</DepthRim.Submarine.Engine.Status.NotOnShip>
+  <DepthRim.Submarine.Engine.Status.ExhaustBlocked>Wash blocked by {0}</DepthRim.Submarine.Engine.Status.ExhaustBlocked>
+  <DepthRim.Submarine.Engine.PlacedBlocked>{0}: the wash zone is blocked by {1}.</DepthRim.Submarine.Engine.PlacedBlocked>
+
+  <!-- Voyage -->
+  <DepthRim.Submarine.Phase.DepartureBurn>Getting under way</DepthRim.Submarine.Phase.DepartureBurn>
+  <DepthRim.Submarine.Phase.Coast>Cruising</DepthRim.Submarine.Phase.Coast>
+  <DepthRim.Submarine.Phase.ArrivalBurn>Slowing to arrive</DepthRim.Submarine.Phase.ArrivalBurn>
+  <DepthRim.Submarine.Phase.Arrived>Arrived</DepthRim.Submarine.Phase.Arrived>
+  <DepthRim.Submarine.Flight.Status>Voyage: {0}, {1} left in this stage</DepthRim.Submarine.Flight.Status>
+  <DepthRim.Submarine.Flight.CoastBegin>{0} is cruising.</DepthRim.Submarine.Flight.CoastBegin>
+  <DepthRim.Submarine.Flight.ArrivalBurnBegin>{0} is slowing to arrive.</DepthRim.Submarine.Flight.ArrivalBurnBegin>
+  <DepthRim.Submarine.Flight.Rerouted>{0}'s destination is taken; it will stop nearby.</DepthRim.Submarine.Flight.Rerouted>
+  <DepthRim.Submarine.Flight.NoThrustLabel>No thrust to slow down</DepthRim.Submarine.Flight.NoThrustLabel>
+  <DepthRim.Submarine.Flight.NoThrustText>{0} has no working thrusters and will drift to a stop on its rudders and ballast ({1}).</DepthRim.Submarine.Flight.NoThrustText>
+  <DepthRim.Submarine.Flight.ArrivedLabel>Voyage complete</DepthRim.Submarine.Flight.ArrivedLabel>
+  <DepthRim.Submarine.ShuttleBlockedBurn>The submarine's thrusters are running.</DepthRim.Submarine.ShuttleBlockedBurn>
+
+  <!-- Docking -->
+  <DepthRim.Submarine.UI.LandOnSite>Will dock at {0}.</DepthRim.Submarine.UI.LandOnSite>
+  <DepthRim.Submarine.Landing>Docking</DepthRim.Submarine.Landing>
+  <DepthRim.Submarine.Land.Designator>Choose docking spot</DepthRim.Submarine.Land.Designator>
+  <DepthRim.Submarine.Land.DesignatorDesc>Choose where the submarine docks on this map.</DepthRim.Submarine.Land.DesignatorDesc>
+  <DepthRim.Submarine.Land.WillMove>The submarine will dock at the nearest free spot.</DepthRim.Submarine.Land.WillMove>
+  <DepthRim.Submarine.Land.Gizmo>Dock at {0}</DepthRim.Submarine.Land.Gizmo>
+  <DepthRim.Submarine.Land.GizmoDesc>Choose a docking spot at {0}.</DepthRim.Submarine.Land.GizmoDesc>
+  <DepthRim.Submarine.Land.Auto>Dock automatically</DepthRim.Submarine.Land.Auto>
+  <DepthRim.Submarine.Land.AutoDesc>Dock at the free spot closest to the map centre.</DepthRim.Submarine.Land.AutoDesc>
+  <DepthRim.Submarine.Land.Cancel>Cancel docking</DepthRim.Submarine.Land.Cancel>
+  <DepthRim.Submarine.Land.CancelDesc>Hold position.</DepthRim.Submarine.Land.CancelDesc>
+  <DepthRim.Submarine.Land.NoRoom>There is not enough room to dock at {0}.</DepthRim.Submarine.Land.NoRoom>
+  <DepthRim.Submarine.Land.SiteGone>The docking site no longer exists.</DepthRim.Submarine.Land.SiteGone>
+  <DepthRim.Submarine.Land.ArrivedText>{0} is waiting to dock at {1}.</DepthRim.Submarine.Land.ArrivedText>
+  <DepthRim.Submarine.Land.LandedLabel>Submarine docked</DepthRim.Submarine.Land.LandedLabel>
+  <DepthRim.Submarine.Land.LandedText>{0} has docked at {1}.</DepthRim.Submarine.Land.LandedText>
+  <DepthRim.Submarine.Land.Moved>The chosen spot was blocked, so it docked at the nearest free spot.</DepthRim.Submarine.Land.Moved>
+
+</LanguageData>

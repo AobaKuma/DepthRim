@@ -71,7 +71,7 @@ namespace DepthRim
                                   | (ulong)MapMeshFlagDefOf.Roofs | (ulong)MapMeshFlagDefOf.GroundGlow;
         }
 
-        public override bool Visible => FloodingOverlay.Show;
+        public override bool Visible => FloodingOverlay.Drawing;
 
         public override void Regenerate()
         {

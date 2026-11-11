@@ -31,11 +31,11 @@ namespace DepthRim.Acceptance
             for (int i = 0; i < surface.TilesCount; i += 13)
             {
                 Tile st = surface[i];
-                bool ice = st.PrimaryBiome == BiomeDefOf.IceSheet || st.PrimaryBiome == BiomeDefOf.SeaIce;
+                bool ice = st.PrimaryBiome == BiomeDefOf.SeaIce; // 冰原算陸地（2026-11-11）
                 PlanetTile under = OceanWorldView.TileBelow(new PlanetTile(i, surface), ocean);
                 if (!under.Valid || Find.WorldObjects.MapParentAt(under) != null) { continue; }
                 bool landBelow = OceanWorldView.IsLandmass(under.Tile.PrimaryBiome);
-                bool isLand = !st.WaterCovered && !ice;
+                bool isLand = !st.WaterCovered;
                 if (isLand != landBelow && misses.Count < 8)
                 {
                     Vector2 ll = Find.WorldGrid.LongLatOf(new PlanetTile(i, surface));
@@ -57,8 +57,8 @@ namespace DepthRim.Acceptance
             }
             if (misses.Count > 0) { ctx.Note("mismatches: " + string.Join("; ", misses)); }
             ctx.Note($"samples: land {landOk}/{landN} landmass below, water {waterOk}/{waterN} ocean below, shelf {shelfOk}/{shelfN} within 200 m");
-            ctx.Check(landN > 0 && landOk == landN, "dry land has no ocean below (landmass)");
-            ctx.Check(waterN > 0 && waterOk == waterN, "water and ice have ocean below");
+            ctx.Check(landN > 0 && landOk == landN, "land, ice sheets included, has no ocean below (landmass)");
+            ctx.Check(waterN > 0 && waterOk == waterN, "water and sea ice have ocean below");
             ctx.Check(shelfN == 0 || shelfOk >= shelfN * 0.9f, "water next to the coast is continental shelf (200 m or shallower)");
             var byBiome = ocean.Tiles.GroupBy(t => t.PrimaryBiome.defName).OrderByDescending(g => g.Count()).ToList();
             ctx.Note("ocean biomes: " + string.Join(", ", byBiome.Select(g => $"{g.Key} {g.Count()}")));
@@ -81,8 +81,9 @@ namespace DepthRim.Acceptance
                 ocean.Filler.FloodFill(new PlanetTile(i, ocean), t => true, (t, d) =>
                 {
                     string b = t.Tile.PrimaryBiome.defName;
-                    if (b == "DepthRim_Landmass" || b == "DepthRim_PolarIceCap") { land = true; }
-                    if (b == "DepthRim_MidOceanRidge") { ridge = true; }
+                    if (b == "DepthRim_Landmass") { land = true; }
+                    // 窄段的中洋脊只有軸線（2026-11-11 脊寬沿著脊變化），熱液段旁邊可能只有其他熱液格
+                    if (b == "DepthRim_MidOceanRidge" || (b == "DepthRim_HydrothermalField" && t.tileId != i)) { ridge = true; }
                     return d >= 6;
                 });
                 if (def == "DepthRim_AbyssalTrench") { trenchTiles++; if (land) { trenchNearCoast++; } }
@@ -93,42 +94,68 @@ namespace DepthRim.Acceptance
             ctx.Check(trenchTiles > 0 && trenchNearCoast == trenchTiles, "every trench runs along a coast (subduction margin)");
             ctx.Check(ventTiles == 0 || ventOnRidge >= ventTiles * 0.9f, "hydrothermal vents sit on mid-ocean ridges");
 
-            // 極地冰蓋與深洋盆犬牙交錯：有離陸地很遠的冰舌，也有緊貼海岸的深洋盆海灣（結冰區）
-            int tongues = 0, embayments = 0, iceBoundary = 0, polarWater = 0;
-            for (int i = 0; i < ocean.TilesCount && (tongues < 50 || embayments < 50 || polarWater < 4000); i++)
-            {
-                Tile ot = ocean[i];
-                Tile st = surface[i];
-                bool frozenWater = st.WaterCovered && (st.PrimaryBiome == BiomeDefOf.SeaIce || st.temperature < OceanBiomeSelector.PolarTemperature);
-                bool polar = ot.PrimaryBiome.defName == "DepthRim_PolarIceCap";
-                if (!frozenWater) { continue; }
-                if (polar) { polarWater++; }
-                PlanetTile pt = new PlanetTile(i, ocean);
-                ocean.GetTileNeighbors(pt, near);
-                if (polar && near.Any(n => n.Tile.elevation < -2500f)) { iceBoundary++; }
-                bool deep = ot.elevation < -2500f;
-                if (!polar && !deep) { continue; }
-                bool landNear = false, landAdjacent = near.Any(n => OceanWorldView.IsLandmass(n.Tile.PrimaryBiome) || !surface[n.tileId].WaterCovered);
-                if (polar)
-                {
-                    ocean.Filler.FloodFill(pt, t => true, (t, d) =>
-                    {
-                        if (!surface[t.tileId].WaterCovered) { landNear = true; }
-                        return landNear || d >= 4;
-                    });
-                    if (!landNear) { tongues++; }
-                }
-                else if (landAdjacent) { embayments++; }
-            }
-            ctx.Note($"ice edge: {tongues} ice-tongue tiles (no land within 4), {embayments} deep-basin tiles touching the coast, {iceBoundary} cap tiles bordering the deep basin, {polarWater} cap tiles over frozen sea");
-            if (polarWater > 50)
-            {
-                ctx.Check(tongues > 0, "ice tongues reach out over the deep basin");
-                ctx.Check(embayments > 0, "the deep basin cuts into the ice cap right up to the coast");
-            }
             ctx.Check(ocean.Tiles.All(t => t.hilliness != Hilliness.Undefined), "ocean tiles have hilliness for rock generation");
-            // 依正上方地表決定：冰原（陸上的冰）下方都是極地冰蓋（抽樣）；海冰只有在大陸棚上才是
-
+            // 靠近陸地邊緣：海洋視圖的深度和地表視圖一樣（生態區深度範圍夾住的除外），往外漸變（2026-11-11）
+            if (surface.TilesCount == ocean.TilesCount)
+            {
+                int coastN = 0, coastSame = 0, coastClamped = 0;
+                float coastSurfaceSum = 0f;
+                var cnb = new List<PlanetTile>();
+                for (int i = 0; i < ocean.TilesCount; i++)
+                {
+                    Tile st = surface[i], ot = ocean[i];
+                    if (!st.WaterCovered || OceanWorldView.IsLandmass(ot.PrimaryBiome) || Find.WorldObjects.MapParentAt(new PlanetTile(i, ocean)) != null) { continue; }
+                    surface.GetTileNeighbors(new PlanetTile(i, surface), cnb);
+                    if (!cnb.Any(n => !n.Tile.WaterCovered)) { continue; }
+                    coastN++;
+                    coastSurfaceSum += -st.elevation;
+                    float want = Mathf.Max(0f, -st.elevation), got = -ot.elevation;
+                    WaterMapExtension ext = ot.PrimaryBiome.GetModExtension<WaterMapExtension>();
+                    if (Mathf.Abs(want - got) < 0.5f) { coastSame++; }
+                    else if (ext != null && (Mathf.Abs(got - ext.seafloorDepth.min) < 0.5f || Mathf.Abs(got - ext.seafloorDepth.max) < 0.5f)) { coastClamped++; }
+                }
+                ctx.Note($"coastal tiles: {coastSame}/{coastN} match the surface depth, {coastClamped} held at their biome's depth limit; average surface depth there {(coastN > 0 ? coastSurfaceSum / coastN : 0f):0} m");
+                ctx.Check(coastN > 0 && coastSame + coastClamped == coastN, "next to land the ocean depth matches the surface view (or its biome's depth limit)");
+            }
+            // 水溫（2026-11-11）：依深度與正上方氣溫；淺水有季節變化、深海沒有；地下冰洋固定在冰點
+            float AvgTemp(string def) { var ts = ocean.Tiles.Where(t => t.PrimaryBiome.defName == def).ToList(); return ts.Count == 0 ? float.NaN : ts.Average(t => t.temperature); }
+            float reefT = AvgTemp("DepthRim_ShallowReef"), kelpT = AvgTemp("DepthRim_KelpForest"), deepReefT = AvgTemp("DepthRim_DeepReef"), plainT = AvgTemp("DepthRim_SeabedPlain"),
+                  trenchT = AvgTemp("DepthRim_AbyssalTrench"), ventT = AvgTemp("DepthRim_HydrothermalField"), iceT = AvgTemp("DepthRim_PolarIceCap");
+            ctx.Note($"average water temperature: reef {reefT:0.0}, kelp {kelpT:0.0}, deep reef {deepReefT:0.0}, plain {plainT:0.0}, trench {trenchT:0.0}, vents {ventT:0.0}, subglacial {iceT:0.0} °C");
+            ctx.Check(reefT > kelpT && kelpT > plainT && deepReefT > plainT, "shallow water is warmer than the deep sea; tropical reefs are the warmest");
+            ctx.Check(plainT > 0.4f && plainT < 3.5f && (float.IsNaN(trenchT) || trenchT < 3.5f), "the abyssal plain and trenches are 1–3 °C");
+            ctx.Check(float.IsNaN(ventT) || ventT > plainT + 4f, "hydrothermal fields are warmer than the abyssal plain");
+            var subTiles = ocean.Tiles.Where(t => OceanBiomeSelector.IsSubglacial(t.PrimaryBiome.defName)).ToList();
+            ctx.Check(subTiles.All(t => t.temperature >= OceanTemperature.FreezingPoint - 0.01f && t.temperature <= OceanTemperature.SubglacialDeepWater + 0.01f)
+                      && (float.IsNaN(iceT) || iceT < -1.2f), "the subglacial ocean is near freezing (shallow at the freezing point, deep water about -0.5 °C)");
+            // 地下冰洋分深淺層（2026-11-11）：每一層的格子深度落在該層，水深層級跟著層
+            var subByLayer = subTiles.GroupBy(t => t.PrimaryBiome.defName).OrderBy(g => g.Key).ToList();
+            ctx.Note("subglacial layers: " + string.Join(", ", subByLayer.Select(g => $"{g.Key} {g.Count()} ({g.Min(t => -t.elevation):0}–{g.Max(t => -t.elevation):0} m, tier {g.First().PrimaryBiome.GetModExtension<WaterMapExtension>().depthTier})")));
+            ctx.Check(subTiles.All(t => OceanBiomeSelector.DefName(OceanBiomeSelector.SubglacialFor(-t.elevation)) == t.PrimaryBiome.defName || t.PrimaryBiome.defName == "DepthRim_SubglacialThermocline" && -t.elevation >= 2000f),
+                      "each subglacial tile is in the layer that matches its depth");
+            ctx.Check(subTiles.Count == 0 || subByLayer.Count >= 2, "the subglacial ocean has more than one depth layer");
+            float YearRange(PlanetTile t)
+            {
+                var temps = Enumerable.Range(0, 12).Select(m => Find.World.tileTemperatures.OutdoorTemperatureAt(t, 1 + m * 300000)).ToList();
+                return temps.Max() - temps.Min();
+            }
+            PlanetTile FirstOf(string def, System.Func<int, bool> extra = null)
+            {
+                for (int i = 0; i < ocean.TilesCount; i++)
+                {
+                    if (ocean[i].PrimaryBiome.defName == def && (extra == null || extra(i))) { return new PlanetTile(i, ocean); }
+                }
+                return PlanetTile.Invalid;
+            }
+            // 中高緯度的淺水（海藻林）季節最明顯；赤道附近季節本來就小
+            PlanetTile kelpTile = FirstOf("DepthRim_KelpForest", i => Find.WorldGrid.DistanceFromEquatorNormalized(new PlanetTile(i, ocean)) > 0.4f);
+            PlanetTile plainTile = FirstOf("DepthRim_SeabedPlain"), iceTile = FirstOf("DepthRim_PolarIceCap");
+            float kelpRange = kelpTile.Valid ? YearRange(kelpTile) : float.NaN, plainRange = plainTile.Valid ? YearRange(plainTile) : float.NaN, iceRange = iceTile.Valid ? YearRange(iceTile) : float.NaN;
+            ctx.Note($"yearly range: kelp {kelpRange:0.00} °C (lat {(kelpTile.Valid ? Find.WorldGrid.LongLatOf(kelpTile).y : 0f):0}), abyssal plain {plainRange:0.00} °C, subglacial {iceRange:0.00} °C");
+            ctx.Check(!kelpTile.Valid || kelpRange > 2f, "shallow kelp forests warm and cool with the seasons");
+            ctx.Check(plainTile.Valid && plainRange < 0.5f, "the abyssal plain stays the same temperature all year");
+            ctx.Check(!iceTile.Valid || iceRange < 0.01f, "the subglacial ocean stays the same temperature all year");
+            // 冰原（陸上的冰）算陸地，下方是陸塊（抽樣）；地下冰洋只在冰海（海冰）下（2026-11-11）
             int iceChecked = 0, iceOk = 0;
             for (int i = 0; i < surface.TilesCount && iceChecked < 40; i += 97)
             {
@@ -136,15 +163,30 @@ namespace DepthRim.Acceptance
                 if (st.PrimaryBiome != BiomeDefOf.IceSheet) { continue; }
                 iceChecked++;
                 PlanetTile under = OceanWorldView.TileBelow(new PlanetTile(i, surface), ocean);
-                if (under.Valid && under.Tile.PrimaryBiome.defName == "DepthRim_PolarIceCap") { iceOk++; }
+                if (under.Valid && OceanWorldView.IsLandmass(under.Tile.PrimaryBiome)) { iceOk++; }
             }
-            ctx.Note($"ice sheet samples: {iceOk}/{iceChecked} have polar ice cap below");
-            ctx.Check(iceChecked == 0 || iceOk == iceChecked, "the ice sheet lies over the polar ice cap");
+            ctx.Note($"ice sheet samples: {iceOk}/{iceChecked} have landmass below");
+            ctx.Check(iceChecked == 0 || iceOk == iceChecked, "the ice sheet counts as land (landmass below)");
+            int subglacial = 0, subglacialUnderSeaIce = 0, seaIce = 0, seaIceOverSubglacial = 0;
+            bool sameGrid = surface.TilesCount == ocean.TilesCount;
+            // 測試夾具會把殖民地正下方那一格改成地下冰洋（DepthRimFixture.EnsureOcean），不算
+            var homeTiles = new HashSet<int>(Find.Maps.Where(m => m.Tile.Layer == surface).Select(m => m.Tile.tileId));
+            for (int i = 0; sameGrid && i < ocean.TilesCount; i++)
+            {
+                if (homeTiles.Contains(i) || Find.WorldObjects.MapParentAt(new PlanetTile(i, ocean)) != null) { continue; }
+                bool sub = OceanBiomeSelector.IsSubglacial(ocean[i].PrimaryBiome.defName), ice = surface[i].PrimaryBiome == BiomeDefOf.SeaIce;
+                if (sub) { subglacial++; if (ice) { subglacialUnderSeaIce++; } }
+                if (ice) { seaIce++; if (sub) { seaIceOverSubglacial++; } }
+            }
+            ctx.Note($"subglacial ocean tiles under sea ice: {subglacialUnderSeaIce}/{subglacial}; sea-ice tiles over subglacial ocean: {seaIceOverSubglacial}/{seaIce}");
+            ctx.Check(subglacialUnderSeaIce == subglacial, "the subglacial ocean only forms under sea ice");
+            // 冰海下必定是地下冰洋（2026-11-11 使用者定案）
+            ctx.Check(seaIceOverSubglacial == seaIce, "every sea-ice tile has subglacial ocean below");
             ctx.Check(surface.zoomInToLayer == ocean, "zooming in on the surface goes to the ice ocean");
             ctx.Check(ocean.zoomOutToLayer == surface, "zooming out of the ice ocean goes to the surface");
             ctx.Check(!surface.HasConnectionFromTo(ocean) && !ocean.HasConnectionFromTo(surface), "no gravship/shuttle connection between surface and ocean");
             ctx.Check(Find.WorldGrid.PlanetLayers.Values.Count(l => l.Def == DepthRimDefOf.DepthRim_Ocean) == 1, "exactly one ice ocean layer");
-            ctx.Check(!DMSE.TransferEnvironment.AllowsTransfer(DepthRimDefOf.DepthRim_Ocean), "DMSE transfer flight is not enabled on the ocean yet (submarine prototype pending)");
+            ctx.Check(DMSE.TransferEnvironment.AllowsTransfer(DepthRimDefOf.DepthRim_Ocean), "DMSE transfer flight (the submarine) is enabled on the ocean");
             int seabed = 0;
             for (int i = 0; i < ocean.TilesCount; i += 7)
             {
@@ -184,6 +226,71 @@ namespace DepthRim.Acceptance
             yield return new WaitFrames(10);
             ctx.Check(ocean.Visible && !surface.Visible, "viewing the ocean: the surface is hidden so the seabed shows");
             ctx.Check(OceanWorldView.Showing(ocean), "viewing the ocean: the ocean terrain is drawn");
+            // 選取：滑鼠點海洋格要拿到海洋層的格子，世界檢視面板要有分頁
+            Find.WorldCameraDriver.JumpTo(home);
+            yield return new WaitFrames(10);
+            UnityEngine.Vector3 screen = Find.WorldCamera.WorldToScreenPoint(ocean.GetTileCenter(home));
+            UnityEngine.Vector2 uiPos = new UnityEngine.Vector2(screen.x, screen.y) / Prefs.UIScale;
+            WorldTerrainColliderManager.EnsureRaycastCollidersUpdated();
+            UnityEngine.Ray ray = Find.WorldCamera.ScreenPointToRay(uiPos * Prefs.UIScale);
+            bool hit = UnityEngine.Physics.Raycast(ray, out UnityEngine.RaycastHit hitInfo, 1500f, WorldCameraManager.WorldLayerMask);
+            PlanetTile picked = GenWorld.TileAt(uiPos);
+            ctx.Note($"pick at {uiPos}: physics hit {hit} ({(hit ? hitInfo.collider?.gameObject.name : "-")}), tile {picked} layer {picked.LayerDef?.defName}, raycastable ocean {ocean.Raycastable} surface {surface.Raycastable}, ocean colliders {ocean.WorldDrawLayers.Count(l => l.Raycastable)}");
+            ctx.Check(picked.Valid && picked.Layer == ocean, $"clicking the seabed picks an ocean tile ({picked})");
+            Find.WorldSelector.ClearSelection();
+            Find.WorldSelector.SelectedTile = home;
+            yield return new WaitFrames(5);
+            List<InspectTabBase> tabs = (ocean.Def.Tabs ?? new List<WITab>()).Cast<InspectTabBase>().ToList();
+            ctx.Note($"selected {Find.WorldSelector.SelectedTile}, any selected {Find.WorldSelector.AnyObjectOrTileSelected}, tabs visible: {string.Join(", ", tabs.Select(t => t.GetType().Name + "=" + t.IsVisible))}");
+            ctx.Check(Find.WorldSelector.SelectedTile == home && tabs.Any(t => t.IsVisible), "a selected ocean tile shows inspector tabs");
+            ctx.Check(tabs.Any(t => t is WITab_OceanTerrain && t.IsVisible), "the inspector has the ocean terrain tab for an ocean tile");
+            Find.MainTabsRoot.SetCurrentTab(MainButtonDefOf.Inspect, playSound: false);
+            WITab_OceanTerrain terrainTab = tabs.OfType<WITab_OceanTerrain>().FirstOrDefault();
+            if (terrainTab != null) { InspectPaneUtility.OpenTab(terrainTab.GetType()); }
+            yield return new WaitFrames(10);
+            ctx.Screenshot("ocean_inspector");
+            yield return new WaitFrames(10);
+            // 看海洋層時要有「檢視地表」按鈕（地表的原版按鈕需要圖層連線，海洋層沒有）
+            List<Command_Action> layerGizmos = Find.WorldGrid.GetGizmos().OfType<Command_Action>()
+                .Where(g => g.icon == surface.Def.ViewGizmoTexture).ToList();
+            ctx.Check(layerGizmos.Count == 1, $"the ocean view has exactly one 'view surface' gizmo ({layerGizmos.Count})");
+            if (layerGizmos.Count > 0)
+            {
+                layerGizmos[0].action();
+                yield return new WaitFrames(5);
+                ctx.Check(PlanetLayer.Selected == surface, "the 'view surface' gizmo switches back to the surface");
+                ctx.Check(OceanWorldView.ReturnToSurfaceGizmo() == null, "no extra surface gizmo while viewing the surface");
+                PlanetLayer.Selected = ocean;
+                yield return new WaitFrames(5);
+                Find.WorldSelector.SelectedTile = home;
+            }
+            // 在海洋視圖點陸塊格：自動切到地表、選正上方的地表格；點海洋格不動
+            // 殖民地在陸地上，正下方（home）是陸塊，所以另外找一格真正的海洋格
+            PlanetTile landmass = PlanetTile.Invalid, water = PlanetTile.Invalid;
+            for (int i = 0; i < ocean.TilesCount && (!landmass.Valid || !water.Valid); i++)
+            {
+                if (OceanWorldView.IsLandmass(ocean[i].PrimaryBiome)) { if (!landmass.Valid) { landmass = new PlanetTile(i, ocean); } }
+                else if (!water.Valid) { water = new PlanetTile(i, ocean); }
+            }
+            ctx.Check(water.Valid && !OceanWorldView.TryJumpToSurface(water) && PlanetLayer.Selected == ocean, $"an ocean tile does not jump to the surface ({water})");
+            if (landmass.Valid)
+            {
+                Find.WorldSelector.SelectedTile = landmass;
+                bool jumped = OceanWorldView.TryJumpToSurface(landmass);
+                yield return new WaitFrames(5);
+                PlanetTile sel = Find.WorldSelector.SelectedTile;
+                ctx.Note($"landmass {landmass} -> selected {sel} layer {sel.LayerDef?.defName}");
+                ctx.Check(jumped && PlanetLayer.Selected == surface && sel.Layer == surface && !sel.Tile.WaterCovered
+                          && Vector3.Dot(ocean.GetTileCenter(landmass).normalized, surface.GetTileCenter(sel).normalized) > 0.999f,
+                          "clicking a landmass in the ocean view jumps to the surface tile above it");
+                PlanetLayer.Selected = ocean;
+                yield return new WaitFrames(5);
+                Find.WorldSelector.SelectedTile = home;
+            }
+            else
+            {
+                ctx.Check(false, "found a landmass tile on the ocean layer");
+            }
             WorldDrawLayer_OceanTerrain terrain = ocean.WorldDrawLayers.OfType<WorldDrawLayer_OceanTerrain>().FirstOrDefault();
             ctx.Check(terrain != null && !terrain.Dirty, "the ocean terrain mesh has been built");
             WorldDrawLayer_OceanBathymetry bathymetry = ocean.WorldDrawLayers.OfType<WorldDrawLayer_OceanBathymetry>().FirstOrDefault();
@@ -225,14 +332,14 @@ namespace DepthRim.Acceptance
                 ctx.Screenshot("ocean_world_map_ridge");
                 yield return new WaitFrames(10);
             }
-            // 對準極地冰蓋與深洋盆的交界（冰緣），看它是不是犬牙交錯
+            // 對準地下冰洋（冰海下）與一般海洋的交界
             PlanetTile iceEdge = PlanetTile.Invalid;
             var edgeNb = new List<PlanetTile>();
             for (int i = 0; i < ocean.TilesCount && !iceEdge.Valid; i++)
             {
-                if (ocean[i].PrimaryBiome.defName != "DepthRim_PolarIceCap" || !surface[i].WaterCovered) { continue; }
+                if (!OceanBiomeSelector.IsSubglacial(ocean[i].PrimaryBiome.defName) || !surface[i].WaterCovered) { continue; }
                 ocean.GetTileNeighbors(new PlanetTile(i, ocean), edgeNb);
-                if (edgeNb.Count(n => n.Tile.elevation < -2500f) >= 2) { iceEdge = new PlanetTile(i, ocean); }
+                if (edgeNb.Count(n => n.Tile.elevation < -2500f) >= 1) { iceEdge = new PlanetTile(i, ocean); }
             }
             if (iceEdge.Valid)
             {
@@ -265,6 +372,14 @@ namespace DepthRim.Acceptance
             ctx.Check(iconOk, "the ocean site's world-map icon colour can be read (no NullReference while drawing)");
             ctx.Check(ocean.Parent.Faction == Faction.OfPlayer, "ice ocean site belongs to the player");
             ctx.Check(ocean.Biome.defName == "DepthRim_PolarIceCap", "map uses the ice ocean biome");
+            // 冰下非常低光（2026-11-11）
+            ctx.Check(ocean.weatherManager.curWeather?.defName == "DepthRim_UnderIce", $"the subglacial map has the under-ice weather ({ocean.weatherManager.curWeather?.defName})");
+            ctx.Check(ocean.skyManager.CurSkyGlow <= 0.061f, $"daylight under the ice is very dim (sky glow {ocean.skyManager.CurSkyGlow:0.000})");
+            WaterTierMaterials.Outer(DepthTier.Shallow);
+            WaterTierMaterials.UpdateSkyLight(ocean);
+            UnityEngine.Material shallowMat = WaterTierMaterials.Outer(DepthTier.Shallow);
+            ctx.Check(shallowMat.GetFloat("_CausticStrength") == 0f && shallowMat.GetFloat("_LightShaftStrength") == 0f, "no sunlight caustics or light shafts under the ice");
+            ctx.Check(System.Math.Abs(ocean.mapTemperature.OutdoorTemp - OceanTemperature.FreezingPoint) < 0.05f, $"the subglacial ocean map's water is at the freezing point ({ocean.mapTemperature.OutdoorTemp:0.00} °C)");
             ctx.Check(ocean.GetComponent<MapComponent_Flooding>().Active, "flooding is active on the ocean map");
             ctx.Require(shaft.exit != null && shaft.exit.Spawned && shaft.exit.Map == ocean, "landing spawned on the ocean map");
             ctx.Check(shaft.exit.def == DepthRimFixture.IceShaftBottom, "landing uses DepthRim_IceShaftBottom");

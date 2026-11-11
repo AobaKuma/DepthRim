@@ -39,6 +39,13 @@ namespace DepthRim
         /// </summary>
         public float ambientReach = 1f;
 
+        /// <summary>
+        /// 遊戲機制上的日光上限（0–1，2026-11-11）：這個層級的地圖，原版天空光（<c>SkyManager.CurSkyGlow</c>：黑暗判定、工作速度、植物生長）
+        /// 最多這麼亮。淺海 1（不限），越深越暗，深海海床完全沒有日光。水體的樣子不受影響（看 <see cref="ambientReach"/>，
+        /// 用的是限制前的日光，見 <see cref="OceanDaylight"/>）。
+        /// </summary>
+        public float maxSkyGlow = 1f;
+
         /// <summary>波紋取樣尺度：1 / 尺度 = 重複週期（格）。0 = 沒有波紋。</summary>
         public float rippleScale = 0.03f;
 
@@ -138,6 +145,7 @@ namespace DepthRim
                 CheckRange("clearAlpha", clearAlpha, 0f, 1f),
                 CheckRange("murkAlpha", murkAlpha, 0f, 1f),
                 CheckRange("ambientReach", ambientReach, 0f, 1f),
+                CheckRange("maxSkyGlow", maxSkyGlow, 0f, 1f),
                 CheckRange("rippleStrength", rippleStrength, 0f, 1f),
                 CheckRange("causticStrength", causticStrength, 0f, 1f),
                 CheckRange("lightShaftStrength", lightShaftStrength, 0f, 1f),

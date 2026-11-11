@@ -18,6 +18,7 @@ static partial class Test
         Run("AudioMath", AudioMath);
         Run("WatertightDoor", WatertightDoor);
         Run("OceanBiomes", OceanBiomes);
+        Run("OceanTemperature", OceanTemperatureTests);
         Run("MidwaterMath", MidwaterMathTests);
         Run("ContentMidwater", ContentMidwater);
         Run("ContentHullPlatform", ContentHullPlatform);

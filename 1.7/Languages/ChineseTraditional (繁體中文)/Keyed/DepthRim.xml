@@ -32,7 +32,7 @@
   <DepthRim.WatertightDoor.Sealed>淹水側（{0}）：沒有潛水服的殖民者不會通過</DepthRim.WatertightDoor.Sealed>
   <DepthRim.WatertightDoor.Open>兩側都可通行（最深 {0}）</DepthRim.WatertightDoor.Open>
   <DepthRim.IceShaft.TooDeep>下方的海洋是{0}（{1}）：升降井到不了這麼深。潛水服只撐得住淺海與變溫層。</DepthRim.IceShaft.TooDeep>
-  <DepthRim.IceShaft.NoOcean>陸地正下方沒有海洋。升降井只能挖穿冰原或海冰。</DepthRim.IceShaft.NoOcean>
+  <DepthRim.IceShaft.NoOcean>陸地（含冰原）正下方沒有海洋。升降井只能挖穿海冰。</DepthRim.IceShaft.NoOcean>
   <DepthRim.IceShaft.Below>下方海洋：{0}</DepthRim.IceShaft.Below>
   <DepthRim.Readout.WaterLevel>水位（{0}）</DepthRim.Readout.WaterLevel>
   <DepthRim.Readout.WaterLevelOpen>開放水域（{0}）</DepthRim.Readout.WaterLevelOpen>
@@ -117,4 +117,11 @@
   <DepthRim.Enemy.BoatLeft>敵方魚雷艇悄悄離開了，你的海洋地圖暫時不在它的射程內。</DepthRim.Enemy.BoatLeft>
   <DepthRim.Enemy.SubLeftLabel>海盜潛艇離開</DepthRim.Enemy.SubLeftLabel>
   <DepthRim.Enemy.SubLeft>海盜潛艇離開了這片海域，聲納失去了接觸。</DepthRim.Enemy.SubLeft>
+  <DepthRim.OceanTab.Landmass>大陸下方的實心岩層，這裡沒有海。</DepthRim.OceanTab.Landmass>
+  <DepthRim.OceanTab.SeafloorDepth>海床深度</DepthRim.OceanTab.SeafloorDepth>
+  <DepthRim.OceanTab.Meters>{0} 公尺</DepthRim.OceanTab.Meters>
+  <DepthRim.OceanTab.DepthTier>水深層級</DepthRim.OceanTab.DepthTier>
+  <DepthRim.OceanTab.Anchor>下錨</DepthRim.OceanTab.Anchor>
+  <DepthRim.OceanTab.AnchorYes>可以（有能停靠的底）</DepthRim.OceanTab.AnchorYes>
+  <DepthRim.OceanTab.AnchorNo>不行（到不了底）</DepthRim.OceanTab.AnchorNo>
 </LanguageData>

@@ -72,9 +72,18 @@ namespace DepthRim
         /// </summary>
         public static void UpdateSkyLight(Map map)
         {
+            // 冰下（地下冰洋）：沒有日光造成的焦散與光柱（材質各層級共用，所以每幀依目前地圖設回來）
+            float sunEffects = WaterLight.UnderIce(map) ? 0f : 1f;
             for (int i = 0; i < outer.Length; i++)
             {
-                outer[i]?.SetFloat("_SkyLight", WaterLight.SkyLevel(map, WaterVisualTierDef.For((DepthTier)i).ambientReach));
+                if (outer[i] == null)
+                {
+                    continue;
+                }
+                WaterVisualTierDef def = WaterVisualTierDef.For((DepthTier)i);
+                outer[i].SetFloat("_SkyLight", WaterLight.SkyLevel(map, def.ambientReach));
+                outer[i].SetFloat("_CausticStrength", (def?.causticStrength ?? 0.22f) * sunEffects);
+                outer[i].SetFloat("_LightShaftStrength", (def?.lightShaftStrength ?? 0f) * sunEffects);
             }
         }
 

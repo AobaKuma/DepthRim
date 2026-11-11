@@ -173,12 +173,18 @@ namespace DepthRim.Acceptance
             ctx.Check(roomLine == "DepthRim.Readout.WaterLevel".Translate(flooding.LevelAt(ring.CenterCell).ToStringPercent("0")).ToString(), $"a compartment reads its level ({roomLine})");
             ctx.Check(Patch_MouseoverReadout.LineFor(DepthRimFixture.Home, DepthRimFixture.Home.Center) == null, "no water line on the surface map");
 
+            // 地下冰洋（測試的冰洋地圖）只有冰下天氣（2026-11-11 非常低光），其他海洋生態區只有海底天氣
             WeatherDef undersea = DefDatabase<WeatherDef>.GetNamed("DepthRim_Undersea");
-            ctx.Check(map.Biome.baseWeatherCommonalities.All(w => w.weather == undersea), "the ocean biome only has the undersea weather");
-            map.weatherManager.TransitionTo(undersea);
+            WeatherDef underIce = DefDatabase<WeatherDef>.GetNamed("DepthRim_UnderIce");
+            WeatherDef expected = OceanBiomeSelector.IsSubglacial(map.Biome.defName) ? underIce : undersea;
+            ctx.Check(map.Biome.baseWeatherCommonalities.All(w => w.weather == expected), $"the ocean biome only has its own weather ({expected.defName})");
+            ctx.Check(DefDatabase<BiomeDef>.AllDefs.Where(b => b.HasModExtension<WaterMapExtension>() && !OceanBiomeSelector.IsSubglacial(b.defName)).All(b => b.baseWeatherCommonalities.All(w => w.weather == undersea)),
+                      "open-ocean biomes only have the undersea weather");
+            map.weatherManager.TransitionTo(expected);
             yield return new WaitTicks(5);
-            ctx.Check(map.weatherManager.curWeather == undersea, "the map's weather is undersea");
+            ctx.Check(map.weatherManager.curWeather == expected, $"the map's weather is {expected.defName}");
             ctx.Check(undersea.LabelCap.ToString() == "海底" || undersea.LabelCap.ToString().ToLowerInvariant() == "undersea", $"the weather reads {undersea.LabelCap}");
+            ctx.Check(underIce.LabelCap.ToString() == "冰下" || underIce.LabelCap.ToString().ToLowerInvariant() == "under the ice", $"the under-ice weather reads {underIce.LabelCap}");
         }
     }
 }

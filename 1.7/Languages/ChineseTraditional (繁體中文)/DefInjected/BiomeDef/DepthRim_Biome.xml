@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
-  <DepthRim_PolarIceCap.label>極地冰蓋</DepthRim_PolarIceCap.label>
-  <DepthRim_PolarIceCap.description>封在數公里極地冰層下的無光海洋。寒冷、礦藏豐富，就在冰架底下，升降井到得了。</DepthRim_PolarIceCap.description>
+  <DepthRim_PolarIceCap.label>地下冰洋（淺海）</DepthRim_PolarIceCap.label>
+  <DepthRim_PolarIceCap.description>封在冰海底下的黑暗冰冷海洋，這裡在大陸棚上，水還淺。礦藏豐富，從海冰挖下去的升降井到得了。</DepthRim_PolarIceCap.description>
+  <DepthRim_SubglacialThermocline.label>地下冰洋（變溫層）</DepthRim_SubglacialThermocline.label>
+  <DepthRim_SubglacialThermocline.description>冰海底下的大陸坡，水深數百公尺到兩公里，又冷又暗。升降井還到得了。</DepthRim_SubglacialThermocline.description>
+  <DepthRim_SubglacialDeep.label>地下冰洋（深海）</DepthRim_SubglacialDeep.label>
+  <DepthRim_SubglacialDeep.description>冰海底下的極地深海盆：數公里深、接近冰點的黑水，海床一片寂靜。升降井到不了這麼深。</DepthRim_SubglacialDeep.description>
+  <DepthRim_SubglacialSeabed.label>地下冰洋（深海海床）</DepthRim_SubglacialSeabed.label>
+  <DepthRim_SubglacialSeabed.description>冰海底下的海溝，極地海床在這裡沉入大陸底下。壓力驚人、一片漆黑，頭頂還是冰。</DepthRim_SubglacialSeabed.description>
   <DepthRim_KelpForest.label>海藻林</DepthRim_KelpForest.label>
   <DepthRim_KelpForest.description>長滿高大海藻的涼爽近岸海域。淤泥海床肥沃，海藻可以採收當作食物。</DepthRim_KelpForest.description>
   <DepthRim_ShallowReef.label>淺珊瑚礁</DepthRim_ShallowReef.label>

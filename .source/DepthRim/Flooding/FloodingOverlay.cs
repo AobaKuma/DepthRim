@@ -13,6 +13,12 @@ namespace DepthRim
     {
         public static bool Show = true;
 
+        /// <summary>
+        /// 水體與水中效果現在要不要畫：玩家開著水體顯示，而且不是在擷取船體影像（DMSE 離港過場用原版 GravshipCapturer
+        /// 拍船體，水體蓋在平台上會讓平台變成一片海水，只看得到上面的建築）。
+        /// </summary>
+        public static bool Drawing => Show && !GravshipCapturer.IsGravshipRenderInProgress;
+
         [HarmonyPostfix]
         public static void Postfix(WidgetRow row, bool worldView)
         {

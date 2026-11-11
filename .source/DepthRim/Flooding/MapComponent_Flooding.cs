@@ -182,6 +182,26 @@ namespace DepthRim
         public DepthTier RenderTier => debugTierOverride ?? DepthTier;
 
 
+        /// <summary>
+        /// 海洋地圖的天氣一定是生態區自己的（海底、冰下）：新地圖的初始天氣與舊存檔（例如 2026-11-11 之前的地下冰洋地圖還是「海底」，
+        /// 沒有冰下的低光）要等天氣輪替才會換，這裡直接換成生態區的天氣。
+        /// </summary>
+        public static void EnsureBiomeWeather(Map map)
+        {
+            var records = map?.Biome?.baseWeatherCommonalities;
+            WeatherManager weather = map?.weatherManager;
+            if (records == null || records.Count == 0 || weather == null || records.Any(r => r.weather == weather.curWeather && r.commonality > 0f))
+            {
+                return;
+            }
+            WeatherDef target = records.Where(r => r.commonality > 0f).OrderByDescending(r => r.commonality).FirstOrDefault()?.weather;
+            if (target != null)
+            {
+                weather.curWeather = target;
+                weather.lastWeather = target;
+            }
+        }
+
         public override void FinalizeInit()
         {
             base.FinalizeInit();
@@ -191,6 +211,7 @@ namespace DepthRim
                 levels = null;
                 return;
             }
+            EnsureBiomeWeather(map);
             openFlags = new byte[map.cellIndices.NumGridCells];
             seaFlags = new byte[map.cellIndices.NumGridCells];
             updatedOnce = false;
@@ -749,6 +770,10 @@ namespace DepthRim
                 WaterTierMaterials.UpdateCameraZoom(Find.CameraDriver.RootSize);
                 WaterTierMaterials.UpdateSkyLight(map);
                 SectionLayer_AbyssBackdrop.UpdateSkyLight(map);
+                if (FloodingOverlay.Drawing)
+                {
+                    OffMapWater.Draw(map, RenderTier);
+                }
             }
             // 地圖的層級改變（潛艇下潛、除錯覆寫）：整張重建，所有區塊改用新材質
             DepthTier tier = RenderTier;

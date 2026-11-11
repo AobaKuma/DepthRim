@@ -34,7 +34,13 @@ namespace DepthRim.Acceptance
         /// </summary>
         public static IEnumerable<Wait> S3_SubmarineAnchoring(TestContext ctx) => Voyage(ctx, anchor: true);
 
-        private static IEnumerable<Wait> Voyage(TestContext ctx, bool anchor, bool thrust = false)
+        /// <summary>
+        /// S5：航行演出的截圖（2026-11-11：潛艇航行動畫沿用轉移船的殘留與平台渲染問題）。同 S2 的船塢，打開過場動畫設定，
+        /// 拍引擎暖機、離港過場的幾個時間點、潛艇地圖（拉遠看地圖邊緣）與世界地圖上的潛艇。
+        /// </summary>
+        public static IEnumerable<Wait> S5_SubmarineVoyageVisuals(TestContext ctx) => Voyage(ctx, anchor: false, visuals: true);
+
+        private static IEnumerable<Wait> Voyage(TestContext ctx, bool anchor, bool thrust = false, bool visuals = false)
         {
             Map map = DepthRimFixture.EnsureOcean();
             yield return Updates(1);
@@ -191,15 +197,67 @@ namespace DepthRim.Acceptance
             console.SetPlan(new TransferPlan(origin, dest, false));
             string blocked = console.LaunchBlockedReason();
             ctx.Require(blocked == null, $"ready to cast off ({blocked})");
+            bool cutscenesBefore = Prefs.GravshipCutscenes;
+            if (visuals)
+            {
+                Prefs.GravshipCutscenes = true;
+                AcceptanceDriver.KeepWindowOpen = typeof(TransferTakeoffCutscene);
+            }
             console.BeginLaunchSequence();
             console.BeginCountdown();
             ctx.Check(console.State == TransferConsoleState.Countdown, "countdown started");
+            if (visuals)
+            {
+                Current.Game.CurrentMap = map;
+                // 潛艇的演出（2026-11-11）：沒有火箭音、震動、噴口火花、尾焰燒傷，離港過場是潛艇自己的
+                TransferPresentation presentation = TransferEnvironment.Presentation(map);
+                ctx.Check(presentation != TransferPresentation.Space, "the ocean layer has its own presentation");
+                ctx.Check(presentation.cameraShake == 0f && !presentation.nozzleSparks && presentation.exhaustDamage == 0f, "no camera shake, nozzle sparks or exhaust burns for a submarine");
+                ctx.Check(presentation.launchSound?.defName == "DepthRim_CastOff" && presentation.thrusterLoopSound?.defName == "DepthRim_PropellerLoop", "cast-off and propeller sounds instead of the gravship's");
+                ctx.Check(presentation.takeoffCutsceneClass == typeof(SubmarineTakeoffCutscene), "the submarine has its own cast-off cutscene");
+                yield return new WaitUntil(() => console.State != TransferConsoleState.Countdown || console.CountdownProgress > 0.4f, 3000);
+                ctx.Check(console.State == TransferConsoleState.Countdown, "still warming up for the warm-up screenshot");
+                foreach (Wait w in ctx.ScreenshotOn(map, center, 12f, "warmup", 6)) { yield return w; }
+            }
             WorldObject_Submarine sub = null;
             yield return new WaitUntil(() => (sub = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_Submarine>().FirstOrDefault(s => s.HasMap)) != null, 3000);
             ctx.Require(sub != null, "a submarine world object was created");
+            if (visuals)
+            {
+                yield return new WaitRealtime(() => Find.WindowStack.IsOpen<TransferTakeoffCutscene>(), 5f);
+                ctx.Note($"takeoff cutscene open: {Find.WindowStack.IsOpen<TransferTakeoffCutscene>()} (Odyssey {ModsConfig.OdysseyActive})");
+                ctx.Check(!ModsConfig.OdysseyActive || Find.WindowStack.IsOpen<SubmarineTakeoffCutscene>(), "the cast-off cutscene is the submarine's");
+                float cutsceneStart = Time.realtimeSinceStartup;
+                foreach (float at in new[] { 1.2f, 4f, 7f, 9f })
+                {
+                    yield return new WaitRealtime(() => Time.realtimeSinceStartup - cutsceneStart >= at, 12f);
+                    if (!Find.WindowStack.IsOpen<TransferTakeoffCutscene>()) { break; }
+                    ctx.Screenshot($"takeoff_{at:0.#}s");
+                    yield return new WaitFrames(2);
+                }
+                yield return new WaitRealtime(() => !Find.WindowStack.IsOpen<TransferTakeoffCutscene>(), 15f);
+                Prefs.GravshipCutscenes = cutscenesBefore;
+                AcceptanceDriver.KeepWindowOpen = null;
+                yield return new WaitFrames(10);
+                Current.Game.CurrentMap = sub.Map;
+                foreach (Wait w in ctx.ScreenshotOn(sub.Map, center, 12f, "under_way_close", 30)) { yield return w; }
+                foreach (Wait w in ctx.ScreenshotOn(sub.Map, center, 24f, "under_way_wide", 30)) { yield return w; }
+                CameraJumper.TryJump(sub);
+                yield return new WaitFrames(40);
+                ctx.Screenshot("world_map_submarine");
+                yield return new WaitFrames(20);
+                CameraJumper.TryHideWorld();
+                yield return new WaitFrames(5);
+            }
             Map subMap = sub.Map;
             ctx.Check(sub.def.defName == "DepthRim_Submarine", "the ship world object is the DepthRim submarine");
             ctx.Check(sub.InFlight, $"the submarine is under way ({sub.phase})");
+            // 潛艇用語（DMSE TransferText，2026-11-11）：信件、階段名稱與預設船名是航海用語，太空船照用 DMSE 的
+            ctx.Check(Find.LetterStack.LettersListForReading.Any(l => l.Label == "DepthRim.Submarine.Letter.SeparatedLabel".Translate()), "the cast-off letter uses submarine wording");
+            ctx.Check(sub.CurrentPhaseLabel == ("DepthRim.Submarine.Phase." + sub.phase).Translate(), $"the voyage stage uses submarine wording ({sub.CurrentPhaseLabel})");
+            ctx.Check(TransferText.Key("DMSE.Transfer.Phase.Coast", sub) == "DepthRim.Submarine.Phase.Coast" && TransferText.Key("DMSE.Transfer.Phase.Coast", PlanetLayerDefOf.Orbit) == "DMSE.Transfer.Phase.Coast",
+                "only the ocean layer swaps the transfer wording");
+            ctx.Check(TransferText.Key("DMSE.Transfer.UI.Footprint", sub) == "DMSE.Transfer.UI.Footprint", "texts the submarine does not override fall back to DMSE's");
             ctx.Check(chargeBefore - batteryComp.StoredEnergy < 20f, $"casting off draws no voyage charge up front ({chargeBefore:0} -> {batteryComp.StoredEnergy:0} Wd)");
             ctx.Check(helm.Map == subMap && thruster.Map == subMap && keel.Map == subMap && battery.Map == subMap, "the hull buildings moved to the submarine map");
             ctx.Check(cargo.Map == subMap && cargo.Position == center + new IntVec3(1, 0, -3), "cargo kept its position aboard");
@@ -245,7 +303,7 @@ namespace DepthRim.Acceptance
                 ctx.Check(!sub.Destroyed && sub.HasMap && helm.Map == subMap, "the submarine and its crew stay at sea");
                 ctx.Check(Mathf.Abs(thrusterPower.PowerOutput + thrusterWatts * VoyageMath.StandbyFactor) < 0.5f, $"after stopping the thruster drops back to standby ({thrusterPower.PowerOutput:0.#} W)");
                 CompTransferConsole subConsole = helm.TryGetComp<CompTransferConsole>();
-                ctx.Check(!TransferReadiness.Check(subConsole, null, includeWarnings: false).Any(i => i.IsError && i.text == "DMSE.Transfer.Issue.InFlight".Translate()), "a new voyage can be planned from where it stopped");
+                ctx.Check(!TransferReadiness.Check(subConsole, null, includeWarnings: false).Any(i => i.IsError && i.text == TransferText.Key("DMSE.Transfer.Issue.InFlight", subConsole).Translate()), "a new voyage can be planned from where it stopped");
 
                 Current.Game.CurrentMap = map;
                 Current.Game.DeinitAndRemoveMap(subMap, false);

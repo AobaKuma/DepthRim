@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
@@ -157,6 +158,86 @@ namespace DepthRim
             return biome != null && biome == DepthRimDefOf.DepthRim_Landmass;
         }
 
+        /// <summary>
+        /// 看海洋層時回到地表的按鈕（和原版的圖層檢視按鈕同樣的標籤、圖示、快捷鍵）。
+        /// 地表的檢視按鈕原版已經會出現時（例如別的模組加了連線）回傳 null，避免重複。
+        /// </summary>
+        public static Command ReturnToSurfaceGizmo()
+        {
+            if (Current.ProgramState != ProgramState.Playing || !OceanSelected)
+            {
+                return null;
+            }
+            PlanetLayer surface = Find.WorldGrid?.Surface;
+            PlanetLayer ocean = PlanetLayer.Selected;
+            if (surface == null || surface == ocean
+                || !surface.Def.viewGizmoOnlyVisibleWithDirectConnection || ocean.HasConnectionFromTo(surface))
+            {
+                return null;
+            }
+            Command_Action command = new Command_Action
+            {
+                defaultLabel = "WorldSelectLayer".Translate(surface.Def.Named("LAYER")),
+                defaultDesc = surface.Def.viewGizmoTooltip,
+                icon = surface.Def.ViewGizmoTexture,
+                hotKey = KeyBindingDefOf.Misc1,
+                action = delegate { PlanetLayer.Selected = surface; }
+            };
+            AcceptanceReport report = surface.CanSelectLayer();
+            if (!report.Accepted)
+            {
+                command.Disable(report.Reason);
+            }
+            return command;
+        }
+
+        /// <summary>海洋格正上方的地表格（<see cref="TileBelow"/> 的反向）。</summary>
+        public static PlanetTile TileAbove(PlanetTile below)
+        {
+            PlanetLayer surface = Find.WorldGrid?.Surface;
+            if (surface == null || !below.Valid)
+            {
+                return PlanetTile.Invalid;
+            }
+            PlanetLayer from = below.Layer;
+            if (from == surface)
+            {
+                return below;
+            }
+            if (from != null && from.TilesCount == surface.TilesCount && below.tileId < surface.TilesCount)
+            {
+                PlanetTile same = new PlanetTile(below.tileId, surface);
+                if (Vector3.Dot(from.GetTileCenter(below).normalized, surface.GetTileCenter(same).normalized) > 0.999999f)
+                {
+                    return same;
+                }
+            }
+            return surface.GetClosestTile_NewTemp(below);
+        }
+
+        /// <summary>
+        /// 在海洋視圖點到陸塊格：陸塊下面沒有海，切到地表視圖、選取正上方的地表格，鏡頭對準它。
+        /// 回傳有沒有切換（不是海洋視圖、不是陸塊時不動）。
+        /// </summary>
+        public static bool TryJumpToSurface(PlanetTile oceanTile)
+        {
+            if (!OceanSelected || !oceanTile.Valid || oceanTile.Layer != PlanetLayer.Selected || !IsLandmass(oceanTile.Tile?.PrimaryBiome))
+            {
+                return false;
+            }
+            PlanetTile above = TileAbove(oceanTile);
+            PlanetLayer surface = Find.WorldGrid.Surface;
+            if (!above.Valid || !surface.CanSelectLayer().Accepted)
+            {
+                return false;
+            }
+            PlanetLayer.Selected = surface;
+            Find.WorldSelector.ClearSelection();
+            Find.WorldSelector.SelectedTile = above;
+            Find.WorldCameraDriver?.JumpTo(above);
+            return true;
+        }
+
         /// <summary>這個圖層是目前選到的海洋層。</summary>
         public static bool Showing(PlanetLayer layer)
         {
@@ -171,6 +252,62 @@ namespace DepthRim
     /// </summary>
     [HarmonyPatch(typeof(PlanetLayer), nameof(PlanetLayer.Visible), MethodType.Getter)]
     public static class Patch_PlanetLayer_Visible
+    {
+        [HarmonyPostfix]
+        public static void Postfix(PlanetLayer __instance, ref bool __result)
+        {
+            if (__result && OceanWorldView.OceanSelected && __instance != PlanetLayer.Selected)
+            {
+                __result = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 看海洋層時補上「檢視地表」按鈕：地表的 <c>viewGizmoOnlyVisibleWithDirectConnection</c> 要求目前圖層有連線到地表，
+    /// 而海洋層刻意不加連線（避免逆重船飛進海洋），原版就只剩「跳轉到地點」，回不去地表。
+    /// </summary>
+    [HarmonyPatch(typeof(WorldGrid), nameof(WorldGrid.GetGizmos))]
+    public static class Patch_WorldGrid_GetGizmos
+    {
+        [HarmonyPostfix]
+        public static IEnumerable<Gizmo> Postfix(IEnumerable<Gizmo> __result)
+        {
+            Command surface = OceanWorldView.ReturnToSurfaceGizmo();
+            if (surface != null)
+            {
+                yield return surface;
+            }
+            foreach (Gizmo g in __result)
+            {
+                yield return g;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 在海洋視圖用滑鼠點到陸塊格（大陸下方，沒有海）時，自動切到地表視圖並選取正上方的地表格。
+    /// 只掛在滑鼠點選（<c>SelectUnderMouse</c>），程式設定 <c>SelectedTile</c> 不會觸發。
+    /// </summary>
+    [HarmonyPatch(typeof(WorldSelector), "SelectUnderMouse")]
+    public static class Patch_WorldSelector_SelectUnderMouse
+    {
+        [HarmonyPostfix]
+        public static void Postfix(WorldSelector __instance)
+        {
+            if (__instance.NumSelectedObjects == 0)
+            {
+                OceanWorldView.TryJumpToSurface(__instance.SelectedTile);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 看海洋層時，其他圖層不接受滑鼠射線：地表的碰撞球（半徑 100）包在海洋層（97）外面，而地表預設永遠可射線，
+    /// 點海床時射線先打到看不見的地表，拿不到海洋格，選不到格子也開不了世界檢視面板。
+    /// </summary>
+    [HarmonyPatch(typeof(PlanetLayer), nameof(PlanetLayer.Raycastable), MethodType.Getter)]
+    public static class Patch_PlanetLayer_Raycastable
     {
         [HarmonyPostfix]
         public static void Postfix(PlanetLayer __instance, ref bool __result)

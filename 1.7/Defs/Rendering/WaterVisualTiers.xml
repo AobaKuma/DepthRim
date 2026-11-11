@@ -5,7 +5,9 @@
     水體視覺分層（設計稿 §3.3、實作指南 C.1／C.5）：每個水深層級一組參數。
     材質由 DepthRim.WaterTierMaterials 依這裡的數值建立；改這裡的數字不需要重新編譯。
     rippleScale：波紋取樣尺度，1 / 尺度 = 重複週期（格）。0.03 = 每 33.3 格重複一次。
-    ambientReach：日光能穿多深（0–1）。淺海 1 = 有日光就算有光；越深越小，深海白天也不會變透明。
+    ambientReach：日光能穿多深（0–1）。淺海 1 = 有日光就算有光；越深越小，深海白天也不會變透明。（只影響水體的樣子）
+    maxSkyGlow：遊戲機制上的日光上限（原版天空光：黑暗判定、工作速度、植物生長）。淺海不限；變溫層是微光的黃昏帶；
+                深海只剩幾乎察覺不到的光；深海海床完全沒有日光。原版天空光 0.3 以下就算黑暗。
     snowSpeed / rippleScale 以外的強度值都是 0–1。
   -->
 
@@ -20,6 +22,7 @@
     <clearAlpha>0.40</clearAlpha>
     <murkAlpha>0.85</murkAlpha>
     <ambientReach>1.0</ambientReach>
+    <maxSkyGlow>1.0</maxSkyGlow>
     <rippleScale>0.03</rippleScale>
     <rippleStrength>0.8</rippleStrength>
     <causticStrength>0.30</causticStrength>
@@ -44,6 +47,7 @@
     <clearAlpha>0.45</clearAlpha>
     <murkAlpha>0.88</murkAlpha>
     <ambientReach>0.55</ambientReach>
+    <maxSkyGlow>0.2</maxSkyGlow>
     <rippleScale>0.03</rippleScale>
     <rippleStrength>0.25</rippleStrength>
     <causticStrength>0.08</causticStrength>
@@ -68,6 +72,7 @@
     <clearAlpha>0.50</clearAlpha>
     <murkAlpha>0.92</murkAlpha>
     <ambientReach>0.25</ambientReach>
+    <maxSkyGlow>0.02</maxSkyGlow>
     <rippleScale>0.03</rippleScale>
     <rippleStrength>0</rippleStrength>
     <causticStrength>0</causticStrength>
@@ -92,6 +97,7 @@
     <clearAlpha>0.50</clearAlpha>
     <murkAlpha>0.93</murkAlpha>
     <ambientReach>0.12</ambientReach>
+    <maxSkyGlow>0</maxSkyGlow>
     <rippleScale>0.03</rippleScale>
     <rippleStrength>0</rippleStrength>
     <causticStrength>0</causticStrength>

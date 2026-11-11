@@ -166,7 +166,7 @@ static partial class Test
         string[] required =
         {
             "defName", "tier", "waterColor", "deepColor", "fogColor", "clearAlpha", "murkAlpha",
-            "ambientReach",
+            "ambientReach", "maxSkyGlow",
             "rippleScale", "rippleStrength", "causticStrength", "lightShaftStrength", "snowDensity",
             "snowSpeed", "biolumDensity", "biolumColor", "hazeStrength", "wobbleStrength", "compartmentEffects"
         };
@@ -191,7 +191,7 @@ static partial class Test
             Check(compartmentOn == shouldBeOn, $"{defName} compartmentEffects = {shouldBeOn} (P2-6)");
             foreach (string field in new[]
                      {
-                         "clearAlpha", "murkAlpha", "ambientReach", "rippleStrength", "causticStrength", "lightShaftStrength",
+                         "clearAlpha", "murkAlpha", "ambientReach", "maxSkyGlow", "rippleStrength", "causticStrength", "lightShaftStrength",
                          "snowDensity", "biolumDensity", "hazeStrength", "wobbleStrength"
                      })
             {
@@ -233,6 +233,11 @@ static partial class Test
               && TierValue(deep, "ambientReach") > TierValue(seabed, "ambientReach"),
             "D9: daylight reaches less as it gets deeper");
         Check(TierValue(seabed, "ambientReach") > 0f, "D9: even the seabed keeps a little daylight");
+        // 遊戲機制上的日光依水深限制（2026-11-11）：淺海不限，越深越暗，深海海床沒有日光；變溫層以下都低於原版的黑暗門檻 0.3
+        Near(TierValue(shallow, "maxSkyGlow"), 1f, "the shallows keep full daylight for gameplay");
+        Check(TierValue(shallow, "maxSkyGlow") > TierValue(thermocline, "maxSkyGlow") && TierValue(thermocline, "maxSkyGlow") > TierValue(deep, "maxSkyGlow")
+              && TierValue(deep, "maxSkyGlow") > TierValue(seabed, "maxSkyGlow"), "gameplay daylight gets dimmer with every depth tier");
+        Check(TierValue(thermocline, "maxSkyGlow") < 0.3f && TierValue(seabed, "maxSkyGlow") == 0f, "below the shallows it counts as dark; the abyssal seabed has no daylight at all");
     }
 
     static float TierValue(XElement def, string field)

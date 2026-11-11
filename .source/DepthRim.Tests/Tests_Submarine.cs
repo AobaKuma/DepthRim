@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -319,9 +320,65 @@ static partial class Test
         Check(File.ReadAllText(Path.Combine(zhRoot, "RaidStrategyDef", "DepthRim_Boarding.xml")).Contains("<DepthRim_Boarding.letterLabelEnemy>"), "the boarding raid letter is translated");
         Check(File.ReadAllText(Path.Combine(zhRoot, "PawnsArrivalModeDef", "DepthRim_Boarding.xml")).Contains("<DepthRim_BoardingArrival.textEnemy>"), "the boarding arrival text is translated");
 
-        // 極地冰蓋有深淵坑當船塢
+        // 潛艇的演出（2026-11-11）：不沿用轉移船的火箭音、震動、火花、尾焰燒傷與升空過場
+        XElement oceanLayer = XDocument.Load(Path.Combine(ModRoot, "1.7", "Defs", "World", "Ocean_Layer.xml")).Root.Elements("PlanetLayerDef").Single(e => (string)e.Element("defName") == "DepthRim_Ocean");
+        XElement pres = oceanLayer.Descendants("presentation").SingleOrDefault();
+        Check(pres != null, "the ocean layer sets a submarine presentation");
+        if (pres != null)
+        {
+            Check((string)pres.Element("cameraShake") == "0" && (string)pres.Element("nozzleSparks") == "false" && (string)pres.Element("exhaustDamage") == "0",
+                "no camera shake, nozzle sparks or exhaust burns for a submarine");
+            Check((string)pres.Element("takeoffCutsceneClass") == "DepthRim.SubmarineTakeoffCutscene" && typeof(SubmarineTakeoffCutscene).IsSubclassOf(typeof(DMSE.TransferTakeoffCutscene)),
+                "the submarine has its own cast-off cutscene");
+            string sounds = File.ReadAllText(Path.Combine(ModRoot, "1.7", "Defs", "Audio", "DepthRim_Sounds.xml"));
+            Check(sounds.Contains("<defName>" + (string)pres.Element("launchSound") + "</defName>") && sounds.Contains("<defName>" + (string)pres.Element("thrusterLoopSound") + "</defName>"),
+                "the cast-off and propeller sounds are DepthRim sound defs");
+
+            // 潛艇用語（DMSE TransferText）：每個覆寫鍵都對得上 DMSE 的原鍵，佔位符一樣，英文與繁中都有
+            string prefix = (string)pres.Element("textKeyPrefix");
+            Check(prefix == "DepthRim.Submarine", "the submarine overrides DMSE's spaceship wording (textKeyPrefix)");
+            string dmseKeyed = Path.Combine(ModRoot, "..", "_Dead-Man-Switch-Expedition", "1.7", "Languages", "English", "Keyed");
+            if (prefix != null && Directory.Exists(dmseKeyed))
+            {
+                Dictionary<string, string> dmse = Directory.GetFiles(dmseKeyed, "*.xml").SelectMany(f => XDocument.Load(f).Root.Elements())
+                    .GroupBy(e => e.Name.LocalName).ToDictionary(g => g.Key, g => g.First().Value);
+                string Holes(string s) => string.Join(",", System.Text.RegularExpressions.Regex.Matches(s, @"\{\d+\}").Select(m => m.Value).Distinct().OrderBy(x => x));
+                foreach (string lang in new[] { "English", "ChineseTraditional (繁體中文)" })
+                {
+                    string file = Path.Combine(ModRoot, "1.7", "Languages", lang, "Keyed", "Submarine_TransferText.xml");
+                    Check(File.Exists(file), $"{lang} has submarine transfer texts");
+                    if (!File.Exists(file))
+                    {
+                        continue;
+                    }
+                    List<XElement> keys = XDocument.Load(file).Root.Elements().ToList();
+                    Check(keys.Count >= 100, $"{lang} overrides the transfer texts ({keys.Count})");
+                    foreach (XElement k in keys)
+                    {
+                        string name = k.Name.LocalName;
+                        string original = name.StartsWith(prefix + ".") ? "DMSE.Transfer." + name.Substring(prefix.Length + 1) : null;
+                        if (original == null || !dmse.TryGetValue(original, out string source))
+                        {
+                            Check(false, $"{lang} {name} overrides an existing DMSE.Transfer key");
+                            continue;
+                        }
+                        if (Holes(k.Value) != Holes(source))
+                        {
+                            Check(false, $"{lang} {name} uses the same placeholders as {original}");
+                        }
+                    }
+                    string joined = string.Join(" ", keys.Select(k => k.Value));
+                    foreach (string spaceWord in lang == "English" ? new[] { "orbit", "launch", "spaceship", "exhaust" } : new[] { "軌道", "起飛", "飛船", "尾焰", "降落", "點火" })
+                    {
+                        Check(!joined.Contains(spaceWord, StringComparison.OrdinalIgnoreCase), $"{lang} submarine texts avoid \"{spaceWord}\"");
+                    }
+                }
+            }
+        }
+
+        // 地下冰洋有深淵坑當船塢
         XElement polar = Def("BiomeDef", "DepthRim_PolarIceCap").Element("modExtensions").Elements("li").Single(e => (string)e.Attribute("Class") == "DepthRim.WaterMapExtension");
-        Check(polar.Element("abyssPockets") != null, "the polar ice cap carves abyss pockets for a shipyard");
+        Check(polar.Element("abyssPockets") != null, "the subglacial ocean carves abyss pockets for a shipyard");
 
         // 翻譯
         string zh = Path.Combine(ModRoot, "1.7", "Languages", "ChineseTraditional (繁體中文)");

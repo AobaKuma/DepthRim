@@ -50,6 +50,12 @@ namespace DepthRim.Acceptance
 
                 ctx.Check(map.Biome == biome, $"{kind}: map uses {biome.defName}");
                 ctx.Check(FloodingUtility.DepthTierOf(map) == ext.depthTier, $"{kind}: map depth tier is the biome's ({ext.depthTier})");
+                string wantWeather = OceanBiomeSelector.IsSubglacial(kind) ? "DepthRim_UnderIce" : "DepthRim_Undersea";
+                // 遊戲機制上的日光依水深限制（2026-11-11）
+                float targetGlow = HarmonyLib.Traverse.Create(map.skyManager).Method("CurrentSkyTarget").GetValue<SkyTarget>().glow;
+                float cap = OceanDaylight.CapFor(FloodingUtility.DepthTierOf(map));
+                ctx.Check(targetGlow <= cap + 0.0001f, $"{kind}: daylight is capped by depth (target {targetGlow:0.00}, cap {cap:0.00}, above the water {OceanDaylight.Uncapped(map):0.00})");
+                ctx.Check(map.weatherManager.curWeather?.defName == wantWeather, $"{kind}: weather is {wantWeather} ({map.weatherManager.curWeather?.defName}, sky glow {map.skyManager.CurSkyGlow:0.00})");
                 ctx.Check(map.Flooding()?.Active == true, $"{kind}: the flooding system is active");
 
                 // 天然岩體會壓縮存檔、熱液泉不進 listerThings，所以直接掃格子
@@ -88,7 +94,7 @@ namespace DepthRim.Acceptance
                 }
                 if (kind == OceanBiome.AbyssalTrench) { ctx.Check(abyssFraction > 0.08f, $"{kind}: the trench is mostly abyss ({abyssFraction:P1})"); }
 
-                if (kind != OceanBiome.PolarIceCap && kind != OceanBiome.SeabedPlain)
+                if (!OceanBiomeSelector.IsSubglacial(kind) && kind != OceanBiome.SeabedPlain)
                 {
                     // 測試地圖沒有出口可以揭開迷霧：截圖前全部揭開，鏡頭對準這個生態區的特色（珊瑚、海藻、熱液泉、深淵）
                     map.fogGrid.ClearAllFog();

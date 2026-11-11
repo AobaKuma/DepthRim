@@ -49,7 +49,9 @@
     <worldGenSteps>
       <li>DepthRim_OceanTiles</li>
     </worldGenSteps>
+    <!-- 選到海洋格時的世界檢視分頁：海洋地形（生態區、海床深度、水深層級、能不能下錨；原版地形分頁只給地表格）與星球 -->
     <worldTabs>
+      <li>DepthRim.WITab_OceanTerrain</li>
       <li>WITab_Planet</li>
     </worldTabs>
     <!-- 潛艇（DMSE 轉移飛行）：海洋層可以起飛。虛空 = 深淵；龍骨樁只把船體平台算進船體（allowedTerrains），
@@ -63,6 +65,18 @@
         <routeWorker Class="DepthRim.OceanRouteWorker" />
         <energyWorker Class="DepthRim.SubmarineEnergyWorker" />
         <landingWorker Class="DepthRim.SubmarineLandingWorker" />
+        <!-- 潛艇的演出（2026-11-11：原本沿用轉移船的火箭音、震動、噴口火花與尾焰燒傷）：
+             離港是船殼的吱嘎聲與水泡、推進器是低頻運轉聲、不震動、推進器不會燒傷人，離港過場改成緩緩滑走沉進海水裡 -->
+        <presentation>
+          <launchSound>DepthRim_CastOff</launchSound>
+          <thrusterLoopSound>DepthRim_PropellerLoop</thrusterLoopSound>
+          <cameraShake>0</cameraShake>
+          <nozzleSparks>false</nozzleSparks>
+          <exhaustDamage>0</exhaustDamage>
+          <takeoffCutsceneClass>DepthRim.SubmarineTakeoffCutscene</takeoffCutsceneClass>
+          <!-- 訊息、信件與介面改用航海用語：DMSE.Transfer.X 先找 DepthRim.Submarine.X（Keyed/Submarine_TransferText.xml），沒有的照用 DMSE 的 -->
+          <textKeyPrefix>DepthRim.Submarine</textKeyPrefix>
+        </presentation>
       </li>
     </modExtensions>
   </PlanetLayerDef>

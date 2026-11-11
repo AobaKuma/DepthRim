@@ -30,7 +30,8 @@ namespace DepthRim
 
         private Perlin depthNoise;
 
-        private Perlin iceEdgeNoise;
+
+        private Perlin ridgeWidthNoise;
 
         private readonly Dictionary<OceanBiome, int> counts = new Dictionary<OceanBiome, int>();
 
@@ -42,8 +43,8 @@ namespace DepthRim
             ventNoise = new Perlin(0.03, 2.0, 0.5, 3, s, QualityMode.Medium);
             seamountNoise = new Perlin(0.09, 2.0, 0.5, 2, s + 1, QualityMode.Medium);
             depthNoise = new Perlin(0.05, 2.0, 0.5, 4, s + 3, QualityMode.Medium);
-            // 冰緣：高頻、高持續度的碎形，冰蓋邊緣才會犬牙交錯而不是平滑的弧線
-            iceEdgeNoise = new Perlin(0.08, 2.2, 0.65, 5, s + 4, QualityMode.Medium);
+            // 中洋脊寬度：沿著脊每十幾格變一次（取樣在軸線格上），脊才會忽寬忽窄
+            ridgeWidthNoise = new Perlin(0.06, 2.0, 0.5, 2, s + 5, QualityMode.Medium);
             surface = Find.WorldGrid?.Surface;
             lookup = SurfaceTileLookup.Build(surface);
             geometry = lookup != null ? new SeafloorGeometry(surface, s) : null;
@@ -65,6 +66,21 @@ namespace DepthRim
             int above = SurfaceTileAbove(tile, layer, dir);
             OceanBiomeInput input = InputFor(dir, above);
             OceanBiome kind = OceanBiomeSelector.Choose(input);
+            float depth = 0f;
+            if (kind != OceanBiome.Landmass)
+            {
+                depth = OceanBiomeSelector.SeafloorDepth(input, Sample(depthNoise, dir));
+                if (above >= 0 && input.surfaceWater)
+                {
+                    // 靠近陸地邊緣時趨近地表視圖的水深，往外漸變成海底地形的深度
+                    depth = OceanBiomeSelector.BlendWithSurface(depth, -surface[above].elevation, input.coastDistance);
+                }
+                if (OceanBiomeSelector.IsSubglacial(kind))
+                {
+                    // 地下冰洋依深度分層（淺海／變溫層／深海／深海海床）
+                    kind = OceanBiomeSelector.SubglacialFor(depth);
+                }
+            }
             counts[kind] = counts.TryGetValue(kind, out int n) ? n + 1 : 1;
             BiomeDef biome = DefDatabase<BiomeDef>.GetNamedSilentFail(OceanBiomeSelector.DefName(kind)) ?? layer.Def.DefaultBiome;
             result.PrimaryBiome = biome;
@@ -82,15 +98,15 @@ namespace DepthRim
             WaterMapExtension ext = biome.GetModExtension<WaterMapExtension>();
             List<Hilliness> hills = ext?.hilliness;
             result.hilliness = hills != null && hills.Count > 0 ? hills.RandomElement() : Hilliness.LargeHills;
-            result.temperature = biome.constantOutdoorTemperature ?? -2f;
-            float depth = OceanBiomeSelector.SeafloorDepth(input, Sample(depthNoise, dir));
             if (ext != null)
             {
-                // 生態區的深度範圍只是保險（例如極寒海面上的極地冰蓋維持淺海，升降井才到得了）
+                // 生態區的深度範圍只是保險（地下冰洋各層的範圍和分層門檻一致，不會被夾）
                 depth = Mathf.Clamp(depth, ext.seafloorDepth.min, ext.seafloorDepth.max);
             }
             // 海床深度：世界地圖的地形分頁顯示，水深著色也用它（負值 = 海面以下）
             result.elevation = -depth;
+            // 年均水溫：依深度與正上方的年均氣溫（季節、日夜變化由 OceanTemperature 的補丁依深度衰減）
+            result.temperature = OceanTemperature.AnnualMean(depth, input.surfaceTemperature, OceanTemperature.KindOf(biome) ?? OceanTemperature.Kind.OpenWater);
             return result;
         }
 
@@ -114,7 +130,6 @@ namespace DepthRim
             {
                 ventNoise = Sample(ventNoise, dir),
                 seamountNoise = Sample(seamountNoise, dir),
-                iceEdgeNoise = Sample(iceEdgeNoise, dir),
                 surfaceTemperature = 10f,
                 coastDistance = OceanBiomeSelector.MaxCoastDistance,
                 ridgeDistance = OceanBiomeSelector.NoRidge
@@ -126,13 +141,16 @@ namespace DepthRim
             Tile t = surface[above];
             input.surfaceKnown = true;
             input.surfaceTemperature = t.temperature;
-            input.surfaceIce = t.PrimaryBiome == BiomeDefOf.IceSheet || t.PrimaryBiome == BiomeDefOf.SeaIce;
+            input.surfaceIce = t.PrimaryBiome == BiomeDefOf.SeaIce; // 冰原是陸地；地下冰洋只長在冰海下
             input.surfaceWater = t.WaterCovered;
             input.coastDistance = geometry.coastDistance[above];
             input.ridgeDistance = geometry.ridgeDistance[above];
+            int axis = geometry.nearestRidge[above];
+            if (axis >= 0)
+            {
+                input.ridgeWidth = Sample(ridgeWidthNoise, surface.GetTileCenter(axis).normalized) - 0.5f;
+            }
             input.activeMargin = geometry.activeMargin[above];
-            int coast = geometry.nearestCoast[above];
-            input.nearIceSheet = coast >= 0 && surface[coast].PrimaryBiome == BiomeDefOf.IceSheet;
             return input;
         }
 
