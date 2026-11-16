@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 水下步槍（2026-11-16 使用者要求）：泡在水裡開火時，一般遠程武器射程只剩 25%（DepthRim.UnderwaterRange），
+       這把帶 DepthRim.UnderwaterWeaponExtension，射程不打折；代價是射程本來就比突擊步槍（30.9）短，彈速也慢。 -->
+  <ThingDef ParentName="BaseBullet">
+    <defName>DepthRim_Bullet_UnderwaterDart</defName>
+    <label>underwater dart</label>
+    <graphicData>
+      <texPath>Things/Projectile/Bullet_Small</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <projectile>
+      <damageDef>Bullet</damageDef>
+      <damageAmountBase>10</damageAmountBase>
+      <stoppingPower>1</stoppingPower>
+      <speed>55</speed>
+    </projectile>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseHumanMakeableGun">
+    <defName>DepthRim_Gun_UnderwaterRifle</defName>
+    <label>underwater rifle</label>
+    <description>An assault rifle that fires long steel darts instead of bullets. Its darts keep their line and speed underwater, where ordinary guns lose three quarters of their range, but out of the water it reaches noticeably less far than a regular assault rifle.</description>
+    <graphicData>
+      <texPath>Thing/Weapons/DR_Rifle</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <!-- 512px 貼圖、槍身斜跨整張：1.1 時槍長約和原版突擊步槍（drawSize 1，水平）相同 -->
+      <drawSize>1.1</drawSize>
+    </graphicData>
+    <!-- 貼圖是斜放（槍口朝右上 45°），原版槍械貼圖是水平朝右：拿在手上時順時針轉 45° 對齊瞄準方向 -->
+    <equippedAngleOffset>45</equippedAngleOffset>
+    <soundInteract>Interact_Rifle</soundInteract>
+    <recipeMaker>
+      <researchPrerequisite>DepthRim_UnderwaterCombat</researchPrerequisite>
+      <skillRequirements>
+        <Crafting>6</Crafting>
+      </skillRequirements>
+      <displayPriority>425</displayPriority>
+    </recipeMaker>
+    <statBases>
+      <WorkToMake>38000</WorkToMake>
+      <Mass>3.4</Mass>
+      <AccuracyTouch>0.65</AccuracyTouch>
+      <AccuracyShort>0.65</AccuracyShort>
+      <AccuracyMedium>0.50</AccuracyMedium>
+      <AccuracyLong>0.35</AccuracyLong>
+      <RangedWeapon_Cooldown>1.60</RangedWeapon_Cooldown>
+    </statBases>
+    <costList>
+      <Steel>70</Steel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>DepthRim_Bullet_UnderwaterDart</defaultProjectile>
+        <warmupTime>1.0</warmupTime>
+        <range>21.9</range>
+        <burstShotCount>3</burstShotCount>
+        <ticksBetweenBurstShots>10</ticksBetweenBurstShots>
+        <soundCast>Shot_AssaultRifle</soundCast>
+        <soundCastTail>GunTail_Medium</soundCastTail>
+        <muzzleFlashScale>7</muzzleFlashScale>
+      </li>
+    </verbs>
+    <weaponTags>
+      <li>DepthRim_UnderwaterGun</li>
+    </weaponTags>
+    <tools>
+      <li>
+        <label>stock</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2</cooldownTime>
+      </li>
+      <li>
+        <label>barrel</label>
+        <capacities>
+          <li>Blunt</li>
+          <li>Poke</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2</cooldownTime>
+      </li>
+    </tools>
+    <modExtensions>
+      <li Class="DepthRim.UnderwaterWeaponExtension" />
+    </modExtensions>
+  </ThingDef>
+
+</Defs>

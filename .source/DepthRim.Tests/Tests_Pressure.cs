@@ -70,6 +70,15 @@ static partial class Test
         Near(PressureAdaptationMath.MoveTowards(2f, 0f, 0.5f), 1.5f, "chamber pressure can go down");
         Check(PressureAdaptationMath.MaxLevel == (int)DepthTier.Seabed, "the top pressure level is the seabed tier");
 
+        // 加壓艙門的洩壓聲（2026-11-17）：壓差夠大才響，同一扇門有冷卻
+        Check(!PressureAdaptationMath.DoorHisses(0f, 1000, -1), "no hiss between rooms at the same pressure");
+        Check(!PressureAdaptationMath.DoorHisses(0.4f, 1000, -1), "no hiss for a small pressure difference");
+        Check(PressureAdaptationMath.DoorHisses(0.5f, 1000, -1), "a half-level difference hisses");
+        Check(PressureAdaptationMath.DoorHisses(-2f, 1000, -1), "the direction of the difference does not matter");
+        Check(!PressureAdaptationMath.DoorHisses(2f, 1000 + PressureAdaptationMath.DoorHissCooldownTicks - 1, 1000), "the same door stays quiet during its cooldown");
+        Check(PressureAdaptationMath.DoorHisses(2f, 1000 + PressureAdaptationMath.DoorHissCooldownTicks, 1000), "the door hisses again once the cooldown is over");
+        Check(PressureAdaptationMath.DoorHissMinDifference > PressureAdaptationMath.DoorOpeningLeak, "one door opening never drains a chamber below the hiss threshold in one go");
+
         // 水密門的壓差通行規則：過去會更不適就不放行；徵召不擋；已經不適的人可以往比較不糟的一側走
         Check(PressureAdaptationMath.DoorAllows(false, 0f, 0f, 1f), "one level up through the door: allowed");
         Check(!PressureAdaptationMath.DoorAllows(false, 0f, 0f, 2f), "an unadapted colonist will not walk into a level-2 chamber");

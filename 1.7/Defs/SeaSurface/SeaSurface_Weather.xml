@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海面地圖的惡劣海況（2026-11-17）：只出現在海面地圖（原版 Ocean 生態區的天氣表，見 Patches/SeaSurface_Weather.xml）。
+    海況由 DepthRim.SeaStateExtension 決定：
+    - swayFloor：海面擺動倍率的下限（≥ 1.8 就算落海風險，艙外沒扣安全繩的人可能被浪捲走）；
+    - roughness：海面的樣子（白浪、浪花、海色變暗、漣漪加強）；
+    - itemSweepMtbHours：戶外、靠海邊的物品平均多久被捲走一件；
+    - buildingHitMtbHours／buildingDamage：靠海邊的建築平均多久被打一次、打多重（不會低於最大耐久的 20%）。
+    平台層高出海面 14.1 格：天氣（雨、閃電）一樣，但浪打不到。
+  -->
+
+  <!-- 惡劣海況：強風、大浪，不下雨 -->
+  <WeatherDef>
+    <defName>DepthRim_RoughSea</defName>
+    <label>rough sea</label>
+    <description>A hard wind is driving the sea into steep, breaking waves. Spray washes over low decks: things stored outside can be carried off, structures at the water's edge take a pounding, and anyone outside without a safety line can be swept away.</description>
+    <isBad>true</isBad>
+    <temperatureRange>-999~999</temperatureRange>
+    <windSpeedFactor>1.6</windSpeedFactor>
+    <windSpeedOffset>1.0</windSpeedOffset>
+    <favorability>Bad</favorability>
+    <perceivePriority>2</perceivePriority>
+    <accuracyMultiplier>0.9</accuracyMultiplier>
+    <moveSpeedMultiplier>0.9</moveSpeedMultiplier>
+    <durationRange>12000~30000</durationRange>
+    <ambientSounds>
+      <li>Ambient_Wind_Storm</li>
+    </ambientSounds>
+    <skyColorsDay>
+      <sky>(0.74,0.77,0.80)</sky>
+      <shadow>(0.90,0.90,0.90)</shadow>
+      <overlay>(0.66,0.68,0.70)</overlay>
+      <saturation>0.85</saturation>
+    </skyColorsDay>
+    <skyColorsDusk>
+      <sky>(0.90,0.88,0.88)</sky>
+      <shadow>(0.90,0.90,0.90)</shadow>
+      <overlay>(0.58,0.58,0.60)</overlay>
+      <saturation>0.85</saturation>
+    </skyColorsDusk>
+    <skyColorsNightEdge>
+      <sky>(0.33,0.38,0.43)</sky>
+      <shadow>(0.90,0.90,0.90)</shadow>
+      <overlay>(0.48,0.48,0.50)</overlay>
+      <saturation>0.85</saturation>
+    </skyColorsNightEdge>
+    <skyColorsNightMid>
+      <sky>(0.33,0.38,0.43)</sky>
+      <shadow>(0.90,0.90,0.90)</shadow>
+      <overlay>(0.48,0.48,0.50)</overlay>
+      <saturation>0.85</saturation>
+    </skyColorsNightMid>
+    <modExtensions>
+      <li Class="DepthRim.SeaStateExtension">
+        <swayFloor>2.0</swayFloor>
+        <roughness>0.65</roughness>
+        <itemSweepMtbHours>10</itemSweepMtbHours>
+        <buildingHitMtbHours>8</buildingHitMtbHours>
+        <buildingDamage>3~8</buildingDamage>
+      </li>
+    </modExtensions>
+  </WeatherDef>
+
+  <!-- 暴風雨中的惡劣海況：狂風、暴雨、雷擊，浪最大 -->
+  <WeatherDef>
+    <defName>DepthRim_RoughSeaStorm</defName>
+    <label>storm at sea</label>
+    <description>A full storm over open water: driving rain, lightning and mountainous waves breaking right across the decks. Anything stored outside is soon lost, structures at the water's edge are badly battered, and nobody should be outside without a safety line. The rain reduces movement speed and shooting accuracy.</description>
+    <isBad>true</isBad>
+    <temperatureRange>0~999</temperatureRange>
+    <windSpeedFactor>2.0</windSpeedFactor>
+    <windSpeedOffset>1.5</windSpeedOffset>
+    <favorability>VeryBad</favorability>
+    <perceivePriority>3</perceivePriority>
+    <weatherThought>SoakingWet</weatherThought>
+    <accuracyMultiplier>0.7</accuracyMultiplier>
+    <rainRate>1.4</rainRate>
+    <moveSpeedMultiplier>0.75</moveSpeedMultiplier>
+    <durationRange>10000~25000</durationRange>
+    <ambientSounds>
+      <li>Ambient_Wind_Storm</li>
+      <li>Ambient_Rain</li>
+    </ambientSounds>
+    <eventMakers>
+      <li>
+        <averageInterval>900</averageInterval>
+        <eventClass>WeatherEvent_LightningFlash</eventClass>
+      </li>
+      <li>
+        <averageInterval>1500</averageInterval>
+        <eventClass>WeatherEvent_LightningStrike</eventClass>
+      </li>
+    </eventMakers>
+    <overlayClasses>
+      <li>WeatherOverlay_Rain</li>
+    </overlayClasses>
+    <skyColorsDay>
+      <sky>(0.58,0.62,0.66)</sky>
+      <shadow>(0.92,0.92,0.92)</shadow>
+      <overlay>(0.55,0.57,0.60)</overlay>
+      <saturation>0.8</saturation>
+    </skyColorsDay>
+    <skyColorsDusk>
+      <sky>(0.72,0.72,0.74)</sky>
+      <shadow>(0.92,0.92,0.92)</shadow>
+      <overlay>(0.50,0.50,0.52)</overlay>
+      <saturation>0.8</saturation>
+    </skyColorsDusk>
+    <skyColorsNightEdge>
+      <sky>(0.28,0.32,0.37)</sky>
+      <shadow>(0.92,0.92,0.92)</shadow>
+      <overlay>(0.42,0.42,0.45)</overlay>
+      <saturation>0.8</saturation>
+    </skyColorsNightEdge>
+    <skyColorsNightMid>
+      <sky>(0.28,0.32,0.37)</sky>
+      <shadow>(0.92,0.92,0.92)</shadow>
+      <overlay>(0.42,0.42,0.45)</overlay>
+      <saturation>0.8</saturation>
+    </skyColorsNightMid>
+    <modExtensions>
+      <li Class="DepthRim.SeaStateExtension">
+        <swayFloor>2.5</swayFloor>
+        <roughness>1.0</roughness>
+        <itemSweepMtbHours>3</itemSweepMtbHours>
+        <buildingHitMtbHours>3</buildingHitMtbHours>
+        <buildingDamage>6~15</buildingDamage>
+      </li>
+    </modExtensions>
+  </WeatherDef>
+
+</Defs>

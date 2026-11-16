@@ -19,6 +19,12 @@ namespace DepthRim
     /// <para><b>存放方式</b>：水位存在每一格上（byte 0–255），房間的水位 = 房間內格子的平均值，更新後再寫回每一格。
     /// 原版每次牆體變動都會重建 Room 物件，用格子存可以讓新房間自然繼承舊房間的水位（合併時按格數加權平均），
     /// 不需要像原版真空系統那樣 patch 房間重建流程。</para>
+    ///
+    /// <para><b>地面層的積水</b>（2026-11-16 使用者決定）：沒有排乾就上浮、破冰到海面或冰面地圖的艙室，水跟著船體搬上來
+    /// （<see cref="CopyLevels"/>）。那種地圖不是水下地圖（<see cref="Active"/> = false），但會暫時「留著積水」（<see cref="HoldsWater"/>）：
+    /// 照樣跑水位更新，只是開放房間（碰到地圖邊緣或露天）是空氣、水位 0，艙室的水只會被排水泵抽掉或從打開的門流出去。
+    /// 積水全部沒了就停用。水壓、外海、水下音效等只看 <see cref="Active"/>；艙室水位、水體網格、排水泵、水密門、找空氣
+    /// 與 Pawn 的涉水／溺水看 <see cref="HasWater"/>。</para>
     /// </summary>
     public class MapComponent_Flooding : MapComponent
     {
@@ -44,6 +50,11 @@ namespace DepthRim
         private byte[] seaFlags;
 
         private bool active;
+
+        /// <summary>非水下地圖暫時保存船體帶上來的積水（存檔）。</summary>
+        private bool holdsWater;
+
+        private bool initialized;
 
         private bool updatedOnce;
 
@@ -84,15 +95,48 @@ namespace DepthRim
         /// </summary>
         public void CopyLevels(MapComponent_Flooding from, IEnumerable<IntVec3> cells, IntVec3 offset)
         {
-            foreach (IntVec3 c in cells)
+            List<IntVec3> list = cells as List<IntVec3> ?? cells.ToList();
+            bool fromHasWater = from != null && from.HasWater && from.levels != null;
+            // 搬到非水下地圖（上浮、破冰）：有積水才開始保存，乾的船體不必啟用水位系統
+            if (!active && levels == null && initialized && fromHasWater
+                && list.Any(c => c.InBounds(from.map) && from.levels[from.map.cellIndices.CellToIndex(c)] > 0))
+            {
+                StartHoldingWater();
+            }
+            foreach (IntVec3 c in list)
             {
                 byte b = 0;
-                if (from != null && from.active && from.levels != null && c.InBounds(from.map))
+                if (fromHasWater && c.InBounds(from.map))
                 {
                     b = from.levels[from.map.cellIndices.CellToIndex(c)];
                 }
                 SetLevelByte(c + offset, b);
             }
+        }
+
+        /// <summary>非水下地圖開始保存積水：整張先是乾的。</summary>
+        public void StartHoldingWater()
+        {
+            if (active || levels != null)
+            {
+                return;
+            }
+            holdsWater = true;
+            levels = new byte[map.cellIndices.NumGridCells];
+            openFlags = new byte[map.cellIndices.NumGridCells];
+            seaFlags = new byte[map.cellIndices.NumGridCells];
+            updatedOnce = false;
+            openFlagsValid = false;
+        }
+
+        /// <summary>積水全部沒了：停用（非水下地圖）。</summary>
+        private void StopHoldingWater()
+        {
+            holdsWater = false;
+            levels = null;
+            openFlags = null;
+            seaFlags = null;
+            FloodingUtility.WaterChanged(map);
         }
 
         /// <summary>
@@ -228,7 +272,17 @@ namespace DepthRim
         {
         }
 
+        /// <summary>水下地圖（海洋層）：開放水域是海、有水壓、外海層與水下音效。</summary>
         public bool Active => active;
+
+        /// <summary>非水下地圖上暫時保存著帶上來的積水。</summary>
+        public bool HoldsWater => holdsWater;
+
+        /// <summary>這張地圖有水位：水下地圖，或保存著積水的地面層地圖。</summary>
+        public bool HasWater => active || holdsWater;
+
+        /// <summary>開放房間（碰到地圖邊緣或露天）的水位：水下是海（1），地面層是空氣（0）。</summary>
+        public float OpenLevel => active ? 1f : 0f;
 
         public DepthTier DepthTier => FloodingUtility.DepthTierOf(map);
 
@@ -263,12 +317,38 @@ namespace DepthRim
         public override void FinalizeInit()
         {
             base.FinalizeInit();
+            initialized = true;
             active = FloodingUtility.IsWaterMap(map);
             if (!active)
             {
+                // 讀檔：地面層還留著積水就繼續保存
+                if (holdsWater && levels != null && levels.Length == map.cellIndices.NumGridCells)
+                {
+                    openFlags = new byte[map.cellIndices.NumGridCells];
+                    seaFlags = new byte[map.cellIndices.NumGridCells];
+                    updatedOnce = false;
+                    levelsOnInit = null;
+                    FloodingUtility.WaterChanged(map);
+                    return;
+                }
+                holdsWater = false;
                 levels = null;
+                // 新地圖（例如上浮時才生成的海面地圖）在初始化前就收到船體的積水：開始保存
+                if (levelsOnInit != null && levelsOnInit.Values.Any(b => b > 0))
+                {
+                    StartHoldingWater();
+                    foreach (KeyValuePair<IntVec3, byte> kv in levelsOnInit)
+                    {
+                        SetLevelByte(kv.Key, kv.Value);
+                    }
+                    levelsOnInit = null;
+                    FloodingUtility.WaterChanged(map);
+                    return;
+                }
+                levelsOnInit = null;
                 return;
             }
+            holdsWater = false;
             EnsureBiomeWeather(map);
             openFlags = new byte[map.cellIndices.NumGridCells];
             seaFlags = new byte[map.cellIndices.NumGridCells];
@@ -303,7 +383,7 @@ namespace DepthRim
 
         public float LevelAt(IntVec3 c)
         {
-            if (!active || !c.InBounds(map))
+            if (!HasWater || levels == null || !c.InBounds(map))
             {
                 return 0f;
             }
@@ -319,13 +399,13 @@ namespace DepthRim
         /// <summary>房間目前的水位（直接由格子平均，不需要等下一次更新）。</summary>
         public float LevelOf(Room room)
         {
-            if (!active || room == null)
+            if (!HasWater || room == null)
             {
                 return 0f;
             }
             if (IsOpenWater(room))
             {
-                return 1f;
+                return OpenLevel;
             }
             return AverageLevel(room);
         }
@@ -365,23 +445,34 @@ namespace DepthRim
         }
 
         public override void MapComponentTick()
-        {            // 潛水服頭燈：每 15 ticks 檢查一次，只有換格時才搬移光源（實作指南 B.3）
+        {
+            // 沒有水的地圖：魚離水窒息（有水的地圖在水位更新裡判斷，見 FloodingPawnEffects）
+            if (!HasWater && map.IsHashIntervalTick(UpdateInterval))
+            {
+                FishHabitat.ApplyNoWater(map);
+            }            // 潛水服頭燈：每 15 ticks 檢查一次，只有換格時才搬移光源（實作指南 B.3）
             if (active && map.IsHashIntervalTick(SuitLampUpdater.Interval))
             {
                 SuitLampUpdater.Update(map);
             }
-            if (active && map.IsHashIntervalTick(LeakEffectInterval))
+            if (HasWater && map.IsHashIntervalTick(LeakEffectInterval))
             {
                 SpawnLeakEffects();
             }
             // 第一次 tick 立刻更新一次，開放水域旗標才不用等 250 ticks（外海層要靠它）
-            if (!active || (updatedOnce && !map.IsHashIntervalTick(UpdateInterval)))
+            if (!HasWater || (updatedOnce && !map.IsHashIntervalTick(UpdateInterval)))
             {
                 return;
             }
             updatedOnce = true;
             UpdateLevels();
             openFlagsValid = true;
+            if (holdsWater && !AnyWater())
+            {
+                StopHoldingWater();
+                FishHabitat.ApplyNoWater(map);
+                return;
+            }
             List<Building_WatertightDoor> watertight = map.listerBuildings.AllBuildingsColonistOfClass<Building_WatertightDoor>().ToList();
             for (int i = 0; i < watertight.Count; i++)
             {
@@ -417,7 +508,7 @@ namespace DepthRim
                 if (IsOpenWater(room))
                 {
                     openRooms.Add(room);
-                    roomLevel[room] = 1f;
+                    roomLevel[room] = OpenLevel;
                 }
                 else
                 {
@@ -436,7 +527,15 @@ namespace DepthRim
                 if (openRooms.Contains(room))
                 {
                     // 和外海相通：每格各自往上漲，滿了才算開放水域（不再一打通就整間瞬間灌滿）
-                    FillOpenRoom(room);
+                    // 地面層：開放房間是空氣，積水直接流光
+                    if (active)
+                    {
+                        FillOpenRoom(room);
+                    }
+                    else
+                    {
+                        WriteLevel(room, 0f, false);
+                    }
                     continue;
                 }
                 WriteLevel(room, FloodingMath.ApplyVolume(kv.Value, roomDelta[room], room.CellCount), false);
@@ -459,7 +558,7 @@ namespace DepthRim
                 }
                 // 門口只有兩側都是開放水域、而且已經灌滿時才算外海；任一側是艙室的門屬於艙室邊界
                 float doorLevel = sum / tmpNeighbors.Count;
-                WriteLevel(door, doorLevel, allOpen && doorLevel >= FullLevel, allOpen);
+                WriteLevel(door, doorLevel, active && allOpen && doorLevel >= FullLevel, active && allOpen);
             }
         }
 
@@ -595,6 +694,18 @@ namespace DepthRim
         }
 
         // ── 工具 ─────────────────────────────────────────────────────────────
+
+        private bool AnyWater()
+        {
+            for (int i = 0; i < levels.Length; i++)
+            {
+                if (levels[i] > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         private float AverageLevel(Room room)
         {
@@ -814,7 +925,7 @@ namespace DepthRim
         public override void MapComponentUpdate()
         {
             base.MapComponentUpdate();
-            if (!active)
+            if (!HasWater)
             {
                 return;
             }
@@ -827,9 +938,12 @@ namespace DepthRim
             {
                 WaterTierMaterials.UpdateCameraZoom(Find.CameraDriver.RootSize);
                 WaterTierMaterials.UpdateSkyLight(map);
-                SectionLayer_AbyssBackdrop.UpdateSkyLight(map);
-                SectionLayer_VoyageDarkness.UpdateFrame(map);
-                if (FloodingOverlay.Drawing)
+                if (active)
+                {
+                    SectionLayer_AbyssBackdrop.UpdateSkyLight(map);
+                    SectionLayer_VoyageDarkness.UpdateFrame(map);
+                }
+                if (active && FloodingOverlay.Drawing)
                 {
                     OffMapWater.Draw(map, RenderTier);
                 }
@@ -917,6 +1031,7 @@ namespace DepthRim
         {
             base.ExposeData();
             DataExposeUtility.LookByteArray(ref levels, "waterLevels");
+            Scribe_Values.Look(ref holdsWater, "holdsWater");
         }
     }
 }

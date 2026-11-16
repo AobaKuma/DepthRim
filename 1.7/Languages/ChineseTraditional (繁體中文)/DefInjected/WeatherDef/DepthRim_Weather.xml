@@ -7,4 +7,10 @@
   <DepthRim_UnderIce.label>冰下</DepthRim_UnderIce.label>
   <DepthRim_UnderIce.description>頭頂被海冰封住，幾乎透不進日光；沒有燈就近乎伸手不見五指。</DepthRim_UnderIce.description>
 
+  <DepthRim_RoughSea.label>惡劣海況</DepthRim_RoughSea.label>
+  <DepthRim_RoughSea.description>強風把海面推成又陡又碎的大浪，浪花漫過低矮的甲板：戶外存放的東西會被捲走，海邊的建築被浪拍打受損，艙外沒扣安全繩的人可能被沖進海裡。</DepthRim_RoughSea.description>
+
+  <DepthRim_RoughSeaStorm.label>海上暴風雨</DepthRim_RoughSeaStorm.label>
+  <DepthRim_RoughSeaStorm.description>開放海面上的一場大暴風雨：暴雨、雷擊，山一樣的大浪直接打過甲板。戶外存放的東西很快就會被捲走，海邊的建築會被打得很慘，沒扣安全繩的人不應該待在艙外。大雨也會降低移動速度與射擊準確度。</DepthRim_RoughSeaStorm.description>
+
 </LanguageData>

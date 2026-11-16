@@ -115,7 +115,8 @@ static partial class Test
         }
         foreach (string line in creditsText.Split('\n').Where(l => l.StartsWith("| `DepthRim/")))
         {
-            Check(line.TrimEnd().EndsWith("CC0 |"), $"credit line is CC0: {line.Trim()}");
+            string l = line.TrimEnd();
+            Check(l.EndsWith("CC0 |") || l.EndsWith("Pixabay Content License |") || l.EndsWith("自製 |"), $"credit line is CC0, Pixabay Content License or self-made: {line.Trim()}");
         }
 
         // 3. 四個層級環境音：各有一個 DepthTier 開關，掛在冰洋生態域上

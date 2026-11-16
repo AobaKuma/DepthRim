@@ -54,7 +54,7 @@ namespace DepthRim
             return -(seafloorDepth.min + (seafloorDepth.max - seafloorDepth.min) * t);
         }
 
-        /// <summary>升降井能不能通到這個生態區：只有淺海與變溫層（目前的潛水服只撐得住水壓 1）。</summary>
+        /// <summary>升降井能不能通到這個生態區：只有淺海與變溫層（鑽探深度上限；更深的海域靠潛艇）。</summary>
         public bool ShaftAccessible => depthTier <= DepthTier.Thermocline;
     }
 
@@ -117,7 +117,7 @@ namespace DepthRim
         public static float WaterLevelAt(this IntVec3 c, Map map)
         {
             MapComponent_Flooding comp = map.Flooding();
-            return comp != null && comp.Active ? comp.LevelAt(c) : 0f;
+            return comp != null && comp.HasWater ? comp.LevelAt(c) : 0f;
         }
     }
 }

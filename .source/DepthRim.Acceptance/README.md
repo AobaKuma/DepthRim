@@ -44,6 +44,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .source/DepthRim.Acceptance/
 | S6 | `Tests_SubmarinePrefab.cs` | 預製潛艇（FFF 結構 `DepthRim_Prefab_PatrolSubmarine`，`DepthRimFixture.SpawnPrefabSubmarine`）：船塢上生成、四個乾的密閉艙室、全部通電、DMSE 認得整塊船體、兩具推進器與電池電量、船殼耐壓變溫層、FFF 生成後占地外原本看得見的格子仍然看得見 |
 | S7 | `Tests_SubmarineStart.cs` | 潛艇開局（場景 `DepthRim_SubmarineStart`、`ScenPart_SubmarineStart`）：開局格換到附近的淺海海洋格、地圖生成器換成 `DepthRim_OceanStart`；開局地圖中央有深淵船塢與遊戲內匯出的潛艇 `DR_Submarine_Test`（看得見、有屋頂、艙室密閉且乾、進家園區）；殖民者與開局物品放在船艙 |
 | S8 | `Tests_Submarine.cs` | 航行中落海（`VoyageOverboard`）：同 S2 起飛後，在密閉艙室、沒屋頂的甲板、船外深淵各放一名殖民者；不在航行（視為已抵達）時沒人失蹤；回到航行後艙外兩人失蹤（世界 pawn、沒死）並收到一封信，艙室裡的人留在船上 |
+| A1 | `Tests_Submarine.cs`、`Tests_RopeAnchor.cs` | 航行中的安全繩錨點：同 S2 起飛後在甲板裝錨點、沒屋頂的甲板放三名殖民者；最近的兩人扣上（有「掛在安全繩上」）、第三人失蹤；遮罩在掃描之間快取、蓋牆後重算且牆後拉不到；走回艙室解開；停船全部解開、回到航行再扣上；拆掉錨點後剩下的人下一個 tick 失蹤；記錄每次掃描的平均時間；截圖 |
+| A2 | `Tests_RopeAnchor.cs` | 水面惡劣海況（`MapComponent_RoughSeaOverboard`）：固定天氣倍率；平靜時不扣繩；倍率 2.5 時錨點旁的人扣上、船另一頭的人上警報；擲骰必中時扣繩的人被浪打倒但留下、沒扣的人被捲走並收到信；倍率降到 1.5 時解開、警報消失；地表基地沒有風險；截圖 |
+| A3 | `Tests_SeaWeather.cs` | 海面的惡劣海況天氣：海面地圖的天氣表有兩種惡劣海況；平靜、惡劣海況、暴風雨各一張截圖（加一張暴風雨全景）；擺動倍率下限、兇度、著色器 `_Rough` 與浪花參數、落海風險；平台層的天氣跟著水面層；戶外靠海邊的物品被捲走、屋頂下的不會；地圖元件自己會掃；海邊的牆受損但停在最大耐久 20%；天氣轉晴後不再捲走或打壞 |
 | U1 | `Tests_Surfacing.cs` | 常規上浮（`SubmarineSurfacing`）：預製潛艇分離成潛艇、移到開放海面下的淺海；不在淺海時停用；上浮後地表那一格有海面地點、船體浮在開放海面上、船員跟著上來、水位系統不作用；從艦橋下潛回到正下方的海洋格（淺海、停著）、船體完整、空的海面地點移除 |
 | I1 | `Tests_Surfacing.cs` | 破冰上浮：正上方改成海冰、冰厚用 `IceConditions.debugThickness` 固定；沒有破冰結構與冰太厚時停用；懸停一小時後部分開裂（結構受損、六小時冷卻）、一天內再頂出水（破冰點、船體在冰上、一圈開放水、碎冰、裂紋、開始結冰）；結冰半天還能下潛、四天後被凍住、撞開凍冰後下潛 |
 | U3 | `Tests_Surfacing.cs` | 海面的畫法照原版深海：材質拿到原版深海的光照色階（`WaterOceanDeep`）與漣漪貼圖；海面地圖左半鋪原版深海、右半是 DepthRim 的海，在交界截圖（離線比較兩邊的平均色與質感） |

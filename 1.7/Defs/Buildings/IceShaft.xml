@@ -10,7 +10,7 @@
     <label>ice shaft elevator</label>
     <description>A deep drilled shaft fitted with a cargo elevator. It leads down to the ocean beneath the surface. It can only reach shallow or mid-depth water.</description>
     <thingClass>DepthRim.Building_IceShaft</thingClass>
-    <!-- 只能通到淺海與變溫層的海洋生態區（目前的潛水服只撐得住水壓 1） -->
+    <!-- 只能通到淺海與變溫層的海洋生態區（鑽探深度上限；更深的海域靠潛艇） -->
     <placeWorkers>
       <li>DepthRim.PlaceWorker_IceShaft</li>
     </placeWorkers>

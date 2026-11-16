@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- 海面地圖（水面層與平台層）的生態區是原版 Ocean，原版沒有天氣表（原版會警告「所有天氣的機率都是 0」然後一直晴天）。
+       給它一份海上的天氣表，包含 DepthRim 的惡劣海況與暴風雨。原版天氣各自的溫度範圍照舊（冷的時候下雪不下雨）。 -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/BiomeDef[defName="Ocean"]/baseWeatherCommonalities</xpath>
+    <nomatch Class="PatchOperationAdd">
+      <xpath>Defs/BiomeDef[defName="Ocean"]</xpath>
+      <value>
+        <baseWeatherCommonalities />
+      </value>
+    </nomatch>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/BiomeDef[defName="Ocean"]/baseWeatherCommonalities</xpath>
+    <value>
+      <Clear>14</Clear>
+      <Fog>1.5</Fog>
+      <Rain>3</Rain>
+      <FoggyRain>1</FoggyRain>
+      <SnowGentle>2</SnowGentle>
+      <SnowHard>0.6</SnowHard>
+      <DepthRim_RoughSea>2.5</DepthRim_RoughSea>
+      <DepthRim_RoughSeaStorm>1.2</DepthRim_RoughSeaStorm>
+    </value>
+  </Operation>
+
+</Patch>

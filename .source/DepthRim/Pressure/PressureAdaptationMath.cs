@@ -98,6 +98,22 @@ namespace DepthRim
         /// <summary>門一直開著時，艙壓每小時往門外的壓力移動幾級（比加壓機快，開著門加不了壓）。</summary>
         public const float OpenDoorLeakPerHour = 2f;
 
+        /// <summary>門打開時兩側艙壓至少差幾級，才會聽到洩壓的嘶聲（2026-11-17：洩壓聲只給加壓艙，不是每扇水密門）。</summary>
+        public const float DoorHissMinDifference = 0.5f;
+
+        /// <summary>同一扇門兩次洩壓聲之間至少隔幾 ticks（約 10 秒），常有人進出的加壓艙也不會一直響。</summary>
+        public const int DoorHissCooldownTicks = 600;
+
+        /// <summary>門開時要不要播洩壓聲：兩側壓差夠大，而且這扇門的冷卻已過（<paramref name="lastHissTick"/> 小於 0 表示從沒響過）。</summary>
+        public static bool DoorHisses(float pressureDifference, int nowTick, int lastHissTick)
+        {
+            if (Math.Abs(pressureDifference) < DoorHissMinDifference)
+            {
+                return false;
+            }
+            return lastHissTick < 0 || nowTick - lastHissTick >= DoorHissCooldownTicks;
+        }
+
         /// <summary>加壓艙的壓力往目標移動 <paramref name="maxDelta"/>，不會超過。</summary>
         public static float MoveTowards(float current, float target, float maxDelta)
         {

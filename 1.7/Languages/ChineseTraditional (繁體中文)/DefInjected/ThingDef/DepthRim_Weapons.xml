@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Bullet_UnderwaterDart.label>水下鋼鏢</DepthRim_Bullet_UnderwaterDart.label>
+
+  <DepthRim_Gun_UnderwaterRifle.label>水下步槍</DepthRim_Gun_UnderwaterRifle.label>
+  <DepthRim_Gun_UnderwaterRifle.description>發射細長鋼鏢而非子彈的突擊步槍。鋼鏢在水中能保持彈道與速度；一般槍械在水裡會損失四分之三的射程，這把不會。但離開水面後，它的射程明顯比一般突擊步槍短。</DepthRim_Gun_UnderwaterRifle.description>
+  <DepthRim_Gun_UnderwaterRifle.tools.stock.label>槍托</DepthRim_Gun_UnderwaterRifle.tools.stock.label>
+  <DepthRim_Gun_UnderwaterRifle.tools.barrel.label>槍管</DepthRim_Gun_UnderwaterRifle.tools.barrel.label>
+
+</LanguageData>

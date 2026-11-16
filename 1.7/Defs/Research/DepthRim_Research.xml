@@ -28,7 +28,7 @@
   <ResearchProjectDef>
     <defName>DepthRim_PressureEngineering</defName>
     <label>pressure engineering</label>
-    <description>Thick-walled structures that can hold back the water pressure below the thermocline, and pressure-rated decks laid over open water. Ordinary walls are slowly crushed at that depth; going further down means switching to a pressure-rated hull.\n\nUnlocks the pressure hull wall, the hull platform, the pressure deck and the pressuriser.</description>
+    <description>Thick-walled structures that can hold back the water pressure below the thermocline, and pressure-rated decks laid over open water. Ordinary walls are slowly crushed at that depth; going further down means switching to a pressure-rated hull.\n\nUnlocks the pressure hull wall, the hull platform, the pressure deck, the pressuriser, and the platform pillar and ocean platform for building over the open sea.</description>
     <baseCost>1200</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>DepthRim_ResearchTab</tab>
@@ -42,7 +42,7 @@
   <ResearchProjectDef>
     <defName>DepthRim_SubmarineConstruction</defName>
     <label>submarine construction</label>
-    <description>Assembling pressure compartments into a submarine that can sail on its own. Once built, it can leave the ice shaft behind and travel to other parts of the ocean.\n\nUnlocks the keel frames, the submarine helm and the underwater thruster.</description>
+    <description>Assembling pressure compartments into a submarine that can sail on its own. Once built, it can leave the ice shaft behind and travel to other parts of the ocean.\n\nUnlocks the keel frames, the submarine helm, the underwater thruster and the safety rope anchor.</description>
     <baseCost>1600</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>DepthRim_ResearchTab</tab>
@@ -70,7 +70,7 @@
   <ResearchProjectDef>
     <defName>DepthRim_UnderwaterCombat</defName>
     <label>underwater combat</label>
-    <description>Finding and fighting other vessels in the dark: sonar arrays that hear across the ocean, and the tactics of hiding behind the thermocline.\n\nUnlocks the active sonar, the passive sonar, the torpedo tube and torpedoes.</description>
+    <description>Finding and fighting other vessels in the dark: sonar arrays that hear across the ocean, and the tactics of hiding behind the thermocline.\n\nUnlocks the active, passive and fire-control sonars, the torpedo tube, torpedoes and anti-torpedo torpedoes, the supercavitating point-defence gun, the moon pool and boarding craft, and the underwater rifle, whose range does not suffer underwater.</description>
     <baseCost>2400</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>DepthRim_ResearchTab</tab>

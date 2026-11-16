@@ -124,7 +124,7 @@ namespace DepthRim.Acceptance
         }
 
         /// <summary>這個生態區沒有世界物件的格子；世界上沒有這種生態區時借一格空的海床平原（回傳原本的生態區，測完改回）。</summary>
-        private static PlanetTile FreeTileOf(PlanetLayer ocean, BiomeDef biome, out BiomeDef original)
+        internal static PlanetTile FreeTileOf(PlanetLayer ocean, BiomeDef biome, out BiomeDef original)
         {
             original = null;
             for (int i = 0; i < ocean.TilesCount; i++)

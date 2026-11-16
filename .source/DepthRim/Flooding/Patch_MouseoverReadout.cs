@@ -33,7 +33,7 @@ namespace DepthRim
         public static string LineFor(Map map, IntVec3 c)
         {
             MapComponent_Flooding flooding = map?.Flooding();
-            if (flooding == null || !flooding.Active || !c.InBounds(map))
+            if (flooding == null || !flooding.HasWater || !c.InBounds(map) || (!flooding.Active && flooding.LevelAt(c) <= 0f))
             {
                 return null;
             }

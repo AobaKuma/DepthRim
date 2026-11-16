@@ -71,7 +71,7 @@ namespace DepthRim
                 return false;
             }
             MapComponent_Flooding flooding = map.Flooding();
-            if (flooding == null || !flooding.Active)
+            if (flooding == null || !flooding.HasWater)
             {
                 return false;
             }
@@ -90,7 +90,7 @@ namespace DepthRim
         public static bool CellFloodedForSleep(IntVec3 c, Pawn sleeper)
         {
             MapComponent_Flooding flooding = sleeper.Map?.Flooding();
-            if (flooding == null || !flooding.Active || !sleeper.RaceProps.IsFlesh)
+            if (flooding == null || !flooding.HasWater || !sleeper.RaceProps.IsFlesh)
             {
                 return false;
             }
@@ -236,7 +236,7 @@ namespace DepthRim
                 return null;
             }
             MapComponent_Flooding flooding = pawn.Map.Flooding();
-            if (flooding == null || !flooding.Active || !SeekAirUtility.InDanger(pawn, flooding))
+            if (flooding == null || !flooding.HasWater || !SeekAirUtility.InDanger(pawn, flooding))
             {
                 return null;
             }
@@ -251,7 +251,7 @@ namespace DepthRim
     /// <summary>游到安全處；穿著潛水裝備的話在原地等到氣量回滿（<see cref="FloodingMath.SeekAirRefilledPercent"/>）。</summary>
     public class JobDriver_SeekAir : JobDriver
     {
-        /// <summary>補氣最多等這麼久（滿瓶 30000 ticks 以每 tick 10 回充，從零補滿約 3000 ticks）。</summary>
+        /// <summary>補氣最多等這麼久（潛水服滿瓶 90000 ticks 以每 tick 30 回充、真空服頭盔 30000 以每 tick 10，從零補滿都約 3000 ticks）。</summary>
         public const int MaxRefillTicks = 4000;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)

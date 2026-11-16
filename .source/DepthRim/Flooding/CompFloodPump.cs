@@ -75,7 +75,7 @@ namespace DepthRim
             get
             {
                 MapComponent_Flooding flooding = parent.Spawned ? parent.Map.Flooding() : null;
-                if (flooding == null || !flooding.Active)
+                if (flooding == null || !flooding.HasWater)
                 {
                     return false;
                 }
@@ -104,7 +104,7 @@ namespace DepthRim
         public override string CompInspectStringExtra()
         {
             MapComponent_Flooding flooding = parent.Map?.Flooding();
-            if (flooding == null || !flooding.Active)
+            if (flooding == null || !flooding.HasWater)
             {
                 return null;
             }

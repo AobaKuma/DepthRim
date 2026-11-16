@@ -86,6 +86,13 @@ namespace DepthRim.Acceptance
             float s1 = Severity(pawn, DepthRimDefOf.DepthRim_Drowning);
             yield return Updates(2);
             float s2 = Severity(pawn, DepthRimDefOf.DepthRim_Drowning);
+            if (s2 > s1)
+            {
+                Map m = DepthRimFixture.Ocean;
+                ctx.Note($"diagnose: pawn at {pawn.Position} level {Level(pawn.Position):P0} posture {pawn.GetPosture()} downed {pawn.Downed} job {pawn.CurJobDef?.defName}; room level {Level(interior.CenterCell):P0}; "
+                    + $"pawns in room: {string.Join(", ", interior.ExpandedBy(1).Cells.Select(c => c.GetFirstPawn(m)).Where(p => p != null).Select(p => p.LabelShort + "@" + p.Position))}; "
+                    + $"open doors: {string.Join(", ", interior.ExpandedBy(1).EdgeCells.Select(c => c.GetDoor(m)).Where(d => d != null).Select(d => d.Position + (d.Open ? " open" : " closed")))}");
+            }
             ctx.Check(s2 <= s1, $"drowning stops getting worse ({s1:F2} -> {s2:F2})");
             ctx.Check(!pawn.Dead, "colonist survived");
         }

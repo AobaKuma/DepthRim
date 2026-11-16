@@ -5,14 +5,14 @@
   <DepthRim_UnderwaterSurvival.description>用於探鑽冰海的鑽機，以及讓殖民者在水下作業及生存的基本技術與維生設備。\n\n解鎖：冰層升降井、潛水服、水密艙門、排水泵。</DepthRim_UnderwaterSurvival.description>
 
   <DepthRim_PressureEngineering.label>耐壓工程</DepthRim_PressureEngineering.label>
-  <DepthRim_PressureEngineering.description>能承受變溫層以下水壓的厚壁結構，以及鋪在開放水域上的耐壓甲板。一般的牆在這個深度會被水壓慢慢壓壞，要往下擴張就必須換上耐壓外殼。\n\n解鎖：水密隔牆、船體平台、耐壓甲板、加壓機。</DepthRim_PressureEngineering.description>
+  <DepthRim_PressureEngineering.description>能承受變溫層以下水壓的厚壁結構，以及鋪在開放水域上的耐壓甲板。一般的牆在這個深度會被水壓慢慢壓壞，要往下擴張就必須換上耐壓外殼。\n\n解鎖：水密隔牆、船體平台、耐壓甲板、加壓機，以及在開放海面上搭建用的平台支柱與海上平台。</DepthRim_PressureEngineering.description>
 
   <DepthRim_SubmarineConstruction.label>潛航器建造</DepthRim_SubmarineConstruction.label>
-  <DepthRim_SubmarineConstruction.description>把耐壓艙室組裝成能自行航行的潛艇。完成後就能離開升降井，前往海洋的其他地方。\n\n解鎖：龍骨框架、潛艇艦橋、水下推進器。</DepthRim_SubmarineConstruction.description>
+  <DepthRim_SubmarineConstruction.description>把耐壓艙室組裝成能自行航行的潛艇。完成後就能離開升降井，前往海洋的其他地方。\n\n解鎖：龍骨框架、潛艇艦橋、水下推進器、安全繩錨點。</DepthRim_SubmarineConstruction.description>
 
   <DepthRim_AbyssalNavigation.label>深淵潛航</DepthRim_AbyssalNavigation.label>
   <DepthRim_AbyssalNavigation.description>撐住深海與淵底水壓的極限技術：幾乎無聲的磁流體推進、讓殖民者在深海出艙的硬殼潛水服，以及出艙前的加壓程序。\n\n解鎖：先進水下推進器。</DepthRim_AbyssalNavigation.description>
 
   <DepthRim_UnderwaterCombat.label>水下戰鬥</DepthRim_UnderwaterCombat.label>
-  <DepthRim_UnderwaterCombat.description>在黑暗中找出並對付其他船艦：能聽遍海洋的聲納陣列，以及躲在溫躍層後面的戰術。\n\n解鎖：主動聲納、被動聲納、魚雷發射管、魚雷。</DepthRim_UnderwaterCombat.description>
+  <DepthRim_UnderwaterCombat.description>在黑暗中找出並對付其他船艦：能聽遍海洋的聲納陣列，以及躲在溫躍層後面的戰術。\n\n解鎖：主動聲納、被動聲納、火控聲納、魚雷發射管、魚雷、反魚雷魚雷、超空泡近防砲、月池、突擊艇，以及在水中射程不打折的水下步槍。</DepthRim_UnderwaterCombat.description>
 </LanguageData>

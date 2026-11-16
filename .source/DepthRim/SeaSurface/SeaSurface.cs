@@ -171,23 +171,69 @@ namespace DepthRim
         /// <summary>天氣倍率每秒最多變多少（真實秒數）：起風時海面與鏡頭慢慢變大，不會突然跳。</summary>
         public const float SwayFactorChangePerSecond = 0.25f;
 
-        /// <summary>這張地圖目前的目標天氣倍率：用水面層的風速（平台層是口袋地圖，風以水面層為準）。</summary>
+        /// <summary>
+        /// 這張地圖目前的目標天氣倍率：用水面層的風速（平台層是口袋地圖，風以水面層為準），
+        /// 惡劣海況的天氣另有下限（<see cref="SeaStateExtension.swayFloor"/>）。
+        /// </summary>
         public float TargetSwayFactor()
         {
             Map windMap = SeaLevels.SeaLevelOf(map) ?? map;
-            return SeaSway.WeatherFactor(windMap.windManager?.WindSpeed ?? 0f);
+            float wind = SeaSway.WeatherFactor(windMap.windManager?.WindSpeed ?? 0f);
+            return Mathf.Max(wind, SeaState.Of(map).swayFloor);
         }
 
-        /// <summary>立刻把天氣倍率設成目標值（驗收測試）。</summary>
+        private float roughness;
+
+        /// <summary>海面看起來多兇（平滑過，0..1）：白浪、浪花、海色、漣漪（<see cref="SeaStateExtension.roughness"/>）。</summary>
+        public float Roughness => roughness;
+
+        /// <summary>海況每秒最多變多少（真實秒數）。</summary>
+        public const float RoughnessChangePerSecond = 0.15f;
+
+        public float TargetRoughness()
+        {
+            return Mathf.Clamp01(SeaState.Of(map).roughness);
+        }
+
+        /// <summary>立刻把天氣倍率與海況設成目標值（驗收測試）。</summary>
         public void SnapSwayFactor()
         {
             swayFactor = TargetSwayFactor();
+            roughness = TargetRoughness();
             ApplySway();
         }
 
         private void ApplySway()
         {
-            material?.SetVector("_Sway", new Vector4(SeaSway.BaseAmplitude * swayFactor, SeaSway.VerticalShare, 0f, 0f));
+            if (material == null)
+            {
+                return;
+            }
+            material.SetVector("_Sway", new Vector4(SeaSway.BaseAmplitude * swayFactor, SeaSway.VerticalShare, 0f, 0f));
+            ApplyRoughness(material, roughness);
+        }
+
+        /// <summary>
+        /// 海況對海面材質的影響：白浪與海色（_Rough）、支柱與船身的浪花（_FoamAmount、_Hull.z）、浪峰線與漣漪（_Vanilla.y／w）。
+        /// 不改 _WaveSpeed：它乘在動畫時鐘上，中途改變會讓整片海跳一下。
+        /// </summary>
+        public static void ApplyRoughness(Material mat, float r)
+        {
+            mat.SetVector("_Rough", RoughParams(r));
+            mat.SetFloat("_FoamAmount", 1f + 1.4f * r);
+            Vector4 hull = HullParams;
+            hull.z *= 1f + 1.5f * r;
+            mat.SetVector("_Hull", hull);
+            Vector4 vanilla = VanillaParams;
+            vanilla.y = 0.35f * r;
+            vanilla.w *= 1f + 1.6f * r;
+            mat.SetVector("_Vanilla", vanilla);
+        }
+
+        /// <summary>著色器的 _Rough：x = 開放海面的白浪，y = 海色變暗、偏灰綠，z = 浪花範圍加大。</summary>
+        public static Vector4 RoughParams(float r)
+        {
+            return new Vector4(r, 0.55f * r, r, 0f);
         }
 
         /// <summary>給驗收測試：平台層的往下看快照重建過幾次。</summary>
@@ -409,6 +455,7 @@ namespace DepthRim
                     material.SetVector("_FoamPhase", FoamPhaseParams);                    // 2026-11-14：海水照原版深海畫（著色器的 vanillaDeepOcean），反光交給原版的日月反光，自己的閃光點與浪峰線不畫
                     material.SetFloat("_GlintAmount", 0f);
                     material.SetVector("_Vanilla", VanillaParams);
+                    ApplyRoughness(material, roughness);
                     material.SetTexture("_RippleTex", TexGame.RippleTex);
                     material.SetTexture("_NoiseTex", TexGame.NoiseTex);
                     material.SetTexture("_WaterReflectionTex", ContentFinder<Texture2D>.Get("Other/WaterReflection", reportFailure: false) ?? BaseContent.GreyTex);
@@ -423,6 +470,7 @@ namespace DepthRim
             if (material != null)
             {
                 swayFactor = Mathf.MoveTowards(swayFactor, TargetSwayFactor(), SwayFactorChangePerSecond * Time.deltaTime);
+                roughness = Mathf.MoveTowards(roughness, TargetRoughness(), RoughnessChangePerSecond * Time.deltaTime);
                 ApplySway();
             }
             if (SeaLevels.IsPlatformLevel(map) && Find.CurrentMap == map && Time.realtimeSinceStartup >= nextLowerCheck)

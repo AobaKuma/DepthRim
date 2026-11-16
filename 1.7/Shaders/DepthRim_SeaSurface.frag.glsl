@@ -43,6 +43,7 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     float _GlintAmount;   // @default = 1.0    陽光反光點的強度
     vec4 _Vanilla;        // @default = vec4(1.0, 0.12, 1.0, 1.0)           x = 原版深海配色的比重，y = 浪峰線強度，z = 漣漪密度，w = 漣漪強度
     vec4 _FoamPhase;      // @default = vec4(12.0, 5.7, 0.01, 0.006)       浪花擺動的相位場：x = 雜訊圖一個像素幾格，y = 相位最多差幾秒，zw = 雜訊圖平移（像素／秒）
+    vec4 _Rough;          // @default = vec4(0.0, 0.0, 0.0, 0.0)           海況（惡劣海況天氣，2026-11-17）：x = 開放海面的白浪，y = 海色變暗偏灰綠，z = 支柱與船身的浪花範圍加大
     vec4 _WaterCastVectSun;               // 全域（SkyManager）：.xz 太陽投影方向，.w 日光強度
     vec4 _WaterCastVectMoon;              // 全域（SkyManager）：.xz 月亮投影方向，.w 月光強度
     float _DayPercent;                    // 全域（SkyManager）
@@ -254,6 +255,16 @@ void main()
     col = mix(col, vanillaDeepOcean(waterUv, t), u._Vanilla.x);
     col = mix(col, u._CrestColor.rgb, crest * u._Vanilla.y);
 
+    // 海況：海色變暗、偏灰綠（暴風雨下的海），大片的明暗起伏也更明顯
+    if (u._Rough.y > 0.0)
+    {
+        float lum = dot(col, vec3(0.299, 0.587, 0.114));
+        vec3 stormy = vec3(lum) * vec3(0.78, 0.92, 0.95) * 0.72 + vec3(0.010, 0.030, 0.035);
+        float swell = fbm(waterUv * 0.08 + vec2(t * 0.02, t * 0.013));
+        stormy *= 0.80 + 0.40 * swell;
+        col = mix(col, stormy, clamp(u._Rough.y, 0.0, 1.0));
+    }
+
     // 平台擋住太陽的地方（只看甲板的投影；畫面上的暗由 DepthRim_PlatformShadow 畫）：那裡沒有反光點，也沒有浮船的短影子
     float sunBlocked = smoothstep(0.05, 0.85, maskAt(world - u._Cast.xy).r);
     float sunOn = clamp(u._Cast.z, 0.0, 1.0) * (1.0 - sunBlocked);
@@ -289,14 +300,36 @@ void main()
     float pillarNear = maskAt(world).g;
     float pillarWake = maskAt(world - downstream * wakeLength).g;
     float foamNoise = fbm(foamUv * 3.0 + vec2(t * 0.05, t * 0.04)) + crest * 0.2;
-    float ring = smoothstep(0.02, 0.30, pillarNear);
-    float foam = smoothstep(0.75 - 0.35 * ring, 0.90 - 0.35 * ring, foamNoise) * ring;
-    foam = max(foam, smoothstep(0.70, 0.85, foamNoise) * smoothstep(0.02, 0.25, pillarWake) * 0.6);
+    // 海況：浪花的範圍與密度加大（_Rough.z）
+    float ringLo = 0.02 * (1.0 - 0.7 * u._Rough.z);
+    float ring = smoothstep(ringLo, 0.30 - 0.18 * u._Rough.z, pillarNear);
+    float foam = smoothstep(0.75 - 0.35 * ring - 0.12 * u._Rough.z, 0.90 - 0.35 * ring - 0.12 * u._Rough.z, foamNoise) * ring;
+    foam = max(foam, smoothstep(0.70 - 0.15 * u._Rough.z, 0.85 - 0.15 * u._Rough.z, foamNoise) * smoothstep(ringLo, 0.25, pillarWake) * (0.6 + 0.3 * u._Rough.z));
     col = mix(col, u._FoamColor.rgb * (1.0 - 0.45 * hullShade), clamp(foam * u._FoamAmount, 0.0, 1.0) * 0.8);
 
+    // 海況：開放海面的白浪（碎浪的白頭）。沿著浪峰線出現，一陣一陣地生成、消散（life 隨時間漂移），
+    // 再用細的浪花雜訊打碎成一條一條；有平台影子的地方一樣有
+    if (u._Rough.x > 0.0)
+    {
+        float life = valueNoise(world * 0.11 + vec2(t * 0.17, -t * 0.11)) * 0.6 + valueNoise(world * 0.37 - vec2(t * 0.29, t * 0.21)) * 0.4;
+        float caps = smoothstep(0.30, 0.65, crest + 0.25 * fbm(foamUv * 0.6)) * smoothstep(0.62 - 0.22 * u._Rough.x, 0.80 - 0.15 * u._Rough.x, life);
+        caps *= smoothstep(0.42, 0.68, foamNoise);
+        // 被風吹開的細碎水沫：沿風向拉長的淡淡條紋
+        float streak = ridge(vec2(dot(foamUv, wind) * 0.35, dot(foamUv, side) * 3.2) + vec2(t * 0.08, 0.0));
+        float spray = pow(streak, 8.0) * smoothstep(0.45, 0.75, life) * 0.35;
+        col = mix(col, u._FoamColor.rgb * (1.0 - 0.45 * hullShade), clamp((caps * 0.9 + spray) * u._Rough.x, 0.0, 0.9));
+    }
+
     // 船身四周的水線白沫：只在船身外緣一圈（船身底下被甲板蓋住，不用管）
-    // 下游那一側的白沫多一點：取樣往上游偏
+    // 下游那一側的白沫多一點：取樣往上游偏。海況越差，浪打上船身的白沫圈越寬（往外多取樣四點）
     float hullNear = maskAt(hullWorld - downstream * 0.35 * flowShare).b;
+    if (u._Rough.z > 0.0)
+    {
+        float reach = 1.4 * u._Rough.z;
+        float wide = max(max(maskAt(hullWorld + vec2(reach, 0.0)).b, maskAt(hullWorld - vec2(reach, 0.0)).b),
+                         max(maskAt(hullWorld + vec2(0.0, reach)).b, maskAt(hullWorld - vec2(0.0, reach)).b));
+        hullNear = max(hullNear, wide * 0.5 * (0.6 + 0.4 * foamNoise));
+    }
     float hullRing = smoothstep(0.03, 0.22, hullNear) * (1.0 - smoothstep(0.55, 0.9, hullNear));
     float hullFoam = smoothstep(0.62, 0.80, foamNoise + 0.15 * hullRing) * hullRing;
     col = mix(col, u._FoamColor.rgb * (1.0 - 0.45 * hullShade), clamp(hullFoam * u._Hull.z * u._FoamAmount, 0.0, 1.0) * 0.7);

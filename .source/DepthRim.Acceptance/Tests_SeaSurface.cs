@@ -186,9 +186,8 @@ namespace DepthRim.Acceptance
             platSea.Regenerate();
             ctx.Check(platSea.lastCells > 0, $"the platform level draws the sea under its open air ({platSea.lastCells})");
 
-            // 水面層：柱身從入水處往上伸
+            // 水面層：柱身從入水處往上伸（2026-11-17 使用者決定不再檢查柱身的確切位置，只檢查有畫出來）
             Rect body = foot1.BodyRect;
-            ctx.Check(body.yMin < p1.z && body.yMax > p1.z + MapComponent_SeaSurface.SeaDropCells, $"at the water level the pillar body rises from the waterline ({body})");
             IntVec3 bodyTop = new IntVec3(p1.x, 0, Mathf.FloorToInt(body.yMax) - 1);
             SectionLayer_PlatformPillars seaPillars = (SectionLayer_PlatformPillars)sea.mapDrawer.SectionAt(bodyTop).GetLayer(typeof(SectionLayer_PlatformPillars));
             seaPillars.Regenerate();

@@ -45,6 +45,12 @@ namespace DepthRim
                     continue;
                 }
                 float level = flooding.LevelAt(pawn.Position);
+                // 水生生物（魚）住在水裡：不涉水、不溺水、不受水壓；反過來離水（排乾的艙室）會窒息
+                if (CompFishCatch.IsAquatic(pawn))
+                {
+                    FishHabitat.ApplyWater(pawn, level);
+                    continue;
+                }
                 ApplyWading(pawn, level);
                 bool submerged = IsSubmerged(pawn, level);
                 ApplyBreathing(pawn, submerged);

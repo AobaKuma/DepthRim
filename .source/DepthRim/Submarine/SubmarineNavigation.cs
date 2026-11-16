@@ -23,7 +23,7 @@ namespace DepthRim
     [StaticConstructorOnStartup]
     public static class SubmarineNavigation
     {
-        public static readonly Texture2D NavigateIcon = ContentFinder<Texture2D>.Get("UI/Commands/ViewOrbit", reportFailure: false) ?? BaseContent.BadTex;
+        public static Texture2D NavigateIcon => SubmarineIcons.RoutePlanning;
 
         // ==================================================================
         //  情境
@@ -212,9 +212,10 @@ namespace DepthRim
         //  選單
         // ==================================================================
 
-        private static FloatMenuOption Option(string label, string block, System.Action action, string tooltip = null)
+        private static FloatMenuOption Option(string label, string block, System.Action action, Texture2D icon, string tooltip = null)
         {
-            FloatMenuOption option = block == null ? new FloatMenuOption(label, action) : new FloatMenuOption(label + " (" + block + ")", null);
+            string text = block == null ? label : label + " (" + block + ")";
+            FloatMenuOption option = new FloatMenuOption(text, block == null ? action : null, icon, Color.white);
             if (tooltip != null)
             {
                 option.tooltip = tooltip;
@@ -246,7 +247,7 @@ namespace DepthRim
             }
             if (adjacent && sub.AnchorageBlockReason(tile) == null)
             {
-                options.Add(Option("DepthRim.Nav.Anchor".Translate(), sub.AnchorBlockedReason(out _), () => sub.AnchorAt(tile)));
+                options.Add(Option("DepthRim.Nav.Anchor".Translate(), sub.AnchorBlockedReason(out _), () => sub.AnchorAt(tile), SubmarineIcons.Anchoring));
             }
             DepthTier current = CurrentTier(helm);
             DepthTier floor = WorldObject_Submarine.SeafloorAt(tile);
@@ -259,7 +260,7 @@ namespace DepthRim
                 {
                     block = DiveMath.DiveBlock.None;
                 }
-                options.Add(Option("DepthRim.Nav.SailTo".Translate(tier.Label()), DiveBlockText(block), () => PlanVoyage(helm, tile, tier, landOnSite: false)));
+                options.Add(Option("DepthRim.Nav.SailTo".Translate(tier.Label()), DiveBlockText(block), () => PlanVoyage(helm, tile, tier, landOnSite: false), SubmarineIcons.ForDepthChange(current, tier)));
             }
             return options;
         }
@@ -275,10 +276,10 @@ namespace DepthRim
                 {
                     sub.landingTarget = PlanetTile.Invalid;
                     sub.SetTargetTier(tier);
-                }));
+                }, SubmarineIcons.ForDepthChange(sub.cruiseTier, tier)));
             }
-            options.Add(Option("DepthRim.Surface.Label".Translate(), SubmarineSurfacing.SurfaceBlockReason(sub, out _), () => SubmarineSurfacing.Surface(sub), "DepthRim.Surface.Desc".Translate()));
-            options.Add(Option("DepthRim.IceBreach.Label".Translate(), SubmarineSurfacing.IceBreachBlockReason(sub, out _, out _), () => SubmarineSurfacing.BeginIceBreach(sub), "DepthRim.IceBreach.Desc".Translate()));
+            options.Add(Option("DepthRim.Surface.Label".Translate(), SubmarineSurfacing.SurfaceBlockReason(sub, out _), () => SubmarineSurfacing.Surface(sub), SubmarineIcons.Ascent, "DepthRim.Surface.Desc".Translate()));
+            options.Add(Option("DepthRim.IceBreach.Label".Translate(), SubmarineSurfacing.IceBreachBlockReason(sub, out _, out _), () => SubmarineSurfacing.BeginIceBreach(sub), SubmarineIcons.Ascent, "DepthRim.IceBreach.Desc".Translate()));
             return options;
         }
 
@@ -307,9 +308,9 @@ namespace DepthRim
             }
             if (adjacent)
             {
-                return Option(label, block, () => DockAdjacent(sub, site, floor));
+                return Option(label, block, () => DockAdjacent(sub, site, floor), SubmarineIcons.Anchoring);
             }
-            return Option(label, block, () => PlanVoyage(helm, site.Tile, floor, landOnSite: true));
+            return Option(label, block, () => PlanVoyage(helm, site.Tile, floor, landOnSite: true), SubmarineIcons.Anchoring);
         }
 
         private static void DockAdjacent(WorldObject_Submarine sub, MapParent site, DepthTier floor)
@@ -333,7 +334,7 @@ namespace DepthRim
             foreach (DepthTier t in System.Enum.GetValues(typeof(DepthTier)))
             {
                 DepthTier tier = t;
-                options.Add(Option("DepthRim.Nav.EndAt".Translate(tier.Label()), DiveBlockText(DiveMath.CanSet(sub.targetTier, tier, floor, rating)), () => sub.SetTargetTier(tier)));
+                options.Add(Option("DepthRim.Nav.EndAt".Translate(tier.Label()), DiveBlockText(DiveMath.CanSet(sub.targetTier, tier, floor, rating)), () => sub.SetTargetTier(tier), SubmarineIcons.ForDepthChange(sub.cruiseTier, tier)));
             }
             return options;
         }
@@ -350,7 +351,7 @@ namespace DepthRim
                 DepthTier tier = t;
                 DiveMath.DiveBlock dive = DiveMath.CanSet(DepthTier.Shallow, tier, floor, rating);
                 string reason = block ?? (dive == DiveMath.DiveBlock.AlreadyThere ? null : DiveBlockText(dive));
-                options.Add(Option("DepthRim.Nav.DiveTo".Translate(tier.Label()), reason, () => SubmarineSurfacing.Dive(helm, tier), "DepthRim.Surface.DiveDesc".Translate()));
+                options.Add(Option("DepthRim.Nav.DiveTo".Translate(tier.Label()), reason, () => SubmarineSurfacing.Dive(helm, tier), SubmarineIcons.Descent, "DepthRim.Surface.DiveDesc".Translate()));
             }
             return options;
         }

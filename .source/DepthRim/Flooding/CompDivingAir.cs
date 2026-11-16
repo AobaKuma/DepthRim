@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -12,6 +13,12 @@ namespace DepthRim
 
         /// <summary>離開水面時，每 tick 補充的氣量（ticks）。</summary>
         public float refillPerTick = 10f;
+
+        /// <summary>
+        /// 要同時穿著其中一件才能用（例如原版真空服頭盔要配真空服身體才密封）；空 = 不需要。
+        /// 沒配齊時 <see cref="CompDivingAir.WornBy"/> 不會回傳這個氣瓶。
+        /// </summary>
+        public List<ThingDef> requiredApparel;
 
         public CompProperties_DivingAir()
         {
@@ -53,12 +60,30 @@ namespace DepthRim
             for (int i = 0; i < worn.Count; i++)
             {
                 CompDivingAir comp = worn[i].GetComp<CompDivingAir>();
-                if (comp != null)
+                if (comp != null && comp.RequirementsMet(worn))
                 {
                     return comp;
                 }
             }
             return null;
+        }
+
+        /// <summary>需要搭配的衣物（<see cref="CompProperties_DivingAir.requiredApparel"/>）有沒有穿著。</summary>
+        public bool RequirementsMet(List<Apparel> worn)
+        {
+            List<ThingDef> required = Props.requiredApparel;
+            if (required.NullOrEmpty())
+            {
+                return true;
+            }
+            for (int i = 0; i < worn.Count; i++)
+            {
+                if (worn[i] != parent && required.Contains(worn[i].def))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>扣除 ticks 的氣量；氣瓶已空時回傳 false。</summary>
@@ -75,6 +100,22 @@ namespace DepthRim
         public void Refill(int ticks)
         {
             airTicks = Mathf.Min(Props.capacityTicks, Air + Props.refillPerTick * ticks);
+        }
+
+        public override IEnumerable<StatDrawEntry> SpecialDisplayStats()
+        {
+            foreach (StatDrawEntry e in base.SpecialDisplayStats())
+            {
+                yield return e;
+            }
+            string explanation = "DepthRim.DivingAir.StatDesc".Translate(Props.capacityTicks.ToStringTicksToPeriod(),
+                ((int)(Props.capacityTicks / Props.refillPerTick)).ToStringTicksToPeriod());
+            if (!Props.requiredApparel.NullOrEmpty())
+            {
+                explanation += "\n\n" + "DepthRim.DivingAir.StatRequires".Translate(Props.requiredApparel.Select(d => d.label).ToCommaListOr());
+            }
+            yield return new StatDrawEntry(StatCategoryDefOf.Apparel, "DepthRim.DivingAir.Label".Translate(),
+                Props.capacityTicks.ToStringTicksToPeriod(), explanation, 4000);
         }
 
         public override string CompInspectStringExtra()

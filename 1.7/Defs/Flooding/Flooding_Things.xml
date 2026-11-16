@@ -147,16 +147,18 @@
     </modExtensions>
   </ThingDef>
 
-  <!-- 潛水服（設計稿 §4.2）：氧氣 12 小時，降低工作與移動效率，水壓抗性 +1。原型借用 Odyssey 真空服貼圖。 -->
+  <!-- 潛水服（設計稿 §4.2）：氧氣 36 小時（回充速度 ×3，從空到滿仍約 1.2 小時），降低工作與移動效率，水壓抗性 +2（撐到深海）。
+       穿著貼圖：wornGraphicPath 留空（原版就不會去找 _體型 貼圖），改由 renderNodeProperties 的自訂節點畫
+       Thing/DiveSuit/DiveSuit_north/_east/_south（加 m 遮罩：紅色區域吃衣物顏色），所有體型共用；頭盔畫在頭與頭髮之上，頭部相關節點用 renderSkipFlags 隱藏。 -->
   <ThingDef ParentName="ApparelBase">
     <defName>DepthRim_DivingSuit</defName>
     <label>diving suit</label>
     <description>A sealed, insulated diving suit with an integrated air tank. It keeps the wearer alive under the ice, but it is heavy and clumsy. The tank refills automatically whenever the wearer is out of the water.</description>
     <techLevel>Industrial</techLevel>
     <graphicData>
-      <texPath>Things/Pawn/Humanlike/Apparel/Vacsuit/Vacsuit</texPath>
+      <texPath>Thing/DiveSuit/DiveSuit_south</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-      <drawSize>0.9</drawSize>
+      <drawSize>2</drawSize>
     </graphicData>
     <apparel>
       <bodyPartGroups>
@@ -167,7 +169,25 @@
         <li>Arms</li>
         <li>Legs</li>
       </bodyPartGroups>
-      <wornGraphicPath>Things/Pawn/Humanlike/Apparel/Vacsuit/Vacsuit</wornGraphicPath>
+      <renderNodeProperties>
+        <li>
+          <debugLabel>DepthRim diving suit</debugLabel>
+          <nodeClass>DepthRim.PawnRenderNode_FullBodySuit</nodeClass>
+          <drawSize>1.75</drawSize>
+          <workerClass>DepthRim.PawnRenderNodeWorker_FullBodySuit</workerClass>
+          <texPath>Thing/DiveSuit/DiveSuit</texPath>
+          <parentTagDef>Root</parentTagDef>
+          <!-- 掛在 Root：Body 被 renderSkipFlags 藏起來時子節點也不畫。頭 50、頭髮 62、頭部傷口 65 之上，頭飾根節點 70 之下 -->
+          <baseLayer>68</baseLayer>
+        </li>
+      </renderNodeProperties>
+      <renderSkipFlags>
+        <li>Head</li>
+        <li>Hair</li>
+        <li>Beard</li>
+        <li>Eyes</li>
+        <li>Body</li>
+      </renderSkipFlags>
       <layers>
         <li>Middle</li>
         <li>Shell</li>
@@ -189,20 +209,20 @@
       <WorkToMake>18000</WorkToMake>
       <Mass>14</Mass>
       <Flammability>0.4</Flammability>
-      <ArmorRating_Sharp>0.15</ArmorRating_Sharp>
-      <ArmorRating_Blunt>0.15</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.55</ArmorRating_Sharp>
+      <ArmorRating_Blunt>0.55</ArmorRating_Blunt>
       <Insulation_Cold>60</Insulation_Cold>
       <EquipDelay>10</EquipDelay>
     </statBases>
     <equippedStatOffsets>
       <MoveSpeed>-0.8</MoveSpeed>
       <WorkSpeedGlobal>-0.25</WorkSpeedGlobal>
-      <DepthRim_PressureResistance>1</DepthRim_PressureResistance>
+      <DepthRim_PressureResistance>2</DepthRim_PressureResistance>
     </equippedStatOffsets>
     <comps>
       <li Class="DepthRim.CompProperties_DivingAir">
-        <capacityTicks>30000</capacityTicks>
-        <refillPerTick>10</refillPerTick>
+        <capacityTicks>90000</capacityTicks>
+        <refillPerTick>30</refillPerTick>
       </li>
       <!-- 頭燈（實作指南 B.3）：穿著者在水下時在腳下註冊原版自訂光源，水體外海層據此提亮 -->
       <li Class="DepthRim.CompProperties_SuitLamp">

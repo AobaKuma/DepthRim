@@ -10,6 +10,8 @@
   <DepthRim.Pump.RoomLevel>Compartment water level: {0}</DepthRim.Pump.RoomLevel>
   <DepthRim.DivingAir.Label>Air supply</DepthRim.DivingAir.Label>
   <DepthRim.DivingAir.Inspect>Air: {0} ({1})</DepthRim.DivingAir.Inspect>
+  <DepthRim.DivingAir.StatDesc>How long the wearer can breathe underwater on a full tank: {0}. The tank refills whenever the wearer is out of the water, from empty to full in {1}.</DepthRim.DivingAir.StatDesc>
+  <DepthRim.DivingAir.StatRequires>Only sealed when worn together with {0}.</DepthRim.DivingAir.StatRequires>
   <DepthRim.Overlay.Toggle>Show water levels.</DepthRim.Overlay.Toggle>
 
   <DepthRim.Debug.WaterTier>Water visual tier: {0}</DepthRim.Debug.WaterTier>
@@ -31,7 +33,7 @@
   <DepthRim.Settings.HullCreak>Hull creak frequency: {0}</DepthRim.Settings.HullCreak>
   <DepthRim.WatertightDoor.Sealed>Flooded side ({0}): colonists without a diving suit will not pass</DepthRim.WatertightDoor.Sealed>
   <DepthRim.WatertightDoor.Open>Both sides passable (deepest {0})</DepthRim.WatertightDoor.Open>
-  <DepthRim.IceShaft.TooDeep>The ocean below is {0} ({1}): too deep for an ice shaft. Diving suits only handle shallow and mid-depth water.</DepthRim.IceShaft.TooDeep>
+  <DepthRim.IceShaft.TooDeep>The ocean below is {0} ({1}): too deep for an ice shaft. Ice shafts only reach shallow and mid-depth water; deeper seas need a submarine.</DepthRim.IceShaft.TooDeep>
   <DepthRim.IceShaft.NoOcean>There is no ocean under land, ice sheets included. An ice shaft has to be dug through sea ice.</DepthRim.IceShaft.NoOcean>
   <DepthRim.IceShaft.Below>Ocean below: {0}</DepthRim.IceShaft.Below>
   <DepthRim.Readout.WaterLevel>Water level ({0})</DepthRim.Readout.WaterLevel>
@@ -206,4 +208,33 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.SubmarineStart.Summary>Start aboard the submarine {0}, docked in the nearest {1} sea below the chosen site.</DepthRim.SubmarineStart.Summary>
   <DepthRim.SubmarineStart.NoSea>There is no {0} sea within {1} tiles of this site. Pick a site on or near the coast, or on sea ice.</DepthRim.SubmarineStart.NoSea>
 
+  <!-- Fish -->
+  <DepthRim.FishCatch>Catch when killed: {0} ×{1}~{2}</DepthRim.FishCatch>
+
+  <!-- 安全繩錨點 -->
+  <DepthRim.Rope.Standby>Standing by (lines are clipped on only while under way or in rough seas)</DepthRim.Rope.Standby>
+  <DepthRim.Rope.Tethered>Safety lines: {0}/{1} ({2})</DepthRim.Rope.Tethered>
+  <DepthRim.Rope.AutoOff>Not clipping anyone new</DepthRim.Rope.AutoOff>
+  <DepthRim.Rope.UntieAll>Unclip all</DepthRim.Rope.UntieAll>
+  <DepthRim.Rope.UntieAllDesc>Unclip everyone on this anchor. They will not be clipped to it again for about an hour.</DepthRim.Rope.UntieAllDesc>
+  <DepthRim.Rope.NobodyTethered>Nobody is clipped on.</DepthRim.Rope.NobodyTethered>
+  <DepthRim.Rope.AutoTether>Clip on automatically</DepthRim.Rope.AutoTether>
+  <DepthRim.Rope.AutoTetherDesc>When on, people working outside within reach are clipped to this anchor automatically while the submarine is under way or the sea is rough. When off, the anchor clips on nobody new; lines already clipped stay on.</DepthRim.Rope.AutoTetherDesc>
+  <DepthRim.Rope.TieHere>Clip {0} to this anchor</DepthRim.Rope.TieHere>
+  <DepthRim.Rope.AlreadyHere>already clipped here</DepthRim.Rope.AlreadyHere>
+  <DepthRim.Rope.NoHazard>only while under way or in rough seas</DepthRim.Rope.NoHazard>
+  <DepthRim.Rope.OutOfReach>out of the line's reach</DepthRim.Rope.OutOfReach>
+  <DepthRim.Rope.NotOutside>not outside</DepthRim.Rope.NotOutside>
+  <DepthRim.Rope.MustBeOnDeck>Must be placed on a hull platform or an ocean platform.</DepthRim.Rope.MustBeOnDeck>
+  <DepthRim.Rope.Untie>Unclip safety line</DepthRim.Rope.Untie>
+  <DepthRim.Rope.UntieDesc>Unclip from the anchor at {0}. This anchor will not clip them on again for about an hour.</DepthRim.Rope.UntieDesc>
+  <DepthRim.Rope.PawnTethered>Clipped to a safety line (anchor at {0})</DepthRim.Rope.PawnTethered>
+  <DepthRim.RoughSea.Started>Rough seas: people outside on the water level can be swept away by the waves.</DepthRim.RoughSea.Started>
+  <DepthRim.RoughSea.OverboardLabel>Swept away by the waves</DepthRim.RoughSea.OverboardLabel>
+  <DepthRim.RoughSea.OverboardText>A heavy sea broke over the deck and carried these away. They are now missing:\n\n{0}\n\nIn rough seas, keep people inside, or clip them to a safety rope anchor.</DepthRim.RoughSea.OverboardText>
+  <DepthRim.Alert.Untethered>Outside without a safety line</DepthRim.Alert.Untethered>
+  <DepthRim.Alert.UntetheredVoyageDesc>The submarine is under way. These are outside without a safety line and will be swept away:\n\n{0}\n\nBring them inside, or build a safety rope anchor within 9 cells of where they work.</DepthRim.Alert.UntetheredVoyageDesc>
+  <DepthRim.Alert.UntetheredSeaDesc>The sea is rough. These are outside without a safety line and can be swept away by the waves:\n\n{0}\n\nBring them inside, or build a safety rope anchor within 9 cells of where they work.</DepthRim.Alert.UntetheredSeaDesc>
+
+  <!-- 海面的惡劣海況 -->\n  <DepthRim.SeaWeather.ItemSwept>The waves carried off {0}.</DepthRim.SeaWeather.ItemSwept>\n  <DepthRim.SeaWeather.ItemsSwept>The waves carried off {0} and {1} other stacks stored outside.</DepthRim.SeaWeather.ItemsSwept>\n  <DepthRim.SeaWeather.BuildingsBattered>Waves are pounding the structures at the water's edge.</DepthRim.SeaWeather.BuildingsBattered>\n
 </LanguageData>

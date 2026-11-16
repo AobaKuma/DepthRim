@@ -40,8 +40,6 @@ namespace DepthRim
         /// <summary>測試用：不播出水與下潛演出。</summary>
         public static bool skipCutscenes;
 
-        private static readonly Texture2D SurfaceIcon = ContentFinder<Texture2D>.Get("UI/Commands/ViewOrbit", reportFailure: false) ?? BaseContent.BadTex;
-
         public static Texture2D IceIcon => DefDatabase<ThingDef>.GetNamedSilentFail("DepthRim_IceBreakerFrame")?.uiIcon ?? WorldObject_Submarine.DiveIcon;
 
         public static PlanetTile SurfaceAbove(WorldObject_Submarine sub) => OceanWorldView.TileAbove(sub.Tile);

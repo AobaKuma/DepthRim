@@ -26,7 +26,7 @@ namespace DepthRim
 
         /// <summary>
         /// 泡在水裡時還缺幾級水壓抗性（0 = 不會受傷）：水深層級 − 裝備的抗性 − 身體的壓力適應值。
-        /// 適應到某個深度的身體本身就撐得住那裡的水壓，潛水服再多給 1 級。
+        /// 適應到某個深度的身體本身就撐得住那裡的水壓，潛水服再多給 2 級。
         /// </summary>
         public static float PressureShortfall(DepthTier tier, float resistance, float adapted)
         {
@@ -397,6 +397,15 @@ namespace DepthRim
 
         /// <summary>站著的人被淹沒的水位（和 <see cref="FloodingPawnEffects.SubmergedLevelStanding"/> 相同）。</summary>
         public const float SubmergedLevelStanding = 0.75f;
+
+        /// <summary>在水中開火時遠程武器的射程倍率（射程 -75%）；水下武器不受影響。</summary>
+        public const float UnderwaterRangeFactor = 0.25f;
+
+        /// <summary>水中射程：射手泡在水裡且不是水下武器時，射程乘 <see cref="UnderwaterRangeFactor"/>。</summary>
+        public static float RangeInWater(float range, bool shooterSubmerged, bool underwaterWeapon)
+        {
+            return shooterSubmerged && !underwaterWeapon ? range * UnderwaterRangeFactor : range;
+        }
 
         // ── 水下 AI：找空氣／離開淹水處 ──
 

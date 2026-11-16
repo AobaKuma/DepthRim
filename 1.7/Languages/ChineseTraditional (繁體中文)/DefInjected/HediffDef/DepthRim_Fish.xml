@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_FishOutOfWater.label>離水</DepthRim_FishOutOfWater.label>
+  <DepthRim_FishOutOfWater.description>擱淺在沒有水的地方的魚。牠只能無助地拍打，除非回到水裡，否則幾分鐘內就會窒息。</DepthRim_FishOutOfWater.description>
+  <DepthRim_FishOutOfWater.stages.0.label>窒息中</DepthRim_FishOutOfWater.stages.0.label>
+
+</LanguageData>

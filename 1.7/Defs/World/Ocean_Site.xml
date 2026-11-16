@@ -52,6 +52,7 @@
       <li>DepthRim_OceanVents</li>
       <li>DepthRim_OceanFeatures</li>
       <li>Plants</li>
+      <li>Animals</li>
       <li>DepthRim_OceanFog</li>
     </genSteps>
   </MapGeneratorDef>

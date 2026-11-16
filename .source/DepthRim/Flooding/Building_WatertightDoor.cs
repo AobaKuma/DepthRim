@@ -33,7 +33,7 @@ namespace DepthRim
         public float MaxSideLevel()
         {
             MapComponent_Flooding flooding = Map?.Flooding();
-            if (flooding == null || !flooding.Active)
+            if (flooding == null || !flooding.HasWater)
             {
                 return 0f;
             }
@@ -73,7 +73,7 @@ namespace DepthRim
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
             base.SpawnSetup(map, respawningAfterLoad);
-            if (!respawningAfterLoad && map.Flooding() is MapComponent_Flooding flooding && flooding.Active)
+            if (!respawningAfterLoad && map.Flooding() is MapComponent_Flooding flooding && flooding.HasWater)
             {
                 Notify_WaterUpdated();
             }

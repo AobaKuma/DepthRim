@@ -10,6 +10,8 @@
   <DepthRim.Pump.RoomLevel>艙室水位：{0}</DepthRim.Pump.RoomLevel>
   <DepthRim.DivingAir.Label>氧氣存量</DepthRim.DivingAir.Label>
   <DepthRim.DivingAir.Inspect>氧氣：{0}（{1}）</DepthRim.DivingAir.Inspect>
+  <DepthRim.DivingAir.StatDesc>滿瓶時穿著者能在水下呼吸的時間：{0}。離開水面時會自動回充，從空到滿需要 {1}。</DepthRim.DivingAir.StatDesc>
+  <DepthRim.DivingAir.StatRequires>必須同時穿著{0}才會密封。</DepthRim.DivingAir.StatRequires>
   <DepthRim.Overlay.Toggle>顯示水位。</DepthRim.Overlay.Toggle>
 
   <DepthRim.Debug.WaterTier>水體視覺層級：{0}</DepthRim.Debug.WaterTier>
@@ -31,7 +33,7 @@
   <DepthRim.Settings.HullCreak>船殼承壓聲頻率：{0}</DepthRim.Settings.HullCreak>
   <DepthRim.WatertightDoor.Sealed>淹水側（{0}）：沒有潛水服的殖民者不會通過</DepthRim.WatertightDoor.Sealed>
   <DepthRim.WatertightDoor.Open>兩側都可通行（最深 {0}）</DepthRim.WatertightDoor.Open>
-  <DepthRim.IceShaft.TooDeep>下方的海洋是{0}（{1}）：升降井到不了這麼深。潛水服只撐得住淺海與變溫層。</DepthRim.IceShaft.TooDeep>
+  <DepthRim.IceShaft.TooDeep>下方的海洋是{0}（{1}）：升降井只通得到淺海與變溫層，更深的海域要靠潛艇。</DepthRim.IceShaft.TooDeep>
   <DepthRim.IceShaft.NoOcean>陸地（含冰原）正下方沒有海洋。升降井只能挖穿海冰。</DepthRim.IceShaft.NoOcean>
   <DepthRim.IceShaft.Below>下方海洋：{0}</DepthRim.IceShaft.Below>
   <DepthRim.Readout.WaterLevel>水位（{0}）</DepthRim.Readout.WaterLevel>
@@ -206,4 +208,33 @@
   <DepthRim.SubmarineStart.Summary>一開始就在潛艇 {0} 上，停在選定地點下方最近的{1}海域。</DepthRim.SubmarineStart.Summary>
   <DepthRim.SubmarineStart.NoSea>這個地點附近 {1} 格內沒有{0}海域。請選海岸、海面或海冰上的地點。</DepthRim.SubmarineStart.NoSea>
 
+  <!-- 魚 -->
+  <DepthRim.FishCatch>死後漁獲：{0} ×{1}~{2}</DepthRim.FishCatch>
+
+  <!-- 安全繩錨點 -->
+  <DepthRim.Rope.Standby>待命（只在航行或惡劣海況時扣繩）</DepthRim.Rope.Standby>
+  <DepthRim.Rope.Tethered>安全繩：{0}／{1}（{2}）</DepthRim.Rope.Tethered>
+  <DepthRim.Rope.AutoOff>不再扣新的人</DepthRim.Rope.AutoOff>
+  <DepthRim.Rope.UntieAll>解開全部</DepthRim.Rope.UntieAll>
+  <DepthRim.Rope.UntieAllDesc>解開這個錨點上所有人的安全繩。大約一小時內不會再自動扣到這個錨點。</DepthRim.Rope.UntieAllDesc>
+  <DepthRim.Rope.NobodyTethered>沒有人扣著繩。</DepthRim.Rope.NobodyTethered>
+  <DepthRim.Rope.AutoTether>允許自動扣繩</DepthRim.Rope.AutoTether>
+  <DepthRim.Rope.AutoTetherDesc>開啟時，潛艇航行或海況惡劣期間，範圍內在艙外的人會自動扣上這個錨點。關閉時不再扣新的人，已經扣著的不受影響。</DepthRim.Rope.AutoTetherDesc>
+  <DepthRim.Rope.TieHere>把{0}扣在這個錨點</DepthRim.Rope.TieHere>
+  <DepthRim.Rope.AlreadyHere>已經扣在這裡</DepthRim.Rope.AlreadyHere>
+  <DepthRim.Rope.NoHazard>只在航行或惡劣海況時可以扣繩</DepthRim.Rope.NoHazard>
+  <DepthRim.Rope.OutOfReach>繩子拉不到</DepthRim.Rope.OutOfReach>
+  <DepthRim.Rope.NotOutside>不在艙外</DepthRim.Rope.NotOutside>
+  <DepthRim.Rope.MustBeOnDeck>只能裝在船體平台或海上平台上。</DepthRim.Rope.MustBeOnDeck>
+  <DepthRim.Rope.Untie>解開安全繩</DepthRim.Rope.Untie>
+  <DepthRim.Rope.UntieDesc>從 {0} 的錨點解開。大約一小時內這個錨點不會再自動扣上這個人。</DepthRim.Rope.UntieDesc>
+  <DepthRim.Rope.PawnTethered>扣著安全繩（錨點 {0}）</DepthRim.Rope.PawnTethered>
+  <DepthRim.RoughSea.Started>海況惡劣：水面層艙外的人可能被浪捲走。</DepthRim.RoughSea.Started>
+  <DepthRim.RoughSea.OverboardLabel>被大浪捲走</DepthRim.RoughSea.OverboardLabel>
+  <DepthRim.RoughSea.OverboardText>一道大浪打上甲板，把以下人員捲進海裡，從此下落不明：\n\n{0}\n\n海況惡劣時不要讓人待在艙外，或讓他們扣上安全繩錨點。</DepthRim.RoughSea.OverboardText>
+  <DepthRim.Alert.Untethered>艙外沒扣安全繩</DepthRim.Alert.Untethered>
+  <DepthRim.Alert.UntetheredVoyageDesc>潛艇正在航行。以下人員待在艙外、沒扣安全繩，會被海流沖走：\n\n{0}\n\n把他們叫回艙內，或在他們工作處 9 格內蓋安全繩錨點。</DepthRim.Alert.UntetheredVoyageDesc>
+  <DepthRim.Alert.UntetheredSeaDesc>海況惡劣。以下人員待在艙外、沒扣安全繩，可能被浪捲走：\n\n{0}\n\n把他們叫回艙內，或在他們工作處 9 格內蓋安全繩錨點。</DepthRim.Alert.UntetheredSeaDesc>
+
+  <!-- 海面的惡劣海況 -->\n  <DepthRim.SeaWeather.ItemSwept>海浪捲走了{0}。</DepthRim.SeaWeather.ItemSwept>\n  <DepthRim.SeaWeather.ItemsSwept>海浪捲走了{0}，以及另外 {1} 堆存放在戶外的物品。</DepthRim.SeaWeather.ItemsSwept>\n  <DepthRim.SeaWeather.BuildingsBattered>海浪正拍打著海邊的建築。</DepthRim.SeaWeather.BuildingsBattered>\n
 </LanguageData>

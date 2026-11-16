@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    安全繩錨點（設計見 Docs/安全繩錨點_機制設計.md）：
+    - 裝在船體平台或海上平台上（DepthRim.PlaceWorker_RopeAnchor），1×1、不擋路、不擋視線、不耗電、可以拆下搬走。
+    - 潛艇航行中或水面層惡劣海況時，繩長 9 格內、在艙外、牆擋不到的我方 Pawn 自動扣上，一個錨點最多兩條。
+    - 自己不 tick：扣繩、解繩、畫繩子在 DepthRim.MapComponent_RopeTethers。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DR_RopeAnchor</defName>
+    <thingClass>DepthRim.Building_RopeAnchor</thingClass>
+    <researchPrerequisites>
+      <li>DepthRim_SubmarineConstruction</li>
+    </researchPrerequisites>
+    <label>safety rope anchor</label>
+    <description>A steel deck anchor with two clasps and a coil of safety line. While a submarine is under way, or the sea is rough at the surface, up to two people working outside within 9 cells are clipped on automatically, and the line keeps them from being swept overboard. Walls block the line; doors do not.\n\nIf the anchor is destroyed or removed, the lines part at once.</description>
+    <graphicData>
+      <texPath>Thing/DR_RopeAnchor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <rect>(0.2,0.2,0.6,0.6)</rect>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <altitudeLayer>BuildingOnTop</altitudeLayer>
+    <passability>Standable</passability>
+    <pathCost>14</pathCost>
+    <fillPercent>0.15</fillPercent>
+    <blockWind>false</blockWind>
+    <castEdgeShadows>false</castEdgeShadows>
+    <canOverlapZones>true</canOverlapZones>
+    <rotatable>false</rotatable>
+    <tickerType>Never</tickerType>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>150</MaxHitPoints>
+      <WorkToBuild>800</WorkToBuild>
+      <Mass>12</Mass>
+      <Flammability>0.3</Flammability>
+    </statBases>
+    <costList>
+      <Steel>25</Steel>
+      <Cloth>20</Cloth>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+    </building>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_RopeAnchor</li>
+    </placeWorkers>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>2300</uiOrder>
+  </ThingDef>
+
+  <!-- 航行中掛在安全繩上被水流拖著：每次扣繩掃描補滿嚴重度，解開後約一小時退掉。 -->
+  <HediffDef>
+    <defName>DepthRim_TetheredInCurrent</defName>
+    <label>tethered in the current</label>
+    <description>Hanging on a safety line against the current of a submarine under way. Moving and working with the hands is hard.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.7, 0.85, 1)</defaultLabelColor>
+    <isBad>false</isBad>
+    <initialSeverity>1</initialSeverity>
+    <maxSeverity>1</maxSeverity>
+    <comps>
+      <li Class="HediffCompProperties_SeverityPerDay">
+        <severityPerDay>-24</severityPerDay>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.3</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.1</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+</Defs>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 魚的品種：通用魚生成時依「體型 + 生態區／水深層級 + 水溫」抽一個，決定顏色、名稱與魚獲。
+       水溫參考 OceanTemperature：地下冰洋約 −1.8~−0.5 °C；開放海面 −1.8~29.5 °C；深層水 1~5 °C；熱液噴口區再暖約 6 °C。
+       沒有任何品種的水溫合適時，取棲地合、水溫最接近的（FishVariantSelector）。
+       biomes / tiers 空白 = 不限。魚獲是 Odyssey 的魚。
+
+       體型決定魚獲的尺寸（FishCatchSizes，載入時檢查）：Odyssey 的魚依營養值分三種大小——
+       極小（孔雀魚、毒魚 0.05）、一般（鱈魚、鮭魚、扁鰺等 0.25）、大型（角鯊、比目魚、鮪魚、旗魚、霜魚等 0.5）。
+         小型魚 → 極小或一般的魚獲，1~2 條（毒魚 1~3）
+         中型魚 → 一般的魚獲，2~4 條
+         大型魚 → 大型魚獲，2~6 條 -->
+
+  <!-- ═══ 小型魚：極小或一般的魚獲 ═══ -->
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Cod</defName>
+    <label>cod</label>
+    <description>A small olive-brown cod, schooling in cold water.</description>
+    <size>Small</size>
+    <color>(0.62, 0.56, 0.40)</color>
+    <catchDef>Fish_Cod</catchDef>
+    <catchCount>1~2</catchCount>
+    <temperature>-2~12</temperature>
+    <tiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Salmon</defName>
+    <label>salmon</label>
+    <description>A silvery-pink salmon feeding along the coast.</description>
+    <size>Small</size>
+    <color>(0.82, 0.68, 0.64)</color>
+    <catchDef>Fish_Salmon</catchDef>
+    <catchCount>1~2</catchCount>
+    <temperature>0~16</temperature>
+    <biomes>
+      <li>DepthRim_KelpForest</li>
+      <li>DepthRim_PolarIceCap</li>
+      <li>DepthRim_ShallowReef</li>
+    </biomes>
+    <commonality>0.8</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_SmallBluefish</defName>
+    <label>bluefish</label>
+    <description>A young blue-backed bluefish of warm water.</description>
+    <size>Small</size>
+    <color>(0.44, 0.62, 0.84)</color>
+    <catchDef>Fish_Bluefish</catchDef>
+    <catchCount>1~2</catchCount>
+    <temperature>10~32</temperature>
+    <tiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Grenadier</defName>
+    <label>grenadier</label>
+    <description>A dusky grey rattail of the deep, a distant relative of cod.</description>
+    <size>Small</size>
+    <color>(0.40, 0.38, 0.43)</color>
+    <catchDef>Fish_Cod</catchDef>
+    <catchCount>1~2</catchCount>
+    <temperature>-2~14</temperature>
+    <tiers>
+      <li>Deep</li>
+      <li>Seabed</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>DepthRim_FishVariant_VentToxfish</defName>
+    <label>toxfish</label>
+    <description>A small, sickly green fish that thrives in the mineral plumes of hydrothermal vents.</description>
+    <size>Small</size>
+    <color>(0.56, 0.70, 0.30)</color>
+    <catchDef>Fish_Toxfish</catchDef>
+    <catchCount>1~3</catchCount>
+    <temperature>-2~40</temperature>
+    <biomes>
+      <li>DepthRim_HydrothermalField</li>
+    </biomes>
+    <commonality>2</commonality>
+  </DepthRim.FishVariantDef>
+
+  <!-- ═══ 中型魚：一般的魚獲，數量較多 ═══ -->
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_MediumCod</defName>
+    <label>cod</label>
+    <description>A fully grown cod, heavy-bodied and slow, from cold water.</description>
+    <size>Medium</size>
+    <color>(0.56, 0.50, 0.34)</color>
+    <catchDef>Fish_Cod</catchDef>
+    <catchCount>2~4</catchCount>
+    <temperature>-2~12</temperature>
+    <tiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_MediumSalmon</defName>
+    <label>salmon</label>
+    <description>A large, deep-pink salmon fattened on the coastal shoals.</description>
+    <size>Medium</size>
+    <color>(0.80, 0.58, 0.54)</color>
+    <catchDef>Fish_Salmon</catchDef>
+    <catchCount>2~4</catchCount>
+    <temperature>0~16</temperature>
+    <biomes>
+      <li>DepthRim_KelpForest</li>
+      <li>DepthRim_PolarIceCap</li>
+      <li>DepthRim_ShallowReef</li>
+    </biomes>
+    <commonality>0.8</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Bluefish</defName>
+    <label>bluefish</label>
+    <description>A fully grown bluefish, hunting in temperate and warm water.</description>
+    <size>Medium</size>
+    <color>(0.32, 0.50, 0.76)</color>
+    <catchDef>Fish_Bluefish</catchDef>
+    <catchCount>2~4</catchCount>
+    <temperature>10~32</temperature>
+    <tiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Hake</defName>
+    <label>hake</label>
+    <description>A long, steel-grey hake prowling the cold deep water, a close relative of cod.</description>
+    <size>Medium</size>
+    <color>(0.50, 0.52, 0.56)</color>
+    <catchDef>Fish_Cod</catchDef>
+    <catchCount>2~4</catchCount>
+    <temperature>-2~14</temperature>
+    <tiers>
+      <li>Deep</li>
+      <li>Seabed</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <!-- ═══ 大型魚：大型魚獲 ═══ -->
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Dogfish</defName>
+    <label>dogfish</label>
+    <description>A slate-grey dogfish, a small shark that roams from the shelf to the deep.</description>
+    <size>Large</size>
+    <color>(0.52, 0.56, 0.60)</color>
+    <catchDef>Fish_Dogfish</catchDef>
+    <catchCount>2~3</catchCount>
+    <temperature>-2~22</temperature>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Flounder</defName>
+    <label>flounder</label>
+    <description>A broad, sandy-brown flounder lying flat on the seabed.</description>
+    <size>Large</size>
+    <color>(0.68, 0.56, 0.38)</color>
+    <catchDef>Fish_Flounder</catchDef>
+    <catchCount>2~3</catchCount>
+    <temperature>-2~26</temperature>
+    <biomes>
+      <li>DepthRim_PolarIceCap</li>
+      <li>DepthRim_KelpForest</li>
+      <li>DepthRim_ShallowReef</li>
+      <li>DepthRim_SeabedPlain</li>
+    </biomes>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Tuna</defName>
+    <label>tuna</label>
+    <description>A dark-blue tuna, cruising through temperate and warm open water.</description>
+    <size>Large</size>
+    <color>(0.26, 0.34, 0.58)</color>
+    <catchDef>Fish_Tuna</catchDef>
+    <catchCount>3~5</catchCount>
+    <temperature>8~32</temperature>
+    <tiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Marlin</defName>
+    <label>marlin</label>
+    <description>A cobalt marlin of tropical seas.</description>
+    <size>Large</size>
+    <color>(0.34, 0.46, 0.80)</color>
+    <catchDef>Fish_Marlin</catchDef>
+    <catchCount>3~5</catchCount>
+    <temperature>20~32</temperature>
+    <tiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+    </tiers>
+    <commonality>0.6</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_Frostfish</defName>
+    <label>frostfish</label>
+    <description>A pale, icy-white frostfish. Its bioengineered ancestors went feral in the cold seas long ago.</description>
+    <size>Large</size>
+    <color>(0.82, 0.90, 0.96)</color>
+    <catchDef>Fish_Frostfish</catchDef>
+    <catchCount>2~4</catchCount>
+    <temperature>-2~10</temperature>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+  <DepthRim.FishVariantDef>
+    <defName>DepthRim_FishVariant_SleeperShark</defName>
+    <label>sleeper shark</label>
+    <description>A sluggish, dark sleeper shark of the cold deep.</description>
+    <size>Large</size>
+    <color>(0.36, 0.34, 0.31)</color>
+    <catchDef>Fish_Dogfish</catchDef>
+    <catchCount>4~6</catchCount>
+    <temperature>-2~14</temperature>
+    <tiers>
+      <li>Deep</li>
+      <li>Seabed</li>
+    </tiers>
+    <commonality>1</commonality>
+  </DepthRim.FishVariantDef>
+
+</Defs>

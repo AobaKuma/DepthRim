@@ -46,7 +46,10 @@ namespace DepthRim.Acceptance
         /// </summary>
         public static IEnumerable<Wait> S8_VoyageOverboard(TestContext ctx) => Voyage(ctx, anchor: false, overboard: true);
 
-        private static IEnumerable<Wait> Voyage(TestContext ctx, bool anchor, bool thrust = false, bool visuals = false, bool overboard = false)
+        /// <summary>A1：同 S2 的船塢與起飛，然後檢查航行中的安全繩錨點（<see cref="Tests_RopeAnchor.Voyage"/>）。</summary>
+        public static IEnumerable<Wait> A1_RopeAnchorVoyage(TestContext ctx) => Voyage(ctx, anchor: false, rope: true);
+
+        private static IEnumerable<Wait> Voyage(TestContext ctx, bool anchor, bool thrust = false, bool visuals = false, bool overboard = false, bool rope = false)
         {
             Map map = DepthRimFixture.EnsureOcean();
             yield return Updates(1);
@@ -105,7 +108,7 @@ namespace DepthRim.Acceptance
             cargo.stackCount = 37;
             // 抽乾的密閉艙室（甲板角落，耐壓隔牆圍出一格、有屋頂；避開中央的龍骨）：出港、航行、下錨後都要維持乾的
             List<IntVec3> dryRoom = new List<IntVec3>();
-            if (anchor || thrust || overboard)
+            if (anchor || thrust || overboard || rope)
             {
                 foreach (IntVec3 c in CellRect.FromLimits(center.x + 2, center.z + 2, center.x + 4, center.z + 4))
                 {
@@ -389,6 +392,14 @@ namespace DepthRim.Acceptance
                 OceanRouting.ClearCache();
             }
 
+            if (rope)
+            {
+                foreach (Wait w in Tests_RopeAnchor.Voyage(ctx, sub, subCenter, dryRoom.Select(c => c + shift).ToList())) { yield return w; }
+                RemoveSubmarine();
+                yield return Updates(1);
+                yield break;
+            }
+
             if (overboard)
             {
                 // ── 航行中落海：艙外的人失蹤，艙室裡的人沒事，不在航行時什麼都不會發生 ──
@@ -406,13 +417,18 @@ namespace DepthRim.Acceptance
                 Pawn inside = DepthRimFixture.SpawnColonist(subMap, cabinCell);
                 Pawn onDeck = DepthRimFixture.SpawnColonist(subMap, deckCell);
                 Pawn inSea = DepthRimFixture.SpawnColonist(subMap, seaCell);
+                // 非我方的人（訪客派系的村民）一樣會被沖走
+                Faction strangerFaction = Find.FactionManager.AllFactionsVisible.FirstOrDefault(f => !f.IsPlayer && f.def.humanlikeFaction && !f.HostileTo(Faction.OfPlayer));
+                ctx.Require(strangerFaction != null, "a non-player humanlike faction exists");
+                Pawn stranger = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Villager, strangerFaction, forceGenerateNewPawn: true, canGeneratePawnRelations: false));
+                GenSpawn.Spawn(stranger, seaCell, subMap, WipeMode.Vanish);
                 ctx.Check(!VoyageOverboard.IsOutside(inside), $"the sealed compartment counts as inside ({cabinCell})");
                 ctx.Check(VoyageOverboard.IsOutside(onDeck), $"the unroofed deck counts as outside ({deckCell})");
                 ctx.Check(VoyageOverboard.IsOutside(inSea), $"the open sea counts as outside ({seaCell})");
                 int lettersBefore = Find.LetterStack.LettersListForReading.Count(l => l.Label == "DepthRim.Voyage.OverboardLabel".Translate());
                 yield return new WaitTicks(VoyageOverboard.CheckInterval * 2 + 10);
                 ctx.Check(!VoyageOverboard.Underway(sub), "not under way after arriving");
-                ctx.Check(inside.Spawned && onDeck.Spawned && inSea.Spawned && onDeck.Map == subMap && inSea.Map == subMap, "not under way: nobody outside goes missing");
+                ctx.Check(inside.Spawned && onDeck.Spawned && inSea.Spawned && stranger.Spawned && onDeck.Map == subMap && inSea.Map == subMap, "not under way: nobody outside goes missing");
                 ctx.Check(VoyageOverboard.Sweep(sub).Count == 0, "a sweep while not under way loses nobody");
 
                 // 回到航行
@@ -420,7 +436,7 @@ namespace DepthRim.Acceptance
                 yield return new WaitTicks(VoyageMath.ThrustCheckInterval + VoyageOverboard.CheckInterval + 20);
                 ctx.Check(VoyageOverboard.Underway(sub), $"under way again ({sub.phase}, thrust {sub.ThrustFraction:P0})");
                 ctx.Check(inside.Spawned && inside.Map == subMap && inside.Position == cabinCell, "the colonist in the sealed compartment stays aboard");
-                foreach (Pawn p in new[] { onDeck, inSea })
+                foreach (Pawn p in new[] { onDeck, inSea, stranger })
                 {
                     ctx.Check(!p.Spawned && !p.Dead && p.IsWorldPawn(), $"{p.LabelShort} outside the hull went missing (spawned {p.Spawned}, dead {p.Dead}, world pawn {p.IsWorldPawn()})");
                 }
@@ -428,9 +444,9 @@ namespace DepthRim.Acceptance
                 ctx.Check(lettersAfter == lettersBefore + 1, $"one lost-overboard letter ({lettersBefore} -> {lettersAfter})");
                 Letter letter = Find.LetterStack.LettersListForReading.LastOrDefault(l => l.Label == "DepthRim.Voyage.OverboardLabel".Translate());
                 string text = (letter as ChoiceLetter)?.Text.ToString() ?? "";
-                ctx.Check(text.Contains(onDeck.LabelCap) && text.Contains(inSea.LabelCap) && !text.Contains(inside.LabelCap), "the letter names the two lost colonists only");
+                ctx.Check(text.Contains(onDeck.LabelCap) && text.Contains(inSea.LabelCap) && text.Contains(stranger.LabelCap) && !text.Contains(inside.LabelCap), "the letter names the two lost colonists and the stranger only");
 
-                foreach (Pawn p in new[] { onDeck, inSea })
+                foreach (Pawn p in new[] { onDeck, inSea, stranger })
                 {
                     if (p.IsWorldPawn()) { Find.WorldPawns.RemoveAndDiscardPawnViaGC(p); }
                 }
@@ -520,6 +536,19 @@ namespace DepthRim.Acceptance
                 ctx.Check(SubmarineNavigation.TileBlockReason(subHelm, anchorage, 0) == null, "a neighbouring anchorage can be picked");
                 ctx.Check(SubmarineNavigation.OptionsFor(subHelm, anchorage).Any(o => o.Label == "DepthRim.Nav.Anchor".Translate() && !o.Disabled), "picking it offers an enabled anchor option");
                 ctx.Check(SubmarineNavigation.OptionsFor(subHelm, sub.Tile).Any(o => o.Label.StartsWith("DepthRim.Sub.Cruise".Translate(DepthTier.Shallow.Label()))), "picking its own tile offers depth changes");
+                // 2026-11-16 指令圖示：五張 Textures/UI 圖都載得到；選單項目依深度變化用上浮／下潛／巡航，下錨用下錨圖
+                ctx.Check(new[] { SubmarineIcons.RoutePlanning, SubmarineIcons.Anchoring, SubmarineIcons.Ascent, SubmarineIcons.Descent, SubmarineIcons.Cruising }.All(t => t != null && t != BaseContent.BadTex),
+                    "the five submarine command icons load");
+                ctx.Check(navCmd != null && navCmd.icon == SubmarineIcons.RoutePlanning, "the navigate command uses the route planning icon");
+                {
+                    System.Func<FloatMenuOption, Texture2D> iconOf = o => HarmonyLib.Traverse.Create(o).Field("iconTex").GetValue<Texture2D>();
+                    ctx.Check(SubmarineNavigation.OptionsFor(subHelm, anchorage).Where(o => o.Label == "DepthRim.Nav.Anchor".Translate()).All(o => iconOf(o) == SubmarineIcons.Anchoring), "the anchor option uses the anchoring icon");
+                    List<FloatMenuOption> own = SubmarineNavigation.OwnTileOptions(sub);
+                    ctx.Check(own.Where(o => o.Label.StartsWith("DepthRim.Sub.Cruise".Translate(sub.cruiseTier.Label()))).All(o => iconOf(o) == SubmarineIcons.Cruising)
+                              && own.Where(o => o.Label.StartsWith("DepthRim.Surface.Label".Translate())).All(o => iconOf(o) == SubmarineIcons.Ascent)
+                              && own.All(o => iconOf(o) != null), "own-tile options: same depth cruising, surfacing ascent, every option has an icon");
+                    ctx.Check(sub.StopGizmo().icon == SubmarineIcons.Anchoring, "stop here uses the anchoring icon");
+                }
                 navCmd?.action();
                 ctx.Check(Find.WorldTargeter.IsTargeting, "the navigate command asks where on the world map");
                 Find.WorldTargeter.StopTargeting();

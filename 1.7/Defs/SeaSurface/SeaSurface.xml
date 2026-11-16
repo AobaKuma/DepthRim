@@ -39,6 +39,8 @@
     <natural>true</natural>
     <holdSnowOrSand>false</holdSnowOrSand>
     <avoidWander>true</avoidWander>
+    <!-- 雷擊打在海上不會留下火（2026-11-17：暴風雨中的惡劣海況） -->
+    <extinguishesFire>true</extinguishesFire>
     <affordances>
       <li>DepthRim_OpenSea</li>
       <li>DepthRim_OpenWater</li>
@@ -71,6 +73,9 @@
        DepthRim.Patch_SeaSurfaceVoid 在海面地圖上把太空換回開放海面。 -->
   <TerrainDef>
     <defName>DepthRim_OceanPlatform</defName>
+    <researchPrerequisites>
+      <li>DepthRim_PressureEngineering</li>
+    </researchPrerequisites>
     <label>ocean platform</label>
     <description>A steel deck raised high above the waves on pillars. Anything can be built on it. It can only be laid on the platform level, within the support radius of a platform pillar, and collapses into the sea if it loses that support.\n\nIt can be taken apart with the 'remove platform' command, leaving open air.</description>
     <texturePath>Thing/DR_OceanPlatform/Platform</texturePath>
@@ -135,6 +140,9 @@
        - 柱身貼圖的入水處（混凝土基座中段）在支柱中心往南 14.1 格 = 平台離海面的高度（MapComponent_SeaSurface.SeaDropCells）。 -->
   <ThingDef ParentName="BuildingBase">
     <defName>DepthRim_PlatformPillar</defName>
+    <researchPrerequisites>
+      <li>DepthRim_PressureEngineering</li>
+    </researchPrerequisites>
     <thingClass>DepthRim.Building_PillarFoot</thingClass>
     <label>platform pillar</label>
     <description>A massive steel-and-concrete pillar driven into the seabed, rising high above the waves. When it is finished, a small ocean platform opens on top of it; the pillar holds up any ocean platform within its support radius, and platform left without any pillar in range collapses into the sea.

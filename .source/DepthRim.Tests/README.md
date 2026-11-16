@@ -33,6 +33,8 @@ dotnet run --project .source/DepthRim.Tests/DepthRim.Tests.csproj -c Release -p:
 | ContentSubmarinePrefab | `Tests_SubmarinePrefab.cs` | 預製潛艇的 FFF 佈局（只讀 XML）：整塊船體平台與屋頂、建築都在船內且不重疊、外殼只有牆與一道外門、四個艙室各有排水泵、從氣閘走得到每一格空地、艦橋互動格空著、龍骨覆蓋整艘船、電池與電線同一個電網、用電建築都在 6 格連接距離內 |
 | IceBreachMath | `Tests_IceBreach.cs` | 破冰計算（破冰出水設計稿 §3、§4、§7.2）：Lebedev 冰厚表、一年冰隨冬天增厚與融冰、多年冰與冰間水道、抗彎強度、特徵長度、§4.6 範例（R 0.95 → 1.26、傷害 175 → 66）、四個 R 區間、結構上限、多座結構平分傷害、−20 °C 結冰天數 |
 | IceCrackPattern | `Tests_IceBreach.cs` | 開裂圖樣：同種子同結果、船體格不變、開放水包住船體、碎冰帶、放射裂紋數與長度、環狀裂紋、部分開裂沒有開放水與碎冰、猛烈出水更大、距離場 |
+| RopeAnchorMath | `Tests_RopeAnchor.cs` | 安全繩錨點的純計算：繩長 9 格、遮罩索引、沒牆時是整個圓、牆與牆後拉不到、遮罩和逐格 `RopePasses` 完全一致、直線只看中間的格子；扣繩排序（殖民者＞機械體＞囚犯＞動物，同類近的先）；懸垂與兩端；惡劣海況門檻 1.8、MTB 12／6／1.5 小時與內插、甲板中央／倒地／行動不便的倍率、每次檢查的機率 |
+| SeaWeather | `Tests_SeaWeather.cs` | 惡劣海況：天氣轉換時的海況內插（平均間隔對機率率內插）、著色器 `_Rough` 參數與宣告、兩種天氣的 XML（都算落海風險、暴風雨更兇、只有暴風雨有雨和閃電）、原版 Ocean 生態區的天氣表補丁 |
 
 新增區段：在 `Tests_*.cs` 寫一個 `static void`，再到 `Program.cs` 用 `Run("名稱", 方法)` 加進去。
 地圖與房間相關的邏輯先抽成純函式（例如 `FloodingMath`），才能在這裡測。

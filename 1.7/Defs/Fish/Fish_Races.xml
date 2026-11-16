@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 通用魚類生物（2026-11-16 使用者設計）：只有小、中、大三種體型的白色貼圖，
+       生成時依生態區、水深層級與水溫抽一個品種（Fish_Variants.xml），決定顏色、名稱與死後的魚獲。
+       魚死了不留屍體，直接變成魚獲（DeathActionWorker_FishCatch）。不吃東西、不睡覺、不繁殖，靠野生動物生成補充。 -->
+
+  <PawnRenderTreeDef>
+    <defName>DepthRim_Fish</defName>
+    <root Class="PawnRenderNodeProperties_Parent">
+      <debugLabel>Root</debugLabel>
+      <tagDef>Root</tagDef>
+      <children>
+        <li>
+          <debugLabel>Body</debugLabel>
+          <tagDef>Body</tagDef>
+          <nodeClass>DepthRim.PawnRenderNode_FishBody</nodeClass>
+          <workerClass>PawnRenderNodeWorker_AnimalBody</workerClass>
+          <children>
+            <li>
+              <debugLabel>Wounds</debugLabel>
+              <nodeClass>PawnRenderNode_AnimalPart</nodeClass>
+              <workerClass>PawnRenderNodeWorker_OverlayWounds</workerClass>
+              <overlayLayer>Body</overlayLayer>
+              <useGraphic>false</useGraphic>
+              <baseLayer>3</baseLayer>
+            </li>
+          </children>
+        </li>
+      </children>
+    </root>
+  </PawnRenderTreeDef>
+
+  <ThingDef Name="DepthRim_FishBase" ParentName="AnimalThingBase" Abstract="True">
+    <statBases>
+      <ComfyTemperatureMin>-10</ComfyTemperatureMin>
+      <ComfyTemperatureMax>45</ComfyTemperatureMax>
+      <Wildness>1</Wildness>
+      <!-- 原版 CanEverFly 需要 MaxFlightTime > 0（離場游走用） -->
+      <MaxFlightTime>5</MaxFlightTime>
+      <FlightCooldown>10</FlightCooldown>
+      <MarketValue>20</MarketValue>
+    </statBases>
+    <tradeability>None</tradeability>
+    <race>
+      <body>Snake</body>
+      <renderTree>DepthRim_Fish</renderTree>
+      <foodType>None</foodType>
+      <needsRest>false</needsRest>
+      <hasGenders>false</hasGenders>
+      <trainability>None</trainability>
+      <petness>0</petness>
+      <manhunterOnDamageChance>0</manhunterOnDamageChance>
+      <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
+      <canBePredatorPrey>false</canBePredatorPrey>
+      <herdAnimal>false</herdAnimal>
+      <!-- 只在海洋：不參與原版不看生態區的生成（獸群遷徙、蹣跚者、任務獎勵；遊蕩農場動物另靠 Wildness 1 與沒有 tradeTags 排除）。
+           野生生成只來自海洋生態區的 wildAnimals；萬一出現在非水下地圖會被移除（FishHabitat）。 -->
+      <herdMigrationAllowed>false</herdMigrationAllowed>
+      <canBecomeShambler>false</canBecomeShambler>
+      <neverIncludeInQuests>true</neverIncludeInQuests>
+      <!-- 游離地圖（比照 Odyssey 的鳥）：在開放水域（沒有屋頂）受驚時直接往上游走、離開地圖，不必游到地圖邊緣；
+           野生魚也從開放水域上方游進來。只用原版的離場／進場飛行（FlyerLeaving／FlyerArrival），平常不會在地圖上「飛」。 -->
+      <canLeaveMapFlying>true</canLeaveMapFlying>
+      <leaveMapOnFleeChance>1</leaveMapOnFleeChance>
+      <canFlyIntoMap>true</canFlyIntoMap>
+      <flightStartChanceOnJobStart>0</flightStartChanceOnJobStart>
+      <lifeExpectancy>6</lifeExpectancy>
+      <meatLabel>fish meat</meatLabel>
+      <deathAction>
+        <workerClass>DepthRim.DeathActionWorker_FishCatch</workerClass>
+      </deathAction>
+      <lifeStageAges>
+        <li>
+          <def>AnimalAdult</def>
+          <minAge>0</minAge>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>Pawn_Melee_SmallScratch_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_SmallScratch_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_SmallScratch_Miss</soundMeleeMiss>
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_FishBase">
+    <defName>DepthRim_Fish_Small</defName>
+    <label>small fish</label>
+    <description>A small, quick fish of the open water. Its kind depends on the local sea and water temperature. Killed, it becomes a catch of fish.</description>
+    <statBases>
+      <MoveSpeed>4.2</MoveSpeed>
+    </statBases>
+    <tools>
+      <li>
+        <label>mouth</label>
+        <capacities>
+          <li>Bite</li>
+        </capacities>
+        <power>1</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </tools>
+    <comps>
+      <li Class="DepthRim.CompProperties_FishCatch">
+        <size>Small</size>
+      </li>
+    </comps>
+    <race>
+      <baseBodySize>0.2</baseBodySize>
+      <baseHealthScale>0.25</baseHealthScale>
+      <useMeatFrom>DepthRim_Fish_Medium</useMeatFrom>
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_FishBase">
+    <defName>DepthRim_Fish_Medium</defName>
+    <label>fish</label>
+    <description>A mid-sized fish of the open water. Its kind depends on the local sea and water temperature. Killed, it becomes a catch of fish.</description>
+    <statBases>
+      <MoveSpeed>3.8</MoveSpeed>
+    </statBases>
+    <tools>
+      <li>
+        <label>mouth</label>
+        <capacities>
+          <li>Bite</li>
+        </capacities>
+        <power>3</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </tools>
+    <comps>
+      <li Class="DepthRim.CompProperties_FishCatch">
+        <size>Medium</size>
+      </li>
+    </comps>
+    <race>
+      <baseBodySize>0.45</baseBodySize>
+      <baseHealthScale>0.5</baseHealthScale>
+    </race>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_FishBase">
+    <defName>DepthRim_Fish_Large</defName>
+    <label>large fish</label>
+    <description>A large, powerful fish of the open water. Its kind depends on the local sea and water temperature. Killed, it becomes a large catch of fish.</description>
+    <statBases>
+      <MoveSpeed>4.6</MoveSpeed>
+    </statBases>
+    <tools>
+      <li>
+        <label>mouth</label>
+        <capacities>
+          <li>Bite</li>
+        </capacities>
+        <power>6</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </tools>
+    <comps>
+      <li Class="DepthRim.CompProperties_FishCatch">
+        <size>Large</size>
+      </li>
+    </comps>
+    <race>
+      <baseBodySize>1.1</baseBodySize>
+      <baseHealthScale>1.1</baseHealthScale>
+      <useMeatFrom>DepthRim_Fish_Medium</useMeatFrom>
+    </race>
+  </ThingDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>DepthRim_Fish_Small</defName>
+    <label>small fish</label>
+    <race>DepthRim_Fish_Small</race>
+    <canArriveManhunter>false</canArriveManhunter>
+    <combatPower>10</combatPower>
+    <ecoSystemWeight>0.1</ecoSystemWeight>
+    <wildGroupSize>3~7</wildGroupSize>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Thing/Fish/fish_s</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>0.9</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>DepthRim_Fish_Medium</defName>
+    <label>fish</label>
+    <race>DepthRim_Fish_Medium</race>
+    <canArriveManhunter>false</canArriveManhunter>
+    <combatPower>20</combatPower>
+    <ecoSystemWeight>0.25</ecoSystemWeight>
+    <wildGroupSize>2~4</wildGroupSize>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Thing/Fish/fish_m</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>1.4</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>DepthRim_Fish_Large</defName>
+    <label>large fish</label>
+    <race>DepthRim_Fish_Large</race>
+    <canArriveManhunter>false</canArriveManhunter>
+    <combatPower>40</combatPower>
+    <ecoSystemWeight>0.6</ecoSystemWeight>
+    <wildGroupSize>1~2</wildGroupSize>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Thing/Fish/fish_l</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>2.2</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+</Defs>

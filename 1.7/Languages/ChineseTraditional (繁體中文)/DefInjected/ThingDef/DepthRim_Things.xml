@@ -85,4 +85,7 @@
   <DR_UnderwaterVolcano.label>海底火山</DR_UnderwaterVolcano.label>
   <DR_UnderwaterVolcano.description>黑色火山岩堆成的煙囪，由噴湧而出、富含礦物的熱水一層層堆積而成，從不停止冒煙。如果被圍在房間裡，會讓房間迅速升溫。</DR_UnderwaterVolcano.description>
 
+  <DR_RopeAnchor.label>安全繩錨點</DR_RopeAnchor.label>
+  <DR_RopeAnchor.description>甲板上的鋼製錨點，附兩個扣環和一捲安全繩。潛艇航行中、或水面海況惡劣時，9 格內在艙外工作的人會自動扣上（最多兩人），繩子能防止他們被沖走。牆會擋住繩子，門不會。\n\n錨點被摧毀或拆除時，繩子會立刻斷開。</DR_RopeAnchor.description>
+
 </LanguageData>

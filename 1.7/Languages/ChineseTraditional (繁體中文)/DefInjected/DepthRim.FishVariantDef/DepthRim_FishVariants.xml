@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- 小型魚 -->
+  <DepthRim_FishVariant_Cod.label>鱈魚</DepthRim_FishVariant_Cod.label>
+  <DepthRim_FishVariant_Cod.description>在冷水中成群游動的橄欖褐色小鱈魚。</DepthRim_FishVariant_Cod.description>
+
+  <DepthRim_FishVariant_Salmon.label>鮭魚</DepthRim_FishVariant_Salmon.label>
+  <DepthRim_FishVariant_Salmon.description>沿著海岸覓食、銀中帶粉的鮭魚。</DepthRim_FishVariant_Salmon.description>
+
+  <DepthRim_FishVariant_SmallBluefish.label>扁鰺</DepthRim_FishVariant_SmallBluefish.label>
+  <DepthRim_FishVariant_SmallBluefish.description>暖水中背部藍色的年輕扁鰺。</DepthRim_FishVariant_SmallBluefish.description>
+
+  <DepthRim_FishVariant_Grenadier.label>鼠尾鱈</DepthRim_FishVariant_Grenadier.label>
+  <DepthRim_FishVariant_Grenadier.description>深海中灰暗的鼠尾鱈，是鱈魚的遠親。</DepthRim_FishVariant_Grenadier.description>
+
+  <DepthRim_FishVariant_VentToxfish.label>毒魚</DepthRim_FishVariant_VentToxfish.label>
+  <DepthRim_FishVariant_VentToxfish.description>在熱液噴口的礦物煙流中繁盛的病態綠色小魚。</DepthRim_FishVariant_VentToxfish.description>
+
+  <!-- 中型魚 -->
+  <DepthRim_FishVariant_MediumCod.label>鱈魚</DepthRim_FishVariant_MediumCod.label>
+  <DepthRim_FishVariant_MediumCod.description>冷水中身軀厚實、動作緩慢的成年鱈魚。</DepthRim_FishVariant_MediumCod.description>
+
+  <DepthRim_FishVariant_MediumSalmon.label>鮭魚</DepthRim_FishVariant_MediumSalmon.label>
+  <DepthRim_FishVariant_MediumSalmon.description>在沿岸淺灘養得肥壯、肉色深粉的大鮭魚。</DepthRim_FishVariant_MediumSalmon.description>
+
+  <DepthRim_FishVariant_Bluefish.label>扁鰺</DepthRim_FishVariant_Bluefish.label>
+  <DepthRim_FishVariant_Bluefish.description>在溫帶與溫暖水域獵食的成年扁鰺。</DepthRim_FishVariant_Bluefish.description>
+
+  <DepthRim_FishVariant_Hake.label>無鬚鱈</DepthRim_FishVariant_Hake.label>
+  <DepthRim_FishVariant_Hake.description>在寒冷深水中巡游、鋼灰色的細長無鬚鱈，是鱈魚的近親。</DepthRim_FishVariant_Hake.description>
+
+  <!-- 大型魚 -->
+  <DepthRim_FishVariant_Dogfish.label>角鯊</DepthRim_FishVariant_Dogfish.label>
+  <DepthRim_FishVariant_Dogfish.description>石板灰色的角鯊，一種從大陸棚游到深海的小型鯊魚。</DepthRim_FishVariant_Dogfish.description>
+
+  <DepthRim_FishVariant_Flounder.label>比目魚</DepthRim_FishVariant_Flounder.label>
+  <DepthRim_FishVariant_Flounder.description>平貼在海床上、寬大的沙褐色比目魚。</DepthRim_FishVariant_Flounder.description>
+
+  <DepthRim_FishVariant_Tuna.label>鮪魚</DepthRim_FishVariant_Tuna.label>
+  <DepthRim_FishVariant_Tuna.description>在溫帶與溫暖開放水域巡游的深藍色鮪魚。</DepthRim_FishVariant_Tuna.description>
+
+  <DepthRim_FishVariant_Marlin.label>旗魚</DepthRim_FishVariant_Marlin.label>
+  <DepthRim_FishVariant_Marlin.description>熱帶海域的鈷藍色旗魚。</DepthRim_FishVariant_Marlin.description>
+
+  <DepthRim_FishVariant_Frostfish.label>霜魚</DepthRim_FishVariant_Frostfish.label>
+  <DepthRim_FishVariant_Frostfish.description>蒼白如冰的霜魚。牠們經基因改造的祖先很久以前就在寒冷的海中野化了。</DepthRim_FishVariant_Frostfish.description>
+
+  <DepthRim_FishVariant_SleeperShark.label>睡鯊</DepthRim_FishVariant_SleeperShark.label>
+  <DepthRim_FishVariant_SleeperShark.description>寒冷深海中行動遲緩的深色睡鯊。</DepthRim_FishVariant_SleeperShark.description>
+
+</LanguageData>

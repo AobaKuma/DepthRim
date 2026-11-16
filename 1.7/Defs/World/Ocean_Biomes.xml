@@ -22,6 +22,7 @@
       <li>DepthRim_Ambient_Thermocline</li>
       <li>DepthRim_Ambient_Deep</li>
       <li>DepthRim_Ambient_Seabed</li>
+      <li>DepthRim_HullInterior</li>
     </soundsAmbient>
     <hasBedrock>true</hasBedrock>
     <animalDensity>0</animalDensity>
@@ -42,6 +43,13 @@
     <label>subglacial ocean (shallows)</label>
     <description>A dark, cold ocean sealed under the frozen sea, shallow here over the continental shelf. Mineral-rich, and within reach of an ice shaft dug through the sea ice.</description>
     <texture>World/Biomes/DepthRim/PolarIceCap</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.6</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <baseWeatherCommonalities Inherit="False">
       <DepthRim_UnderIce>1</DepthRim_UnderIce>
@@ -81,6 +89,13 @@
     <label>subglacial ocean (thermocline)</label>
     <description>Cold, dark water under the sea ice, a few hundred meters to two kilometers deep over the continental slope. An ice shaft can still reach it.</description>
     <texture>World/Biomes/DepthRim/PolarIceCap</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.4</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <baseWeatherCommonalities Inherit="False">
       <DepthRim_UnderIce>1</DepthRim_UnderIce>
@@ -120,6 +135,13 @@
     <label>subglacial ocean (deep sea)</label>
     <description>The deep polar basin beneath the sea ice: kilometers of black, near-freezing water over a quiet sea floor. Too deep for an ice shaft.</description>
     <texture>World/Biomes/DepthRim/PolarIceCap</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.2</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <baseWeatherCommonalities Inherit="False">
       <DepthRim_UnderIce>1</DepthRim_UnderIce>
@@ -157,6 +179,13 @@
     <label>subglacial ocean (abyssal seabed)</label>
     <description>A trench beneath the sea ice, where the polar sea floor plunges under a continent. Crushing pressure, total darkness, and ice overhead.</description>
     <texture>World/Biomes/DepthRim/PolarIceCap</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.1</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <baseWeatherCommonalities Inherit="False">
       <DepthRim_UnderIce>1</DepthRim_UnderIce>
@@ -194,6 +223,13 @@
     <label>kelp forest</label>
     <description>Cool coastal water thick with towering kelp. The silt floor is fertile, and the kelp can be harvested for food.</description>
     <texture>World/Biomes/DepthRim/KelpForest</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>1.2</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0.55</plantDensity>
     <wildPlants>
       <DepthRim_Kelp>1</DepthRim_Kelp>
@@ -231,6 +267,13 @@
     <label>shallow coral reef</label>
     <description>Warm, shallow water over a sprawling coral reef. Pale coral ridges can be quarried for building stone.</description>
     <texture>World/Biomes/DepthRim/ShallowReef</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>1.4</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0.12</plantDensity>
     <wildPlants>
       <DepthRim_Kelp>0.3</DepthRim_Kelp>
@@ -267,6 +310,13 @@
     <label>deep coral reef</label>
     <description>Cold, dim water on the continental slope or atop a seamount, where dark coral grows in slow, massive mounds below the reach of sunlight.</description>
     <texture>World/Biomes/DepthRim/DeepReef</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.8</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>DepthRim_DarkCoralRock</li>
@@ -300,6 +350,13 @@
     <label>seabed plain</label>
     <description>A vast, flat expanse of sediment on the deep sea floor. Few rocks break the silence.</description>
     <texture>World/Biomes/DepthRim/SeabedPlain</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.4</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Marble</li>
@@ -334,6 +391,13 @@
     <label>hydrothermal vent field</label>
     <description>A field of hydrothermal vents on the axis of a mid-ocean ridge. The water is warm, the young volcanic rock is fractured, and the vents can be tapped for geothermal power.</description>
     <texture>World/Biomes/DepthRim/HydrothermalField</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.5</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Slate</li>
@@ -382,6 +446,13 @@
     <label>abyssal trench</label>
     <description>The edge of an ocean trench, where the sea floor plunges beneath a continent along a subduction fault. Sheer cliffs fall away into bottomless dark.</description>
     <texture>World/Biomes/DepthRim/AbyssalTrench</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.1</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Slate</li>
@@ -420,6 +491,13 @@
     <label>mid-ocean ridge</label>
     <description>A volcanic mountain range running down the middle of the ocean basin, where new sea floor is born. The black rock is young and broken by rift valleys.</description>
     <texture>World/Biomes/DepthRim/MidOceanRidge</texture>
+    <!-- 魚（Fish_Races.xml）：體型決定魚的生成比例，品種由水溫與生態區決定 -->
+    <animalDensity>0.3</animalDensity>
+    <wildAnimals>
+      <DepthRim_Fish_Small>1</DepthRim_Fish_Small>
+      <DepthRim_Fish_Medium>0.6</DepthRim_Fish_Medium>
+      <DepthRim_Fish_Large>0.3</DepthRim_Fish_Large>
+    </wildAnimals>
     <plantDensity>0</plantDensity>
     <forceRockTypes>
       <li>Slate</li>

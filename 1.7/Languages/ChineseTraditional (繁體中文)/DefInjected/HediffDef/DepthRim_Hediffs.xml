@@ -27,4 +27,7 @@
   <DepthRim_PressureAdaptation.stages.2.label>壓力不適</DepthRim_PressureAdaptation.stages.2.label>
   <DepthRim_PressureAdaptation.stages.3.label>嚴重壓力不適</DepthRim_PressureAdaptation.stages.3.label>
 
+  <DepthRim_TetheredInCurrent.label>掛在安全繩上</DepthRim_TetheredInCurrent.label>
+  <DepthRim_TetheredInCurrent.description>潛艇航行時掛在安全繩上，被海流拖著。行動與手上的工作都很吃力。</DepthRim_TetheredInCurrent.description>
+
 </LanguageData>

@@ -36,3 +36,11 @@ C:\Users\user\AppData\Local\Temp\claude\f1180d7bffe5409b\26f302b3-90ad-4bd3-bfef
 C:\Users\user\AppData\Local\Temp\claude\d3313d9bf8e7026a\592d5e02-2da7-4a22-822b-e385e7e3d591\scratchpad\ut\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\5dfc4e5c6559b375\f0d91279-9148-437a-bbd7-10ddab7263bb\scratchpad\ut\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\49c2ec4a99eca63f\2e205a2b-f415-4ea0-926b-3dddf378c5d5\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\9efcf5f6ac6b5e03\a0ee0d89-8f87-4e62-9501-0bf0439b557f\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\ee72e0b9-75e0-433d-a4f6-6feb457220d3\scratchpad\unit\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\4d11ad89ade713f5\0a0cf255-f173-46ce-8c94-b22ffe3358f1\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\ee72e0b9-75e0-433d-a4f6-6feb457220d3\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\bbf44ba4c14f7d5b\430be6fe-1179-411d-9212-2450e6992cac\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\430be6fe-1179-411d-9212-2450e6992cac\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\806ed9f35c11418e\9c493883-d54c-47c5-9984-2cdb3f23febc\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\4632b6801fdb6935\503af897-949c-4d2e-820f-e11330380f41\scratchpad\unit\DepthRim.dll

@@ -236,10 +236,10 @@ namespace DepthRim
 
     public static class PressureAdaptationUtility
     {
-        /// <summary>壓力適應只影響血肉角色（機械體不用適應）。</summary>
+        /// <summary>壓力適應只影響血肉角色（機械體不用適應；魚本來就住在這個水壓下）。</summary>
         public static bool Applies(Pawn pawn)
         {
-            return pawn != null && !pawn.Dead && pawn.RaceProps.IsFlesh;
+            return pawn != null && !pawn.Dead && pawn.RaceProps.IsFlesh && !CompFishCatch.IsAquatic(pawn);
         }
 
         public static Hediff_PressureAdaptation Get(Pawn pawn)

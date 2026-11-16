@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 魚離水（FishHabitat）：水下地圖上水位低於 FishHabitat.MinWaterLevel 的地方（排乾的密閉艙室），
+       每次水位結算（250 ticks）加 0.25：一離水就倒地，約四次結算（1000 ticks）後死亡、變成漁獲。回到水裡立刻消退。 -->
+  <HediffDef>
+    <defName>DepthRim_FishOutOfWater</defName>
+    <label>out of water</label>
+    <description>A fish stranded without water. It flops helplessly and will suffocate within minutes unless it gets back into the water.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.9, 0.3, 0.3)</defaultLabelColor>
+    <makesSickThought>false</makesSickThought>
+    <lethalSeverity>1</lethalSeverity>
+    <initialSeverity>0.01</initialSeverity>
+    <stages>
+      <li>
+        <label>suffocating</label>
+        <minSeverity>0</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Moving</capacity>
+            <setMax>0</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+</Defs>

@@ -185,7 +185,7 @@ namespace DepthRim
             {
                 defaultLabel = "DepthRim.Voyage.Stop".Translate(),
                 defaultDesc = "DepthRim.Voyage.StopDesc".Translate(),
-                icon = DiveIcon,
+                icon = SubmarineIcons.Anchoring,
                 action = StopHere,
             };
         }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- 原版（Odyssey）真空服：頭盔本來就會循環利用氧氣，配上真空服身體就密封，可以在淺海水下呼吸 12 小時。
+       氣瓶掛在頭盔上，requiredApparel 要求同時穿著真空服（成人或兒童款），只戴頭盔不算。
+       不給水壓抗性：淺海不需要抗性，變溫層以下仍要潛水服或壓力適應。 -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/ThingDef[defName="Apparel_VacsuitHelmet"]/comps</xpath>
+    <nomatch Class="PatchOperationAdd">
+      <xpath>Defs/ThingDef[defName="Apparel_VacsuitHelmet"]</xpath>
+      <value>
+        <comps />
+      </value>
+    </nomatch>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[defName="Apparel_VacsuitHelmet"]/comps</xpath>
+    <value>
+      <li Class="DepthRim.CompProperties_DivingAir">
+        <capacityTicks>30000</capacityTicks>
+        <refillPerTick>10</refillPerTick>
+        <requiredApparel>
+          <li>Apparel_Vacsuit</li>
+          <li MayRequire="Ludeon.RimWorld.Biotech">Apparel_VacsuitChildren</li>
+        </requiredApparel>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

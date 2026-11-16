@@ -22,6 +22,9 @@ static partial class Test
         Run("OceanTemperature", OceanTemperatureTests);
         Run("MidwaterMath", MidwaterMathTests);
         Run("ContentMidwater", ContentMidwater);
+        Run("FishVariantSelection", FishVariantSelection);
+        Run("ContentFish", ContentFish);
+        Run("FishHabitatRules", FishHabitatRules);
         Run("ContentHullPlatform", ContentHullPlatform);
         Run("ContentDesignationCategory", ContentDesignationCategory);
         Run("ContentSeaSurface", ContentSeaSurface);
@@ -39,6 +42,10 @@ static partial class Test
         Run("WallPressure", WallPressure);
         Run("PressureAdaptation", PressureAdaptation);
         Run("BoardingReadiness", BoardingReadiness);
+        Run("RopeAnchorMath", RopeAnchorMath);
+        Run("SeaWeather", SeaWeather);
+        Run("ContentResearch", ContentResearch);
+        Run("UnderwaterRange", UnderwaterRange);
         Run("ContentPressure", ContentPressure);
         Run("ContentXml", ContentXml);
         Run("ContentOcean", ContentOcean);

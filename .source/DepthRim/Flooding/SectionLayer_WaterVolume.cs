@@ -84,7 +84,7 @@ namespace DepthRim
         {
             ClearSubMeshes(MeshParts.All);
             MapComponent_Flooding flooding = Map.Flooding();
-            if (flooding == null || !flooding.Active)
+            if (flooding == null || !flooding.HasWater)
             {
                 return;
             }

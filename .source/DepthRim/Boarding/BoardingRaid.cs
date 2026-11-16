@@ -146,7 +146,8 @@ namespace DepthRim
             {
                 return;
             }
-            if (pawn.apparel.WornApparel.Any(a => a.def.apparel.tags != null && a.def.apparel.tags.Contains("DepthRim_Diving")))
+            // 已經有可用的水下呼吸裝備（潛水服，或配齊的原版真空服）就不換
+            if (CompDivingAir.WornBy(pawn) != null)
             {
                 return;
             }

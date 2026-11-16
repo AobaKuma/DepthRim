@@ -22,6 +22,9 @@ namespace DepthRim
 
         public static HediffDef DepthRim_Barotrauma;
 
+        /// <summary>魚離水：倒地並很快窒息（<see cref="FishHabitat"/>）。</summary>
+        public static HediffDef DepthRim_FishOutOfWater;
+
         public static StatDef DepthRim_PressureResistance;
 
         /// <summary>水下 AI：缺氧或睡覺處淹水時游到安全處（<see cref="JobDriver_SeekAir"/>）。</summary>
@@ -57,6 +60,9 @@ namespace DepthRim
         public static SoundDef DepthRim_DiverBubbles;
 
         public static SoundDef DepthRim_DiverLowAir;
+
+        /// <summary>加壓艙的門打開、兩側壓差夠大時的洩壓嘶聲。</summary>
+        public static SoundDef DepthRim_PressureHiss;
 
         // ── 水密門與進水效果 ──
         public static ThingDef DepthRim_WatertightDoor;
@@ -102,6 +108,12 @@ namespace DepthRim
         public static ThingDef DepthRim_Filth_IceChunks;
 
         public static MapMeshFlagDef DepthRim_LowerLevel;
+
+        // ── 安全繩錨點 ──
+        public static ThingDef DR_RopeAnchor;
+
+        /// <summary>航行中掛在安全繩上被水流拖著：移動、操作變差。</summary>
+        public static HediffDef DepthRim_TetheredInCurrent;
 
         static DepthRimDefOf()
         {

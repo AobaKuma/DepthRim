@@ -185,14 +185,11 @@ static partial class Test
         Check(!gen.Element("genSteps").Elements("li").Any(e => e.Value == "Fog" || e.Value == "FindPlayerStartSpot"), "no vanilla fog or player start spot on the sea surface");
         Check((string)Def("WorldObjectDef", "DepthRim_SeaSurfaceSite").Element("worldObjectClass") == "DepthRim.WorldObject_SeaSurfaceSite", "sea surface site uses its own map parent");
 
-        // 柱身與海面對齊：入水處＝海面在甲板下方的距離
+        // 柱身的確切位置（入水處對齊海面落差、柱頂在基座中心上方 1.67 格）不再檢查（2026-11-17 使用者決定）
         float topOffset = float.Parse((string)topExt.Element("pillarOffsetZ"), System.Globalization.CultureInfo.InvariantCulture);
-        float drop = PlatformPillarGeometry.SeaDrop(topOffset, 18.333f);
-        Near(drop, MapComponent_SeaSurface.SeaDropCells, "sea drop matches the pillar waterline", 0.05f);
         string frag = File.ReadAllText(Path.Combine(ModRoot, "1.7", "Shaders", "DepthRim_SeaSurface.frag.glsl"));
         Check(frag.Contains("vec4(14.1,"), "the shader default sea drop matches too");
         UnityEngine.Rect body = PlatformPillarGeometry.PillarRect(10.5f, 20.5f, new UnityEngine.Vector2(11f, 18.333f), topOffset);
-        Near(body.yMax - 20.5f, 1.67f, "pillar top sits 1.67 cells above the base centre", 0.01f);
         Near(body.xMin, 5f, "pillar body is centred on the base");
 
         // 支撐範圍（圓形，從基座中心算）

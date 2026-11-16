@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.Sound;
 
 namespace DepthRim
 {
@@ -335,6 +336,26 @@ namespace DepthRim
             return found;
         }
 
+        /// <summary>每扇門上次播洩壓聲的 tick（不存檔：讀檔後頂多早一次響）。</summary>
+        private readonly Dictionary<int, int> lastDoorHissTick = new Dictionary<int, int>();
+
+        /// <summary>播過幾次洩壓聲（驗收測試用）。</summary>
+        public static int TotalDoorHisses;
+
+        /// <summary>門開時兩側壓差夠大就播洩壓的嘶聲（<see cref="PressureAdaptationMath.DoorHisses"/>）。</summary>
+        private void PlayDoorHiss(Building_Door door, float pressureDifference)
+        {
+            int now = Find.TickManager.TicksGame;
+            int last = lastDoorHissTick.TryGetValue(door.thingIDNumber, out int t) ? t : -1;
+            if (!PressureAdaptationMath.DoorHisses(pressureDifference, now, last))
+            {
+                return;
+            }
+            lastDoorHissTick[door.thingIDNumber] = now;
+            TotalDoorHisses++;
+            DepthRimDefOf.DepthRim_PressureHiss?.PlayOneShot(new TargetInfo(door.Position, map));
+        }
+
         /// <summary>門每開一次，門兩側的艙室各往另一側的艙壓靠近 <see cref="PressureAdaptationMath.DoorOpeningLeak"/> 級。</summary>
         public void Notify_DoorOpened(Building_Door door)
         {
@@ -355,6 +376,25 @@ namespace DepthRim
             {
                 tmpOld[tmpRoomList[i]] = IsOutside(tmpRoomList[i]) ? 0f : Average(tmpRoomList[i]);
             }
+            float largestDifference = 0f;
+            for (int i = 0; i < tmpRoomList.Count; i++)
+            {
+                Room room = tmpRoomList[i];
+                if (IsOutside(room))
+                {
+                    continue;
+                }
+                float self = tmpOld[room];
+                for (int j = 0; j < tmpRoomList.Count; j++)
+                {
+                    Room n = tmpRoomList[j];
+                    if (n != room && !(water && IsOutside(n)))
+                    {
+                        largestDifference = Mathf.Max(largestDifference, Mathf.Abs(tmpOld[n] - self));
+                    }
+                }
+            }
+            PlayDoorHiss(door, largestDifference);
             for (int i = 0; i < tmpRoomList.Count; i++)
             {
                 Room room = tmpRoomList[i];
