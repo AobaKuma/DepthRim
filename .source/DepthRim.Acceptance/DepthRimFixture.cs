@@ -126,6 +126,53 @@ namespace DepthRim.Acceptance
             return rect;
         }
 
+        /// <summary>
+        /// 在冰洋地圖上生成一艘預製潛艇（<see cref="SubmarinePrefab"/>，FFF 結構 <c>DepthRim_Prefab_PatrolSubmarine</c>）：
+        /// 先挖一塊比船體每邊大 2 格的深淵船塢，船就像玩家自己蓋在船塢上一樣，可以直接出航。
+        /// 位置避開井底出口與地圖邊緣。船上的東西、屋頂與地形都會在 <see cref="CleanupAfterTest"/> 收掉。回傳船體佔地。
+        /// </summary>
+        public static CellRect SpawnPrefabSubmarine(out IntVec3 center)
+        {
+            Map map = EnsureOcean();
+            IntVec3 exit = Shaft.exit.Position;
+            CellRect probe = SubmarinePrefab.Footprint(null, IntVec3.Zero, Rot4.North);
+            int margin = 2;
+            center = IntVec3.Invalid;
+            foreach (IntVec3 c in map.AllCells.OrderBy(c => c.DistanceToSquared(map.Center)))
+            {
+                CellRect yard = probe.MovedBy(c).ExpandedBy(margin + 1);
+                if (yard.InBounds(map) && !yard.Contains(exit) && yard.ClosestCellTo(exit).DistanceTo(exit) >= 6f && !yard.Cells.Any(y => y.GetFirstPawn(map) != null))
+                {
+                    center = c;
+                    break;
+                }
+            }
+            if (!center.IsValid)
+            {
+                return CellRect.Empty;
+            }
+            CellRect hull = SubmarinePrefab.Footprint(null, center, Rot4.North);
+            foreach (IntVec3 c in hull.ExpandedBy(margin))
+            {
+                if (!terrainBefore.ContainsKey(c)) { terrainBefore[c] = map.terrainGrid.TerrainAt(c); }
+                ClearCell(map, c, DepthRimDefOf.DepthRim_Abyss);
+                map.roofGrid.SetRoof(c, null);
+            }
+            SubmarinePrefab.Spawn(map, center, Rot4.North);
+            foreach (IntVec3 c in hull)
+            {
+                roofed.Add(c);
+                foreach (Thing t in c.GetThingList(map))
+                {
+                    if (t.def.category == ThingCategory.Building && !spawned.Contains(t)) { spawned.Add(t); }
+                }
+            }
+            return hull;
+        }
+
+        /// <summary>預製潛艇挖船塢前的地形，清理時還原。</summary>
+        private static readonly Dictionary<IntVec3, TerrainDef> terrainBefore = new Dictionary<IntVec3, TerrainDef>();
+
         /// <summary>沿 rect 外框蓋一圈鋼牆，圍出 rect.ContractedBy(1) 的密閉艙室。</summary>
         public static List<Thing> BuildWallRing(CellRect rect)
         {
@@ -202,8 +249,10 @@ namespace DepthRim.Acceptance
             if (Ocean != null && Ocean.Parent != null && Ocean.Parent.HasMap)
             {
                 foreach (IntVec3 c in roofed) { Ocean.roofGrid.SetRoof(c, null); }
+                foreach (KeyValuePair<IntVec3, TerrainDef> kv in terrainBefore) { Ocean.terrainGrid.SetTerrain(kv.Key, kv.Value); }
             }
             roofed.Clear();
+            terrainBefore.Clear();
             // 殘留檢查（二期 P2-1）：除錯層級覆寫與頭燈追蹤清單都是**跨測試**的狀態，
             // 上一個測試忘了清，下一個測試就會量到別人的光或材質。這裡主動清掉而不是只偵測，
             // 並且在有殘留時記一行——記不出來的話，殘留會變成「偶爾怪怪的」而永遠查不到。

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_SeaSurface.label>海面</DepthRim_SeaSurface.label>
+  <DepthRim_PlatformLevel.label>平台層</DepthRim_PlatformLevel.label>
+
+  <DepthRim_IceFloe.label>浮冰</DepthRim_IceFloe.label>
+  <DepthRim_OceanStart.label>海洋（潛艇開局）</DepthRim_OceanStart.label>
+</LanguageData>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_SubmarineStart.label>深淵船員</DepthRim_SubmarineStart.label>
+  <DepthRim_SubmarineStart.description>船員們在一艘巡邏潛艇裡醒來，潛艇就坐在海床上。上面沒有殖民地、沒有降落場，也沒有天空：只有船殼、海水，和船員能從黑暗裡撈回來的東西。
+
+可以選星球上任何地點，潛艇會在它下方最近的淺海開局。</DepthRim_SubmarineStart.description>
+  <DepthRim_SubmarineStart.scenario.summary>三名船員在海床上的潛艇裡。DepthRim 的水下開局。</DepthRim_SubmarineStart.scenario.summary>
+  <DepthRim_SubmarineStart.scenario.parts.0.text>壓載艙穩定下來，船殼在海水的重量下吱嘎作響。舷窗外只有漆黑的海水，和船底下海床模糊的輪廓。
+
+現在潛艇就是你們的家。讓艙室保持乾燥、電池保持充電；準備好之後，就去艦橋掌舵，找個值得上浮的地方。</DepthRim_SubmarineStart.scenario.parts.0.text>
+
+</LanguageData>

@@ -24,6 +24,15 @@ namespace DepthRim
             return 1 << (int)tier;
         }
 
+        /// <summary>
+        /// 泡在水裡時還缺幾級水壓抗性（0 = 不會受傷）：水深層級 − 裝備的抗性 − 身體的壓力適應值。
+        /// 適應到某個深度的身體本身就撐得住那裡的水壓，潛水服再多給 1 級。
+        /// </summary>
+        public static float PressureShortfall(DepthTier tier, float resistance, float adapted)
+        {
+            return System.Math.Max(0f, RequiredPressureResistance(tier) - resistance - adapted);
+        }
+
         /// <summary>沒入水中時需要的環境水壓抗性 = 水深層級（淺海 0 … 海床 3）。</summary>
         public static int RequiredPressureResistance(DepthTier tier)
         {
@@ -388,6 +397,55 @@ namespace DepthRim
 
         /// <summary>站著的人被淹沒的水位（和 <see cref="FloodingPawnEffects.SubmergedLevelStanding"/> 相同）。</summary>
         public const float SubmergedLevelStanding = 0.75f;
+
+        // ── 水下 AI：找空氣／離開淹水處 ──
+
+        /// <summary>
+        /// 潛水裝備氣量低於這個比例且人在水中時，殖民者會自己游回乾處補氣。
+        /// 比 <see cref="FloodingPawnEffects.MinAirToLeave"/>（20%）高：留一段游回去的時間，也讓水密門還肯放行。
+        /// </summary>
+        public const float SeekAirBelowPercent = 0.35f;
+
+        /// <summary>補氣時在乾處等到氣量回到這個比例才離開。</summary>
+        public const float SeekAirRefilledPercent = 0.95f;
+
+        /// <summary>
+        /// 睡覺處的安全水位：床或地鋪的水位到這裡就算淹水（比躺下被淹沒的 30% 低一點，水還沒蓋過口鼻就先叫醒）。
+        /// 也是找安全處時優先選的水位上限。
+        /// </summary>
+        public const float SleepSafeLevel = 0.2f;
+
+        /// <summary>
+        /// 醒著的人要不要去找空氣：需要呼吸、已經沒入水中，而且沒有潛水裝備或氣量偏低。
+        /// </summary>
+        public static bool NeedsToSeekAir(bool needsBreath, bool submerged, bool wearsAirSupply, float airPercent)
+        {
+            if (!needsBreath || !submerged)
+            {
+                return false;
+            }
+            return !wearsAirSupply || airPercent < SeekAirBelowPercent;
+        }
+
+        /// <summary>睡覺處算不算淹水：需要呼吸、不能在水中呼吸，而且水位達到 <see cref="SleepSafeLevel"/>。</summary>
+        public static bool SleepSpotFlooded(bool needsBreath, bool canBreatheUnderwater, float level)
+        {
+            return needsBreath && !canBreatheUnderwater && level >= SleepSafeLevel;
+        }
+
+        /// <summary>
+        /// 睡著的人要不要叫醒並離開：睡覺處淹水（沒有可用的氧氣），或在水中靠潛水裝備撐著但氣量偏低。
+        /// </summary>
+        public static bool SleeperMustEvacuate(bool needsBreath, bool submergedLying, bool wearsAirSupply, float airPercent, bool canBreatheUnderwater, float level)
+        {
+            return NeedsToSeekAir(needsBreath, submergedLying, wearsAirSupply, airPercent) || SleepSpotFlooded(needsBreath, canBreatheUnderwater, level);
+        }
+
+        /// <summary>補氣等待結束：沒有潛水裝備（到乾處就好），或氣量已回到 <see cref="SeekAirRefilledPercent"/>。</summary>
+        public static bool DoneRefilling(bool wearsAirSupply, float airPercent)
+        {
+            return !wearsAirSupply || airPercent >= SeekAirRefilledPercent;
+        }
 
         /// <summary>每次水位更新（250 ticks）船殼承壓聲的機率：淺海與變溫層 0；深海 4%、海床 8%；每面受損牆再加 2%，上限 30%。</summary>
         public static float HullCreakChance(DepthTier tier, int damagedWalls)

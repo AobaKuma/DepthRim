@@ -151,6 +151,14 @@ namespace DepthRim
             return dp * FloodingMath.PressureFactor(tier) / t;
         }
 
+        /// <summary>一格牆承受的負載（絕對壓力版）：兩側絕對壓力差 ÷ 厚度（最多算兩格）。</summary>
+        public static float LoadGauge(float gA, float gB, int thickness)
+        {
+            float dp = gA > gB ? gA - gB : gB - gA;
+            int t = thickness < 1 ? 1 : thickness > 2 ? 2 : thickness;
+            return dp / t;
+        }
+
         /// <summary>牆能承受的負載：依它的耐壓等級（淺海 1、變溫層 2、深海 4、海床 8）。</summary>
         public static float Capacity(DepthTier rating)
         {

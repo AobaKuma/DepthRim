@@ -32,11 +32,25 @@ namespace DepthRim
             }
             // 上限沒卡到時直接用原版平滑過的天空光（淺海一律如此）；卡到時才用限制前的目標值
             float current = map.skyManager.CurSkyGlow;
-            if (current < CapFor(FloodingUtility.DepthTierOf(map)) - 0.001f || !uncapped.TryGetValue(map.uniqueID, out float glow))
+            if (current < CapOn(map) - 0.001f || !uncapped.TryGetValue(map.uniqueID, out float glow))
             {
                 return current;
             }
             return Mathf.Max(current, glow);
+        }
+
+        /// <summary>
+        /// 這張地圖現在的日光上限：換層淡入淡出中時在兩層的上限之間內插（<see cref="MapComponent_Flooding.TierFadeProgress"/>），
+        /// 否則就是目前層級的上限。原版的天空亮度每幀直接等於目標值，所以不在這裡內插的話，換層時整張地圖的亮度會一下子跳過去。
+        /// </summary>
+        public static float CapOn(Map map)
+        {
+            MapComponent_Flooding flooding = map?.Flooding();
+            if (flooding != null && flooding.FadingTier && flooding.debugTierOverride == null)
+            {
+                return Mathf.Lerp(CapFor(flooding.FadeFrom), CapFor(flooding.FadeTo), flooding.TierFadeProgress);
+            }
+            return CapFor(FloodingUtility.DepthTierOf(map));
         }
 
         internal static void Record(Map map, float glow)
@@ -59,7 +73,7 @@ namespace DepthRim
                 return;
             }
             OceanDaylight.Record(map, __result.glow);
-            __result.glow = Mathf.Min(__result.glow, OceanDaylight.CapFor(FloodingUtility.DepthTierOf(map)));
+            __result.glow = Mathf.Min(__result.glow, OceanDaylight.CapOn(map));
         }
     }
 }

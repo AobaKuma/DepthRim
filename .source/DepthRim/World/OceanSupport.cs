@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
@@ -29,7 +30,7 @@ namespace DepthRim
             {
                 IntVec3 c = CellFinder.RandomNotEdgeCell(12, map);
                 CellRect rect = GenAdj.OccupiedRect(c, Rot4.North, def.size);
-                if (!CanPlace(rect, map))
+                if (!CanPlace(rect.ExpandedBy(1), map))
                 {
                     continue;
                 }
@@ -39,9 +40,10 @@ namespace DepthRim
             Log.Message($"[DepthRim] placed {placed}/{want} hydrothermal vent(s) on map {map.uniqueID}");
         }
 
-        private static bool CanPlace(CellRect rect, Map map)
+        /// <summary>整個範圍都在地圖內、可站立、沒有建築，而且不是深淵或不能通行的地形。</summary>
+        internal static bool CanPlace(CellRect rect, Map map)
         {
-            foreach (IntVec3 c in rect.ExpandedBy(1))
+            foreach (IntVec3 c in rect)
             {
                 if (!c.InBounds(map) || !c.Standable(map) || c.GetEdifice(map) != null)
                 {
@@ -54,6 +56,49 @@ namespace DepthRim
                 }
             }
             return true;
+        }
+    }
+
+    /// <summary>
+    /// 海床上的天然物件（海底火山生態的 DR_UnderwaterVolcano、DR_Rock 等）：清單與數量來自生態區的
+    /// <see cref="WaterMapExtension.seafloorFeatures"/>，依序放置（大型物件寫在前面，才不會被小岩塊佔掉空地）。
+    /// 排在岩體與深淵之後，只放在空曠、可站立的海床上。
+    /// </summary>
+    public class GenStep_OceanFeatures : GenStep
+    {
+        public override int SeedPart => 730214597;
+
+        public override void Generate(Map map, GenStepParams parms)
+        {
+            List<SeafloorFeature> features = map.Biome?.GetModExtension<WaterMapExtension>()?.seafloorFeatures;
+            if (features.NullOrEmpty())
+            {
+                return;
+            }
+            foreach (SeafloorFeature f in features)
+            {
+                if (f?.thing == null || f.count.max <= 0)
+                {
+                    continue;
+                }
+                int want = f.count.RandomInRange;
+                int placed = 0;
+                for (int attempt = 0; attempt < want * 40 && placed < want; attempt++)
+                {
+                    IntVec3 c = CellFinder.RandomNotEdgeCell(f.edgeMargin, map);
+                    CellRect rect = GenAdj.OccupiedRect(c, Rot4.North, f.thing.size);
+                    if (!GenStep_OceanVents.CanPlace(rect.ExpandedBy(f.clearance), map))
+                    {
+                        continue;
+                    }
+                    GenSpawn.Spawn(ThingMaker.MakeThing(f.thing), c, map, WipeMode.Vanish);
+                    placed++;
+                }
+                if (placed < want)
+                {
+                    Log.Message($"[DepthRim] placed {placed}/{want} {f.thing.defName} on map {map.uniqueID}");
+                }
+            }
         }
     }
 

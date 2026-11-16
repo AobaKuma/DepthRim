@@ -90,4 +90,25 @@
     <shaderPath>Map/DepthRim_Abyss</shaderPath>
   </ShaderTypeDef>
 
+  <!-- 航行黑暗（DepthRim.SectionLayer_VoyageDarkness）：航行中潛艇地圖的艙外淡出到地圖界外的顏色。
+       排在光照暗化（Darkness 3180）之後：界外色不該被日夜或燈光改變。關閉深度測試，艙外的一切都被蓋住。 -->
+  <ShaderDef>
+    <defName>DepthRim_VoyageDarkness</defName>
+    <shaderProgram>
+      <vertexShaderFileName>MapWorldUV.vert.glsl</vertexShaderFileName>
+      <fragmentShaderFileName>DepthRim_VoyageDarkness.frag.glsl</fragmentShaderFileName>
+      <flipTextureST>false</flipTextureST>
+      <transparent>true</transparent>
+      <depthTest>false</depthTest>
+      <depthWrite>false</depthWrite>
+      <cullMode>None</cullMode>
+      <renderQueue>3182</renderQueue>
+    </shaderProgram>
+  </ShaderDef>
+
+  <ShaderTypeDef>
+    <defName>DepthRim_VoyageDarkness</defName>
+    <shaderPath>Map/DepthRim_VoyageDarkness</shaderPath>
+  </ShaderTypeDef>
+
 </Defs>

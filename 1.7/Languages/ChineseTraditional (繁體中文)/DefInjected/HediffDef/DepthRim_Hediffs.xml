@@ -19,4 +19,12 @@
   <DepthRim_Barotrauma.stages.1.label>嚴重</DepthRim_Barotrauma.stages.1.label>
   <DepthRim_Barotrauma.stages.2.label>危急</DepthRim_Barotrauma.stages.2.label>
 
+  <DepthRim_PressureAdaptation.label>壓力適應</DepthRim_PressureAdaptation.label>
+  <DepthRim_PressureAdaptation.description>這個身體對所在壓力的適應程度。它會慢慢往周圍的壓力等級靠近（一般人每級約一天），血液過濾能力越好越快。
+
+周圍的壓力和身體習慣的壓力相差不超過一級時沒有任何影響。超過一級（不論是下潛還是上浮）就會不舒服，直到身體跟上為止。加壓艙可以讓人分段適應。\n\n適應了深處壓力的身體，出艙時也撐得住同樣等級的水壓，和潛水裝備的抗性相加。</DepthRim_PressureAdaptation.description>
+  <DepthRim_PressureAdaptation.stages.1.label>輕微不適</DepthRim_PressureAdaptation.stages.1.label>
+  <DepthRim_PressureAdaptation.stages.2.label>壓力不適</DepthRim_PressureAdaptation.stages.2.label>
+  <DepthRim_PressureAdaptation.stages.3.label>嚴重壓力不適</DepthRim_PressureAdaptation.stages.3.label>
+
 </LanguageData>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!--
+    出水演出的水花（2026-11-15）：照原版生物出水（EffecterDef PawnEmergeFromWater / PawnEmergeFromWaterLarge）。
+    下面是原版 GroundWaterSplash 的原樣複本（貼圖、顏色、時間、scaler 曲線都不動），
+    改了兩處：scalingAnchor 改成中心（演出把水柱轉到船體法線方向，原版 (.5,.2) 的錨點補償只往北、不跟著旋轉，水柱的根會漂走；
+    演出把生成點往法線推出去補回來），以及 renderQueue 3300：DMSE 過場的船體畫在 3200，原版 mote 材質在它下面，水柱才蓋得住船體浮現的邊緣。
+  -->
+
+  <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+    <defName>DepthRim_SurfacingSplash</defName>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_FleckPulse</graphicClass>
+        <shaderType>Mote</shaderType>
+        <texPath>Things/Mote/GroundSplash/GroundSplashA</texPath>
+        <drawSize>(1,1)</drawSize>
+        <color>(0.53, 0.69, 0.74, .5)</color>
+        <renderQueue>3300</renderQueue>
+      </li>
+      <li>
+        <graphicClass>Graphic_FleckPulse</graphicClass>
+        <shaderType>Mote</shaderType>
+        <texPath>Things/Mote/GroundSplash/GroundSplashB</texPath>
+        <drawSize>(1,1)</drawSize>
+        <color>(0.53, 0.69, 0.74, .5)</color>
+        <renderQueue>3300</renderQueue>
+      </li>
+    </randomGraphics>
+    <unattachedDrawOffset>(0, 0, 0)</unattachedDrawOffset>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0</fadeInTime>
+    <solidTime>.3</solidTime>
+    <fadeOutTime>.35</fadeOutTime>
+    <archHeight>0</archHeight>
+    <growthRate>1</growthRate>
+    <scalingAnchor>(.5, .5, 0)</scalingAnchor>
+    <scalers>
+      <li>
+        <scaleAmt>1</scaleAmt>
+        <scaleTime>.65</scaleTime>
+        <axisMask>(1, 0, 0)</axisMask>
+        <curve>
+          <points>
+            <li>(0,0.5)</li>
+            <li>(0.04,0.4548468)</li>
+            <li>(0.08,0.402833)</li>
+            <li>(0.12,0.3486849)</li>
+            <li>(0.16,0.2971286)</li>
+            <li>(0.2,0.2528901)</li>
+            <li>(0.24,0.2206958)</li>
+            <li>(0.28,0.2052717)</li>
+            <li>(0.32,0.2082831)</li>
+            <li>(0.36,0.2212332)</li>
+            <li>(0.3999999,0.2424916)</li>
+            <li>(0.4399999,0.2712372)</li>
+            <li>(0.4799999,0.3066487)</li>
+            <li>(0.5199999,0.3479051)</li>
+            <li>(0.5599999,0.3941854)</li>
+            <li>(0.6,0.4446683)</li>
+            <li>(0.64,0.4985328)</li>
+            <li>(0.68,0.5549577)</li>
+            <li>(0.72,0.613122)</li>
+            <li>(0.7600001,0.6722045)</li>
+            <li>(0.8000001,0.7313842)</li>
+            <li>(0.8400001,0.7898397)</li>
+            <li>(0.8800001,0.8467504)</li>
+            <li>(0.9200001,0.9012946)</li>
+            <li>(0.9600002,0.9526517)</li>
+            <li>(1,1)</li>
+          </points>
+        </curve>
+      </li>
+      <li>
+        <scaleAmt>1</scaleAmt>
+        <scaleTime>.65</scaleTime>
+        <axisMask>(0, 0, 1)</axisMask>
+        <curve>
+          <points>
+            <li>(0,0)</li>
+            <li>(0.04,0.08772291)</li>
+            <li>(0.08,0.1736811)</li>
+            <li>(0.12,0.2568415)</li>
+            <li>(0.16,0.3361711)</li>
+            <li>(0.2,0.4106368)</li>
+            <li>(0.24,0.4792057)</li>
+            <li>(0.28,0.5408444)</li>
+            <li>(0.32,0.5945203)</li>
+            <li>(0.36,0.6392)</li>
+            <li>(0.3999999,0.6738507)</li>
+            <li>(0.4399999,0.6974391)</li>
+            <li>(0.4799999,0.7089323)</li>
+            <li>(0.5199999,0.7097846)</li>
+            <li>(0.5599999,0.7065364)</li>
+            <li>(0.6,0.6982319)</li>
+            <li>(0.64,0.683339)</li>
+            <li>(0.68,0.6603254)</li>
+            <li>(0.72,0.6276588)</li>
+            <li>(0.7600001,0.5838069)</li>
+            <li>(0.8000001,0.5272376)</li>
+            <li>(0.8400001,0.4564185)</li>
+            <li>(0.8800001,0.3698174)</li>
+            <li>(0.9200001,0.265902)</li>
+            <li>(0.9600002,0.1431402)</li>
+            <li>(1,0)</li>
+          </points>
+        </curve>
+      </li>
+    </scalers>
+  </FleckDef>
+
+</Defs>

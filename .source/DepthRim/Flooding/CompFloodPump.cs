@@ -66,6 +66,33 @@ namespace DepthRim
             power = parent.GetComp<CompPowerTrader>();
             flickable = parent.GetComp<CompFlickable>();
             parent.Map.Flooding()?.Register(this);
+            RefreshPowerDraw();
+        }
+
+        /// <summary>所在艙室真的有水可抽（密閉、水位大於零）；開放水域或乾的艙室只吃待機電力。</summary>
+        public bool HasWork
+        {
+            get
+            {
+                MapComponent_Flooding flooding = parent.Spawned ? parent.Map.Flooding() : null;
+                if (flooding == null || !flooding.Active)
+                {
+                    return false;
+                }
+                Room room = DrainedRoom;
+                return room != null && !room.IsDoorway && !flooding.IsOpenWater(room) && flooding.LevelOf(room) > 0f;
+            }
+        }
+
+        public void RefreshPowerDraw()
+        {
+            IdlePowerUtility.SetBusy(power, HasWork);
+        }
+
+        public override void CompTickRare()
+        {
+            base.CompTickRare();
+            RefreshPowerDraw();
         }
 
         public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)

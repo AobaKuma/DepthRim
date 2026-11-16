@@ -286,7 +286,8 @@ namespace DepthRim.Acceptance
                 Log($"Game ready (map {Find.CurrentMap.uniqueID}, tile {Find.CurrentMap.Tile}).");
                 if (tests == null)
                 {
-                    DepthRimFixture.PrepareGameOnce();
+                    // 用別的場景開新遊戲時（-depthrim-scenario）地圖不是原版的地表殖民地，不挖測試區
+                    if (!ScenarioOverride.Active) { DepthRimFixture.PrepareGameOnce(); }
                     tests = AcceptanceSuite.Build();
                     if (GenCommandLine.TryGetCommandLineArg(OnlyArgKey, out string only) && !only.NullOrEmpty())
                     {

@@ -167,6 +167,8 @@
       <li Class="DMSE.CompProperties_TransferConsole">
         <operateTicks>1250</operateTicks>
         <countdownTicks>600</countdownTicks>
+        <!-- 規劃航線併入艦橋的航行指令（DepthRim.SubmarineNavigation） -->
+        <showPlanGizmo>false</showPlanGizmo>
       </li>
       <li Class="DepthRim.CompProperties_DiveControl" />
     </comps>

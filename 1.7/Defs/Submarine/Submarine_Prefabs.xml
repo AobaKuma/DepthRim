@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    預製潛艇（FFF 結構，Fortified.Structures.FFF_StructureDef）。
+    生成：DepthRim.SubmarinePrefab.Spawn（測試、除錯動作「Spawn prefab submarine」）或 DepthRim.GenStep_PrefabSubmarine（之後的開局內容）。
+    直接用 FFF 的 GenStep 也能生成，但不會把艙室設成乾的、也不會還原地圖迷霧，所以請走上面兩個入口。
+
+    尺寸 17×11（x 0..16，z 0..10），船艏朝東（+x）。座標是 FFF 慣例：物件的 pos 是原版的中心格。
+
+      z10  W W W W W W W W W W W W W W W W W
+      z 9  W T T T L W h . . . P W H H H L W    T 推進器（朝西，3×2）  H 艦橋（3×2，互動格在下方）
+      z 8  W T T T . W . . . . . W H H H . W     B 電池（1×2）          K 龍骨框架（3×3）
+      z 7  W B . B . W . K K K . W . . . . W    P 排水泵               R 加壓機
+      z 6  W B . B . W . K K K . W . . . b W     S 被動聲納（2×2）      b 床（1×2）
+      z 5  W B c c c D c K K K c D c c c b W     D 水密門               c 電線（x 2..14，z 5）
+      z 4  W B . . . W . . . . . W . . . . W     L 落地燈               h 暖氣
+      z 3  W . . . P W . W D W . W b . S S W     W 抗壓水密牆
+      z 2  W T T T . W . W P W . W b . S S W
+      z 1  W T T T . W L W . W R W . P . . W     中艙下方 (8,1)～(8,2) 是氣閘：內門 (8,3)、外門 (8,0)
+      z 0  W W W W W W W W D W W W W W W W W
+           0 1 2 3 4 5 6 7 8 9 ...       16
+
+    - 三個艙室：船尾機艙（x1..4）、中艙（x6..10，龍骨＋氣閘）、船艏艦橋（x12..15）。全部蓋屋頂，所以都是密閉艙室。
+    - 船殼耐壓：外牆是抗壓水密牆（海床），但氣閘外門是水密門（變溫層），所以整艘船耐壓變溫層（HullPressure 取最弱的那一塊）。
+    - 龍骨框架中心 (8,6)，覆蓋半徑 11：最遠的角落 (0,0)／(16,0) 距離 10，整塊船體平台都在船體內，不需要鋪大樑。
+    - 電：三顆電池（FFF 生成時充滿）；電線沿 z5 鋪一條主幹，避開電池格（同一格不能有兩個 transmitter）；其他用電建築都在 6 格連接距離內。
+    - 每個艙室與氣閘各一台排水泵；中艙有加壓機與暖氣。
+  -->
+  <Fortified.Structures.FFF_StructureDef>
+    <defName>DepthRim_Prefab_PatrolSubmarine</defName>
+    <size>(17, 11)</size>
+    <disableSuggestedRoof>True</disableSuggestedRoof>
+    <tags>
+      <li>DepthRim_Submarine</li>
+    </tags>
+    <elements>
+      <!-- 船體平台 -->
+      <li Class="Fortified.Structures.FFF_Element_TerrainRect">
+        <def>DepthRim_HullPlatform</def>
+        <pos>(0, 0, 0)</pos>
+        <size>(17, 11)</size>
+      </li>
+
+      <!-- 外殼 -->
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(0, 0, 0)</pos>
+        <size>(8, 1)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(9, 0, 0)</pos>
+        <size>(8, 1)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(0, 0, 10)</pos>
+        <size>(17, 1)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(0, 0, 1)</pos>
+        <size>(1, 9)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(16, 0, 1)</pos>
+        <size>(1, 9)</size>
+      </li>
+
+      <!-- 艙壁（x5、x11，門在 z5） -->
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(5, 0, 1)</pos>
+        <size>(1, 4)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(5, 0, 6)</pos>
+        <size>(1, 4)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(11, 0, 1)</pos>
+        <size>(1, 4)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(11, 0, 6)</pos>
+        <size>(1, 4)</size>
+      </li>
+
+      <!-- 氣閘（x8，z1..2）的側牆 -->
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(7, 0, 1)</pos>
+        <size>(1, 3)</size>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>DepthRim_PressureHullWall</def>
+        <pos>(9, 0, 1)</pos>
+        <size>(1, 3)</size>
+      </li>
+
+      <!-- 水密門：氣閘外門、氣閘內門、兩道艙壁門 -->
+      <li Class="Fortified.Structures.FFF_Element_ThingScatter">
+        <def>DepthRim_WatertightDoor</def>
+        <posList>
+          <li>(8, 0, 0)</li>
+          <li>(8, 0, 3)</li>
+          <li>(5, 0, 5)</li>
+          <li>(11, 0, 5)</li>
+        </posList>
+      </li>
+
+      <!-- 電線主幹（z5，x2..14） -->
+      <li Class="Fortified.Structures.FFF_Element_ThingRect">
+        <def>PowerConduit</def>
+        <pos>(2, 0, 5)</pos>
+        <size>(13, 1)</size>
+      </li>
+
+      <!-- 船尾機艙 -->
+      <li Class="Fortified.Structures.FFF_Element_Thing">
+        <def>DepthRim_Thruster</def>
+        <pos>(2, 0, 1)</pos>
+        <rot>West</rot>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_Thing">
+        <def>DepthRim_Thruster</def>
+        <pos>(2, 0, 8)</pos>
+        <rot>West</rot>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingScatter">
+        <def>Battery</def>
+        <posList>
+          <li>(1, 0, 4)</li>
+          <li>(1, 0, 6)</li>
+          <li>(3, 0, 6)</li>
+        </posList>
+      </li>
+
+      <!-- 中艙：龍骨框架、加壓機、暖氣 -->
+      <li Class="Fortified.Structures.FFF_Element_Thing">
+        <def>DepthRim_Keel</def>
+        <pos>(8, 0, 6)</pos>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_Thing">
+        <def>DepthRim_Pressurizer</def>
+        <pos>(10, 0, 1)</pos>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_Thing">
+        <def>Heater</def>
+        <pos>(6, 0, 9)</pos>
+        <targetTemperature>21</targetTemperature>
+      </li>
+
+      <!-- 船艏：艦橋、被動聲納、兩張床 -->
+      <li Class="Fortified.Structures.FFF_Element_Thing">
+        <def>DepthRim_Helm</def>
+        <pos>(13, 0, 8)</pos>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_Thing">
+        <def>DepthRim_PassiveSonar</def>
+        <pos>(14, 0, 2)</pos>
+      </li>
+      <li Class="Fortified.Structures.FFF_Element_ThingScatter">
+        <def>Bed</def>
+        <stuff>Steel</stuff>
+        <posList>
+          <li>(12, 0, 2)</li>
+          <li>(15, 0, 5)</li>
+        </posList>
+      </li>
+
+      <!-- 排水泵：每個艙室與氣閘各一台 -->
+      <li Class="Fortified.Structures.FFF_Element_ThingScatter">
+        <def>DepthRim_BilgePump</def>
+        <posList>
+          <li>(4, 0, 3)</li>
+          <li>(8, 0, 2)</li>
+          <li>(10, 0, 9)</li>
+          <li>(13, 0, 1)</li>
+        </posList>
+      </li>
+
+      <!-- 燈 -->
+      <li Class="Fortified.Structures.FFF_Element_ThingScatter">
+        <def>StandingLamp</def>
+        <posList>
+          <li>(4, 0, 9)</li>
+          <li>(6, 0, 1)</li>
+          <li>(15, 0, 9)</li>
+        </posList>
+      </li>
+
+      <!-- 屋頂：整塊船體（含牆）都蓋，三個艙室與氣閘才是密閉的 -->
+      <li Class="Fortified.Structures.FFF_Element_RoofRect">
+        <def>RoofConstructed</def>
+        <pos>(0, 0, 0)</pos>
+        <size>(17, 11)</size>
+      </li>
+    </elements>
+  </Fortified.Structures.FFF_StructureDef>
+
+</Defs>

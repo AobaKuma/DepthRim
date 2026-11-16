@@ -4,4 +4,10 @@
   <DepthRim_OpenAbyss.label>開放深淵</DepthRim_OpenAbyss.label>
   <DepthRim_HullPlatform.label>船體平台</DepthRim_HullPlatform.label>
 
+  <DepthRim_OpenSea.label>開放海面</DepthRim_OpenSea.label>
+  <DepthRim_OceanDeck.label>海上平台</DepthRim_OceanDeck.label>
+  <DepthRim_OpenWater.label>開放水域</DepthRim_OpenWater.label>
+  <DepthRim_HullBase.label>開放水域或海床</DepthRim_HullBase.label>
+  <DepthRim_OpenAir.label>高空</DepthRim_OpenAir.label>
+
 </LanguageData>

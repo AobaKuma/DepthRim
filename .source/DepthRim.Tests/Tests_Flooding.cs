@@ -294,6 +294,32 @@ static partial class Test
         // 那需要真的 Map 與 MapParent，單元測試建不出來，所以由文件與 V6（除錯覆寫優先序）涵蓋。
     }
 
+    static void SeekAirRules()
+    {
+        // 醒著：只有沒入水中、需要呼吸，且沒有氣瓶或氣量偏低時才去找空氣
+        Check(FloodingMath.NeedsToSeekAir(true, true, false, 0f), "submerged without gear seeks air");
+        Check(!FloodingMath.NeedsToSeekAir(true, false, false, 0f), "not submerged: no need");
+        Check(!FloodingMath.NeedsToSeekAir(false, true, false, 0f), "pawns that do not breathe never seek air");
+        Check(!FloodingMath.NeedsToSeekAir(true, true, true, 1f), "a full tank keeps working underwater");
+        Check(!FloodingMath.NeedsToSeekAir(true, true, true, FloodingMath.SeekAirBelowPercent), "exactly at the threshold keeps working");
+        Check(FloodingMath.NeedsToSeekAir(true, true, true, FloodingMath.SeekAirBelowPercent - 0.01f), "a low tank seeks air");
+        Check(FloodingMath.SeekAirBelowPercent > FloodingPawnEffects.MinAirToLeave, "divers turn back while watertight doors still let them through");
+        // 睡覺處：低於躺下淹沒的水位就先叫醒
+        Check(FloodingMath.SleepSafeLevel < FloodingPawnEffects.SubmergedLevelLying, "sleepers are woken before the water covers them");
+        Check(FloodingMath.SleepSpotFlooded(true, false, FloodingMath.SleepSafeLevel), "bed at the safe level counts as flooded");
+        Check(!FloodingMath.SleepSpotFlooded(true, false, FloodingMath.SleepSafeLevel - 0.01f), "bed just below is fine");
+        Check(!FloodingMath.SleepSpotFlooded(true, true, 1f), "a diver with air may sleep in water");
+        Check(!FloodingMath.SleepSpotFlooded(false, false, 1f), "mechanoids may sleep in water");
+        Check(FloodingMath.SleeperMustEvacuate(true, false, false, 0f, false, 0.25f), "sleeper in a 25% flooded bed is woken");
+        Check(FloodingMath.SleeperMustEvacuate(true, true, true, 0.3f, true, 1f), "sleeping diver with a low tank is woken");
+        Check(!FloodingMath.SleeperMustEvacuate(true, true, true, 0.9f, true, 1f), "sleeping diver with air keeps sleeping");
+        Check(!FloodingMath.SleeperMustEvacuate(true, false, false, 0f, false, 0.1f), "dry bed keeps sleeping");
+        // 補氣
+        Check(FloodingMath.DoneRefilling(false, 0f), "without gear the job ends on arrival");
+        Check(!FloodingMath.DoneRefilling(true, 0.5f), "half a tank keeps refilling");
+        Check(FloodingMath.DoneRefilling(true, FloodingMath.SeekAirRefilledPercent), "refilled");
+    }
+
     static void DivingAir()
     {        CompDivingAir air = new CompDivingAir { props = new CompProperties_DivingAir { capacityTicks = 1000, refillPerTick = 10f } };
         Near(air.Air, 1000f, "starts full");

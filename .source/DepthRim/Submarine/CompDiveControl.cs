@@ -13,12 +13,35 @@ namespace DepthRim
     }
 
     /// <summary>
-    /// 艦橋上的下潛控制：和潛艇世界物件上的指令是同一個（<see cref="WorldObject_Submarine.DiveGizmo"/>）。
-    /// 還在船塢（地圖父物件不是潛艇）時顯示但停用。
+    /// 艦橋上的航行指令（<see cref="SubmarineNavigation"/>），和潛艇世界物件上的是同一個。
+    /// 也記著航行指令規劃的終端深度：啟航後新的潛艇第一次 tick 時接手（<see cref="TakeVoyageDepth"/>）。
     /// </summary>
     public class CompDiveControl : ThingComp
     {
+        private bool hasVoyageDepth;
+
+        private DepthTier voyageStart;
+
+        private DepthTier voyageEnd;
+
         public WorldObject_Submarine Submarine => parent.Map?.Parent as WorldObject_Submarine;
+
+        public void SetVoyageDepth(DepthTier start, DepthTier end)
+        {
+            hasVoyageDepth = true;
+            voyageStart = start;
+            voyageEnd = end;
+        }
+
+        /// <summary>取走規劃的出發與終端深度（取走後清掉）。</summary>
+        public bool TakeVoyageDepth(out DepthTier start, out DepthTier end)
+        {
+            start = voyageStart;
+            end = voyageEnd;
+            bool had = hasVoyageDepth;
+            hasVoyageDepth = false;
+            return had;
+        }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
@@ -26,25 +49,38 @@ namespace DepthRim
             {
                 yield break;
             }
+            yield return SubmarineNavigation.NavigateGizmo(parent);
             WorldObject_Submarine sub = Submarine;
             if (sub != null)
             {
-                yield return sub.DiveGizmo();
                 if (sub.InFlight && !sub.isImpact)
                 {
                     yield return sub.StopGizmo();
                 }
+                else if (!sub.landingTarget.Valid)
+                {
+                    foreach (Gizmo g in SubmarineSurfacing.SubmarineGizmos(sub))
+                    {
+                        yield return g;
+                    }
+                }
                 yield break;
             }
-            Command_Action disabled = new Command_Action
+            if (SubmarineSurfacing.IsSurfacedMap(parent.Map))
             {
-                defaultLabel = "DepthRim.Sub.CruiseNone".Translate(),
-                defaultDesc = "DepthRim.Sub.NotAboard".Translate(),
-                icon = WorldObject_Submarine.DiveIcon,
-                action = delegate { },
-            };
-            disabled.Disable("DepthRim.Sub.NotAboard".Translate());
-            yield return disabled;
+                foreach (Gizmo g in SubmarineSurfacing.SurfacedGizmos(parent))
+                {
+                    yield return g;
+                }
+            }
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref hasVoyageDepth, "hasVoyageDepth");
+            Scribe_Values.Look(ref voyageStart, "voyageStart");
+            Scribe_Values.Look(ref voyageEnd, "voyageEnd");
         }
     }
 }

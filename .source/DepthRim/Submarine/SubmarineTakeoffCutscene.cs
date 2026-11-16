@@ -9,8 +9,8 @@ namespace DepthRim
 {
     /// <summary>
     /// 潛艇的離港過場（2026-11-11：原本整段沿用轉移船的升空動畫）。DMSE 的 <see cref="TransferTakeoffCutscene"/> 負責擷取船體影像與流程，
-    /// 這裡只換演出：沒有鏡頭震動與火箭聲（改成推進器的低頻運轉聲）、鏡頭幾乎不拉遠、船體沿推進方向緩緩滑出，
-    /// 一邊變小（往深處潛）一邊沉進海水的顏色裡淡出；推進器只吐水泡（推進器沒有火焰，見 Submarine_Buildings.xml）。
+    /// 這裡只換演出：沒有鏡頭震動與火箭聲（改成推進器的低頻運轉聲）、鏡頭不拉遠、船體沿推進方向緩緩滑出，
+    /// 稍微變小（往深處潛）並沉進海水的顏色裡淡出；推進器只吐水泡（推進器沒有火焰，見 Submarine_Buildings.xml）。
     /// 由海洋圖層的 <c>TransferEnvironmentExtension.presentation.takeoffCutsceneClass</c> 指定。
     /// </summary>
     public class SubmarineTakeoffCutscene : TransferTakeoffCutscene
@@ -21,6 +21,7 @@ namespace DepthRim
             : base(displayMap, center, onComplete, captureMap, cells)
         {
         }
+
 
         protected override float Duration => 8f;
 
@@ -51,7 +52,8 @@ namespace DepthRim
 
         protected override float ZoomAt(float progress)
         {
-            return Mathf.Lerp(InitialZoom, Mathf.Min(InitialZoom * 1.15f, MaxZoom), Mathf.SmoothStep(0f, 1f, progress));
+            // 鏡頭固定（2026-11-14：原本拉遠 15%）
+            return InitialZoom;
         }
 
         protected override Vector3 ShipOffset(float progress)
@@ -62,7 +64,8 @@ namespace DepthRim
 
         protected override float ShipScale(float progress)
         {
-            return Mathf.Lerp(1f, 0.8f, Mathf.SmoothStep(0f, 1f, progress));
+            // 往深處潛只縮一點（2026-11-14：原本縮到 0.8），主要靠沉進海水的顏色與淡出
+            return Mathf.Lerp(1f, 0.92f, Mathf.SmoothStep(0f, 1f, progress));
         }
 
         protected override float FadeAt(float progress)

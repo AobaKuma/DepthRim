@@ -2,4 +2,5 @@
 <LanguageData>
   <DepthRim_BoardCraft.reportString>登上TargetA。</DepthRim_BoardCraft.reportString>
   <DepthRim_CarryToCraft.reportString>把TargetA扛上TargetB。</DepthRim_CarryToCraft.reportString>
+  <DepthRim_SeekAir.reportString>尋找空氣。</DepthRim_SeekAir.reportString>
 </LanguageData>

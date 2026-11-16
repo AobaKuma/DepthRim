@@ -37,7 +37,7 @@ namespace DepthRim
     /// 降落時不破壞屋頂（skyfaller 的 hitRoof 關掉），所以不會打破艙室的密閉；落地後放出艇上的人。
     /// 敵方：襲擊撤退時（<see cref="LordToil_ReturnToCraft"/>）存活的人回到艇上（可能扛著俘虜或戰利品），
     /// 全員上艇或等太久就離開。摧毀停著的艇，裡面的人和東西會掉出來。
-    /// 玩家：殖民者右鍵登艇，按「出發」選一格海路到得了的海洋格，飛過去後一樣切入對方艙室。
+    /// 玩家：殖民者右鍵登艇，按「出發」選一格海路到得了的海洋格，確認出航前檢查（<see cref="BoardingReadiness"/>）後飛過去，一樣切入對方艙室。
     /// 艇上的人放在自己的容器（不用 CompTransporter：它在離場時會倒出內容物，也不能在 skyfaller 裡存非世界 pawn）。
     /// </summary>
     public class Building_BoardingCraft : Building, IThingHolder, IBVRPayloadHolder, IInterceptResolver, IBVRContactLabel
@@ -303,7 +303,7 @@ namespace DepthRim
             {
                 launch.Disable("DepthRim.Boarding.NoCrew".Translate());
             }
-            else if (!OceanRouting.IsOcean(Map.Tile))
+            else if (!LaunchTile(Map).Valid)
             {
                 launch.Disable("DepthRim.Torpedo.SeaOnly".Translate());
             }
@@ -318,6 +318,31 @@ namespace DepthRim
                     action = Eject,
                 };
             }
+        }
+
+        /// <summary>
+        /// 艇從這張地圖出航時在海洋層上的起點：海洋層的地圖就是它的格子；海面地圖（水面層、平台層）在地表層，
+        /// 起點是正下方的海洋格。都不是（陸地殖民地）時無效。
+        /// </summary>
+        public static PlanetTile LaunchTile(Map map)
+        {
+            if (map == null)
+            {
+                return PlanetTile.Invalid;
+            }
+            if (OceanRouting.IsOcean(map.Tile))
+            {
+                return map.Tile;
+            }
+            if (SeaLevels.IsAnyLevel(map))
+            {
+                PlanetTile below = OceanWorldView.TileBelow(map.Tile);
+                if (OceanRouting.IsOcean(below) && OceanRouting.Navigable(below))
+                {
+                    return below;
+                }
+            }
+            return PlanetTile.Invalid;
         }
 
         /// <summary>目的地檢查：海路到得了、在航程內的海洋格，而且那裡沒有不是據點的世界物件。回傳 null 表示可以。</summary>
@@ -338,8 +363,16 @@ namespace DepthRim
 
         private void StartChoosingDestination()
         {
-            PlanetTile from = Map.Tile;
+            PlanetTile from = LaunchTile(Map);
+            if (!from.Valid)
+            {
+                return;
+            }
             CameraJumper.TryJump(CameraJumper.GetWorldTarget(this));
+            if (PlanetLayer.Selected != from.Layer)
+            {
+                PlanetLayer.Selected = from.Layer;
+            }
             Find.WorldSelector.ClearSelection();
             Find.WorldTargeter.BeginTargeting(target =>
             {
@@ -349,7 +382,8 @@ namespace DepthRim
                     Messages.Message(reason.Translate(RangeTiles), MessageTypeDefOf.RejectInput, historical: false);
                     return false;
                 }
-                Launch(target.Tile);
+                PlanetTile to = target.Tile;
+                BoardingReadiness.Confirm(this, to, () => Launch(to));
                 return true;
             }, canTargetTiles: true, closeWorldTabWhenFinished: true,
             extraLabelGetter: target =>
@@ -406,12 +440,13 @@ namespace DepthRim
         protected override void LeaveMap()
         {
             Building_BoardingCraft craft = innerContainer.OfType<Building_BoardingCraft>().FirstOrDefault();
-            if (craft != null && craft.destinationTile.Valid && Map != null)
+            PlanetTile origin = Building_BoardingCraft.LaunchTile(Map);
+            if (craft != null && craft.destinationTile.Valid && origin.Valid)
             {
                 innerContainer.Remove(craft);
                 WorldObject_TravelingBoardingCraft traveling =
                     (WorldObject_TravelingBoardingCraft)WorldObjectMaker.MakeWorldObject(BoardingDefOf.DepthRim_TravelingBoardingCraft);
-                traveling.Setup(craft, Map.Tile, craft.destinationTile);
+                traveling.Setup(craft, origin, craft.destinationTile);
                 Find.WorldObjects.Add(traveling);
             }
             else

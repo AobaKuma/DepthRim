@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    潛艇開局：殖民者一開始就在一艘直接坐在淺海海床上的潛艇上（DepthRim.ScenPart_SubmarineStart）。
+    carveShipyard 設成 true 會改成先在海床上挖深淵船塢、潛艇停在船塢裡。
+    選地點時照常選地表格（海面也可以），開局地圖是正下方附近最近的淺海海洋格；附近沒有海就不能按「下一步」。
+    潛艇是遊戲內用 FFF 匯出的結構（1.7/Defs/Structures.xml 的 DR_Submarine_Test），重新匯出同名結構就會換船。
+    這個場景沒有原版的「抵達方式」：殖民者與開局物品由 ScenPart_SubmarineStart 放進船艙。
+  -->
+  <ScenarioDef ParentName="ScenarioBase">
+    <defName>DepthRim_SubmarineStart</defName>
+    <label>Abyssal Crew</label>
+    <description>Your crew wakes aboard a patrol submarine resting on the seabed. There is no colony above, no landing pad and no sky: only the hull, the sea, and whatever the crew can salvage from the dark.\n\nPick any site on the planet. The submarine starts in the nearest shallow sea below it.</description>
+    <scenario>
+      <summary>Three crew aboard a submarine on the seabed. DepthRim's underwater start.</summary>
+      <parts>
+
+        <!-- Game start dialog -->
+        <li Class="ScenPart_GameStartDialog">
+          <def>GameStartDialog</def>
+          <text>The ballast tanks settle and the hull creaks under the weight of the sea. Outside the viewports there is only black water and the faint shape of the seabed below the hull.\n\nThe submarine is your home now. Keep its compartments dry, keep the batteries charged, and when you are ready, take the helm and find somewhere worth surfacing.</text>
+          <closeSound>GameStartSting</closeSound>
+        </li>
+
+        <!-- Config pages -->
+        <li Class="ScenPart_ConfigPage_ConfigureStartingPawns">
+          <def>ConfigPage_ConfigureStartingPawns</def>
+          <pawnCount>3</pawnCount>
+          <pawnChoiceCount>8</pawnChoiceCount>
+        </li>
+
+        <!-- Start aboard the submarine (replaces the arrival method) -->
+        <li Class="DepthRim.ScenPart_SubmarineStart">
+          <def>DepthRim_SubmarineStart</def>
+          <structure>DR_Submarine_Test</structure>
+          <mapGenerator>DepthRim_OceanStart</mapGenerator>
+          <maxTier>Shallow</maxTier>
+          <searchRadius>6</searchRadius>
+          <carveShipyard>false</carveShipyard>
+          <shipyardMargin>2</shipyardMargin>
+        </li>
+
+        <!-- The crew already knows how to live and work under water -->
+        <li Class="ScenPart_StartingResearch">
+          <def>StartingResearch</def>
+          <project>DepthRim_UnderwaterSurvival</project>
+        </li>
+        <li Class="ScenPart_StartingResearch">
+          <def>StartingResearch</def>
+          <project>DepthRim_PressureEngineering</project>
+        </li>
+        <li Class="ScenPart_StartingResearch">
+          <def>StartingResearch</def>
+          <project>DepthRim_SubmarineConstruction</project>
+        </li>
+
+        <!-- Player starting things (placed inside the hull) -->
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>DepthRim_DivingSuit</thingDef>
+          <count>3</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>MealSurvivalPack</thingDef>
+          <count>40</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>MedicineIndustrial</thingDef>
+          <count>20</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>Chemfuel</thingDef>
+          <count>150</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>Steel</thingDef>
+          <count>300</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>ComponentIndustrial</thingDef>
+          <count>20</count>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>Gun_BoltActionRifle</thingDef>
+        </li>
+        <li Class="ScenPart_StartingThing_Defined">
+          <def>StartingThing_Defined</def>
+          <thingDef>Gun_Autopistol</thingDef>
+        </li>
+      </parts>
+    </scenario>
+  </ScenarioDef>
+
+  <ScenPartDef>
+    <defName>DepthRim_SubmarineStart</defName>
+    <label>start aboard a submarine</label>
+    <category>StartingImportant</category>
+    <scenPartClass>DepthRim.ScenPart_SubmarineStart</scenPartClass>
+    <selectionWeight>0</selectionWeight>
+    <maxUses>1</maxUses>
+  </ScenPartDef>
+
+  <!-- 潛艇開局的地圖：海洋地圖（DepthRim_Ocean 的全部步驟）加上最後一步，清出停泊處（或挖船塢）、生成潛艇、放殖民者 -->
+  <MapGeneratorDef ParentName="DepthRim_OceanBase">
+    <defName>DepthRim_OceanStart</defName>
+    <label>ocean (submarine start)</label>
+    <genSteps>
+      <li>DepthRim_SubmarineStart</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <!-- 排在海洋迷霧（1500）之後 -->
+  <GenStepDef>
+    <defName>DepthRim_SubmarineStart</defName>
+    <order>1510</order>
+    <genStep Class="DepthRim.GenStep_SubmarineStart" />
+  </GenStepDef>
+
+</Defs>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    上浮與破冰上浮（Docs/潛艇破冰出水_機制設計.md；程式 DepthRim.SubmarineSurfacing、IceBreach/）。
+    - 常規上浮：淺海、正上方沒有冰的海 → 船體搬到海面地圖（DepthRim_SeaSurfaceSite）。
+    - 破冰上浮：正上方是海冰 → 要有破冰結構；成功時船體搬到這裡的冰面地圖（DepthRim_IceBreachSite），四周開裂、破口慢慢重新結冰。
+    貼圖暫時借原版（冰、深海水、碎石污物）與龍骨樁的貼圖。
+  -->
+
+  <!-- ── 研究 ── -->
+  <ResearchProjectDef>
+    <defName>DepthRim_PolarNavigation</defName>
+    <label>polar navigation</label>
+    <description>Reinforced crowns and jacking frames that let a submarine punch up through sea ice by blowing its main ballast, and the upward sonar to measure the ice first.\n\nUnlocks the ice-breaker frame.</description>
+    <baseCost>1800</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>DepthRim_ResearchTab</tab>
+    <prerequisites>
+      <li>DepthRim_SubmarineConstruction</li>
+    </prerequisites>
+    <researchViewX>3.00</researchViewX>
+    <researchViewY>2.00</researchViewY>
+  </ResearchProjectDef>
+
+  <!-- ── 破冰結構：船艙內 3×3，頂住艙頂 ── -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_IceBreakerFrame</defName>
+    <label>ice-breaker frame</label>
+    <description>Reinforcing ribs and hydraulic jacks that brace the cabin roof against the keel. With one aboard, a submarine resting in the shallows under sea ice can blow its main ballast and punch up through the ice. Its built-in upward sonar measures the ice above.\n\nHow thick the ice can be is limited by the frame (half as much once it is below half health). Every attempt damages it; more frames share the damage but do not add lift.\n\nMust be built inside a roofed cabin on a hull platform. It is not part of the hull and does not affect how deep the submarine can dive.</description>
+    <graphicData>
+      <texPath>Thing/DR_Keel/Keel</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(3.4,3.4)</drawSize>
+      <color>(170,200,225)</color>
+    </graphicData>
+    <size>(3,3)</size>
+    <rotatable>false</rotatable>
+    <passability>Impassable</passability>
+    <fillPercent>1</fillPercent>
+    <holdsRoof>true</holdsRoof>
+    <castEdgeShadows>true</castEdgeShadows>
+    <canOverlapZones>false</canOverlapZones>
+    <terrainAffordanceNeeded>DepthRim_HullPlatform</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <researchPrerequisites>
+      <li>DepthRim_PolarNavigation</li>
+    </researchPrerequisites>
+    <statBases>
+      <MaxHitPoints>1200</MaxHitPoints>
+      <WorkToBuild>6000</WorkToBuild>
+      <Mass>200</Mass>
+      <Flammability>0</Flammability>
+      <Beauty>-4</Beauty>
+    </statBases>
+    <costList>
+      <Steel>150</Steel>
+      <Plasteel>40</Plasteel>
+    </costList>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <comps>
+      <li Class="DepthRim.CompProperties_IceBreakerFrame">
+        <maxThickness>2.0</maxThickness>
+      </li>
+    </comps>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_IceBreakerFrame</li>
+    </placeWorkers>
+    <uiOrder>2215</uiOrder>
+  </ThingDef>
+
+  <!-- ── 冰面地形 ── -->
+  <TerrainDef ParentName="NaturalTerrainBase" Name="DepthRim_SeaIceBase" Abstract="True">
+    <texturePath>Terrain/Surfaces/Ice</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <pathCost>14</pathCost>
+    <statBases>
+      <Beauty>-3</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+    </statBases>
+    <scatterType>SoftGray</scatterType>
+    <fertility>0</fertility>
+    <takeFootprints>True</takeFootprints>
+    <canEverTerraform>false</canEverTerraform>
+    <tags>
+      <li>Ice</li>
+    </tags>
+  </TerrainDef>
+
+  <TerrainDef ParentName="DepthRim_SeaIceBase">
+    <defName>DepthRim_SeaIceSheet</defName>
+    <label>sea ice</label>
+    <description>Floating sea ice, thick enough to walk and build on.</description>
+    <renderPrecedence>352</renderPrecedence>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Walkable</li>
+    </affordances>
+  </TerrainDef>
+
+  <TerrainDef ParentName="DepthRim_SeaIceBase">
+    <defName>DepthRim_IceCracked</defName>
+    <label>cracked sea ice</label>
+    <description>Sea ice split by the pressure of a surfacing hull. The cracks freeze shut again within a few days of frost.</description>
+    <renderPrecedence>353</renderPrecedence>
+    <color>(0.78, 0.84, 0.90)</color>
+    <statBases>
+      <Beauty>-4</Beauty>
+      <BeautyOutdoors>-1</BeautyOutdoors>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Walkable</li>
+    </affordances>
+  </TerrainDef>
+
+  <TerrainDef ParentName="DepthRim_SeaIceBase">
+    <defName>DepthRim_IceRubble</defName>
+    <label>ice rubble</label>
+    <description>Slabs of sea ice shoved up and piled around a surfaced hull. Slow and awkward to cross.</description>
+    <renderPrecedence>354</renderPrecedence>
+    <!-- 碎冰用原版石板地貼圖染成冰藍色（看起來像一塊塊翻起的冰板），和平整的海冰分得出來 -->
+    <texturePath>Terrain/Surfaces/Flagstone</texturePath>
+    <color>(0.80, 0.90, 1.0)</color>
+    <pathCost>28</pathCost>
+    <statBases>
+      <Beauty>-5</Beauty>
+      <BeautyOutdoors>-2</BeautyOutdoors>
+    </statBases>
+    <affordances>
+      <li>Walkable</li>
+    </affordances>
+  </TerrainDef>
+
+  <TerrainDef ParentName="DepthRim_SeaIceBase">
+    <defName>DepthRim_NewIce</defName>
+    <label>new ice</label>
+    <description>A thin skin of ice freezing over open water. It holds a person, but nothing can be built on it.</description>
+    <renderPrecedence>351</renderPrecedence>
+    <color>(0.62, 0.72, 0.82)</color>
+    <pathCost>20</pathCost>
+    <statBases>
+      <Beauty>0</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+    </statBases>
+    <affordances>
+      <li>Walkable</li>
+    </affordances>
+  </TerrainDef>
+
+  <!-- 破口的開放水：冰面地圖的「虛空」（船體離開後留下的就是它），船體平台可以鋪在上面 -->
+  <TerrainDef ParentName="WaterBase">
+    <defName>DepthRim_BreachWater</defName>
+    <label>open water</label>
+    <description>Freezing open water in a hole broken through the sea ice. It slowly ices over again.</description>
+    <texturePath>Terrain/Surfaces/WaterDeepRamp</texturePath>
+    <waterDepthShader>Map/WaterDepth</waterDepthShader>
+    <renderPrecedence>396</renderPrecedence>
+    <passability>Impassable</passability>
+    <pathCost>300</pathCost>
+    <changeable>false</changeable>
+    <canFreeze>false</canFreeze>
+    <waterBodyType>Saltwater</waterBodyType>
+    <affordances>
+      <li>DepthRim_OpenWater</li>
+      <li>DepthRim_HullBase</li>
+    </affordances>
+  </TerrainDef>
+
+  <!-- ── 甲板上的碎冰 ── -->
+  <ThingDef ParentName="BaseFilth">
+    <defName>DepthRim_Filth_IceChunks</defName>
+    <label>ice chunks</label>
+    <graphicData>
+      <texPath>Things/Filth/RubbleRock</texPath>
+      <color>(200, 225, 245, 200)</color>
+    </graphicData>
+    <filth>
+      <disappearsInDays>8~12</disappearsInDays>
+      <cleaningWorkToReduceThickness>20</cleaningWorkToReduceThickness>
+    </filth>
+    <statBases>
+      <BeautyOutdoors>-2</BeautyOutdoors>
+    </statBases>
+  </ThingDef>
+
+  <!-- ── 破冰點：地表格上的冰面地點與地圖 ── -->
+  <WorldObjectDef>
+    <defName>DepthRim_IceBreachSite</defName>
+    <label>ice breach</label>
+    <description>A hole a submarine broke through the sea ice.</description>
+    <worldObjectClass>DepthRim.WorldObject_IceBreachSite</worldObjectClass>
+    <mapGenerator>DepthRim_IceFloe</mapGenerator>
+    <canBePlayerHome>true</canBePlayerHome>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/Gravship</expandingIconTexture>
+    <expandingIconPriority>60</expandingIconPriority>
+    <expandingIconColor>(180,220,245,255)</expandingIconColor>
+    <neverMultiSelect>true</neverMultiSelect>
+    <inspectorTabs>
+      <li>WITab_Terrain</li>
+      <li>WITab_Planet</li>
+    </inspectorTabs>
+  </WorldObjectDef>
+
+  <!-- 冰面地圖：整張海冰板，沒有迷霧（冰原一覽無遺）。天氣、溫度、季節照原版地表格。 -->
+  <MapGeneratorDef>
+    <defName>DepthRim_IceFloe</defName>
+    <label>ice floe</label>
+    <disableCallAid>true</disableCallAid>
+    <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
+    <genSteps>
+      <li>DepthRim_IceFloe</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <GenStepDef>
+    <defName>DepthRim_IceFloe</defName>
+    <order>200</order>
+    <genStep Class="DepthRim.GenStep_IceFloe" />
+  </GenStepDef>
+
+</Defs>

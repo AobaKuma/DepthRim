@@ -163,5 +163,72 @@ namespace DepthRim.Acceptance
             }
             yield return Updates(1);
         }
+
+        /// <summary>
+        /// B3：海面地圖（地表層）上的月池也能出航：起點是正下方的海洋格，出發鈕可用、目的地檢查與航跡都從那格算。
+        /// </summary>
+        public static IEnumerable<Wait> B3_SeaSurfaceLaunch(TestContext ctx)
+        {
+            Map sea = Tests_SeaSurface.CreateSeaMap(ctx);
+            Dictionary<PlanetTile, BiomeDef> biomeBefore = null;
+            Pawn colonist = null;
+            try
+            {
+                PlanetTile below = OceanWorldView.TileBelow(sea.Tile);
+                ctx.Require(OceanRouting.IsOcean(below), $"the sea surface map has an ocean tile below ({below})");
+                biomeBefore = Tests_TorpedoDefense.OceanRings(below, 3);
+                OceanRouting.ClearCache();
+                ctx.Check(Building_BoardingCraft.LaunchTile(sea) == below, "a sea surface map launches from the ocean tile below it");
+                ctx.Check(!Building_BoardingCraft.LaunchTile(DepthRimFixture.Home).Valid || OceanRouting.IsOcean(DepthRimFixture.Home.Tile),
+                    "a land colony has no launch tile");
+
+                IntVec3 center = sea.Center;
+                Tests_SeaSurface.LayHull(sea, CellRect.CenteredOn(center, 4));
+                Thing pool = ThingMaker.MakeThing(BoardingDefOf.DepthRim_MoonPool, GenStuff.DefaultStuffFor(BoardingDefOf.DepthRim_MoonPool));
+                pool.SetFaction(Faction.OfPlayer);
+                GenSpawn.Spawn(pool, center, sea, WipeMode.Vanish);
+                Building_BoardingCraft craft = (Building_BoardingCraft)ThingMaker.MakeThing(BoardingDefOf.DepthRim_PlayerBoardingCraft,
+                    GenStuff.DefaultStuffFor(BoardingDefOf.DepthRim_PlayerBoardingCraft));
+                craft.SetFaction(Faction.OfPlayer);
+                GenSpawn.Spawn(craft, pool.Position, sea, WipeMode.Vanish);
+                yield return new WaitTicks(Building_BoardingCraft.EjectDelayTicks + 40);
+                colonist = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
+                craft.Load(colonist);
+                Command_Action launch = craft.GetGizmos().OfType<Command_Action>().FirstOrDefault(g => g.defaultLabel == "DepthRim.Boarding.Launch".Translate());
+                ctx.Check(launch != null && !launch.Disabled, $"launch is available on the sea surface ({launch?.disabledReason})");
+
+                PlanetTile dest = PlanetTile.Invalid;
+                foreach (PlanetTile t in biomeBefore.Keys)
+                {
+                    int d = OceanRouting.Distance(below, t);
+                    if (d >= 2 && d <= 3 && !Find.WorldObjects.AnyWorldObjectAt(t)) { dest = t; break; }
+                }
+                ctx.Require(dest.Valid, "found an empty ocean tile 2-3 tiles away by sea");
+                ctx.Check(Building_BoardingCraft.DestinationBlockReason(below, dest) == null, "the destination is within range of the tile below");
+                craft.Launch(dest);
+                WorldObject_TravelingBoardingCraft traveling = null;
+                yield return new WaitUntil(() =>
+                {
+                    traveling = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_TravelingBoardingCraft>().FirstOrDefault();
+                    return traveling != null;
+                }, 1200);
+                ctx.Require(traveling != null, "the craft left the sea surface and is running through the water");
+                ctx.Check(traveling.from == below && traveling.Tile == below, $"the track starts at the ocean tile below ({traveling.from})");
+                ctx.Check(traveling.arriveTick > traveling.departTick && traveling.arriveTick - traveling.departTick <= 3 * WorldObject_TravelingBoardingCraft.TicksPerTile,
+                    "the trip length is the sea distance from the tile below");
+            }
+            finally
+            {
+                foreach (WorldObject_TravelingBoardingCraft t in Find.WorldObjects.AllWorldObjects.OfType<WorldObject_TravelingBoardingCraft>().ToList()) { t.Destroy(); }
+                if (colonist != null && !colonist.Destroyed) { colonist.Destroy(); }
+                Tests_SeaSurface.RemoveSeaMaps(sea);
+                if (biomeBefore != null)
+                {
+                    foreach (KeyValuePair<PlanetTile, BiomeDef> kv in biomeBefore) { kv.Key.Tile.PrimaryBiome = kv.Value; }
+                }
+                OceanRouting.ClearCache();
+            }
+            yield return Updates(1);
+        }
     }
 }

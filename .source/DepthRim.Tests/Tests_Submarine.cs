@@ -244,7 +244,7 @@ static partial class Test
         XElement baseComp = boat.Element("comps").Elements("li").Single(e => (string)e.Attribute("Class") == "DMSE.CompProperties_MissileBase");
         Check((string)baseComp.Element("missileBody") == "DepthRim_TorpedoBody" && (string)Def("WorldObjectDef", (string)baseComp.Element("incomingWorldObjectDef")).Element("worldObjectClass") == "DMSE.WorldObject_IncomingMissile", "the enemy boat fires torpedo tracks of the class DMSE's missile base creates");
         Check(int.Parse((string)baseComp.Element("range")) <= range, "the enemy boat's range does not exceed the torpedo's");
-        // DMSE 擴充點（DMSE_調整計畫.md）：陣地的部件選項、離開信件、魚雷的水下領域與交戰判定、火控聲納的領域、海洋層的轉移 worker
+        // DMSE 擴充點（DMSE_對接研究.md）：陣地的部件選項、離開信件、魚雷的水下領域與交戰判定、火控聲納的領域、海洋層的轉移 worker
         foreach (string enemyDef in new[] { "DepthRim_EnemyTorpedoBoat", "DepthRim_PirateSubmarine" })
         {
             XElement mb = Def("WorldObjectDef", enemyDef).Element("comps").Elements("li").Single(e => (string)e.Attribute("Class") == "DMSE.CompProperties_MissileBase");

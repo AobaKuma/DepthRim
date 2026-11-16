@@ -12,10 +12,12 @@
     <mapGenerator>DepthRim_Ocean</mapGenerator>
     <canBePlayerHome>true</canBePlayerHome>
     <useDynamicDrawer>true</useDynamicDrawer>
+    <!-- 拉近時原版 WorldObject.Draw 畫的是 texture（沒設就什麼都不畫）；拉遠才換成 expandingIconTexture。 -->
+    <texture>World/WorldObjects/Camp</texture>
     <expandingIcon>true</expandingIcon>
     <expandingIconTexture>World/WorldObjects/Expanding/Gravship</expandingIconTexture>
     <expandingIconPriority>60</expandingIconPriority>
-    <!-- 必填：這個 WorldObjectDef 沒有 texture（沒有 Material），原版 ExpandingIconColor 會退回讀 Material.color 而 NullReference。
+    <!-- 沒設的話原版 ExpandingIconColor 會退回讀 Material.color（Camp 貼圖的白色）；拿掉 texture 時這裡變成必填，否則 NullReference。
          Odyssey 的 SpaceMapParent 定義也標註 required。 -->
     <expandingIconColor>(140,210,240,255)</expandingIconColor>
     <neverMultiSelect>true</neverMultiSelect>
@@ -35,7 +37,7 @@
        不能設 isUnderground：原版會把整張地圖鋪滿厚岩頂、高度全設為 1（整片岩體），玩家永遠蓋不出密閉艙室。
        沒有天光改由生態區的 Underground 天氣處理。
        迷霧用 DepthRim_OceanFog（原版 Fog 需要玩家起點，非開局地圖會報錯）。 -->
-  <MapGeneratorDef>
+  <MapGeneratorDef Name="DepthRim_OceanBase">
     <defName>DepthRim_Ocean</defName>
     <label>ocean</label>
     <forceCaves>true</forceCaves>
@@ -48,6 +50,7 @@
       <li>RocksFromGrid</li>
       <li>DepthRim_AbyssCarve</li>
       <li>DepthRim_OceanVents</li>
+      <li>DepthRim_OceanFeatures</li>
       <li>Plants</li>
       <li>DepthRim_OceanFog</li>
     </genSteps>

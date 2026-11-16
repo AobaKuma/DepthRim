@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_SeaIceSheet.label>海冰</DepthRim_SeaIceSheet.label>
+  <DepthRim_SeaIceSheet.description>浮在海上的冰，厚到可以行走、建造。</DepthRim_SeaIceSheet.description>
+  <DepthRim_IceCracked.label>裂開的海冰</DepthRim_IceCracked.label>
+  <DepthRim_IceCracked.description>被浮上來的船體頂裂的海冰。結凍幾天之後裂縫會重新凍合。</DepthRim_IceCracked.description>
+  <DepthRim_IceRubble.label>碎冰堆</DepthRim_IceRubble.label>
+  <DepthRim_IceRubble.description>被推開、堆在浮出的船體四周的冰塊，走起來又慢又不穩。</DepthRim_IceRubble.description>
+  <DepthRim_NewIce.label>新冰</DepthRim_NewIce.label>
+  <DepthRim_NewIce.description>開放水上剛結起來的一層薄冰。撐得住人，但不能在上面建造。</DepthRim_NewIce.description>
+  <DepthRim_BreachWater.label>開放水</DepthRim_BreachWater.label>
+  <DepthRim_BreachWater.description>海冰被撞開的破口裡冰冷的海水，會慢慢重新結冰。</DepthRim_BreachWater.description>
+
+</LanguageData>

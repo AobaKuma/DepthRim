@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- 常規上浮 -->
+  <DepthRim.Surface.Label>上浮</DepthRim.Surface.Label>
+  <DepthRim.Surface.Desc>吹除壓載，浮到正上方的海面。船體會浮在這一格的海面地圖上；之後從艦橋下潛。\n\n潛艇要停在淺海，而且上面是沒有冰的海。</DepthRim.Surface.Desc>
+  <DepthRim.Surface.NoHull>潛艇沒有船體。</DepthRim.Surface.NoHull>
+  <DepthRim.Surface.InFlight>潛艇正在航行，先停下來。</DepthRim.Surface.InFlight>
+  <DepthRim.Surface.NotShallow>先上升到{0}。</DepthRim.Surface.NotShallow>
+  <DepthRim.Surface.Land>上面是陸地，不是海。</DepthRim.Surface.Land>
+  <DepthRim.Surface.Shelf>上面是冰棚：幾百公尺厚的冰，任何潛艇都頂不開。</DepthRim.Surface.Shelf>
+  <DepthRim.Surface.Iced>上面的海結冰了（冰厚 {0} m），要用破冰上浮。</DepthRim.Surface.Iced>
+  <DepthRim.Surface.Occupied>上面已經有{0}。</DepthRim.Surface.Occupied>
+  <DepthRim.Surface.NoRoom>{0}沒有地方放得下船體。</DepthRim.Surface.NoRoom>
+  <DepthRim.Surface.Surfacing>上浮中</DepthRim.Surface.Surfacing>
+  <DepthRim.Surface.LetterLabel>浮出海面</DepthRim.Surface.LetterLabel>
+  <DepthRim.Surface.LetterText>{0}吹除壓載，衝出了海面，船體正浮在開放海面上。\n\n準備好之後從艦橋下潛。</DepthRim.Surface.LetterText>
+
+  <!-- 從水面下潛 -->
+  <DepthRim.Surface.DiveDesc>注水入壓載艙，沉回下方海洋，再下潛到選擇的深度。船體上的一切都會跟著走；不在船體上的東西留在原地。</DepthRim.Surface.DiveDesc>
+  <DepthRim.Surface.NotSurfaced>潛艇不在水面上。</DepthRim.Surface.NotSurfaced>
+  <DepthRim.Surface.NotOnHull>艦橋不在龍骨框架撐住的船體上。</DepthRim.Surface.NotOnHull>
+  <DepthRim.Surface.NoSeaBelow>下面沒有空著、可以航行的海。</DepthRim.Surface.NoSeaBelow>
+  <DepthRim.Surface.Diving>下潛中</DepthRim.Surface.Diving>
+  <DepthRim.Surface.Dived>{0}沉入水面之下，停在淺海。</DepthRim.Surface.Dived>
+
+  <!-- 破冰上浮 -->
+  <DepthRim.IceBreach.Label>破冰上浮</DepthRim.IceBreach.Label>
+  <DepthRim.IceBreach.Desc>懸停上升、貼住冰底一小時，然後緊急吹除主壓載，試著把冰頂破。\n\n成不成功取決於冰厚與氣溫對上船體大小（船越大上浮力越大）。如果冰只是裂開，一天內再試一次：裂過的冰比較容易頂破。每次嘗試都會讓破冰結構受損，而且要六小時重新注水、充氣。</DepthRim.IceBreach.Desc>
+  <DepthRim.IceBreach.NoFrame>船上沒有破冰結構。</DepthRim.IceBreach.NoFrame>
+  <DepthRim.IceBreach.Cooldown>壓載艙重新注水、充氣中：還要{0}。</DepthRim.IceBreach.Cooldown>
+  <DepthRim.IceBreach.NoIce>上面沒有冰，直接上浮。</DepthRim.IceBreach.NoIce>
+  <DepthRim.IceBreach.TooThick>冰厚 {0} m，超過破冰結構的上限（{1} m）。</DepthRim.IceBreach.TooThick>
+  <DepthRim.IceBreach.Hovering>正在冰下懸停，準備頂冰。</DepthRim.IceBreach.Hovering>
+  <DepthRim.IceBreach.Begin>{0}正緩緩上升貼住冰底，一小時後吹除壓載。</DepthRim.IceBreach.Begin>
+  <DepthRim.IceBreach.Cancelled>{0}放棄破冰：{1}</DepthRim.IceBreach.Cancelled>
+  <DepthRim.IceBreach.CancelledByPlayer>已取消。</DepthRim.IceBreach.CancelledByPlayer>
+  <DepthRim.IceBreach.CancelledMoved>潛艇移動或改變了深度。</DepthRim.IceBreach.CancelledMoved>
+  <DepthRim.IceBreach.CancelLabel>停止懸停</DepthRim.IceBreach.CancelLabel>
+  <DepthRim.IceBreach.CancelDesc>取消破冰。壓載將在{0}後吹除。</DepthRim.IceBreach.CancelDesc>
+  <DepthRim.IceBreach.InspectHovering>冰下懸停：{0}後頂冰</DepthRim.IceBreach.InspectHovering>
+  <DepthRim.IceBreach.StuckLabel>冰頂不動</DepthRim.IceBreach.StuckLabel>
+  <DepthRim.IceBreach.StuckText>{0}撞上冰層（厚 {1} m），卻完全頂不動（上浮比 {2}）。破冰結構承受了衝擊。\n\n找薄一點的冰、冰間水道，或換一艘更大的船。</DepthRim.IceBreach.StuckText>
+  <DepthRim.IceBreach.PartialLabel>冰被頂裂</DepthRim.IceBreach.PartialLabel>
+  <DepthRim.IceBreach.PartialText>{0}把冰層（厚 {1} m）頂裂了，但沒有穿透（上浮比 {2}）。破冰結構受損。\n\n六小時後壓載充好氣，在一天內再試一次：裂過的冰比較容易頂破。</DepthRim.IceBreach.PartialText>
+  <DepthRim.IceBreach.SurfacedLabel>破冰出水</DepthRim.IceBreach.SurfacedLabel>
+  <DepthRim.IceBreach.SurfacedText>{0}頂破了 {1} m 厚的海冰（上浮比 {2}），停在自己撞開的破口裡。\n\n船體四周的開放水會重新結冰。在船體四周的冰長到 0.4 m 之前下潛，或者用破冰結構把冰撞開。</DepthRim.IceBreach.SurfacedText>
+  <DepthRim.IceBreach.Violent>船體衝出得太猛，四周的冰碎了一大片。</DepthRim.IceBreach.Violent>
+  <DepthRim.IceBreach.FrozenIn>船體被凍住了（四周的冰厚 {0} m，超過 {1} m）。用破冰結構把冰撞開。</DepthRim.IceBreach.FrozenIn>
+  <DepthRim.IceBreach.NotFrozen>船體沒有被凍住。</DepthRim.IceBreach.NotFrozen>
+  <DepthRim.IceBreach.BreakFreeLabel>撞開凍冰</DepthRim.IceBreach.BreakFreeLabel>
+  <DepthRim.IceBreach.BreakFreeDesc>用破冰結構撞開船體四周的冰，讓它變回開放水。破冰結構平分 {0} 點傷害。</DepthRim.IceBreach.BreakFreeDesc>
+  <DepthRim.IceBreach.BrokeFree>船體四周的冰已經撞開。</DepthRim.IceBreach.BrokeFree>
+  <DepthRim.IceBreach.FrameLimit>可破冰厚 {0} m</DepthRim.IceBreach.FrameLimit>
+  <DepthRim.IceBreach.NeedsRoof>要蓋在屋頂下：破冰結構要頂住艙頂。</DepthRim.IceBreach.NeedsRoof>
+  <DepthRim.IceBreach.SiteInspect>{0}，厚 {1} m</DepthRim.IceBreach.SiteInspect>
+
+  <!-- 量測冰層 -->
+  <DepthRim.IceBreach.MeasureLabel>量測冰層</DepthRim.IceBreach.MeasureLabel>
+  <DepthRim.IceBreach.MeasureDesc>用上視聲納量測上方的冰，估計潛艇能不能頂破。</DepthRim.IceBreach.MeasureDesc>
+  <DepthRim.IceBreach.MeasureOpen>上方是{0}：可以直接上浮。</DepthRim.IceBreach.MeasureOpen>
+  <DepthRim.IceBreach.MeasureText>上方的冰：{0}，厚 {1} m{2}。\n氣溫：{3} °C（抗彎強度 {4} MPa）。\n船體：{5} 格。\n\n預估上浮比：{6} → {7}</DepthRim.IceBreach.MeasureText>
+  <DepthRim.IceBreach.MeasureLead>（這裡裂開了一道冰間水道）</DepthRim.IceBreach.MeasureLead>
+  <DepthRim.IceBreach.Result.TooThick>太厚，超過破冰結構的上限</DepthRim.IceBreach.Result.TooThick>
+  <DepthRim.IceBreach.Result.Stuck>頂不動</DepthRim.IceBreach.Result.Stuck>
+  <DepthRim.IceBreach.Result.Partial>會頂裂但頂不穿</DepthRim.IceBreach.Result.Partial>
+  <DepthRim.IceBreach.Result.Surfaced>頂得破</DepthRim.IceBreach.Result.Surfaced>
+  <DepthRim.IceBreach.Result.Violent>猛烈衝出</DepthRim.IceBreach.Result.Violent>
+
+  <DepthRim.IceKind.None>開放海面</DepthRim.IceKind.None>
+  <DepthRim.IceKind.FirstYear>一年冰</DepthRim.IceKind.FirstYear>
+  <DepthRim.IceKind.MultiYear>多年冰</DepthRim.IceKind.MultiYear>
+  <DepthRim.IceKind.Shelf>冰棚</DepthRim.IceKind.Shelf>
+
+</LanguageData>

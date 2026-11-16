@@ -25,6 +25,8 @@
       <li>Bridgeable</li>
       <!-- 潛艇船體平台（DepthRim_HullPlatform）只能鋪在深淵上 -->
       <li>DepthRim_OpenAbyss</li>
+      <li>DepthRim_OpenWater</li>
+      <li>DepthRim_HullBase</li>
     </affordances>
     <tags>
       <li>DepthRim_Abyss</li>
@@ -46,6 +48,8 @@
       <li>Medium</li>
       <li>Heavy</li>
       <li>Diggable</li>
+      <!-- 船體平台可以直接鋪在海床上（坐在海床上，側面只露出半格） -->
+      <li>DepthRim_HullBase</li>
     </affordances>
     <takeFootprints>True</takeFootprints>
     <spaceEdgeGraphicData>

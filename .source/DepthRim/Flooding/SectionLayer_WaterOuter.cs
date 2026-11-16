@@ -60,7 +60,7 @@ namespace DepthRim
                 return;
             }
             Map map = Map;
-            LayerSubMesh sm = GetSubMesh(WaterTierMaterials.Outer(flooding.RenderTier));
+            LayerSubMesh sm = GetSubMesh(WaterTierMaterials.Outer(flooding.MeshTier));
             // 頂點只存人造光（g）與「看得到天空的比例」（a）；日光強度隨時間變，由 WaterTierMaterials.UpdateSkyLight 每幀設給 _SkyLight
             float y = AltitudeLayer.FogOfWar.AltitudeFor() + 0.01f;
             foreach (IntVec3 c in section.CellRect)

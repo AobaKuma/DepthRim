@@ -24,6 +24,14 @@ namespace DepthRim
         public string sideSingleTexPath;
         public List<string> sideLoopTexPaths = new List<string>();
 
+        /// <summary>
+        /// 海面地圖上浮在水面的平台（船體平台）：側面只畫這麼高（格）的乾舷，海面的影子與白沫貼著水線畫
+        /// （<see cref="MapComponent_SeaSurface"/> 遮罩的 b）。0 = 不浮在水面（海上平台：高出海面，側面照常畫兩格）。
+        /// </summary>
+        public float seaSurfaceFreeboard;
+
+        public bool FloatsOnSea => seaSurfaceFreeboard > 0f;
+
         [Unsaved(false)]
         private Dictionary<string, Material> materials;
 
@@ -76,6 +84,10 @@ namespace DepthRim
             {
                 yield return "sideLoopTexPaths is empty";
             }
+            if (seaSurfaceFreeboard < 0f || seaSurfaceFreeboard > 2f)
+            {
+                yield return "seaSurfaceFreeboard must be between 0 and 2 cells";
+            }
         }
     }
 
@@ -123,6 +135,30 @@ namespace DepthRim
                 return 0;
             }
             return secondBelowOpen ? 2 : 1;
+        }
+
+        /// <summary>
+        /// 側面要畫多高（格）：海面地圖上浮在水面的平台只畫乾舷（<paramref name="freeboard"/>），其他照 <see cref="SideCells"/>。
+        /// 坐在海床上的平台（<paramref name="onSeabed"/>：鋪在海床上，或下錨停在海床上）南邊緊鄰海床時，
+        /// 和海面一樣只露出乾舷，畫在海床格上；南邊是深淵時照常往下垂。
+        /// 側面貼圖高兩格、頂端貼著平台，所以畫 h 格時取貼圖上方 h/2（v 從 1 − h/2 到 1）。
+        /// </summary>
+        public static float SideHeight(bool firstBelowOpen, bool secondBelowOpen, bool onSeaSurface, float freeboard, bool onSeabed = false)
+        {
+            if (!firstBelowOpen)
+            {
+                return onSeabed && !onSeaSurface && freeboard > 0f ? Mathf.Min(freeboard, 2f) : 0f;
+            }
+            if (onSeaSurface && freeboard > 0f)
+            {
+                return Mathf.Min(freeboard, 2f);
+            }
+            return SideCells(firstBelowOpen, secondBelowOpen);
+        }
+
+        public static float SideVMin(float height)
+        {
+            return 1f - Mathf.Clamp(height, 0f, 2f) / 2f;
         }
     }
 
@@ -190,7 +226,7 @@ namespace DepthRim
         public override bool Visible => DebugViewSettings.drawTerrain;
 
         /// <summary>最近一次重建輸出的側面格數（給驗收測試）：每一項是（側面所在的格、畫幾格高）。</summary>
-        public readonly List<(IntVec3 cell, int height)> lastSides = new List<(IntVec3, int)>();
+        public readonly List<(IntVec3 cell, float height)> lastSides = new List<(IntVec3, float)>();
 
         public static HullPlatformPropsExtension PropsAt(IntVec3 c, Map map)
         {
@@ -199,6 +235,21 @@ namespace DepthRim
                 return null;
             }
             return map.terrainGrid.BaseTerrainAt(c)?.GetModExtension<HullPlatformPropsExtension>();
+        }
+
+        /// <summary>
+        /// 平台格 <paramref name="c"/> 坐在海床上、南邊 <paramref name="below"/> 是露出來的海床：
+        /// 平台底下原本是海床（<see cref="MapComponent_SeabedMemory"/> 有記錄：鋪在海床上或下錨停在海床上），
+        /// 南邊那格在地圖內、不是深淵、也不是另一塊平台。
+        /// </summary>
+        public static bool RestsOnSeabed(IntVec3 c, IntVec3 below, Map map)
+        {
+            if (!below.InBounds(map) || IsOpen(below, map) || PropsAt(below, map) != null)
+            {
+                return false;
+            }
+            MapComponent_SeabedMemory memory = map.GetComponent<MapComponent_SeabedMemory>();
+            return memory != null && memory.TryGetUnder(c, out _);
         }
 
         private static bool IsOpen(IntVec3 c, Map map)
@@ -293,8 +344,9 @@ namespace DepthRim
         private void DrawSide(HullPlatformPropsExtension props, IntVec3 c, Map map, float altitude)
         {
             IntVec3 below = c + IntVec3.South;
-            int cells = HullPlatformProps.SideCells(IsOpen(below, map), IsOpen(below + IntVec3.South, map));
-            if (cells == 0)
+            float cells = HullPlatformProps.SideHeight(IsOpen(below, map), IsOpen(below + IntVec3.South, map), SeaSurface.IsSeaSurfaceMap(map), props.seaSurfaceFreeboard,
+                RestsOnSeabed(c, below, map));
+            if (cells <= 0f)
             {
                 return;
             }
@@ -309,9 +361,8 @@ namespace DepthRim
                 case HullPlatformProps.SidePiece.Loop: path = props.sideLoopTexPaths[Mathf.Abs(c.GetHashCode()) % props.sideLoopTexPaths.Count]; break;
                 default: path = props.sideSingleTexPath; break;
             }
-            // 貼圖高兩格、頂端貼著平台：畫兩格時用整張，只畫一格時只取上半（v 0.5..1）
-            float vMin = cells == 2 ? 0f : 0.5f;
-            AddQuad(props.MaterialFor(path), c.x, c.z - cells, cells, vMin, 1f, altitude, Rot4.North);
+            // 貼圖高兩格、頂端貼著平台：畫兩格時用整張，只畫一格時只取上半（v 0.5..1），乾舷依高度取上方一段
+            AddQuad(props.MaterialFor(path), c.x, c.z - cells, cells, HullPlatformProps.SideVMin(cells), 1f, altitude, Rot4.North);
             lastSides.Add((below, cells));
         }
 
@@ -319,7 +370,7 @@ namespace DepthRim
         /// 一個四邊形：左下角 (x, z)、寬 1、高 <paramref name="height"/> 格，貼圖取 v 從 <paramref name="vMin"/> 到 <paramref name="vMax"/>；
         /// 旋轉比照原版（UV 依 Rot4 輪換）。
         /// </summary>
-        private void AddQuad(Material mat, int x, int z, float height, float vMin, float vMax, float altitude, Rot4 rotation)
+        private void AddQuad(Material mat, float x, float z, float height, float vMin, float vMax, float altitude, Rot4 rotation)
         {
             if (mat == null)
             {

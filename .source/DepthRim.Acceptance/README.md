@@ -37,6 +37,21 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .source/DepthRim.Acceptance/
 | P1 | `Tests_Pawns.cs` | 沒裝備的殖民者在開放水域溺水、溺水加重、回到地表後消退 |
 | P2 | `Tests_Pawns.cs` | 潛水服供氧、水壓抗性 +1、氣瓶空了開始溺水、地表不回充、冰洋乾燥艙室回充 |
 | P3 | `Tests_Pawns.cs` | 涉水嚴重度 = 水位、游泳階段減速、淺海沒有水壓傷害 |
+| H3 | `Tests_SeaHull.cs` | 海面地圖上的船體平台：能鋪在開放海面（不能鋪在海上平台上、不需要支柱）、側面只露出乾舷而海上平台照舊兩格、海面遮罩記成浮在水面（b）、水線參數、水密隔牆與水密門能蓋、拆除露出海面；近景與全景截圖 |
+| H5 | `Tests_HullPlatform.cs` | 抗壓水密牆的斜角：海床平台上蓋一圈帶兩段斜接的牆，四個缺口格各一張 ShipHull 風格的斜角圖（`Textures/Thing/ShipHullAngled`），室內直角內角不補，往南接直牆的一側用 `_Linked` 變體；截圖 |
+| P5 | `Tests_Pressure.cs` | 地表加壓艙的三個條件（耐壓甲板、密閉、水密門）、加壓到 2 級、殖民者進艙後不適並在 0.5～2 天內適應、出艙不會不適、適應值歸零後移除、海床上來的人在艙外嚴重不適而在艙內沒事、其他陣營視為已適應、斷電洩壓、破艙立刻失壓；水密門擋住未適應的人進艙與適應中的人出艙（徵召不擋、可達性一致）、開門洩壓、壓力不適警示、一般牆與水密門超過耐壓時受損 |
+| P6 | `Tests_Pressure.cs` | 水下地圖的艙壓：乾艙在任何深度都維持自己的壓力、和外海同壓時牆不受力、換到更深處艙壓不變而牆再度超載、非耐壓甲板地板慢慢洩壓、艙裡的殖民者照艙壓適應、潛艇搬動時艙壓跟著格子走 |
+| S6 | `Tests_SubmarinePrefab.cs` | 預製潛艇（FFF 結構 `DepthRim_Prefab_PatrolSubmarine`，`DepthRimFixture.SpawnPrefabSubmarine`）：船塢上生成、四個乾的密閉艙室、全部通電、DMSE 認得整塊船體、兩具推進器與電池電量、船殼耐壓變溫層、FFF 生成後占地外原本看得見的格子仍然看得見 |
+| S7 | `Tests_SubmarineStart.cs` | 潛艇開局（場景 `DepthRim_SubmarineStart`、`ScenPart_SubmarineStart`）：開局格換到附近的淺海海洋格、地圖生成器換成 `DepthRim_OceanStart`；開局地圖中央有深淵船塢與遊戲內匯出的潛艇 `DR_Submarine_Test`（看得見、有屋頂、艙室密閉且乾、進家園區）；殖民者與開局物品放在船艙 |
+| S8 | `Tests_Submarine.cs` | 航行中落海（`VoyageOverboard`）：同 S2 起飛後，在密閉艙室、沒屋頂的甲板、船外深淵各放一名殖民者；不在航行（視為已抵達）時沒人失蹤；回到航行後艙外兩人失蹤（世界 pawn、沒死）並收到一封信，艙室裡的人留在船上 |
+| U1 | `Tests_Surfacing.cs` | 常規上浮（`SubmarineSurfacing`）：預製潛艇分離成潛艇、移到開放海面下的淺海；不在淺海時停用；上浮後地表那一格有海面地點、船體浮在開放海面上、船員跟著上來、水位系統不作用；從艦橋下潛回到正下方的海洋格（淺海、停著）、船體完整、空的海面地點移除 |
+| I1 | `Tests_Surfacing.cs` | 破冰上浮：正上方改成海冰、冰厚用 `IceConditions.debugThickness` 固定；沒有破冰結構與冰太厚時停用；懸停一小時後部分開裂（結構受損、六小時冷卻）、一天內再頂出水（破冰點、船體在冰上、一圈開放水、碎冰、裂紋、開始結冰）；結冰半天還能下潛、四天後被凍住、撞開凍冰後下潛 |
+| U3 | `Tests_Surfacing.cs` | 海面的畫法照原版深海：材質拿到原版深海的光照色階（`WaterOceanDeep`）與漣漪貼圖；海面地圖左半鋪原版深海、右半是 DepthRim 的海，在交界截圖（離線比較兩邊的平均色與質感） |
+| U2 | `Tests_Surfacing.cs` | 開放海面的出水演出（`SubmarineSurfacingCutscene`）：上浮後演出先播、船體等演出結束才搬上海面；1.2、2.6、3.6、5.5 秒各截一張 |
+| I2 | `Tests_Surfacing.cs` | 破冰的出水演出（猛烈出水）：破裂前放射裂紋已經長出、沒有開放水；破裂後出現開放水、上百塊碎冰四射；演出結束後船體在冰上、四周一圈開放水；0.5、2.5、3.6、6、9 秒各截一張 |
+| G1 | `Tests_SubmarineStart.cs` | **只在 `run.ps1 -Scenario DepthRim_SubmarineStart -Only G1` 時跑**（`ScenarioOverride` 讓 -quicktest 改用這個場景開新遊戲，原版新遊戲流程只少了選地點的頁面）：開局地圖在海洋層、是玩家據點、潛艇直接坐在中央的海床上、三名殖民者與開局物品在船艙、起始研究完成、鏡頭在潛艇上；跑兩天後殖民者沒事、沒有溺水、屋頂沒塌、艙室乾；存檔再讀檔後一切還在；全程沒有錯誤 |
+| G2 | `Tests_StartSubmarineSurfacing.cs` | **只在 `run.ps1 -Scenario DepthRim_SubmarineStart -Only G2` 時跑**：開局的潛艇（`DR_Submarine_Test`，996 格）整艘出港、船員在船上；移到開放海面下上浮（演出照播、截圖）、下潛；移到海冰下、裝破冰結構、破冰上浮（演出照播、截圖）；船體與船員都在冰面上 |
+| G3 | `Tests_StartVoyagePlan.cs` | **只在 `run.ps1 -Scenario DepthRim_SubmarineStart -Only G3` 時跑**：開局潛艇用艦橋的航行指令（玩家實際的流程）：一開局（遊戲還沒開始跑）推進器與艦橋就有電、航程內的海洋格能選、選了之後有可按的「前往此處」、航行計畫視窗打開且沒有錯誤、啟航沒被擋 |
 | V1 | `Tests_Visual.cs` | 兩個水體著色器都編譯成功、開放水域只由外海層畫（繪製高度在迷霧之上）、每個開放水域區塊都有網格；近景與全景截圖 |
 | V2 | `Tests_Visual.cs` | 艙室層的水位、角落岸邊、牆外的水不滲進艙室、抽乾後沒有網格；外海層裁掉艙室與牆、牆外往艙室淡出；漏水中的截圖 |
 | V3 | `Tests_Visual.cs` | 迷霧格（岩體或洞穴）只帶迷霧權重、迷霧邊緣柔和過渡、揭開迷霧後重建；迷霧邊緣截圖 |
@@ -57,6 +72,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .source/DepthRim.Acceptance/
 | V18 | `Tests_Phase4.cs` | 艙室水面延伸進東西牆的透明邊；室內建築依 fillPercent 淹沒（排水泵有覆蓋、發電機沒有）；屋頂破洞慢慢進水、灌滿才算開放水域；牆體耐久 80/60/30/10% 對應漏水階段 0–3 與進水聲階段 |
 | V19 | `Tests_Phase4.cs` | 左下角水位行的文字（開放水域／艙室／地表沒有）與 transpiler 已掛上；海洋地圖的天氣是「海底」 |
 | R1 | `Tests_Pawns.cs` | 水線材質在主執行緒建立、使用 CutoutComplex、保留原貼圖、有遮罩、會快取；近景與遠景截圖 |
+| H2 | `Tests_SeaSurface.cs` | 海面的兩層：新的海面地圖只有海；支柱蓋在開放海面上，建立平台層（同尺寸、同格子的口袋地圖）與 5×5 平台、支柱頂；第二根支柱共用平台層；溫度與日照一致；放置規則；兩層的海面遮罩（平台影子、浮船、支柱入水處）；水面層往上伸的柱身、平台層往下畫的柱身；往下看的快照（水面層變了才重建）；搭升降梯上去；拆支柱後平台崩塌、上面的人掉到水面層；拆平台露出高空；兩層一起移除；兩張截圖 |
 
 ## 測試環境
 

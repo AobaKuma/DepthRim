@@ -28,7 +28,7 @@
   <ResearchProjectDef>
     <defName>DepthRim_PressureEngineering</defName>
     <label>pressure engineering</label>
-    <description>Thick-walled structures that can hold back the water pressure below the thermocline, and pressure-rated decks laid over open water. Ordinary walls are slowly crushed at that depth; going further down means switching to a pressure-rated hull.\n\nUnlocks the pressure hull wall and the hull platform.</description>
+    <description>Thick-walled structures that can hold back the water pressure below the thermocline, and pressure-rated decks laid over open water. Ordinary walls are slowly crushed at that depth; going further down means switching to a pressure-rated hull.\n\nUnlocks the pressure hull wall, the hull platform, the pressure deck and the pressuriser.</description>
     <baseCost>1200</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>DepthRim_ResearchTab</tab>

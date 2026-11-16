@@ -13,9 +13,9 @@ namespace DepthRim
     /// 只有牆或門變動（原版 <c>RegionDirtyer</c>，見下方的 Harmony patch）或密閉艙室改變（屋頂）時才重建，
     /// 而且只在密閉艙室附近算；沒有基地的海洋地圖完全不花時間。</para>
     ///
-    /// <para><b>每次更新</b>（250 ticks，與 <see cref="MapComponent_Flooding"/> 錯開）：兩側房間的壓力比例
-    /// （開放水域 1、密閉艙室 = 它的水位）相減 × 層級水壓 ÷ 厚度，超過牆的耐壓上限（<see cref="HullPressure.RatingOf"/>）
-    /// 就累積損傷，滿 1 點才扣一次血。自然岩不受損，打開的門兩側正在等化，不受力。淺海的水壓是 1，任何牆都撐得住，整段跳過。</para>
+    /// <para><b>每次更新</b>（250 ticks，與 <see cref="MapComponent_Flooding"/> 錯開）：兩側房間的絕對壓力
+    /// （<see cref="PressureEnvironment.GaugeOf"/>：開放水域 = 層級水壓，艙室 = 艙壓與水壓取大的）相減 ÷ 厚度，超過牆的耐壓上限（<see cref="HullPressure.RatingOf"/>）
+    /// 就累積損傷，滿 1 點才扣一次血。自然岩不受損，打開的門兩側正在等化，不受力。這也是加壓艙艙壁唯一的損傷來源：地表有艙壓的艙室同樣在這裡算。</para>
     /// </summary>
     public class MapComponent_WallPressure : MapComponent
     {
@@ -40,6 +40,31 @@ namespace DepthRim
         public int LastOverloadedCount { get; private set; }
 
         public int CachedEntryCount => entries.Count;
+
+        /// <summary>最近一次更新時超載的牆格（給加壓機的檢視面板）。</summary>
+        private readonly HashSet<int> overloadedCells = new HashSet<int>();
+
+        private readonly HashSet<int> tmpCounted = new HashSet<int>();
+
+        /// <summary>這間房間邊界上有幾格牆或門超載。</summary>
+        public int OverloadedAround(Room room)
+        {
+            if (room == null || overloadedCells.Count == 0)
+            {
+                return 0;
+            }
+            // 原版的邊界格會重複列出同一格（每個相鄰的房間格各一次），去掉重複
+            tmpCounted.Clear();
+            foreach (IntVec3 c in room.BorderCellsCardinal)
+            {
+                int i = c.z * map.Size.x + c.x;
+                if (c.InBounds(map) && overloadedCells.Contains(i))
+                {
+                    tmpCounted.Add(i);
+                }
+            }
+            return tmpCounted.Count;
+        }
 
         public int RebuildCount { get; private set; }
 
@@ -66,13 +91,16 @@ namespace DepthRim
         {
             LastLoadedCount = 0;
             LastOverloadedCount = 0;
+            overloadedCells.Clear();
             MapComponent_Flooding flooding = map.Flooding();
-            if (flooding == null || !flooding.Active)
+            bool water = flooding != null && flooding.Active;
+            MapComponent_PressureChambers chambers = map.GetComponent<MapComponent_PressureChambers>();
+            bool air = chambers != null && chambers.AnyPressure;
+            if (!water && !air)
             {
                 return;
             }
-            DepthTier tier = flooding.DepthTier;
-            int hash = SealedRoomsHash(flooding);
+            int hash = SealedRoomsHash(flooding, water, chambers);
             if (hash != sealedHash)
             {
                 sealedHash = hash;
@@ -80,31 +108,48 @@ namespace DepthRim
             }
             if (dirty)
             {
-                Rebuild(flooding);
-            }
-            if (entries.Count == 0)
-            {
-                return;
+                Rebuild(flooding, water, chambers);
             }
             for (int i = 0; i < entries.Count; i++)
             {
-                Apply(entries[i], flooding, tier);
+                Apply(entries[i]);
             }
         }
 
-        private int SealedRoomsHash(MapComponent_Flooding flooding)
+        /// <summary>
+        /// 要算牆體水壓的房間：水下地圖上是所有密閉艙室（開放水域之外），其他地圖上是有艙壓的艙室。
+        /// </summary>
+        private IEnumerable<Room> ConsideredRooms(MapComponent_Flooding flooding, bool water, MapComponent_PressureChambers chambers)
+        {
+            if (!water)
+            {
+                if (chambers != null)
+                {
+                    foreach (Room r in chambers.PressurisedRooms)
+                    {
+                        yield return r;
+                    }
+                }
+                yield break;
+            }
+            IReadOnlyList<Room> rooms = map.regionGrid.AllRooms;
+            for (int i = 0; i < rooms.Count; i++)
+            {
+                Room r = rooms[i];
+                if (!r.IsDoorway && !flooding.IsOpenWater(r))
+                {
+                    yield return r;
+                }
+            }
+        }
+
+        private int SealedRoomsHash(MapComponent_Flooding flooding, bool water, MapComponent_PressureChambers chambers)
         {
             unchecked
             {
                 int h = 17;
-                IReadOnlyList<Room> rooms = map.regionGrid.AllRooms;
-                for (int i = 0; i < rooms.Count; i++)
+                foreach (Room r in ConsideredRooms(flooding, water, chambers))
                 {
-                    Room r = rooms[i];
-                    if (r.IsDoorway || flooding.IsOpenWater(r))
-                    {
-                        continue;
-                    }
                     h = h * 31 + r.ID;
                     h = h * 31 + r.CellCount;
                 }
@@ -117,24 +162,18 @@ namespace DepthRim
             return b != null && (b is Building_Door || b.def.passability == Traversability.Impassable);
         }
 
-        private void Rebuild(MapComponent_Flooding flooding)
+        private void Rebuild(MapComponent_Flooding flooding, bool water, MapComponent_PressureChambers chambers)
         {
             dirty = false;
             RebuildCount++;
             entries.Clear();
             int w = map.Size.x;
             int h = map.Size.z;
-            // 只在密閉艙室附近算：每間密閉艙室的外接矩形往外 2 × 最大厚度
+            // 只在要算的艙室附近算：每間的外接矩形往外 2 × 最大厚度
             bool[] band = new bool[w * h];
             bool any = false;
-            IReadOnlyList<Room> rooms = map.regionGrid.AllRooms;
-            for (int i = 0; i < rooms.Count; i++)
+            foreach (Room r in ConsideredRooms(flooding, water, chambers))
             {
-                Room r = rooms[i];
-                if (r.IsDoorway || flooding.IsOpenWater(r))
-                {
-                    continue;
-                }
                 CellRect rect = r.ExtentsClose.ExpandedBy(WallPressureTopology.MaxThickness * 2).ClipInsideMap(map);
                 foreach (IntVec3 c in rect)
                 {
@@ -159,16 +198,7 @@ namespace DepthRim
             return new IntVec3(i % w, 0, i / w);
         }
 
-        private static float PressureOf(Room room, MapComponent_Flooding flooding)
-        {
-            if (room == null)
-            {
-                return 1f; // 沒有房間的格子（深淵、地圖外側）就是外海
-            }
-            return flooding.IsOpenWater(room) ? 1f : flooding.LevelOf(room);
-        }
-
-        private void Apply(WallPressureTopology.Entry e, MapComponent_Flooding flooding, DepthTier tier)
+        private void Apply(WallPressureTopology.Entry e)
         {
             int w = map.Size.x;
             IntVec3 cell = CellAt(e.cell, w);
@@ -177,9 +207,10 @@ namespace DepthRim
             {
                 return;
             }
-            float pA = PressureOf(CellAt(e.seedA, w).GetRoom(map), flooding);
-            float pB = PressureOf(CellAt(e.seedB, w).GetRoom(map), flooding);
-            float load = WallPressureTopology.Load(pA, pB, tier, e.thickness);
+            // 兩側的絕對壓力：開放水域 = 層級水壓；艙室 = 艙壓與水壓取大的（PressureEnvironment.GaugeOf）
+            float gA = PressureEnvironment.GaugeOf(map, CellAt(e.seedA, w).GetRoom(map));
+            float gB = PressureEnvironment.GaugeOf(map, CellAt(e.seedB, w).GetRoom(map));
+            float load = WallPressureTopology.LoadGauge(gA, gB, e.thickness);
             if (load <= 0.001f)
             {
                 return;
@@ -191,6 +222,7 @@ namespace DepthRim
                 return;
             }
             LastOverloadedCount++;
+            overloadedCells.Add(e.cell);
             damage.TryGetValue(e.cell, out float acc);
             acc += dmg;
             int whole = Mathf.FloorToInt(acc);

@@ -341,13 +341,13 @@
     </forceRockTypes>
     <terrainsByFertility>
       <li>
-        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <terrain>DR_RockFloor</terrain>
         <min>-999</min>
-        <max>0.45</max>
+        <max>0.5</max>
       </li>
       <li>
-        <terrain>DepthRim_Seabed_Sand</terrain>
-        <min>0.45</min>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <min>0.5</min>
         <max>999</max>
       </li>
     </terrainsByFertility>
@@ -360,6 +360,19 @@
           <li>Mountainous</li>
         </hilliness>
         <hydrothermalVents>2~4</hydrothermalVents>
+        <!-- 海底火山生態：火山噴口與玄武岩塊（大的先放） -->
+        <seafloorFeatures>
+          <li>
+            <thing>DR_UnderwaterVolcano</thing>
+            <count>1~2</count>
+          </li>
+          <li>
+            <thing>DR_Rock</thing>
+            <count>10~16</count>
+            <clearance>0</clearance>
+            <edgeMargin>3</edgeMargin>
+          </li>
+        </seafloorFeatures>
       </li>
     </modExtensions>
   </BiomeDef>
@@ -400,7 +413,8 @@
 
 
   <!-- 中洋脊（2026-11-09，比照真實海底地形）：洋盆中線上隆起的海底火山山脈，比兩側的深海平原淺（約 2100–3500 m）。
-       軸線上熱液旺盛的段落改成熱液噴口區（OceanBiomeSelector）。年輕的玄武岩地殼：用板岩代表深色火成岩。 -->
+       軸線上熱液旺盛的段落改成熱液噴口區（OceanBiomeSelector）。年輕的玄武岩地殼：用板岩代表深色火成岩；
+       海底火山生態（Ocean_Volcanic.xml）：裸露的岩床 DR_RockFloor、海底火山 DR_UnderwaterVolcano、玄武岩塊 DR_Rock。 -->
   <BiomeDef ParentName="DepthRim_OceanBiomeBase">
     <defName>DepthRim_MidOceanRidge</defName>
     <label>mid-ocean ridge</label>
@@ -412,12 +426,12 @@
     </forceRockTypes>
     <terrainsByFertility>
       <li>
-        <terrain>DepthRim_Seabed_Gravel</terrain>
+        <terrain>DR_RockFloor</terrain>
         <min>-999</min>
         <max>0.6</max>
       </li>
       <li>
-        <terrain>DepthRim_Seabed_Sand</terrain>
+        <terrain>DepthRim_Seabed_Gravel</terrain>
         <min>0.6</min>
         <max>999</max>
       </li>
@@ -430,6 +444,19 @@
           <li>Mountainous</li>
         </hilliness>
         <abyssBias>0.05</abyssBias>
+        <!-- 海底火山生態：火山噴口與玄武岩塊（大的先放） -->
+        <seafloorFeatures>
+          <li>
+            <thing>DR_UnderwaterVolcano</thing>
+            <count>2~4</count>
+          </li>
+          <li>
+            <thing>DR_Rock</thing>
+            <count>15~25</count>
+            <clearance>0</clearance>
+            <edgeMargin>3</edgeMargin>
+          </li>
+        </seafloorFeatures>
       </li>
     </modExtensions>
   </BiomeDef>

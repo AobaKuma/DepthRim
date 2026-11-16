@@ -26,6 +26,24 @@ namespace DepthRim
 
         private bool depthInitialized;
 
+        // ── 破冰上浮（SubmarineSurfacing）──────────────────────────────────
+        /// <summary>懸停結束、頂冰的時刻（-1 = 沒有在懸停）。</summary>
+        public int iceBreachAtTick = -1;
+
+        /// <summary>下一次可以頂冰的時刻（每次頂冰後六小時）。</summary>
+        public int nextIceBreachTick = -1;
+
+        /// <summary>冰被頂裂過、抗彎厚度打折到這個時刻。</summary>
+        public int crackedUntilTick = -1;
+
+        /// <summary>從海面或冰面下潛時直接設定深度（不從腳下的海床出發）。</summary>
+        public void InitDepth(DepthTier tier)
+        {
+            cruiseTier = targetTier = tier;
+            nextDiveTick = -1;
+            depthInitialized = true;
+        }
+
         /// <summary>上一次通知地圖時的層級（不存檔：讀檔後第一次 tick 會重新通知一次，無害）。</summary>
         private DepthTier? notifiedTier;
 
@@ -186,9 +204,7 @@ namespace DepthRim
             base.TickInterval(delta);
             if (!depthInitialized)
             {
-                // 剛分離：從船塢所在的深度出發
-                cruiseTier = targetTier = Seafloor;
-                depthInitialized = true;
+                InitDepthAfterLaunch();
             }
             if (nextDiveTick >= 0 && Find.TickManager.TicksGame >= nextDiveTick)
             {
@@ -197,9 +213,72 @@ namespace DepthRim
                 if (cruiseTier == targetTier)
                 {
                     Messages.Message("DepthRim.Sub.DepthReached".Translate(Label, cruiseTier.Label()), this, MessageTypeDefOf.NeutralEvent, historical: false);
+                    if (!InFlight && landingTarget.Valid && HasMap)
+                    {
+                        // 停靠地點：到了那裡的深度才選停船位置（航行指令的停靠、或抵達時深度還沒到）
+                        LongEventHandler.ExecuteWhenFinished(() => TransferLandingUtility.BeginLanding(this));
+                    }
                 }
             }
             NotifyIfTierChanged();
+            TickIceBreach();
+            TickOverboard();
+        }
+
+        /// <summary>下一次檢查艙外人員的時刻（不存檔：讀檔後立刻檢查一次，無害）。</summary>
+        private int nextOverboardCheckTick = -1;
+
+        /// <summary>航行中待在艙外的我方人員失蹤（<see cref="VoyageOverboard"/>）。</summary>
+        private void TickOverboard()
+        {
+            int now = Find.TickManager.TicksGame;
+            if (!VoyageOverboard.Underway(this))
+            {
+                nextOverboardCheckTick = -1;
+                return;
+            }
+            if (nextOverboardCheckTick >= 0 && now < nextOverboardCheckTick)
+            {
+                return;
+            }
+            nextOverboardCheckTick = now + VoyageOverboard.CheckInterval;
+            VoyageOverboard.Sweep(this);
+        }
+
+        /// <summary>
+        /// 剛分離：航行指令規劃過就從出發時的深度開始、往終端深度走；否則從腳下的海床出發。
+        /// </summary>
+        private void InitDepthAfterLaunch()
+        {
+            depthInitialized = true;
+            CompDiveControl dive = SubmarineNavigation.HelmOf(this)?.TryGetComp<CompDiveControl>();
+            if (dive != null && dive.TakeVoyageDepth(out DepthTier start, out DepthTier end))
+            {
+                cruiseTier = targetTier = start;
+                if (end != start && DiveMath.CanSet(start, end, end, HullRating(out _)) == DiveMath.DiveBlock.None)
+                {
+                    SetTargetTier(end);
+                }
+                return;
+            }
+            cruiseTier = targetTier = Seafloor;
+        }
+
+        private void TickIceBreach()
+        {
+            if (iceBreachAtTick < 0)
+            {
+                return;
+            }
+            if (InFlight || cruiseTier != DepthTier.Shallow || targetTier != DepthTier.Shallow)
+            {
+                SubmarineSurfacing.CancelIceBreach(this, "DepthRim.IceBreach.CancelledMoved".Translate());
+                return;
+            }
+            if (Find.TickManager.TicksGame >= iceBreachAtTick)
+            {
+                SubmarineSurfacing.ResolveIceBreach(this);
+            }
         }
 
         /// <summary>實際層級變了（換層，或航行經過較淺的海床）：整張地圖的水體重建成新層級的樣子。</summary>
@@ -223,14 +302,21 @@ namespace DepthRim
             {
                 yield return g;
             }
-            yield return DiveGizmo();
+            Thing helm = SubmarineNavigation.HelmOf(this);
+            if (helm != null)
+            {
+                yield return SubmarineNavigation.NavigateGizmo(helm);
+            }
             if (InFlight && !isImpact)
             {
                 yield return StopGizmo();
             }
             if (HasMap && !landingTarget.Valid && !InFlight)
             {
-                yield return AnchorGizmo();
+                foreach (Gizmo g in SubmarineSurfacing.SubmarineGizmos(this))
+                {
+                    yield return g;
+                }
             }
         }
 
@@ -242,18 +328,40 @@ namespace DepthRim
         /// </summary>
         public PlanetTile FindAnchorage()
         {
+            List<PlanetTile> all = Anchorages();
+            return all.Count > 0 ? all[0] : PlanetTile.Invalid;
+        }
+
+        /// <summary>所有能下錨的鄰格（給玩家在世界地圖上挑）。</summary>
+        public List<PlanetTile> Anchorages()
+        {
             List<PlanetTile> neighbors = new List<PlanetTile>();
             Find.WorldGrid.GetTileNeighbors(Tile, neighbors);
-            DepthTier here = Seafloor;
-            for (int i = 0; i < neighbors.Count; i++)
+            neighbors.RemoveAll(n => AnchorageBlockReason(n) != null);
+            return neighbors;
+        }
+
+        /// <summary>這一格不能當下錨點的原因（可以時 null）。</summary>
+        public string AnchorageBlockReason(PlanetTile tile)
+        {
+            if (!tile.Valid || !Find.WorldGrid.IsNeighbor(Tile, tile))
             {
-                PlanetTile n = neighbors[i];
-                if (OceanRouting.Navigable(n) && !Find.WorldObjects.AnyWorldObjectAt(n) && SeafloorAt(n) == here)
-                {
-                    return n;
-                }
+                return "DepthRim.Anchor.Spot.NotAdjacent".Translate();
             }
-            return PlanetTile.Invalid;
+            if (!OceanRouting.Navigable(tile))
+            {
+                return "DepthRim.Anchor.Spot.NotOcean".Translate();
+            }
+            if (Find.WorldObjects.AnyWorldObjectAt(tile))
+            {
+                return "DepthRim.Anchor.Spot.Occupied".Translate();
+            }
+            DepthTier there = SeafloorAt(tile);
+            if (there != Seafloor)
+            {
+                return "DepthRim.Anchor.Spot.OtherDepth".Translate(there.Label(), Seafloor.Label());
+            }
+            return null;
         }
 
         /// <summary>現在能不能下錨；不能時回傳原因。</summary>
@@ -281,10 +389,16 @@ namespace DepthRim
             return null;
         }
 
-        /// <summary>在旁邊一格建立海洋地點，接著走 DMSE 的降落流程（生成地圖 → 選位 → 船體搬進去）。</summary>
+        /// <summary>自動挑第一個能下錨的鄰格（測試與除錯用；玩家用航行指令（<see cref="SubmarineNavigation"/>））。</summary>
         public void Anchor()
         {
-            string reason = AnchorBlockedReason(out PlanetTile anchorage);
+            AnchorAt(FindAnchorage());
+        }
+
+        /// <summary>在指定的鄰格建立海洋地點，接著走 DMSE 的降落流程（生成地圖 → 選位 → 船體搬進去）。</summary>
+        public void AnchorAt(PlanetTile anchorage)
+        {
+            string reason = AnchorBlockedReason(out _) ?? AnchorageBlockReason(anchorage);
             if (reason != null)
             {
                 Messages.Message(reason, this, MessageTypeDefOf.RejectInput, historical: false);
@@ -298,58 +412,8 @@ namespace DepthRim
             TransferLandingUtility.BeginLanding(this);
         }
 
-        public Command AnchorGizmo()
-        {
-            Command_Action cmd = new Command_Action
-            {
-                defaultLabel = "DepthRim.Anchor.Label".Translate(),
-                defaultDesc = "DepthRim.Anchor.Desc".Translate(),
-                icon = DiveIcon,
-                action = Anchor,
-            };
-            string reason = AnchorBlockedReason(out _);
-            if (reason != null)
-            {
-                cmd.Disable(reason);
-            }
-            return cmd;
-        }
-
         /// <summary>下潛指令的圖示：艦橋的建築圖示。</summary>
         public static Texture2D DiveIcon => DefDatabase<ThingDef>.GetNamedSilentFail("DepthRim_Helm")?.uiIcon ?? BaseContent.BadTex;
-
-        public Command DiveGizmo()
-        {
-            DepthTier rating = HullRating(out Building weakest);
-            string weak = weakest != null ? "DepthRim.Sub.WeakestPiece".Translate(weakest.LabelCap).ToString() : "";
-            return new Command_Action
-            {
-                defaultLabel = "DepthRim.Sub.Cruise".Translate(targetTier.Label()),
-                defaultDesc = "DepthRim.Sub.CruiseDesc".Translate(Seafloor.Label(), rating.Label() + weak),
-                icon = DiveIcon,
-                action = OpenDiveMenu,
-            };
-        }
-
-        private void OpenDiveMenu()
-        {
-            List<FloatMenuOption> options = new List<FloatMenuOption>();
-            foreach (DepthTier tier in System.Enum.GetValues(typeof(DepthTier)))
-            {
-                DepthTier t = tier;
-                DiveMath.DiveBlock block = CanDiveTo(t);
-                string label = t.Label().CapitalizeFirst();
-                if (block == DiveMath.DiveBlock.None)
-                {
-                    options.Add(new FloatMenuOption(label, () => SetTargetTier(t)));
-                }
-                else
-                {
-                    options.Add(new FloatMenuOption(label + " (" + ("DepthRim.Sub.Block." + block).Translate() + ")", null));
-                }
-            }
-            Find.WindowStack.Add(new FloatMenu(options));
-        }
 
         public override string GetInspectString()
         {
@@ -363,6 +427,10 @@ namespace DepthRim
             if (thrust != null)
             {
                 depth = thrust + "\n" + depth;
+            }
+            if (iceBreachAtTick >= 0)
+            {
+                depth += "\n" + "DepthRim.IceBreach.InspectHovering".Translate((iceBreachAtTick - Find.TickManager.TicksGame).ToStringTicksToPeriod());
             }
             return s.NullOrEmpty() ? depth : s + "\n" + depth;
         }
@@ -378,6 +446,9 @@ namespace DepthRim
             Scribe_Values.Look(ref currentThrust, "currentThrust");
             Scribe_Values.Look(ref stallCarry, "stallCarry");
             Scribe_Values.Look(ref stallNotified, "stallNotified");
+            Scribe_Values.Look(ref iceBreachAtTick, "iceBreachAtTick", -1);
+            Scribe_Values.Look(ref nextIceBreachTick, "nextIceBreachTick", -1);
+            Scribe_Values.Look(ref crackedUntilTick, "crackedUntilTick", -1);
         }
     }
 }

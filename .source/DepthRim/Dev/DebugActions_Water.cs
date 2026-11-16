@@ -45,6 +45,7 @@ namespace DepthRim
         {
             WaterTierMaterials.Reset();
             SectionLayer_AbyssBackdrop.Reset();
+            SectionLayer_VoyageDarkness.Reset();
             Map map = Find.CurrentMap;
             if (map == null)
             {

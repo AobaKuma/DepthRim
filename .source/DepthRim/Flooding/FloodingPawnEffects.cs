@@ -9,7 +9,7 @@ namespace DepthRim
     /// <list type="bullet">
     /// <item>涉水：水位越高移動越慢（<c>DepthRim_Wading</c>，嚴重度 = 水位）。</item>
     /// <item>溺水：沒入水中（站立時水位 ≥ 75%，躺下時 ≥ 30%）且沒有潛水裝備的氧氣時累積 <c>DepthRim_Drowning</c>；離開水面後消退。</item>
-    /// <item>水壓：沒入水中時，若「環境水壓抗性」低於目前水深層級的需求，累積 <c>DepthRim_Barotrauma</c>。</item>
+    /// <item>水壓：沒入水中時，若「環境水壓抗性 + 壓力適應值」低於目前水深層級的需求，累積 <c>DepthRim_Barotrauma</c>。</item>
     /// </list>
     /// 不需要呼吸的 Pawn（非肉體，例如機械體）不會溺水，但仍受水壓影響。
     /// 三種 hediff 都靠 HediffDef 上的 SeverityPerDay 自然消退，所以回到地表後也會消失。
@@ -35,7 +35,6 @@ namespace DepthRim
 
         public static void Apply(Map map, MapComponent_Flooding flooding)
         {
-            int requiredResistance = FloodingMath.RequiredPressureResistance(flooding.DepthTier);
             tmpPawns.Clear();
             tmpPawns.AddRange(map.mapPawns.AllPawnsSpawned);
             for (int i = 0; i < tmpPawns.Count; i++)
@@ -49,9 +48,24 @@ namespace DepthRim
                 ApplyWading(pawn, level);
                 bool submerged = IsSubmerged(pawn, level);
                 ApplyBreathing(pawn, submerged);
+                // 睡覺處淹水就叫醒去找安全處：常駐思考樹（JobGiver_SeekAir）只對醒著的人運作
                 if (!pawn.Dead)
                 {
-                    ApplyPressure(pawn, submerged, requiredResistance);
+                    SeekAirUtility.TryEvacuateSleeper(pawn, flooding);
+                }
+                // 壓力適應：進到非常壓的環境（地圖的水深層級或加壓艙）就開始記錄適應值，之後由 hediff 自己結算。
+                // 排在水壓傷害之前：其他陣營與野生動物視為已適應，第一次結算就不該被壓傷。
+                if (!pawn.Dead && PressureAdaptationUtility.Applies(pawn) && PressureAdaptationUtility.Get(pawn) == null)
+                {
+                    float ambient = PressureEnvironment.At(map, pawn.Position);
+                    if (ambient > 0f)
+                    {
+                        PressureAdaptationUtility.Ensure(pawn, ambient);
+                    }
+                }
+                if (!pawn.Dead)
+                {
+                    ApplyPressure(pawn, submerged, flooding.DepthTier);
                 }
             }
             tmpPawns.Clear();
@@ -112,10 +126,14 @@ namespace DepthRim
             HealthUtility.AdjustSeverity(pawn, DepthRimDefOf.DepthRim_Drowning, DrowningPerUpdate);
         }
 
-        private static void ApplyPressure(Pawn pawn, bool submerged, int requiredResistance)
+        private static void ApplyPressure(Pawn pawn, bool submerged, DepthTier tier)
         {
-            int shortfall = submerged ? requiredResistance - (int)pawn.GetStatValue(DepthRimDefOf.DepthRim_PressureResistance) : 0;
-            if (shortfall > 0)
+            if (!submerged || tier == DepthTier.Shallow)
+            {
+                return;
+            }
+            float shortfall = FloodingMath.PressureShortfall(tier, pawn.GetStatValue(DepthRimDefOf.DepthRim_PressureResistance), PressureAdaptationUtility.AdaptedLevel(pawn));
+            if (shortfall > 0f)
             {
                 HealthUtility.AdjustSeverity(pawn, DepthRimDefOf.DepthRim_Barotrauma, BarotraumaPerUpdatePerTier * shortfall);
             }

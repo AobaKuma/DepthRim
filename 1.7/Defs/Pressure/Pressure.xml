@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    壓力適應（設計稿 §4.2a）：嚴重度 = 適應值和環境壓力的差距超過 1 級的部分（0–2），由 Hediff_PressureAdaptation 設定。
+    第一個階段沒有效果，只用來顯示目前的適應值；之後三個階段是壓力不適，不致命。
+    isBad = false：不讓治療血清之類的東西把適應值洗掉。
+  -->
+  <HediffDef>
+    <defName>DepthRim_PressureAdaptation</defName>
+    <label>pressure adaptation</label>
+    <description>How far this body has adjusted to the pressure it lives under. It drifts towards the surrounding pressure level, about a day per level for a healthy body, faster with good blood filtration.\n\nNothing happens while the surroundings are within one level of what the body is used to. Beyond that, in either direction, the body suffers until it has caught up. A pressure chamber lets someone adjust in steps.\n\nA body adapted to depth also withstands that much water pressure when it leaves the hull, on top of what its diving gear gives.</description>
+    <hediffClass>DepthRim.Hediff_PressureAdaptation</hediffClass>
+    <defaultLabelColor>(0.55, 0.75, 0.9)</defaultLabelColor>
+    <isBad>false</isBad>
+    <everCurableByItem>false</everCurableByItem>
+    <initialSeverity>0.001</initialSeverity>
+    <minSeverity>0.001</minSeverity>
+    <maxSeverity>2</maxSeverity>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+      </li>
+      <li>
+        <label>mild discomfort</label>
+        <minSeverity>0.02</minSeverity>
+        <painOffset>0.08</painOffset>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.08</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.1</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>pressure sickness</label>
+        <minSeverity>0.5</minSeverity>
+        <painOffset>0.2</painOffset>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.2</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.25</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.15</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>severe pressure sickness</label>
+        <minSeverity>1.25</minSeverity>
+        <painOffset>0.35</painOffset>
+        <vomitMtbDays>1</vomitMtbDays>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.35</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.4</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.3</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!--
+    耐壓甲板：船體平台的陸上版本。船體平台是只能鋪在深淵上的基底地形（拆掉會露出虛空），不能鋪在實地上；
+    這個是一般的地板（可用原版「移除地板」拆掉），提供同一個 DepthRim_HullPlatform 承載力，加壓艙的地板靠它判定。
+  -->
+  <TerrainDef ParentName="FloorBase">
+    <defName>DepthRim_PressureDeck</defName>
+    <researchPrerequisites>
+      <li>DepthRim_PressureEngineering</li>
+    </researchPrerequisites>
+    <label>pressure deck</label>
+    <description>Hull platform plating laid on solid ground as a floor. A room floored entirely with it, closed with watertight doors, can be held at pressure by a pressuriser.</description>
+    <texturePath>Thing/DR_LightPlatform/Platform</texturePath>
+    <edgeType>Hard</edgeType>
+    <renderPrecedence>240</renderPrecedence>
+    <constructEffect>ConstructMetal</constructEffect>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>1011</uiOrder>
+    <costList>
+      <Steel>12</Steel>
+    </costList>
+    <statBases>
+      <WorkToBuild>1200</WorkToBuild>
+      <Beauty>-2</Beauty>
+      <Flammability>0</Flammability>
+    </statBases>
+    <affordances>
+      <li>DepthRim_HullPlatform</li>
+    </affordances>
+  </TerrainDef>
+
+  <!--
+    加壓機：把所在的加壓艙維持在指定的壓力等級（0–3）。加壓艙 = 密閉、地板全是耐壓甲板或船體平台、門都是水密門的艙室。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_Pressurizer</defName>
+    <researchPrerequisites>
+      <li>DepthRim_PressureEngineering</li>
+    </researchPrerequisites>
+    <label>pressuriser</label>
+    <description>A compressor that pushes the sealed chamber it stands in to a chosen pressure level, so the people inside adapt to that pressure instead of the one outside. Use it to bring a crew up from the deep in steps, or to prepare them before a dive.\n\nThe chamber must be roofed and enclosed, floored entirely with pressure deck or hull platform, and every door must be a watertight door. One pressuriser controls a chamber of up to 80 cells. A sealed chamber keeps its pressure when the pressuriser is switched off or loses power; a room that does not meet these conditions slowly loses it.\n\nWalls and doors must hold the pressure difference or they are slowly crushed, just as against the sea: a single ordinary wall holds the shallows, a watertight door the thermocline, a pressure hull wall anything. Opening a door lets some pressure out. People who would suffer on the other side of a watertight door will not walk through it on their own. Requires power.</description>
+    <graphicData>
+      <texPath>Thing/DR_Pressurizer</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(1,1)</size>
+    <rotatable>false</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <fillPercent>0.3</fillPercent>
+    <tickerType>Rare</tickerType>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <terrainAffordanceNeeded>DepthRim_HullPlatform</terrainAffordanceNeeded>
+    <costList>
+      <Steel>120</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <WorkToBuild>2400</WorkToBuild>
+      <Flammability>0</Flammability>
+      <Mass>25</Mass>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>400</basePowerConsumption>
+        <!-- 艙壓已達目標、艙室不合格或是副機時只吃待機電力，見 CompPressurizer.HasWork -->
+        <idlePowerDraw>10</idlePowerDraw>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="DepthRim.CompProperties_Pressurizer">
+        <levelsPerHour>1</levelsPerHour>
+        <maxRoomCells>80</maxRoomCells>
+      </li>
+    </comps>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+  </ThingDef>
+
+</Defs>

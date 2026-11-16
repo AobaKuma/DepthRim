@@ -1,6 +1,7 @@
 #version 450
 
 // DepthRim 中層水域（地形下方經過的生物）：網格每幀由 C# 以世界座標建好（模型矩陣是單位矩陣）。
+// 支柱柱身（DepthRim_Pillar.frag.glsl）也用這個頂點著色器：區塊網格同樣是世界座標。
 // 除了貼圖 UV，還要把世界座標 XZ 傳給片段著色器，用來查深淵遮罩。
 
 layout(location = 0) in vec3 inPosition; // @vertex Position required

@@ -76,6 +76,15 @@ namespace DepthRim.Acceptance
                 int vents = all.Count(t => t.def == ThingDefOf.SteamGeyser);
                 ctx.Check(kind == OceanBiome.HydrothermalField ? vents >= 1 : vents == 0, $"{kind}: hydrothermal vents {vents}");
 
+                // 海底火山生態（中洋脊、熱液噴口區）：火山岩床、海底火山、玄武岩塊
+                bool volcanic = kind == OceanBiome.MidOceanRidge || kind == OceanBiome.HydrothermalField;
+                int volcanoes = all.Count(t => t.def.defName == "DR_UnderwaterVolcano");
+                int boulders = all.Count(t => t.def.defName == "DR_Rock");
+                int rockFloor = map.AllCells.Count(c => c.GetTerrain(map).defName == "DR_RockFloor");
+                ctx.Check(volcanic ? volcanoes >= 1 : volcanoes == 0, $"{kind}: underwater volcanoes {volcanoes}");
+                ctx.Check(volcanic ? boulders >= 5 : boulders == 0, $"{kind}: basalt boulders {boulders}");
+                ctx.Check(volcanic ? rockFloor > 500 : rockFloor == 0, $"{kind}: volcanic rock floor {rockFloor} cells");
+
                 int abyss = map.AllCells.Count(c => c.GetTerrain(map) == DepthRimDefOf.DepthRim_Abyss);
                 float abyssFraction = abyss / (float)map.cellIndices.NumGridCells;
                 ctx.Note($"{kind}: abyss {abyssFraction:P1}");
@@ -98,7 +107,8 @@ namespace DepthRim.Acceptance
                 {
                     // 測試地圖沒有出口可以揭開迷霧：截圖前全部揭開，鏡頭對準這個生態區的特色（珊瑚、海藻、熱液泉、深淵）
                     map.fogGrid.ClearAllFog();
-                    Thing feature = all.FirstOrDefault(t => t.def.defName.Contains("Coral") || t.def.defName == "DepthRim_Kelp" || t.def == ThingDefOf.SteamGeyser);
+                    Thing feature = all.FirstOrDefault(t => t.def.defName == "DR_UnderwaterVolcano")
+                        ?? all.FirstOrDefault(t => t.def.defName.Contains("Coral") || t.def.defName == "DepthRim_Kelp" || t.def == ThingDefOf.SteamGeyser);
                     IntVec3 focus = feature?.Position ?? map.AllCells.FirstOrDefault(c => c.GetTerrain(map) == DepthRimDefOf.DepthRim_Abyss);
                     if (!focus.IsValid || focus == IntVec3.Zero) { focus = map.Center; }
                     foreach (Wait w in ctx.ScreenshotOn(map, focus, 16f, "biome_" + kind, 30)) { yield return w; }

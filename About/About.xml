@@ -19,6 +19,12 @@
 			<displayName>Odyssey</displayName>
 		</li>
 		<li>
+			<packageId>AOBA.Framework</packageId>
+			<displayName>Fortified Feature Framework</displayName>
+			<downloadUrl>https://github.com/AobaKuma/Fortified-Framework</downloadUrl>
+			<steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3498575851</steamWorkshopUrl>
+		</li>
+		<li>
 			<packageId>Aoba.DeadManSwitch.Core</packageId>
 			<displayName>Dead Man Switch</displayName>
 			<steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=3121742525</steamWorkshopUrl>
@@ -31,6 +37,7 @@
 	<loadAfter>
 		<li>brrainz.harmony</li>
 		<li>Ludeon.RimWorld.Odyssey</li>
+		<li>AOBA.Framework</li>
 		<li>Aoba.DeadManSwitch.Core</li>
 		<li>Aoba.DeadManSwitch.Expedition</li>
 	</loadAfter>

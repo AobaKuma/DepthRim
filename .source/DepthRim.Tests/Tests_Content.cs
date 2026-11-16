@@ -49,8 +49,8 @@ static partial class Test
         {
             defTypes[t.Name] = t;
         }
-        // DMSE 的 Def 型別（魚雷用的 MissileBodyDef／MissilePartDef）
-        foreach (Type t in typeof(DMSE.MissileBodyDef).Assembly.GetTypes().Where(t => typeof(Verse.Def).IsAssignableFrom(t)))
+        // DMSE 的 Def 型別（魚雷用的 MissileBodyDef／MissilePartDef）與 FFF 的結構 Def（預製潛艇）
+        foreach (Type t in typeof(DMSE.MissileBodyDef).Assembly.GetTypes().Concat(typeof(Fortified.Structures.FFF_StructureDef).Assembly.GetTypes()).Where(t => typeof(Verse.Def).IsAssignableFrom(t)))
         {
             if (!defTypes.ContainsKey(t.Name)) { defTypes[t.Name] = t; }
         }
@@ -102,7 +102,12 @@ static partial class Test
         }
         Check(refs > 0, $"found shader file references ({refs})");
         // 全域 uniform 由引擎提供，不算材質參數
-        HashSet<string> globals = new HashSet<string> { "_GameSeconds" };
+        // 引擎每幀設的全域值：不能寫 @default（原版著色器的註解：寫了預設值會蓋掉全域值）。
+        // 海面著色器照原版深海打光，要用 SkyManager 設的日月方向與反光（2026-11-14）
+        HashSet<string> globals = new HashSet<string>
+        {
+            "_GameSeconds", "_WaterCastVectSun", "_WaterCastVectMoon", "_DayPercent", "_LightsourceShineSizeReduction", "_LightsourceShineIntensity",
+        };
         const int maxUniformBytes = 512; // MaterialLayout.ValidateSlots 的硬上限
         int blocks = 0;
         foreach (string glsl in Directory.Exists(modShaders) ? Directory.GetFiles(modShaders, "*.glsl") : new string[0])
@@ -285,7 +290,7 @@ static partial class Test
     /// <summary>XML 裡引用的 DepthRim / DMSE 類別都存在。</summary>
     static void ContentTypes()
     {
-        Regex classAttr = new Regex("Class=\"((?:DepthRim|DMSE)\\.[\\w.]+)\"");
+        Regex classAttr = new Regex("Class=\"((?:DepthRim|DMSE|Fortified)\\.[\\w.]+)\"");
         Regex classElem = new Regex("<(?:thingClass|workerClass|worldObjectClass|compClass|hediffClass|layerType|tileType)>((?:DepthRim|DMSE)\\.[\\w.]+)</");
         Assembly dmse = typeof(DMSE.TransferEnvironmentExtension).Assembly;
         int refs = 0;
@@ -296,7 +301,7 @@ static partial class Test
             {
                 refs++;
                 string name = m.Groups[1].Value;
-                Assembly asm = name.StartsWith("DMSE.") ? dmse : DepthRimAssembly;
+                Assembly asm = name.StartsWith("DMSE.") ? dmse : name.StartsWith("Fortified.") ? typeof(Fortified.Structures.FFF_StructureDef).Assembly : DepthRimAssembly;
                 Check(asm.GetType(name) != null, $"{Path.GetFileName(file)}: type {name} exists");
             }
         }

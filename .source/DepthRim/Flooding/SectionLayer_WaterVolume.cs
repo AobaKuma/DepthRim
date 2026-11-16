@@ -57,6 +57,13 @@ namespace DepthRim
         /// </summary>
         public const float WallOverlap = 0.5f;
 
+        /// <summary>
+        /// 牆角斜面在正面頂端的寬度（格）。北牆與往南轉的側牆相接時，正面兩端各有一塊三角形斜面
+        /// （頂端約 0.25 格寬、往下收到 0），水帶只蓋本格寬度會在兩側留下乾的斜面（使用者回報「側面的隙縫」）。
+        /// 依截圖量測：面高 0.45 格時斜面頂寬約 0.22–0.26 格。
+        /// </summary>
+        public const float WallBevelWidth = 0.25f;
+
         private readonly Color32[] cornerColors = new Color32[4];
 
         private readonly FloodingMath.CornerCell[] kinds = new FloodingMath.CornerCell[4];
@@ -82,7 +89,7 @@ namespace DepthRim
                 return;
             }
             Map map = Map;
-            LayerSubMesh sm = GetSubMesh(WaterTierMaterials.Volume(flooding.RenderTier));
+            LayerSubMesh sm = GetSubMesh(WaterTierMaterials.Volume(flooding.MeshTier));
             float y = AltitudeLayer.MoteLow.AltitudeFor();
             CellRect rect = section.CellRect;
             foreach (IntVec3 c in rect)
@@ -233,6 +240,48 @@ namespace DepthRim
             sm.colors.Add(new Color32(0, light, FaceBottomB, a));
             sm.colors.Add(new Color32(0, light, FaceTopB, a));
             sm.colors.Add(new Color32(0, light, FaceTopB, a));
+            sm.colors.Add(new Color32(0, light, FaceBottomB, a));
+            sm.tris.Add(start);
+            sm.tris.Add(start + 1);
+            sm.tris.Add(start + 2);
+            sm.tris.Add(start);
+            sm.tris.Add(start + 2);
+            sm.tris.Add(start + 3);
+
+            // 牆角斜面：本格左右是牆、北牆也往那一側延伸時，正面那一端有三角斜面，跟著水位補一塊三角形水
+            float bevel = WallBevelWidth * Mathf.Clamp01(level);
+            if (bevel > 0.001f)
+            {
+                if (IsBevelSide(water + IntVec3.West, wall + IntVec3.West, map))
+                {
+                    AddBevel(sm, new Vector3(wall.x - bevel, y, top), new Vector3(wall.x, y, top), new Vector3(wall.x, y, wall.z), light, a);
+                }
+                if (IsBevelSide(water + IntVec3.East, wall + IntVec3.East, map))
+                {
+                    AddBevel(sm, new Vector3(wall.x + 1, y, top), new Vector3(wall.x + 1 + bevel, y, top), new Vector3(wall.x + 1, y, wall.z), light, a);
+                }
+            }
+        }
+
+        private static bool IsBevelSide(IntVec3 side, IntVec3 sideWall, Map map)
+        {
+            return side.InBounds(map) && sideWall.InBounds(map) && !side.Fogged(map) && IsSolid(side, map) && sideWall.Filled(map);
+        }
+
+        /// <summary>
+        /// 斜面三角形：兩個頂點在水線（頂邊）、一個在牆腳。為了讓網格維持「每 4 個頂點一個四邊形」，
+        /// 牆腳頂點重複一次（第二個三角形退化）；第一個頂點放頂邊，避免被當成水帶本體（水帶的第一個頂點在牆腳）。
+        /// </summary>
+        private static void AddBevel(LayerSubMesh sm, Vector3 topA, Vector3 topB, Vector3 bottom, byte light, byte a)
+        {
+            int start = sm.verts.Count;
+            sm.verts.Add(topA);
+            sm.verts.Add(topB);
+            sm.verts.Add(bottom);
+            sm.verts.Add(bottom);
+            sm.colors.Add(new Color32(0, light, FaceTopB, a));
+            sm.colors.Add(new Color32(0, light, FaceTopB, a));
+            sm.colors.Add(new Color32(0, light, FaceBottomB, a));
             sm.colors.Add(new Color32(0, light, FaceBottomB, a));
             sm.tris.Add(start);
             sm.tris.Add(start + 1);

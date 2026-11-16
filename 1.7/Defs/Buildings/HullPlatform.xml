@@ -3,7 +3,10 @@
 
   <!--
     潛艇船體平台：比照 DMSE 的軌道平台（DMS_OrbitalPlatform / DMS_LightPlatform），只是「虛空」換成深淵。
-    - 只能鋪在深淵上（深淵地形帶 DepthRim_OpenAbyss 承載力）。
+    - 鋪在開放水域或海床上：水下地圖的深淵與海床、海面地圖的開放海面（這些地形都帶 DepthRim_HullBase 承載力）。
+    - 鋪在海床上（或下錨停在海床上）時平台坐在海床上：側面和海面一樣只露出 seaSurfaceFreeboard 格；
+      被蓋掉的海床由 MapComponent_SeabedMemory 記下，拆除或潛艇離開時還原。
+    - 海面地圖上船體平台浮在水面：側面只露出 seaSurfaceFreeboard 格的乾舷，影子與白沫貼著水線（海上平台則高出海面 14.1 格）。
     - 是基底地形（非 foundation、非 layerable），拆除時才能直接換回深淵。
     - 邊框與下方側面由 SectionLayer_HullPlatformProps 畫（比照 Odyssey 的 SectionLayer_SubstructureProps），見下方 modExtensions。
     - 船體要蓋水密隔牆與水密艙門（都需要 Heavy），所以和 DMSE 的輕型平台不同，這裡承載 Heavy。
@@ -14,6 +17,20 @@
     <defName>DepthRim_OpenAbyss</defName>
     <label>open abyss</label>
     <order>2420</order>
+  </TerrainAffordanceDef>
+
+  <!-- 船體平台能鋪的地方：深淵與開放海面 -->
+  <TerrainAffordanceDef>
+    <defName>DepthRim_OpenWater</defName>
+    <label>open water</label>
+    <order>2425</order>
+  </TerrainAffordanceDef>
+
+  <!-- 船體平台能鋪的地方：開放水域（深淵、開放海面、冰洞水面）加上海床 -->
+  <TerrainAffordanceDef>
+    <defName>DepthRim_HullBase</defName>
+    <label>open water or seabed</label>
+    <order>2427</order>
   </TerrainAffordanceDef>
 
   <TerrainAffordanceDef>
@@ -28,7 +45,7 @@
       <li>DepthRim_PressureEngineering</li>
     </researchPrerequisites>
     <label>hull platform</label>
-    <description>A pressure-rated lattice deck laid over open water. It is the base structure of a submarine: watertight walls, doors and machinery can all be built on it.\n\nIt can be taken apart with the 'remove platform' command, leaving the abyss below.</description>
+    <description>A pressure-rated lattice deck laid over open water or the seabed: the abyss below the sea, the seabed itself, where it rests on the bottom, or the open sea surface, where it floats at the waterline. It is the base structure of a submarine: watertight walls, doors and machinery can all be built on it.\n\nIt can be taken apart with the 'remove platform' command, leaving open water below.</description>
     <texturePath>Thing/DR_LightPlatform/Platform</texturePath>
     <renderPrecedence>240</renderPrecedence>
     <preventCraters>true</preventCraters>
@@ -59,11 +76,13 @@
       <li>Walkable</li>
       <li>DepthRim_HullPlatform</li>
     </affordances>
-    <terrainAffordanceNeeded>DepthRim_OpenAbyss</terrainAffordanceNeeded>
+    <terrainAffordanceNeeded>DepthRim_HullBase</terrainAffordanceNeeded>
     <modExtensions>
       <!-- 邊框與下方側面由 DepthRim.SectionLayer_HullPlatformProps 畫（比照 Odyssey 的 SectionLayer_SubstructureProps），
            不用原版 spaceEdgeGraphicData：原版側面一律畫滿兩格、靠地形把落在實地上的部分蓋掉，和不透明的深淵背景互相衝突。 -->
       <li Class="DepthRim.HullPlatformPropsExtension">
+        <!-- 海面地圖上浮在水面、或坐在海床上：側面只露出半格乾舷 -->
+        <seaSurfaceFreeboard>0.5</seaSurfaceFreeboard>
         <oShapeTexPath>Thing/DR_LightPlatform/BorderInside_OShape</oShapeTexPath>
         <uShapeTexPath>Thing/DR_LightPlatform/BorderInside_UShape</uShapeTexPath>
         <cornerInnerTexPath>Thing/DR_LightPlatform/BorderInside_CornerInner</cornerInnerTexPath>

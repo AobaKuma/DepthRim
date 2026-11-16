@@ -19,4 +19,8 @@
   <DepthRim_PirateSubmarine.description>在航道上巡弋的海盜攻擊潛艇。它會朝你的海洋地圖發射魚雷，也會用自己的攔截彈擊落來襲的魚雷。用魚雷把它的船殼打穿讓它沉沒，或派突擊艇強攻。</DepthRim_PirateSubmarine.description>
   <DepthRim_FishSchool.label>魚群</DepthRim_FishSchool.label>
   <DepthRim_FishSchool.description>一大群魚。在聲納上聽起來和潛艇很像，要靠近才分得出來。</DepthRim_FishSchool.description>
+
+  <DepthRim_SeaSurfaceSite.label>海上平台</DepthRim_SeaSurfaceSite.label>
+  <DepthRim_SeaSurfaceSite.description>開放海面上的平台。</DepthRim_SeaSurfaceSite.description>
+
 </LanguageData>

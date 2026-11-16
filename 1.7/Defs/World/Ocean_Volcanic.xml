@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海底火山生態（中洋脊、熱液噴口區）：
+    - DR_RockFloor：年輕玄武岩裸露的岩床地形（貼圖 Textures/DR_RockFloor），取代大部分碎石。
+    - DR_Rock：散落在岩床上的玄武岩塊（2×2，三種外觀隨機），可當掩體、可開採出板岩石塊（板岩在這兩個生態區代表玄武岩）。
+    - DR_UnderwaterVolcano：海底火山的煙囪狀噴口（3×3，畫成 4.5 格高），不能通過、不能摧毀，持續冒煙並加熱密閉空間。
+    散佈數量由生態區的 WaterMapExtension.seafloorFeatures 決定（GenStep_OceanFeatures）。
+  -->
+
+  <!-- ================ 岩床 ================ -->
+
+  <TerrainDef ParentName="DepthRim_SeabedBase">
+    <defName>DR_RockFloor</defName>
+    <label>volcanic rock floor</label>
+    <description>Bare, young basalt on the sea floor, cracked as it cooled. Hardly any sediment has settled on it yet.</description>
+    <texturePath>DR_RockFloor</texturePath>
+    <renderPrecedence>330</renderPrecedence>
+    <pathCost>2</pathCost>
+    <scatterType>Rocky</scatterType>
+    <fertility>0</fertility>
+    <statBases Inherit="False">
+      <Beauty>-1</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+  </TerrainDef>
+
+  <!-- ================ 玄武岩塊 ================ -->
+
+  <ThingDef ParentName="BuildingNaturalBase">
+    <defName>DR_Rock</defName>
+    <label>basalt boulder</label>
+    <description>A lump of black basalt left where lava met the cold sea. Waist-high and wide, it gives some cover, and it can be mined for a chunk of stone.</description>
+    <thingClass>Mineable</thingClass>
+    <graphicData>
+      <texPath>Thing/DR_Rock</texPath>
+      <graphicClass>Graphic_Random</graphicClass>
+      <drawSize>(2.4,2.4)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>40</pathCost>
+    <fillPercent>0.45</fillPercent>
+    <rotatable>false</rotatable>
+    <mineable>true</mineable>
+    <fertility>0</fertility>
+    <canOverlapZones>false</canOverlapZones>
+    <statBases>
+      <MaxHitPoints>600</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <Beauty>-1</Beauty>
+    </statBases>
+    <building>
+      <isInert>true</isInert>
+      <claimable>false</claimable>
+      <deconstructible>false</deconstructible>
+      <expandHomeArea>false</expandHomeArea>
+      <mineableThing>ChunkSlate</mineableThing>
+      <mineableDropChance>1</mineableDropChance>
+      <mineableYieldWasteable>false</mineableYieldWasteable>
+      <destroyShakeAmount>0</destroyShakeAmount>
+    </building>
+    <damageMultipliers>
+      <li>
+        <damageDef>Thump</damageDef>
+        <multiplier>4</multiplier>
+      </li>
+    </damageMultipliers>
+  </ThingDef>
+
+  <!-- ================ 海底火山 ================ -->
+
+  <ThingDef ParentName="BuildingNaturalBase">
+    <defName>DR_UnderwaterVolcano</defName>
+    <label>underwater volcano</label>
+    <description>A chimney of black volcanic rock, built up layer by layer by the hot, mineral-laden water pouring out of it. It never stops smoking. Enclosed in a room, it will heat the room fast.</description>
+    <thingClass>Building</thingClass>
+    <graphicData>
+      <texPath>Thing/DR_UnderwaterVolcano</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <!-- 貼圖是高瘦的煙囪：佔地 3×3，畫成 4.5×4.5、往上移 0.75 格，讓底部貼齊佔地 -->
+      <drawSize>(4.5,4.5)</drawSize>
+      <drawOffset>(0,0,0.75)</drawOffset>
+    </graphicData>
+    <uiIconScale>0.8</uiIconScale>
+    <size>(3,3)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Impassable</passability>
+    <fillPercent>1</fillPercent>
+    <blockLight>true</blockLight>
+    <blockWind>true</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.8</staticSunShadowHeight>
+    <rotatable>false</rotatable>
+    <destroyable>false</destroyable>
+    <useHitPoints>false</useHitPoints>
+    <tickerType>Normal</tickerType>
+    <blockPlants>true</blockPlants>
+    <canOverlapZones>false</canOverlapZones>
+    <fertility>0</fertility>
+    <building>
+      <isEdifice>true</isEdifice>
+      <isInert>true</isInert>
+      <claimable>false</claimable>
+      <deconstructible>false</deconstructible>
+      <repairable>false</repairable>
+      <isTargetable>false</isTargetable>
+      <expandHomeArea>false</expandHomeArea>
+      <canBuildNonEdificesUnder>false</canBuildNonEdificesUnder>
+    </building>
+    <comps>
+      <!-- 開放水域（室外）不受影響；只有被圍進密閉艙室時才會加熱 -->
+      <li Class="CompProperties_HeatPusher">
+        <heatPerSecond>90</heatPerSecond>
+      </li>
+      <li Class="CompProperties_FleckEmitterLongTerm">
+        <fleckDef>Smoke</fleckDef>
+        <spawnRadius>0.2</spawnRadius>
+        <spawnChance>0.04</spawnChance>
+        <spawnOffsetFromCenter>(0.3,0,2.6)</spawnOffsetFromCenter>
+        <prewarmCycles>1.0</prewarmCycles>
+        <fleckScale>3.0</fleckScale>
+        <minRotationRate>-10.0</minRotationRate>
+        <maxRotationRate>10.0</maxRotationRate>
+        <minVelocityAngle>-15.0</minVelocityAngle>
+        <maxVelocityAngle>15.0</maxVelocityAngle>
+        <minVelocitySpeed>0.3</minVelocitySpeed>
+        <maxVelocitySpeed>0.5</maxVelocitySpeed>
+        <forceEnabled>true</forceEnabled>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <GenStepDef>
+    <defName>DepthRim_OceanFeatures</defName>
+    <order>1465</order>
+    <genStep Class="DepthRim.GenStep_OceanFeatures" />
+  </GenStepDef>
+
+</Defs>

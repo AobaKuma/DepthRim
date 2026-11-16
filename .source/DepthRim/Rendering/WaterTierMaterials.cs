@@ -81,10 +81,118 @@ namespace DepthRim
                     continue;
                 }
                 WaterVisualTierDef def = WaterVisualTierDef.For((DepthTier)i);
-                outer[i].SetFloat("_SkyLight", WaterLight.SkyLevel(map, def.ambientReach));
-                outer[i].SetFloat("_CausticStrength", (def?.causticStrength ?? 0.22f) * sunEffects);
-                outer[i].SetFloat("_LightShaftStrength", (def?.lightShaftStrength ?? 0f) * sunEffects);
+                float reach = def?.ambientReach ?? 0f;
+                float caustic = def?.causticStrength ?? 0.22f;
+                float shaft = def?.lightShaftStrength ?? 0f;
+                if (i == blendIndex && blendTo != null)
+                {
+                    // 換層淡入淡出中：這個材質正在往新層級的樣子走
+                    reach = Mathf.Lerp(reach, blendTo.ambientReach, blendT);
+                    caustic = Mathf.Lerp(caustic, blendTo.causticStrength, blendT);
+                    shaft = Mathf.Lerp(shaft, blendTo.lightShaftStrength, blendT);
+                }
+                outer[i].SetFloat("_SkyLight", WaterLight.SkyLevel(map, reach));
+                outer[i].SetFloat("_CausticStrength", caustic * sunEffects);
+                outer[i].SetFloat("_LightShaftStrength", shaft * sunEffects);
             }
+        }
+
+        // ── 換層淡入淡出（MapComponent_Flooding 驅動）──────────────────────────
+        // 換層時網格先繼續用舊層級的材質，把它的參數逐幀往新層級內插；淡完後整張重建成新層級的材質
+        // （那時兩者一模一樣，看不出切換），再把舊材質還原。同一時間只有一組在淡（只淡正在看的地圖）。
+
+        private static int blendIndex = -1;
+        private static WaterVisualTierDef blendTo;
+        private static float blendT;
+
+        /// <summary>把 <paramref name="from"/> 層級的材質調成往 <paramref name="to"/> 走了 <paramref name="t"/>（0..1）的樣子。</summary>
+        public static void BlendTier(DepthTier from, DepthTier to, float t)
+        {
+            int index = Index(from);
+            if (blendIndex >= 0 && blendIndex != index)
+            {
+                EndBlend();
+            }
+            blendIndex = index;
+            blendTo = WaterVisualTierDef.For(to);
+            blendT = Mathf.Clamp01(t);
+            WaterVisualTierDef a = WaterVisualTierDef.For(from);
+            if (outer[index] != null)
+            {
+                ApplyOuter(outer[index], a, blendTo, blendT);
+            }
+            if (volume[index] != null)
+            {
+                ApplyVolume(volume[index], a, blendTo, blendT);
+            }
+        }
+
+        /// <summary>結束淡入淡出：被借用的舊材質還原成自己層級的參數。</summary>
+        public static void EndBlend()
+        {
+            if (blendIndex < 0)
+            {
+                return;
+            }
+            WaterVisualTierDef own = WaterVisualTierDef.For((DepthTier)blendIndex);
+            if (outer[blendIndex] != null)
+            {
+                ApplyOuter(outer[blendIndex], own, own, 0f);
+            }
+            if (volume[blendIndex] != null)
+            {
+                ApplyVolume(volume[blendIndex], own, own, 0f);
+            }
+            blendIndex = -1;
+            blendTo = null;
+            blendT = 0f;
+        }
+
+        /// <summary>給驗收測試：正在淡的材質層級（沒有時 -1）與進度。</summary>
+        public static int BlendingIndex => blendIndex;
+
+        public static float BlendProgress => blendT;
+
+        private static float Lerp(float? a, float? b, float fallback, float t)
+        {
+            return Mathf.Lerp(a ?? fallback, b ?? fallback, t);
+        }
+
+        private static Color Lerp(Color? a, Color? b, Color fallback, float t)
+        {
+            return Color.Lerp(a ?? fallback, b ?? fallback, t);
+        }
+
+        /// <summary>外海材質中由層級 Def 決定的參數（<paramref name="a"/> 往 <paramref name="b"/> 內插）。</summary>
+        private static void ApplyOuter(Material mat, WaterVisualTierDef a, WaterVisualTierDef b, float t)
+        {
+            mat.color = Lerp(a?.waterColor, b?.waterColor, new Color(0.06f, 0.24f, 0.40f), t);
+            mat.SetColor("_DeepColor", Lerp(a?.deepColor, b?.deepColor, new Color(0.02f, 0.07f, 0.15f), t));
+            mat.SetColor("_FogColor", Lerp(a?.fogColor, b?.fogColor, new Color(0.015f, 0.05f, 0.11f), t));
+            mat.SetColor("_BiolumColor", Lerp(a?.biolumColor, b?.biolumColor, new Color(0.35f, 0.90f, 0.85f), t));
+            mat.SetFloat("_ClearAlpha", Lerp(a?.clearAlpha, b?.clearAlpha, 0.40f, t));
+            mat.SetFloat("_MurkAlpha", Mathf.Lerp(MurkOf(a), MurkOf(b), t));
+            mat.SetFloat("_RippleScale", Lerp(a?.rippleScale, b?.rippleScale, 0.03f, t));
+            mat.SetFloat("_RippleStrength", Lerp(a?.rippleStrength, b?.rippleStrength, 0.8f, t));
+            mat.SetFloat("_CausticStrength", Lerp(a?.causticStrength, b?.causticStrength, 0.22f, t));
+            mat.SetFloat("_LightShaftStrength", Lerp(a?.lightShaftStrength, b?.lightShaftStrength, 0f, t));
+            mat.SetFloat("_SnowDensity", Mathf.Lerp(Particle(a?.snowDensity), Particle(b?.snowDensity), t));
+            mat.SetFloat("_SnowSpeed", Lerp(a?.snowSpeed, b?.snowSpeed, 1f, t));
+            mat.SetFloat("_BiolumDensity", Mathf.Lerp(Particle(a?.biolumDensity), Particle(b?.biolumDensity), t));
+            mat.SetFloat("_HazeStrength", Mathf.Lerp(Particle(a?.hazeStrength), Particle(b?.hazeStrength), t));
+            mat.SetFloat("_WobbleStrength", Lerp(a?.wobbleStrength, b?.wobbleStrength, 0f, t));
+        }
+
+        /// <summary>艙室材質中由層級 Def 決定的參數。</summary>
+        private static void ApplyVolume(Material mat, WaterVisualTierDef a, WaterVisualTierDef b, float t)
+        {
+            mat.color = Lerp(a?.waterColor, b?.waterColor, new Color(0.10f, 0.36f, 0.55f), t);
+            mat.SetColor("_DeepColor", Lerp(a?.deepColor, b?.deepColor, new Color(0.02f, 0.10f, 0.22f), t));
+            mat.SetFloat("_ClearAlpha", Lerp(a?.clearAlpha, b?.clearAlpha, 0.40f, t));
+            mat.SetFloat("_MurkAlpha", Mathf.Lerp(MurkOf(a), MurkOf(b), t));
+            mat.SetFloat("_RippleScale", Lerp(a?.rippleScale, b?.rippleScale, 0.06f, t));
+            mat.SetFloat("_SnowDensity", Mathf.Lerp(CompartmentSnow(a), CompartmentSnow(b), t));
+            mat.SetFloat("_SnowSpeed", Lerp(a?.snowSpeed, b?.snowSpeed, 1f, t));
         }
 
         public static void UpdateCameraZoom(float rootSize)
@@ -101,6 +209,9 @@ namespace DepthRim
         /// </summary>
         public static void Reset()
         {
+            blendIndex = -1;
+            blendTo = null;
+            blendT = 0f;
             for (int i = 0; i < TierCount; i++)
             {
                 if (outer[i] != null)

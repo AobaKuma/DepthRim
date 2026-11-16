@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- Surfacing (open sea) -->
+  <DepthRim.Surface.Label>Surface</DepthRim.Surface.Label>
+  <DepthRim.Surface.Desc>Blow the ballast and rise to the open sea above. The hull floats on the sea surface map of this tile; dive again from the helm.\n\nThe submarine must be stopped at shallow depth, under open water without ice.</DepthRim.Surface.Desc>
+  <DepthRim.Surface.NoHull>The submarine has no hull.</DepthRim.Surface.NoHull>
+  <DepthRim.Surface.InFlight>The submarine is under way. Stop first.</DepthRim.Surface.InFlight>
+  <DepthRim.Surface.NotShallow>Rise to {0} depth first.</DepthRim.Surface.NotShallow>
+  <DepthRim.Surface.Land>There is land above, not sea.</DepthRim.Surface.Land>
+  <DepthRim.Surface.Shelf>There is an ice shelf above: hundreds of metres of ice that no submarine can break.</DepthRim.Surface.Shelf>
+  <DepthRim.Surface.Iced>The sea above is frozen ({0} m of ice). Use ice-breaking surfacing.</DepthRim.Surface.Iced>
+  <DepthRim.Surface.Occupied>{0} is already above.</DepthRim.Surface.Occupied>
+  <DepthRim.Surface.NoRoom>There is no room for the hull at {0}.</DepthRim.Surface.NoRoom>
+  <DepthRim.Surface.Surfacing>Surfacing</DepthRim.Surface.Surfacing>
+  <DepthRim.Surface.LetterLabel>Surfaced</DepthRim.Surface.LetterLabel>
+  <DepthRim.Surface.LetterText>{0} blew its ballast and broke the surface. The hull is riding the open sea.\n\nDive again from the helm when you are ready.</DepthRim.Surface.LetterText>
+
+  <!-- Diving from the surface -->
+  <DepthRim.Surface.DiveDesc>Flood the ballast and sink back into the ocean below, then on down to the chosen depth. Everything on the hull goes with it; whatever is off the hull stays behind.</DepthRim.Surface.DiveDesc>
+  <DepthRim.Surface.NotSurfaced>The submarine is not on the surface.</DepthRim.Surface.NotSurfaced>
+  <DepthRim.Surface.NotOnHull>The helm is not on a hull held by keel frames.</DepthRim.Surface.NotOnHull>
+  <DepthRim.Surface.NoSeaBelow>There is no free, navigable ocean below.</DepthRim.Surface.NoSeaBelow>
+  <DepthRim.Surface.Diving>Diving</DepthRim.Surface.Diving>
+  <DepthRim.Surface.Dived>{0} slipped beneath the surface and is resting in the shallows.</DepthRim.Surface.Dived>
+
+  <!-- Ice-breaking surfacing -->
+  <DepthRim.IceBreach.Label>Break through ice</DepthRim.IceBreach.Label>
+  <DepthRim.IceBreach.Desc>Hover up against the ice for an hour, then blow the main ballast and try to punch through.\n\nWhether it works depends on the ice thickness and temperature against the size of the hull (bigger hulls have more lift). If the ice only cracks, try again within a day: cracked ice gives way more easily. Every attempt damages the ice-breaker frames and needs six hours to reflood and recharge.</DepthRim.IceBreach.Desc>
+  <DepthRim.IceBreach.NoFrame>No ice-breaker frame aboard.</DepthRim.IceBreach.NoFrame>
+  <DepthRim.IceBreach.Cooldown>Reflooding and recharging the ballast: {0} left.</DepthRim.IceBreach.Cooldown>
+  <DepthRim.IceBreach.NoIce>There is no ice above. Surface normally.</DepthRim.IceBreach.NoIce>
+  <DepthRim.IceBreach.TooThick>The ice is {0} m thick, more than the ice-breaker frame can take ({1} m).</DepthRim.IceBreach.TooThick>
+  <DepthRim.IceBreach.Hovering>Hovering under the ice, about to break through.</DepthRim.IceBreach.Hovering>
+  <DepthRim.IceBreach.Begin>{0} is rising slowly against the ice. It will blow its ballast in an hour.</DepthRim.IceBreach.Begin>
+  <DepthRim.IceBreach.Cancelled>{0} gave up breaking the ice: {1}</DepthRim.IceBreach.Cancelled>
+  <DepthRim.IceBreach.CancelledByPlayer>cancelled.</DepthRim.IceBreach.CancelledByPlayer>
+  <DepthRim.IceBreach.CancelledMoved>the submarine moved or changed depth.</DepthRim.IceBreach.CancelledMoved>
+  <DepthRim.IceBreach.CancelLabel>Stop hovering</DepthRim.IceBreach.CancelLabel>
+  <DepthRim.IceBreach.CancelDesc>Call off the ice breach. The ballast blows in {0}.</DepthRim.IceBreach.CancelDesc>
+  <DepthRim.IceBreach.InspectHovering>Hovering under the ice: breaking through in {0}</DepthRim.IceBreach.InspectHovering>
+  <DepthRim.IceBreach.StuckLabel>Ice held</DepthRim.IceBreach.StuckLabel>
+  <DepthRim.IceBreach.StuckText>{0} slammed into the ice ({1} m thick) and could not move it (lift ratio {2}). The ice-breaker frames took the blow.\n\nFind thinner ice, a lead, or a bigger hull.</DepthRim.IceBreach.StuckText>
+  <DepthRim.IceBreach.PartialLabel>Ice cracked</DepthRim.IceBreach.PartialLabel>
+  <DepthRim.IceBreach.PartialText>{0} cracked the ice ({1} m thick) but did not break through (lift ratio {2}). The ice-breaker frames are damaged.\n\nTry again within a day, once the ballast is recharged in six hours: the cracked ice will give way more easily.</DepthRim.IceBreach.PartialText>
+  <DepthRim.IceBreach.SurfacedLabel>Broke through the ice</DepthRim.IceBreach.SurfacedLabel>
+  <DepthRim.IceBreach.SurfacedText>{0} punched up through {1} m of sea ice (lift ratio {2}) and is resting in the hole it broke.\n\nThe open water around the hull freezes over again. Dive before the ice around the hull grows thicker than 0.4 m, or use the ice-breaker frame to break free.</DepthRim.IceBreach.SurfacedText>
+  <DepthRim.IceBreach.Violent>The hull burst through so hard that the ice shattered far around it.</DepthRim.IceBreach.Violent>
+  <DepthRim.IceBreach.FrozenIn>The hull is frozen in ({0} m of ice around it, more than {1} m). Break free with the ice-breaker frame.</DepthRim.IceBreach.FrozenIn>
+  <DepthRim.IceBreach.NotFrozen>The hull is not frozen in.</DepthRim.IceBreach.NotFrozen>
+  <DepthRim.IceBreach.BreakFreeLabel>Break free</DepthRim.IceBreach.BreakFreeLabel>
+  <DepthRim.IceBreach.BreakFreeDesc>Ram the ice around the hull with the ice-breaker frames until it is open water again. The frames share {0} damage.</DepthRim.IceBreach.BreakFreeDesc>
+  <DepthRim.IceBreach.BrokeFree>The ice around the hull is broken open.</DepthRim.IceBreach.BrokeFree>
+  <DepthRim.IceBreach.FrameLimit>Breaks ice up to {0} m</DepthRim.IceBreach.FrameLimit>
+  <DepthRim.IceBreach.NeedsRoof>Must be under a roof: the frame braces the cabin roof.</DepthRim.IceBreach.NeedsRoof>
+  <DepthRim.IceBreach.SiteInspect>{0}, {1} m thick</DepthRim.IceBreach.SiteInspect>
+
+  <!-- Measuring the ice -->
+  <DepthRim.IceBreach.MeasureLabel>Measure ice</DepthRim.IceBreach.MeasureLabel>
+  <DepthRim.IceBreach.MeasureDesc>Sound the ice above with the upward sonar and estimate whether the submarine can break through.</DepthRim.IceBreach.MeasureDesc>
+  <DepthRim.IceBreach.MeasureOpen>{0} above: you can surface normally.</DepthRim.IceBreach.MeasureOpen>
+  <DepthRim.IceBreach.MeasureText>Ice above: {0}, {1} m thick{2}.\nAir temperature: {3} °C (flexural strength {4} MPa).\nHull: {5} cells.\n\nEstimated lift ratio: {6} → {7}</DepthRim.IceBreach.MeasureText>
+  <DepthRim.IceBreach.MeasureLead> (a lead has opened here)</DepthRim.IceBreach.MeasureLead>
+  <DepthRim.IceBreach.Result.TooThick>too thick for the ice-breaker frame</DepthRim.IceBreach.Result.TooThick>
+  <DepthRim.IceBreach.Result.Stuck>the ice will not move</DepthRim.IceBreach.Result.Stuck>
+  <DepthRim.IceBreach.Result.Partial>the ice will crack but not break</DepthRim.IceBreach.Result.Partial>
+  <DepthRim.IceBreach.Result.Surfaced>breaks through</DepthRim.IceBreach.Result.Surfaced>
+  <DepthRim.IceBreach.Result.Violent>bursts through violently</DepthRim.IceBreach.Result.Violent>
+
+  <DepthRim.IceKind.None>open sea</DepthRim.IceKind.None>
+  <DepthRim.IceKind.FirstYear>first-year sea ice</DepthRim.IceKind.FirstYear>
+  <DepthRim.IceKind.MultiYear>multi-year sea ice</DepthRim.IceKind.MultiYear>
+  <DepthRim.IceKind.Shelf>ice shelf</DepthRim.IceKind.Shelf>
+
+</LanguageData>

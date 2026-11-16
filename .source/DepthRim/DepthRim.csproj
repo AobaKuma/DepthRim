@@ -40,6 +40,11 @@
       <HintPath>$(RimWorldDir)Mods\_Dead-Man-Switch-Expedition\1.7\Assemblies\DMSE.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <!-- Fortified Framework（FFF）：預製潛艇用它的結構系統（DMS 本來就相依 FFF） -->
+    <Reference Include="Fortified">
+      <HintPath>$(RimWorldDir)Mods\_Fortified-Framework\1.7\Assemblies\Fortified.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
 </Project>

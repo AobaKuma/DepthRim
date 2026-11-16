@@ -43,6 +43,9 @@ namespace DepthRim
         /// <summary>船殼承壓聲的頻率倍率（0–2）：0 = 關閉。</summary>
         public float hullCreakFrequency = 1f;
 
+        /// <summary>海面地圖（水面層）的鏡頭隨海浪微微上下擺動。</summary>
+        public bool seaCameraSway = true;
+
         private static DepthRimModSettings current;
 
         /// <summary>目前載入的設定；沒有載入（單元測試、極早期）時回傳一份預設值。</summary>
@@ -81,6 +84,7 @@ namespace DepthRim
             Scribe_Values.Look(ref muffleStrength, "muffleStrength", 1f);
             Scribe_Values.Look(ref diverBreathing, "diverBreathing", true);
             Scribe_Values.Look(ref hullCreakFrequency, "hullCreakFrequency", 1f);
+            Scribe_Values.Look(ref seaCameraSway, "seaCameraSway", true);
         }
 
         public void DoWindowContents(Rect inRect)
@@ -113,6 +117,9 @@ namespace DepthRim
             {
                 lampRadiusOverride = 1f; // 太小的半徑沒有意義，也讓滑桿好對齊
             }
+            list.Gap(6f);
+            list.CheckboxLabeled("DepthRim.Settings.SeaCameraSway".Translate(), ref seaCameraSway,
+                "DepthRim.Settings.SeaCameraSwayTip".Translate());
             list.GapLine();
             list.Label("DepthRim.Settings.AudioHeader".Translate());
             list.Label("DepthRim.Settings.Muffle".Translate(muffleStrength.ToStringPercent()));

@@ -13,6 +13,9 @@ namespace DepthRim
     /// <para>例外：徵召中的角色照玩家的命令走；已經泡在水裡的角色可以通過（不然氣瓶用完的人會被關在外面）；
     /// 非血肉（機械體）不需要呼吸。</para>
     ///
+    /// <para>壓差：門兩側壓力不同時（加壓艙、水下地圖的乾艙與外海），過去會變得更不適的玩家角色也不會自己通過（<see cref="PressureAllows"/>），
+    /// 所以適應中的人會留在艙裡、沒適應的人不會闖進去。門每開一次，艙壓會洩一點。</para>
+    ///
     /// <para>門的狀態會隨水位改變，<see cref="MapComponent_Flooding"/> 每次更新後呼叫 <see cref="Notify_WaterUpdated"/>；
     /// 「淹水側」狀態一變就清掉可達性快取，和原版門開關時的做法一樣。關著的水密門受損時滲水量只有一般牆的 <see cref="LeakFactor"/>。</para>
     /// </summary>
@@ -82,19 +85,112 @@ namespace DepthRim
             {
                 return false;
             }
-            if (!floodedSide || p.Map != Map)
+            if (p.Map != Map)
             {
                 return true;
             }
-            MapComponent_Flooding flooding = Map.Flooding();
-            bool pawnInWater = flooding != null && FloodingPawnEffects.IsSubmerged(p, flooding.LevelAt(p.Position));
-            return FloodingMath.WatertightDoorAllows(p.Drafted, FloodingPawnEffects.CanBreatheUnderwater(p), pawnInWater, MaxSideLevel());
+            if (floodedSide)
+            {
+                MapComponent_Flooding flooding = Map.Flooding();
+                bool pawnInWater = flooding != null && FloodingPawnEffects.IsSubmerged(p, flooding.LevelAt(p.Position));
+                if (!FloodingMath.WatertightDoorAllows(p.Drafted, FloodingPawnEffects.CanBreatheUnderwater(p), pawnInWater, MaxSideLevel()))
+                {
+                    return false;
+                }
+            }
+            return PressureAllows(p);
+        }
+
+        // ── 壓差（加壓艙）──
+
+        private int pressureSidesTick = -1;
+
+        private bool pressureGap;
+
+        private float pressureLow;
+
+        private float pressureHigh;
+
+        /// <summary>
+        /// 門兩側的壓力不一樣時回傳 true，並給出較低與較高的那一側（壓力等級）。地圖上不可能有壓差時（見 <see cref="PressureEnvironment.HasPressureDifferences"/>）一律 false。
+        /// 結果每 tick 只算一次：尋路時同一扇門會被問很多次。
+        /// </summary>
+        public bool PressureSides(out float low, out float high)
+        {
+            low = high = 0f;
+            Map map = Map;
+            if (!PressureEnvironment.HasPressureDifferences(map))
+            {
+                return false;
+            }
+            int now = Find.TickManager.TicksGame;
+            if (pressureSidesTick != now)
+            {
+                pressureSidesTick = now;
+                bool any = false;
+                pressureLow = pressureHigh = 0f;
+                for (int i = 0; i < 4; i++)
+                {
+                    IntVec3 c = Position + GenAdj.CardinalDirections[i];
+                    if (!c.InBounds(map) || c.Filled(map))
+                    {
+                        continue;
+                    }
+                    float pressure = PressureEnvironment.At(map, c);
+                    pressureLow = any ? UnityEngine.Mathf.Min(pressureLow, pressure) : pressure;
+                    pressureHigh = any ? UnityEngine.Mathf.Max(pressureHigh, pressure) : pressure;
+                    any = true;
+                }
+                pressureGap = any && pressureHigh - pressureLow > 0.05f;
+            }
+            low = pressureLow;
+            high = pressureHigh;
+            return pressureGap;
+        }
+
+        /// <summary>讓下一次 <see cref="PressureSides"/> 重新計算（同一個 tick 內艙壓被改掉時用）。</summary>
+        public void InvalidatePressureSides()
+        {
+            pressureSidesTick = -1;
+        }
+
+        /// <summary>
+        /// 加壓艙的活動範圍靠這扇門：門另一側的壓力會讓這個人比現在更不適時，他不會自己走過去
+        /// （<see cref="PressureAdaptationMath.DoorAllows"/>）。徵召中照命令走；機械體不用適應。
+        /// </summary>
+        public bool PressureAllows(Pawn p)
+        {
+            // 只管玩家的角色（含囚犯）：其他陣營的 AI 不靠這扇門判斷該不該過去
+            bool ours = p.Faction == Faction.OfPlayer || p.IsPrisonerOfColony;
+            if (!ours || !PressureAdaptationUtility.Applies(p) || !PressureSides(out float low, out float high))
+            {
+                return true;
+            }
+            float adapted = PressureAdaptationUtility.AdaptedLevel(p);
+            float here = PressureEnvironment.At(Map, p.Position);
+            bool drafted = p.Drafted;
+            return PressureAdaptationMath.DoorAllows(drafted, adapted, here, low) && PressureAdaptationMath.DoorAllows(drafted, adapted, here, high);
+        }
+
+        /// <summary>門每開一次，兩側的加壓艙就洩一點壓。</summary>
+        protected override void DoorOpen(int ticksToClose)
+        {
+            base.DoorOpen(ticksToClose);
+            if (Spawned)
+            {
+                Map.GetComponent<MapComponent_PressureChambers>()?.Notify_DoorOpened(this);
+                InvalidatePressureSides();
+            }
         }
 
         public override string GetInspectString()
         {
             string s = base.GetInspectString();
             string line = (floodedSide ? "DepthRim.WatertightDoor.Sealed" : "DepthRim.WatertightDoor.Open").Translate(MaxSideLevel().ToStringPercent());
+            if (Spawned && PressureSides(out float low, out float high))
+            {
+                line += "\n" + "DepthRim.WatertightDoor.PressureGap".Translate(low.ToString("0.0"), high.ToString("0.0"));
+            }
             return s.NullOrEmpty() ? line : s + "\n" + line;
         }
 

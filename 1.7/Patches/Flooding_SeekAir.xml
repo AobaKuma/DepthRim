@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- 水下 AI：缺氧時找空氣（DepthRim.JobGiver_SeekAir），排在原版真空的找氧氣之後、敵對反應之前。
+       常駐思考樹只對醒著的人運作；睡著的人由 FloodingPawnEffects 每次水位更新叫醒。 -->
+  <Operation Class="PatchOperationInsert">
+    <xpath>Defs/ThinkTreeDef[defName="HumanlikeConstant"]/thinkRoot/subNodes/li[@Class="ThinkNode_ConditionalCanDoConstantThinkTreeJobNow"]/subNodes/li[@Class="JobGiver_FindOxygen"]</xpath>
+    <order>Append</order>
+    <value>
+      <li Class="DepthRim.JobGiver_SeekAir" />
+    </value>
+  </Operation>
+
+</Patch>

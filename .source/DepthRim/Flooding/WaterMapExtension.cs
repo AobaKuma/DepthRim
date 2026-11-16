@@ -35,6 +35,9 @@ namespace DepthRim
         /// <summary>地圖生成時散佈的熱液泉數量（熱液噴口區；之後接 P2-7 的專用熱液泉）。</summary>
         public IntRange hydrothermalVents = IntRange.Zero;
 
+        /// <summary>地圖生成時散佈在海床上的天然物件（海底火山、玄武岩塊等），由 <see cref="GenStep_OceanFeatures"/> 放置。</summary>
+        public List<SeafloorFeature> seafloorFeatures = new List<SeafloorFeature>();
+
         /// <summary>世界格子的地勢候選：決定岩體與礦脈多寡（海床平原平坦、珊瑚礁與海溝起伏大）。</summary>
         public List<Hilliness> hilliness = new List<Hilliness> { Hilliness.LargeHills, Hilliness.Mountainous };
 
@@ -53,6 +56,20 @@ namespace DepthRim
 
         /// <summary>升降井能不能通到這個生態區：只有淺海與變溫層（目前的潛水服只撐得住水壓 1）。</summary>
         public bool ShaftAccessible => depthTier <= DepthTier.Thermocline;
+    }
+
+    /// <summary><see cref="WaterMapExtension.seafloorFeatures"/> 的一項：要散佈的物件與數量。</summary>
+    public class SeafloorFeature
+    {
+        public ThingDef thing;
+
+        public IntRange count = IntRange.One;
+
+        /// <summary>佔地周圍要留空（可站立、沒有建築）的格數：大型物件留 1 格，岩塊 0 格就能貼著彼此。</summary>
+        public int clearance = 1;
+
+        /// <summary>離地圖邊緣至少幾格。</summary>
+        public int edgeMargin = 8;
     }
 
     /// <summary>地圖父物件實作此介面時，由它決定目前水深層級（例如潛艇依下潛深度）。</summary>

@@ -2,6 +2,6 @@
 <LanguageData>
 
   <DepthRim_PressureResistance.label>水壓抗性</DepthRim_PressureResistance.label>
-  <DepthRim_PressureResistance.description>這種生物在水下能承受多大的水壓。\n\n0：只能待在淺海\n1：可到變溫層\n2：可到深海\n3：可到深海海床</DepthRim_PressureResistance.description>
+  <DepthRim_PressureResistance.description>這種生物在水下能承受多大的水壓。\n\n0：只能待在淺海\n1：可到變溫層\n2：可到深海\n3：可到深海海床\n\n身體的壓力適應值會加在這上面。</DepthRim_PressureResistance.description>
 
 </LanguageData>

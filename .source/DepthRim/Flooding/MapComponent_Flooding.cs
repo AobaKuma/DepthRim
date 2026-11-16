@@ -48,27 +48,85 @@ namespace DepthRim
         private bool updatedOnce;
 
         /// <summary>
-        /// 地圖生成時要乾著的格子（例如生成的海盜潛艇艙室，§11 M7）：水位陣列在 <see cref="FinalizeInit"/> 才建立，
-        /// 比 GenStep 晚，所以 GenStep 先登記在這裡，建立水位時設成 0。不存檔（只在第一次初始化用）。
+        /// 地圖生成時要指定水位的格子（例如生成的海盜潛艇艙室要乾的，§11 M7）：水位陣列在 <see cref="FinalizeInit"/> 才建立，
+        /// 比 GenStep 晚，所以先登記在這裡，建立水位時套用。不存檔（只在第一次初始化用）。
         /// </summary>
-        private List<IntVec3> dryOnInit;
+        private Dictionary<IntVec3, byte> levelsOnInit;
 
         /// <summary>給地圖生成用：這些格子在水位初始化時設成乾的。地圖已經初始化過就直接設。</summary>
         public void MarkDry(IEnumerable<IntVec3> cells)
         {
+            foreach (IntVec3 c in cells)
+            {
+                SetLevelByte(c, 0);
+            }
+        }
+
+        /// <summary>設定一格的水位（byte）；水位陣列還沒建立時先登記，初始化時套用。</summary>
+        private void SetLevelByte(IntVec3 c, byte b)
+        {
             if (levels != null)
             {
-                foreach (IntVec3 c in cells)
+                if (c.InBounds(map))
                 {
-                    if (c.InBounds(map))
-                    {
-                        levels[map.cellIndices.CellToIndex(c)] = 0;
-                    }
+                    levels[map.cellIndices.CellToIndex(c)] = b;
                 }
                 return;
             }
-            dryOnInit ??= new List<IntVec3>();
-            dryOnInit.AddRange(cells);
+            levelsOnInit ??= new Dictionary<IntVec3, byte>();
+            levelsOnInit[c] = b;
+        }
+
+        /// <summary>
+        /// 船體搬家（DMSE 出港分離、下錨降落，<see cref="Patch_CarryWaterLevels"/>）：把 <paramref name="from"/> 上這些格子的水位
+        /// 原封不動搬到這張地圖的「格子 + <paramref name="offset"/>」。新地圖整張是初始水位（深淵 = 滿水），
+        /// 不搬的話抽乾的艙室一出港又全部淹水。來源地圖沒有水位系統（陸地船塢）時當作乾的。
+        /// </summary>
+        public void CopyLevels(MapComponent_Flooding from, IEnumerable<IntVec3> cells, IntVec3 offset)
+        {
+            foreach (IntVec3 c in cells)
+            {
+                byte b = 0;
+                if (from != null && from.active && from.levels != null && c.InBounds(from.map))
+                {
+                    b = from.levels[from.map.cellIndices.CellToIndex(c)];
+                }
+                SetLevelByte(c + offset, b);
+            }
+        }
+
+        /// <summary>
+        /// 船體剛離開（DMSE 出港分離、上浮或下錨搬走，<see cref="HullMoveHooks"/>）：空出來、現在和外海相通的格子立刻灌滿、標成開放水域。
+        /// 否則要等下一次水位更新（250 ticks）外海層才會畫這些格子，而離港過場會暫停遊戲，整段動畫原地留著一個船形的坑。
+        /// 還被圍住的格子（例如留在原地的船塢牆）不動，交給一般的水位更新。
+        /// </summary>
+        public void FillVacated(IEnumerable<IntVec3> cells)
+        {
+            if (!active || levels == null)
+            {
+                return;
+            }
+            ulong flag = DepthRimDefOf.DepthRim_Water;
+            foreach (IntVec3 c in cells)
+            {
+                if (!c.InBounds(map))
+                {
+                    continue;
+                }
+                Room room = c.GetRoom(map);
+                if (room == null || !IsOpenWater(room))
+                {
+                    continue;
+                }
+                int index = map.cellIndices.CellToIndex(c);
+                seaFlags[index] = 1;
+                if (levels[index] != 255 || openFlags[index] != 1)
+                {
+                    levels[index] = 255;
+                    openFlags[index] = 1;
+                    map.mapDrawer.MapMeshDirty(c, flag, regenAdjacentCells: true, regenAdjacentSections: false);
+                }
+            }
         }
 
         /// <summary>
@@ -224,18 +282,18 @@ namespace DepthRim
                 {
                     levels[i] = b;
                 }
-                if (dryOnInit != null)
+                if (levelsOnInit != null)
                 {
-                    foreach (IntVec3 c in dryOnInit)
+                    foreach (KeyValuePair<IntVec3, byte> kv in levelsOnInit)
                     {
-                        if (c.InBounds(map))
+                        if (kv.Key.InBounds(map))
                         {
-                            levels[map.cellIndices.CellToIndex(c)] = 0;
+                            levels[map.cellIndices.CellToIndex(kv.Key)] = kv.Value;
                         }
                     }
                 }
             }
-            dryOnInit = null;
+            levelsOnInit = null;
             // 原版在地圖生成時就建好區塊網格，那時這個元件還沒啟用（水體網格是空的）；開放水域的水位之後也不會再變，
             // 所以啟用後整張地圖重建一次水體網格（地圖還在生成中時跳過，之後的整張重建會照啟用後的狀態畫）
             FloodingUtility.WaterChanged(map);
@@ -770,19 +828,89 @@ namespace DepthRim
                 WaterTierMaterials.UpdateCameraZoom(Find.CameraDriver.RootSize);
                 WaterTierMaterials.UpdateSkyLight(map);
                 SectionLayer_AbyssBackdrop.UpdateSkyLight(map);
+                SectionLayer_VoyageDarkness.UpdateFrame(map);
                 if (FloodingOverlay.Drawing)
                 {
                     OffMapWater.Draw(map, RenderTier);
                 }
             }
-            // 地圖的層級改變（潛艇下潛、除錯覆寫）：整張重建，所有區塊改用新材質
+            // 地圖的層級改變（潛艇下潛、除錯覆寫）：正在看的地圖淡入淡出，淡完才整張重建成新材質；沒在看的地圖直接換
             DepthTier tier = RenderTier;
-            if (!renderTierKnown || tier != lastRenderTier)
+            if (!renderTierKnown)
             {
                 renderTierKnown = true;
                 lastRenderTier = tier;
                 map.mapDrawer.WholeMapChanged(DepthRimDefOf.DepthRim_Water);
             }
+            else if (tier != lastRenderTier)
+            {
+                if (FadingTier)
+                {
+                    EndTierFade(); // 淡到一半又換層：先收尾，從現在的層級重新開始淡
+                }
+                fadeFrom = lastRenderTier;
+                fadeTo = tier;
+                fadeStartTick = Find.TickManager.TicksGame;
+                lastRenderTier = tier;
+                if (Find.CurrentMap != map)
+                {
+                    EndTierFade();
+                }
+            }
+            if (FadingTier)
+            {
+                if (Find.CurrentMap != map || TierFadeProgress >= 1f)
+                {
+                    EndTierFade();
+                }
+                else
+                {
+                    WaterTierMaterials.BlendTier(fadeFrom, fadeTo, TierFadeProgress);
+                }
+            }
+        }
+
+        // ── 換層淡入淡出 ────────────────────────────────────────────────────────
+
+        /// <summary>換層時光線與水色淡入淡出的時間（遊戲 ticks：一倍速 15 秒，暫停時停住）。</summary>
+        public const int TierFadeTicks = 900;
+
+        private DepthTier fadeFrom;
+        private DepthTier fadeTo;
+        private int fadeStartTick = -1;
+
+        /// <summary>正在換層淡入淡出。</summary>
+        public bool FadingTier => fadeStartTick >= 0;
+
+        public DepthTier FadeFrom => fadeFrom;
+
+        public DepthTier FadeTo => fadeTo;
+
+        /// <summary>淡入淡出的進度（0..1，平滑過；沒在淡時 1）。</summary>
+        public float TierFadeProgress
+        {
+            get
+            {
+                if (!FadingTier)
+                {
+                    return 1f;
+                }
+                float x = Mathf.Clamp01((Find.TickManager.TicksGame - fadeStartTick) / (float)TierFadeTicks);
+                return x * x * (3f - 2f * x);
+            }
+        }
+
+        /// <summary>
+        /// 網格用的層級：淡入淡出中還是舊層級（它的材質正被逐幀調成新層級的樣子），淡完才換成新層級的材質。
+        /// 只影響選材質，水壓等遊戲數值與其他畫面仍用 <see cref="RenderTier"/>／<see cref="DepthTier"/>。
+        /// </summary>
+        public DepthTier MeshTier => FadingTier ? fadeFrom : RenderTier;
+
+        private void EndTierFade()
+        {
+            fadeStartTick = -1;
+            WaterTierMaterials.EndBlend();
+            map.mapDrawer.WholeMapChanged(DepthRimDefOf.DepthRim_Water);
         }
 
         public override void ExposeData()

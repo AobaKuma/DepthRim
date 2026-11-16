@@ -6,7 +6,7 @@
   <StatDef>
     <defName>DepthRim_PressureResistance</defName>
     <label>water pressure resistance</label>
-    <description>How much water pressure this creature can withstand while submerged.\n\n0: shallows only\n1: down to the thermocline\n2: the deep sea\n3: the abyssal seabed</description>
+    <description>How much water pressure this creature can withstand while submerged.\n\n0: shallows only\n1: down to the thermocline\n2: the deep sea\n3: the abyssal seabed\n\nA body's pressure adaptation level is added to this.</description>
     <category>BasicsPawn</category>
     <defaultBaseValue>0</defaultBaseValue>
     <minValue>0</minValue>

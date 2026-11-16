@@ -193,19 +193,21 @@ void main()
     float t = u._GameSeconds;
     vec2 world = vUv;
     float far = smoothstep(18.0, 55.0, u._CameraZoom);
+    // 鏡頭拉近（rootSize 11 → 24）時淡化海面光紋與光柱，方便看清水下的東西；最近時只留 15%
+    float nearFade = mix(0.15, 1.0, smoothstep(11.0, 24.0, u._CameraZoom));
 
     // A：波紋與光紋
     vec2 wobble = thermoclineWobble(world, t);
     float h = waterRipple(world, wobble, t);
     float clarity = clarityOf(light);
-    float caustic = causticBand(h) * u._RippleStrength;
+    float caustic = causticBand(h) * u._RippleStrength * nearFade;
 
     // 已探索的水色：光紋 + 亮處往淺青偏移（燈光看起來照進了水裡）
     vec3 openCol = u._Color.rgb + u._CausticColor.rgb * caustic * u._CausticStrength;
     openCol = mix(openCol, u._CausticColor.rgb, u._LightTint * clarity);
 
     // C：淺海光柱，暗處比較明顯（亮處被燈光蓋過）
-    openCol += u._CausticColor.rgb * lightShaft(world, t) * u._LightShaftStrength * (1.0 - clarity);
+    openCol += u._CausticColor.rgb * lightShaft(world, t) * u._LightShaftStrength * (1.0 - clarity) * nearFade;
 
     // D：海洋雪（被燈照亮的懸浮物；鏡頭拉遠時變淡）
     float snow = marineSnow(world, t) * (1.0 - 0.75 * far);
@@ -221,7 +223,7 @@ void main()
 
     // B：覆蓋程度只看光照；迷霧區另外用 _FogAlpha
     float alphaOpen = mix(u._MurkAlpha, u._ClearAlpha, clarity) + haze * 0.10;
-    alphaOpen += (h - 0.35) * 0.03 * u._RippleStrength;
+    alphaOpen += (h - 0.35) * 0.03 * u._RippleStrength * nearFade;
 
     // 迷霧：不讀光照，只留緩慢的大尺度起伏
     float swell = valueNoise(world * 0.08 + vec2(t * 0.02, -t * 0.015));

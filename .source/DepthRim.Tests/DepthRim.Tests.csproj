@@ -24,6 +24,7 @@
     <Reference Include="UnityStubs"><HintPath>$(RimWorldDir)UnityStubs.dll</HintPath><Private>true</Private></Reference>
     <Reference Include="Waylith"><HintPath>$(RimWorldDir)Waylith.dll</HintPath><Private>true</Private></Reference>
     <Reference Include="DMSE"><HintPath>$(RimWorldDir)Mods\_Dead-Man-Switch-Expedition\1.7\Assemblies\DMSE.dll</HintPath><Private>true</Private></Reference>
+    <Reference Include="Fortified"><HintPath>$(RimWorldDir)Mods\_Fortified-Framework\1.7\Assemblies\Fortified.dll</HintPath><Private>true</Private></Reference>
   </ItemGroup>
 
 </Project>

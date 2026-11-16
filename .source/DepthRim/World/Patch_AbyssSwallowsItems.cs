@@ -5,7 +5,7 @@ using Verse;
 namespace DepthRim
 {
     /// <summary>
-    /// 一格變成深淵時，上面的物品沉下去（銷毀）：深淵沒有地面，什麼都放不住。
+    /// 一格變成深淵（或海面地圖的開放海面）時，上面的物品沉下去（銷毀）：深淵沒有地面，什麼都放不住。
     ///
     /// <para>為什麼需要：海洋地圖的生成順序是 <c>RockChunks</c> → <c>RocksFromGrid</c> → <c>DepthRim_AbyssCarve</c>，
     /// 石塊先散在海床上，之後才挖出深淵，於是深淵上留著石塊。之後在深淵上鋪船體平台，石塊會原封不動地留在平台上，
@@ -22,7 +22,7 @@ namespace DepthRim
         [HarmonyPostfix]
         public static void Postfix(IntVec3 c, TerrainDef newTerr, Map ___map)
         {
-            if (newTerr != DepthRimDefOf.DepthRim_Abyss || ___map == null || !c.InBounds(___map))
+            if ((newTerr != DepthRimDefOf.DepthRim_Abyss && newTerr != DepthRimDefOf.DepthRim_OpenSea && newTerr != DepthRimDefOf.DepthRim_OpenAir) || ___map == null || !c.InBounds(___map))
             {
                 return;
             }

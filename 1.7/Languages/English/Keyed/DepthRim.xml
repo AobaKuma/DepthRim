@@ -39,8 +39,6 @@
 
   <!-- 潛艇 -->
   <DepthRim.Sub.Cruise>Cruising depth: {0}</DepthRim.Sub.Cruise>
-  <DepthRim.Sub.CruiseNone>Cruising depth</DepthRim.Sub.CruiseNone>
-  <DepthRim.Sub.CruiseDesc>Set the depth this submarine cruises at. Each depth tier takes an hour to reach. It can never go deeper than the seafloor below, and the hull must be rated for the depth.\n\nSeafloor here: {0}\nHull rating: {1}</DepthRim.Sub.CruiseDesc>
   <DepthRim.Sub.WeakestPiece> (weakest: {0})</DepthRim.Sub.WeakestPiece>
   <DepthRim.Sub.NotAboard>Only works aboard a submarine that has cast off from the shipyard.</DepthRim.Sub.NotAboard>
   <DepthRim.Sub.Block.AlreadyThere>already set</DepthRim.Sub.Block.AlreadyThere>
@@ -54,13 +52,36 @@
 
   <DepthRim.Pressure.Crushing>{0} is being crushed by the water pressure. Use pressure hull walls at this depth.</DepthRim.Pressure.Crushing>
 
-  <DepthRim.Anchor.Label>Anchor</DepthRim.Anchor.Label>
-  <DepthRim.Anchor.Desc>Settle on the seafloor right next to here. The hull lands on a full map of the sea floor: the outside becomes visible and divers can leave the hull. Only possible in the shallows, or on the seabed while resting at the bottom.</DepthRim.Anchor.Desc>
+  <DepthRim.Nav.Label>Navigate</DepthRim.Nav.Label>
+  <DepthRim.Nav.LabelDepth>Navigate ({0})</DepthRim.Nav.LabelDepth>
+  <DepthRim.Nav.Desc>Pick a tile on the world map, then the depth to end at:
+- This tile: change cruising depth, surface, or break through the ice
+- A neighbouring sea tile: anchor
+- An existing site: dock; once there and at its seafloor depth, choose where the hull stops
+- Any other sea tile: plan a voyage; confirming it starts the launch sequence
+Under way it changes the depth to end at; on the surface it picks how deep to dive. Each depth tier takes an hour, never below the seafloor, and the hull must be rated for it.
+
+Seafloor here: {0}
+Hull rating: {1}</DepthRim.Nav.Desc>
+  <DepthRim.Nav.Choose>Choose a destination</DepthRim.Nav.Choose>
+  <DepthRim.Nav.Docked>The depth cannot change while docked. Choose a destination.</DepthRim.Nav.Docked>
+  <DepthRim.Nav.SailTo>Sail here, ending at {0}</DepthRim.Nav.SailTo>
+  <DepthRim.Nav.EndAt>End at {0}</DepthRim.Nav.EndAt>
+  <DepthRim.Nav.DiveTo>Dive to {0}</DepthRim.Nav.DiveTo>
+  <DepthRim.Nav.Anchor>Anchor here (choose where to stop)</DepthRim.Nav.Anchor>
+  <DepthRim.Nav.Dock>Dock at {0} ({1}, choose where to stop)</DepthRim.Nav.Dock>
+  <DepthRim.Nav.DockWhenReady>{0} is heading to the {1}; once there, choose where to stop at {2}.</DepthRim.Nav.DockWhenReady>
+  <DepthRim.Nav.PlaceLabel>Choose where to stop</DepthRim.Nav.PlaceLabel>
+  <DepthRim.Nav.PlaceDesc>Choose where the hull comes up.</DepthRim.Nav.PlaceDesc>
+  <DepthRim.Nav.PlaceNotOpenSea>must float on open sea</DepthRim.Nav.PlaceNotOpenSea>
   <DepthRim.Anchor.InFlight>Cannot anchor while under way.</DepthRim.Anchor.InFlight>
   <DepthRim.Anchor.Block.NoBottom>There is no bottom to anchor on at this depth ({0}).</DepthRim.Anchor.Block.NoBottom>
   <DepthRim.Anchor.Block.NotAtBottom>Bring the submarine down to the seafloor ({0}) first.</DepthRim.Anchor.Block.NotAtBottom>
   <DepthRim.Anchor.NoSpot>There is no free stretch of seafloor next to here.</DepthRim.Anchor.NoSpot>
-
+  <DepthRim.Anchor.Spot.NotAdjacent>Choose a sea tile right next to the submarine.</DepthRim.Anchor.Spot.NotAdjacent>
+  <DepthRim.Anchor.Spot.NotOcean>Not open sea.</DepthRim.Anchor.Spot.NotOcean>
+  <DepthRim.Anchor.Spot.Occupied>Something is already there.</DepthRim.Anchor.Spot.Occupied>
+  <DepthRim.Anchor.Spot.OtherDepth>The seafloor there is {0}, not {1} like here.</DepthRim.Anchor.Spot.OtherDepth>
   <DepthRim.Voyage.Stop>Stop here</DepthRim.Voyage.Stop>
   <DepthRim.Voyage.StopDesc>Abandon the voyage and stop the submarine where it is now. The thrusters drop back to standby.</DepthRim.Voyage.StopDesc>
   <DepthRim.Voyage.Stopped>{0} has stopped mid-voyage.</DepthRim.Voyage.Stopped>
@@ -69,6 +90,8 @@
   <DepthRim.Voyage.InspectThrust>Thrust: {0}</DepthRim.Voyage.InspectThrust>
   <DepthRim.Voyage.InspectStalled>Thrust: none (drifting)</DepthRim.Voyage.InspectStalled>
   <DepthRim.Voyage.ThrusterStandby>Standby (full power draw only while under way)</DepthRim.Voyage.ThrusterStandby>
+  <DepthRim.Voyage.OverboardLabel>Lost overboard</DepthRim.Voyage.OverboardLabel>
+  <DepthRim.Voyage.OverboardText>While {0} was under way, these were outside the hull. They could not keep up with the boat, were swept away by the current, and are now missing:\n\n{1}\n\nKeep everyone inside sealed compartments while under way.</DepthRim.Voyage.OverboardText>
 
 
   <!-- 魚雷 -->
@@ -101,6 +124,19 @@
   <DepthRim.Boarding.CannotBoard>Cannot board</DepthRim.Boarding.CannotBoard>
   <DepthRim.Boarding.BoardOption>Board {0}</DepthRim.Boarding.BoardOption>
   <DepthRim.Boarding.NeedsMoonPool>Must be built on a moon pool.</DepthRim.Boarding.NeedsMoonPool>
+  <DepthRim.Readiness.Title>Pre-launch check</DepthRim.Readiness.Title>
+  <DepthRim.Readiness.Intro>Destination depth: {0}. The craft may settle on the seabed, leaving the crew in open water.</DepthRim.Readiness.Intro>
+  <DepthRim.Readiness.NotFlesh>Not flesh: unaffected by water pressure and pressure adaptation.</DepthRim.Readiness.NotFlesh>
+  <DepthRim.Readiness.NoSuit>No diving suit: will drown underwater.</DepthRim.Readiness.NoSuit>
+  <DepthRim.Readiness.Suit>Wearing {0}, air {1}</DepthRim.Readiness.Suit>
+  <DepthRim.Readiness.LowAir>(air below half)</DepthRim.Readiness.LowAir>
+  <DepthRim.Readiness.Pressure>Pressure resistance {0} + adaptation {1}, destination needs {2}</DepthRim.Readiness.Pressure>
+  <DepthRim.Readiness.PressureShort>: will take pressure damage underwater ({0} short).</DepthRim.Readiness.PressureShort>
+  <DepthRim.Readiness.Adaptation>Pressure adaptation {0}, destination pressure level {1}</DepthRim.Readiness.Adaptation>
+  <DepthRim.Readiness.Maladapted>: will suffer pressure sickness on arrival (severity {0}, about {1} to adapt).</DepthRim.Readiness.Maladapted>
+  <DepthRim.Readiness.OutroOk>All crew ready.</DepthRim.Readiness.OutroOk>
+  <DepthRim.Readiness.OutroWarn>Some crew are not ready. Launch anyway?</DepthRim.Readiness.OutroWarn>
+  <DepthRim.Readiness.Go>Launch</DepthRim.Readiness.Go>
 
   <!-- 敵方勢力 -->
   <DepthRim.Pirate.SubHit>Torpedo hit on {0}: hull at {1} / {2}.</DepthRim.Pirate.SubHit>
@@ -124,4 +160,50 @@
   <DepthRim.OceanTab.Anchor>Anchoring</DepthRim.OceanTab.Anchor>
   <DepthRim.OceanTab.AnchorYes>Possible (there is a bottom to settle on)</DepthRim.OceanTab.AnchorYes>
   <DepthRim.OceanTab.AnchorNo>Not possible (no reachable bottom)</DepthRim.OceanTab.AnchorNo>
+
+  <!-- 海面地圖 -->
+  <DepthRim.SeaSurface.NeedOceanTile>Pick an ocean tile on the surface.</DepthRim.SeaSurface.NeedOceanTile>
+  <DepthRim.SeaSurface.TileOccupied>That tile already has a map.</DepthRim.SeaSurface.TileOccupied>
+  <DepthRim.Pillar.SupportRadius>Supports ocean platform within {0} cells.</DepthRim.Pillar.SupportRadius>
+  <DepthRim.Platform.NeedsSupport>Must be within the support radius of a platform pillar.</DepthRim.Platform.NeedsSupport>
+  <DepthRim.Platform.Unsupported>{0} cells of ocean platform have lost their support (out of pillar range, or cut off from the platform on a pillar) and will collapse in {1} seconds unless they are joined back or a platform pillar is built in range.</DepthRim.Platform.Unsupported>
+  <DepthRim.Platform.Collapsed>{0} cells of ocean platform collapsed into the sea.</DepthRim.Platform.Collapsed>
+  <DepthRim.Platform.PawnFell>{0} fell with the collapsing platform and climbed back up, injured.</DepthRim.Platform.PawnFell>
+  <DepthRim.Platform.PawnLost>{0} fell into the sea with the collapsing platform and was lost.</DepthRim.Platform.PawnLost>
+
+  <!-- Pressure adaptation and the pressure chamber -->
+  <DepthRim.Pressure.Level0>surface pressure</DepthRim.Pressure.Level0>
+  <DepthRim.Adaptation.Bracket>adapted {0}, surroundings {1}</DepthRim.Adaptation.Bracket>
+  <DepthRim.Adaptation.Rate>Adapts by one pressure level every {0} days (depends on blood filtration).</DepthRim.Adaptation.Rate>
+  <DepthRim.Adaptation.TimeLeft>Discomfort ends in about {0} if the surroundings stay the same.</DepthRim.Adaptation.TimeLeft>
+  <DepthRim.Pressurizer.Target>Target pressure: level {0} ({1})</DepthRim.Pressurizer.Target>
+  <DepthRim.Pressurizer.Current>Chamber pressure: level {0}</DepthRim.Pressurizer.Current>
+  <DepthRim.Pressurizer.Secondary>Another pressuriser is already holding this chamber.</DepthRim.Pressurizer.Secondary>
+  <DepthRim.Pressurizer.Lower>Lower pressure</DepthRim.Pressurizer.Lower>
+  <DepthRim.Pressurizer.LowerDesc>Lower the target pressure of this chamber by one level.</DepthRim.Pressurizer.LowerDesc>
+  <DepthRim.Pressurizer.Raise>Raise pressure</DepthRim.Pressurizer.Raise>
+  <DepthRim.Pressurizer.RaiseDesc>Raise the target pressure of this chamber by one level.</DepthRim.Pressurizer.RaiseDesc>
+  <DepthRim.Pressurizer.NotSealed>Not a pressure chamber: the room must be roofed and fully enclosed.</DepthRim.Pressurizer.NotSealed>
+  <DepthRim.Pressurizer.TooLarge>Not a pressure chamber: the room is larger than {0} cells.</DepthRim.Pressurizer.TooLarge>
+  <DepthRim.Pressurizer.NeedsDeck>Not a pressure chamber: the whole floor must be pressure deck or hull platform.</DepthRim.Pressurizer.NeedsDeck>
+  <DepthRim.Pressurizer.NeedsWatertightDoors>Not a pressure chamber: every door must be a watertight door.</DepthRim.Pressurizer.NeedsWatertightDoors>
+  <DepthRim.Pressurizer.Overloaded>{0} wall or door sections cannot hold this pressure difference and are being damaged.</DepthRim.Pressurizer.Overloaded>
+  <DepthRim.WatertightDoor.PressureGap>Pressure difference (level {0} / level {1}): people who would suffer on the other side will not pass on their own</DepthRim.WatertightDoor.PressureGap>
+  <DepthRim.Alert.PressureSickness>Pressure sickness</DepthRim.Alert.PressureSickness>
+  <DepthRim.Alert.PressureSickness.Line>{0}: adapted {1}, surroundings {2}, about {3} left</DepthRim.Alert.PressureSickness.Line>
+  <DepthRim.Alert.PressureSickness.Desc>These colonists are more than one pressure level away from what their bodies are used to:\n\n{0}\n\nThey recover as their bodies adapt. To spare them, move them to a pressure chamber set within one level of their adapted level, then change the chamber one level at a time.</DepthRim.Alert.PressureSickness.Desc>
+  <DepthRim.Pillar.GoUp>Ride up to the platform</DepthRim.Pillar.GoUp>
+  <DepthRim.Pillar.CancelGoUp>Cancel riding up</DepthRim.Pillar.CancelGoUp>
+  <DepthRim.Pillar.GoDown>Ride down to the water</DepthRim.Pillar.GoDown>
+  <DepthRim.Pillar.CancelGoDown>Cancel riding down</DepthRim.Pillar.CancelGoDown>
+  <DepthRim.Pillar.NeedsLanding>The pillar must stand on open sea right next to a floating platform: at least one side of its 9x9 footprint has to touch it (that cell becomes the elevator spot).</DepthRim.Pillar.NeedsLanding>
+  <DepthRim.Pillar.BlockedAbove>Blocked on the platform level by {0}.</DepthRim.Pillar.BlockedAbove>
+  <DepthRim.Platform.PawnFellToSea>{0} fell with the collapsing platform down to the water, injured.</DepthRim.Platform.PawnFellToSea>
+  <DepthRim.Settings.SeaCameraSway>Camera sways with the sea</DepthRim.Settings.SeaCameraSway>
+  <DepthRim.Settings.SeaCameraSwayTip>On the sea surface (water level), the camera bobs up and down very slightly with the waves, more in strong wind and storms. Aboard a submarine under way, the view rocks slowly and gently. Turn off if it bothers you.</DepthRim.Settings.SeaCameraSwayTip>
+
+  <!-- Submarine start scenario -->
+  <DepthRim.SubmarineStart.Summary>Start aboard the submarine {0}, docked in the nearest {1} sea below the chosen site.</DepthRim.SubmarineStart.Summary>
+  <DepthRim.SubmarineStart.NoSea>There is no {0} sea within {1} tiles of this site. Pick a site on or near the coast, or on sea ice.</DepthRim.SubmarineStart.NoSea>
+
 </LanguageData>

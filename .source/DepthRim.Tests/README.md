@@ -30,6 +30,9 @@ dotnet run --project .source/DepthRim.Tests/DepthRim.Tests.csproj -c Release -p:
 | ContentSounds | `Tests_Audio.cs` | SoundDef 引用的音檔與資料夾都在 `Sounds/`、每個音檔都列在 `Sounds/CREDITS.md` 且為 CC0、四個層級各一個環境音並掛在冰洋生態域、DefOf 的 SoundDef 都有定義 |
 | ContentDefInjected | `Tests_Content.cs` | DefInjected 每個鍵的 Def 與欄位都存在；資料夾名稱能被遊戲的 `GenTypes` 解析（模組自己的型別要寫完整名稱，例如 `DepthRim.WaterVisualTierDef`） |
 | HarmonyTargets | `Tests_Content.cs` | 每個 `[HarmonyPatch]` 的目標方法、`___欄位`、參數名稱在目前的 1.7 組件裡都存在 |
+| ContentSubmarinePrefab | `Tests_SubmarinePrefab.cs` | 預製潛艇的 FFF 佈局（只讀 XML）：整塊船體平台與屋頂、建築都在船內且不重疊、外殼只有牆與一道外門、四個艙室各有排水泵、從氣閘走得到每一格空地、艦橋互動格空著、龍骨覆蓋整艘船、電池與電線同一個電網、用電建築都在 6 格連接距離內 |
+| IceBreachMath | `Tests_IceBreach.cs` | 破冰計算（破冰出水設計稿 §3、§4、§7.2）：Lebedev 冰厚表、一年冰隨冬天增厚與融冰、多年冰與冰間水道、抗彎強度、特徵長度、§4.6 範例（R 0.95 → 1.26、傷害 175 → 66）、四個 R 區間、結構上限、多座結構平分傷害、−20 °C 結冰天數 |
+| IceCrackPattern | `Tests_IceBreach.cs` | 開裂圖樣：同種子同結果、船體格不變、開放水包住船體、碎冰帶、放射裂紋數與長度、環狀裂紋、部分開裂沒有開放水與碎冰、猛烈出水更大、距離場 |
 
 新增區段：在 `Tests_*.cs` 寫一個 `static void`，再到 `Program.cs` 用 `Run("名稱", 方法)` 加進去。
 地圖與房間相關的邏輯先抽成純函式（例如 `FloodingMath`），才能在這裡測。

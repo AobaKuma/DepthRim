@@ -39,8 +39,6 @@
 
   <!-- 潛艇 -->
   <DepthRim.Sub.Cruise>巡航深度：{0}</DepthRim.Sub.Cruise>
-  <DepthRim.Sub.CruiseNone>巡航深度</DepthRim.Sub.CruiseNone>
-  <DepthRim.Sub.CruiseDesc>設定這艘潛艇的巡航深度，每換一個層級要一小時。不能潛得比腳下的海床更深，船殼也必須撐得住那個深度。\n\n此處海床：{0}\n船殼耐壓：{1}</DepthRim.Sub.CruiseDesc>
   <DepthRim.Sub.WeakestPiece>（最弱：{0}）</DepthRim.Sub.WeakestPiece>
   <DepthRim.Sub.NotAboard>只有在已經離開船塢的潛艇上才能使用。</DepthRim.Sub.NotAboard>
   <DepthRim.Sub.Block.AlreadyThere>已經是這個深度</DepthRim.Sub.Block.AlreadyThere>
@@ -54,13 +52,36 @@
 
   <DepthRim.Pressure.Crushing>{0}正被水壓慢慢壓壞。這個深度要用水密隔牆。</DepthRim.Pressure.Crushing>
 
-  <DepthRim.Anchor.Label>下錨</DepthRim.Anchor.Label>
-  <DepthRim.Anchor.Desc>停到旁邊的海床上。船體會降落到一張完整的海床地圖：艙外看得見，穿潛水裝備的人員也能出艙。只能在淺海，或觸底停在深海海床時下錨。</DepthRim.Anchor.Desc>
+  <DepthRim.Nav.Label>航行</DepthRim.Nav.Label>
+  <DepthRim.Nav.LabelDepth>航行（{0}）</DepthRim.Nav.LabelDepth>
+  <DepthRim.Nav.Desc>在世界地圖上選一格，再從選單選擇終端深度：
+・自己這一格：換巡航深度、上浮或破冰上浮
+・旁邊的海域：下錨
+・已經有的地點：停靠，抵達並到達那裡的海床深度後選擇停船位置
+・其他海域：規劃航線，確認後開始啟航程序
+航行中改終端深度；浮在海面上時選擇下潛到哪個深度。每換一個層級要一小時，不能潛得比海床更深，船殼也必須撐得住。
+
+此處海床：{0}
+船殼耐壓：{1}</DepthRim.Nav.Desc>
+  <DepthRim.Nav.Choose>選擇目的地</DepthRim.Nav.Choose>
+  <DepthRim.Nav.Docked>停在船塢時不能換深度，請選擇目的地。</DepthRim.Nav.Docked>
+  <DepthRim.Nav.SailTo>前往此處・終端深度：{0}</DepthRim.Nav.SailTo>
+  <DepthRim.Nav.EndAt>終端深度：{0}</DepthRim.Nav.EndAt>
+  <DepthRim.Nav.DiveTo>下潛至{0}</DepthRim.Nav.DiveTo>
+  <DepthRim.Nav.Anchor>在此下錨（選擇停船位置）</DepthRim.Nav.Anchor>
+  <DepthRim.Nav.Dock>停靠{0}（{1}・選擇停船位置）</DepthRim.Nav.Dock>
+  <DepthRim.Nav.DockWhenReady>{0}正前往{1}，到達後選擇在{2}的停船位置。</DepthRim.Nav.DockWhenReady>
+  <DepthRim.Nav.PlaceLabel>選擇停船位置</DepthRim.Nav.PlaceLabel>
+  <DepthRim.Nav.PlaceDesc>選擇船體浮出水面的位置。</DepthRim.Nav.PlaceDesc>
+  <DepthRim.Nav.PlaceNotOpenSea>只能浮在開放海面上</DepthRim.Nav.PlaceNotOpenSea>
   <DepthRim.Anchor.InFlight>航行中不能下錨。</DepthRim.Anchor.InFlight>
   <DepthRim.Anchor.Block.NoBottom>這個深度（{0}）沒有能下錨的底。</DepthRim.Anchor.Block.NoBottom>
   <DepthRim.Anchor.Block.NotAtBottom>先把潛艇下潛或上浮到海床的深度（{0}）。</DepthRim.Anchor.Block.NotAtBottom>
   <DepthRim.Anchor.NoSpot>這附近沒有空著的海床可以停。</DepthRim.Anchor.NoSpot>
-
+  <DepthRim.Anchor.Spot.NotAdjacent>請選潛艇旁邊的海域。</DepthRim.Anchor.Spot.NotAdjacent>
+  <DepthRim.Anchor.Spot.NotOcean>這裡不是開闊海域。</DepthRim.Anchor.Spot.NotOcean>
+  <DepthRim.Anchor.Spot.Occupied>那裡已經有東西了。</DepthRim.Anchor.Spot.Occupied>
+  <DepthRim.Anchor.Spot.OtherDepth>那裡的海床是{0}，和這裡的{1}不同。</DepthRim.Anchor.Spot.OtherDepth>
   <DepthRim.Voyage.Stop>就地停船</DepthRim.Voyage.Stop>
   <DepthRim.Voyage.StopDesc>放棄這趟航程，讓潛艇停在現在的位置。推進器會回到待機。</DepthRim.Voyage.StopDesc>
   <DepthRim.Voyage.Stopped>{0}在航程中途停船了。</DepthRim.Voyage.Stopped>
@@ -69,6 +90,8 @@
   <DepthRim.Voyage.InspectThrust>推力：{0}</DepthRim.Voyage.InspectThrust>
   <DepthRim.Voyage.InspectStalled>推力：無（漂流中）</DepthRim.Voyage.InspectStalled>
   <DepthRim.Voyage.ThrusterStandby>待機中（只有航行時才全速耗電）</DepthRim.Voyage.ThrusterStandby>
+  <DepthRim.Voyage.OverboardLabel>航行中有人失蹤</DepthRim.Voyage.OverboardLabel>
+  <DepthRim.Voyage.OverboardText>{0}航行時，以下人員待在艙外，跟不上船身被海流沖走，從此下落不明：\n\n{1}\n\n航行中不要讓人離開密閉艙室。</DepthRim.Voyage.OverboardText>
 
 
   <!-- 魚雷 -->
@@ -101,6 +124,19 @@
   <DepthRim.Boarding.CannotBoard>無法登艇</DepthRim.Boarding.CannotBoard>
   <DepthRim.Boarding.BoardOption>登上{0}</DepthRim.Boarding.BoardOption>
   <DepthRim.Boarding.NeedsMoonPool>必須造在月池上。</DepthRim.Boarding.NeedsMoonPool>
+  <DepthRim.Readiness.Title>出航前檢查</DepthRim.Readiness.Title>
+  <DepthRim.Readiness.Intro>目的地水深：{0}。突擊艇可能降在海床上，乘員會直接泡在水裡。</DepthRim.Readiness.Intro>
+  <DepthRim.Readiness.NotFlesh>不是血肉之軀，不受水壓與壓力適應影響。</DepthRim.Readiness.NotFlesh>
+  <DepthRim.Readiness.NoSuit>沒穿潛水服：在水中會溺水。</DepthRim.Readiness.NoSuit>
+  <DepthRim.Readiness.Suit>穿著{0}，氣瓶 {1}</DepthRim.Readiness.Suit>
+  <DepthRim.Readiness.LowAir>（氣瓶不足一半）</DepthRim.Readiness.LowAir>
+  <DepthRim.Readiness.Pressure>水壓抗性 {0} ＋ 適應 {1}，目的地需要 {2}</DepthRim.Readiness.Pressure>
+  <DepthRim.Readiness.PressureShort>：在水中會受水壓傷害（差 {0} 級）。</DepthRim.Readiness.PressureShort>
+  <DepthRim.Readiness.Adaptation>壓力適應 {0}，目的地壓力 {1} 級</DepthRim.Readiness.Adaptation>
+  <DepthRim.Readiness.Maladapted>：抵達後會壓力不適（嚴重度 {0}，約 {1} 後才適應）。</DepthRim.Readiness.Maladapted>
+  <DepthRim.Readiness.OutroOk>全員準備就緒。</DepthRim.Readiness.OutroOk>
+  <DepthRim.Readiness.OutroWarn>有乘員還沒準備好。仍要出航嗎？</DepthRim.Readiness.OutroWarn>
+  <DepthRim.Readiness.Go>出航</DepthRim.Readiness.Go>
 
   <!-- 敵方勢力 -->
   <DepthRim.Pirate.SubHit>魚雷命中{0}：船殼剩 {1} / {2}。</DepthRim.Pirate.SubHit>
@@ -124,4 +160,50 @@
   <DepthRim.OceanTab.Anchor>下錨</DepthRim.OceanTab.Anchor>
   <DepthRim.OceanTab.AnchorYes>可以（有能停靠的底）</DepthRim.OceanTab.AnchorYes>
   <DepthRim.OceanTab.AnchorNo>不行（到不了底）</DepthRim.OceanTab.AnchorNo>
+
+  <!-- 海面地圖 -->
+  <DepthRim.SeaSurface.NeedOceanTile>請選擇地表上的海洋格。</DepthRim.SeaSurface.NeedOceanTile>
+  <DepthRim.SeaSurface.TileOccupied>那一格已經有地圖了。</DepthRim.SeaSurface.TileOccupied>
+  <DepthRim.Pillar.SupportRadius>支撐 {0} 格內的海上平台。</DepthRim.Pillar.SupportRadius>
+  <DepthRim.Platform.NeedsSupport>必須在平台支柱的支撐範圍內。</DepthRim.Platform.NeedsSupport>
+  <DepthRim.Platform.Unsupported>{0} 格海上平台失去支撐（超出支柱範圍，或和支柱底下的平台斷開），{1} 秒後會崩塌，除非重新接上，或在範圍內蓋好平台支柱。</DepthRim.Platform.Unsupported>
+  <DepthRim.Platform.Collapsed>{0} 格海上平台塌進海裡了。</DepthRim.Platform.Collapsed>
+  <DepthRim.Platform.PawnFell>{0} 隨著崩塌的平台掉下去，受傷爬了回來。</DepthRim.Platform.PawnFell>
+  <DepthRim.Platform.PawnLost>{0} 隨著崩塌的平台落海，失蹤了。</DepthRim.Platform.PawnLost>
+
+  <!-- 壓力適應與加壓艙 -->
+  <DepthRim.Pressure.Level0>常壓</DepthRim.Pressure.Level0>
+  <DepthRim.Adaptation.Bracket>適應 {0}，環境 {1}</DepthRim.Adaptation.Bracket>
+  <DepthRim.Adaptation.Rate>每 {0} 天適應一級壓力（依血液過濾能力而定）。</DepthRim.Adaptation.Rate>
+  <DepthRim.Adaptation.TimeLeft>環境不變的話，大約 {0} 後不再不適。</DepthRim.Adaptation.TimeLeft>
+  <DepthRim.Pressurizer.Target>目標壓力：{0} 級（{1}）</DepthRim.Pressurizer.Target>
+  <DepthRim.Pressurizer.Current>艙內壓力：{0} 級</DepthRim.Pressurizer.Current>
+  <DepthRim.Pressurizer.Secondary>這間艙室已經由另一台加壓機控制。</DepthRim.Pressurizer.Secondary>
+  <DepthRim.Pressurizer.Lower>降低壓力</DepthRim.Pressurizer.Lower>
+  <DepthRim.Pressurizer.LowerDesc>把這間艙室的目標壓力降低一級。</DepthRim.Pressurizer.LowerDesc>
+  <DepthRim.Pressurizer.Raise>提高壓力</DepthRim.Pressurizer.Raise>
+  <DepthRim.Pressurizer.RaiseDesc>把這間艙室的目標壓力提高一級。</DepthRim.Pressurizer.RaiseDesc>
+  <DepthRim.Pressurizer.NotSealed>不是加壓艙：房間必須有屋頂而且完全密閉。</DepthRim.Pressurizer.NotSealed>
+  <DepthRim.Pressurizer.TooLarge>不是加壓艙：房間超過 {0} 格。</DepthRim.Pressurizer.TooLarge>
+  <DepthRim.Pressurizer.NeedsDeck>不是加壓艙：地板必須全部是耐壓甲板或船體平台。</DepthRim.Pressurizer.NeedsDeck>
+  <DepthRim.Pressurizer.NeedsWatertightDoors>不是加壓艙：所有的門都必須是水密門。</DepthRim.Pressurizer.NeedsWatertightDoors>
+  <DepthRim.Pressurizer.Overloaded>有 {0} 塊艙壁（牆或門）撐不住這個壓差，正在受損。</DepthRim.Pressurizer.Overloaded>
+  <DepthRim.WatertightDoor.PressureGap>壓差（{0} 級／{1} 級）：過去會不適的人不會自己通過</DepthRim.WatertightDoor.PressureGap>
+  <DepthRim.Alert.PressureSickness>壓力不適</DepthRim.Alert.PressureSickness>
+  <DepthRim.Alert.PressureSickness.Line>{0}：適應 {1}，環境 {2}，大約還要 {3}</DepthRim.Alert.PressureSickness.Line>
+  <DepthRim.Alert.PressureSickness.Desc>這些殖民者所在的壓力和身體習慣的壓力相差超過一級：\n\n{0}\n\n身體適應之後就會好轉。想讓他們不難受，可以送進壓力設在適應值上下一級以內的加壓艙，再一級一級調整艙壓。</DepthRim.Alert.PressureSickness.Desc>
+  <DepthRim.Pillar.GoUp>搭升降梯上平台</DepthRim.Pillar.GoUp>
+  <DepthRim.Pillar.CancelGoUp>取消上平台</DepthRim.Pillar.CancelGoUp>
+  <DepthRim.Pillar.GoDown>搭升降梯下到水面</DepthRim.Pillar.GoDown>
+  <DepthRim.Pillar.CancelGoDown>取消下到水面</DepthRim.Pillar.CancelGoDown>
+  <DepthRim.Pillar.NeedsLanding>支柱要蓋在浮船（船體平台）旁邊的開放海面上：9×9 的佔地至少有一邊緊貼浮船，那一格就是升降點。</DepthRim.Pillar.NeedsLanding>
+  <DepthRim.Pillar.BlockedAbove>平台層同一位置有{0}擋住。</DepthRim.Pillar.BlockedAbove>
+  <DepthRim.Platform.PawnFellToSea>{0}隨著崩塌的平台掉到下面的水面，受了傷。</DepthRim.Platform.PawnFellToSea>
+  <DepthRim.Settings.SeaCameraSway>鏡頭隨海浪擺動</DepthRim.Settings.SeaCameraSway>
+  <DepthRim.Settings.SeaCameraSwayTip>在海面地圖（水面層）上，鏡頭會隨海浪非常微小地上下擺動，風大或暴風雨時擺得多一點；航行中的潛艇上，畫面會持續緩慢地輕微搖晃。不習慣可以關掉。</DepthRim.Settings.SeaCameraSwayTip>
+
+  <!-- 潛艇開局 -->
+  <DepthRim.SubmarineStart.Summary>一開始就在潛艇 {0} 上，停在選定地點下方最近的{1}海域。</DepthRim.SubmarineStart.Summary>
+  <DepthRim.SubmarineStart.NoSea>這個地點附近 {1} 格內沒有{0}海域。請選海岸、海面或海冰上的地點。</DepthRim.SubmarineStart.NoSea>
+
 </LanguageData>

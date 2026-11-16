@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 水下 AI：缺氧或睡覺處淹水時游到安全處，穿潛水裝備的話留在原地補氣（DepthRim.JobDriver_SeekAir）。 -->
+  <JobDef>
+    <defName>DepthRim_SeekAir</defName>
+    <driverClass>DepthRim.JobDriver_SeekAir</driverClass>
+    <reportString>seeking air.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+    <suspendable>false</suspendable>
+  </JobDef>
+
+</Defs>

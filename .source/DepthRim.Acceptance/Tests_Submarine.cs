@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using DMSE;
 using RimWorld;
@@ -40,7 +40,13 @@ namespace DepthRim.Acceptance
         /// </summary>
         public static IEnumerable<Wait> S5_SubmarineVoyageVisuals(TestContext ctx) => Voyage(ctx, anchor: false, visuals: true);
 
-        private static IEnumerable<Wait> Voyage(TestContext ctx, bool anchor, bool thrust = false, bool visuals = false)
+        /// <summary>
+        /// S8：同 S2 的船塢與起飛，然後檢查航行中落海（<see cref="VoyageOverboard"/>）：在密閉艙室、沒屋頂的甲板與船外深淵各放一名殖民者。
+        /// 不在航行時（視為已抵達）誰都不會失蹤；回到航行後艙外的兩人失蹤（成為世界 pawn、沒有死亡）並收到信，艙室裡的人留在船上。
+        /// </summary>
+        public static IEnumerable<Wait> S8_VoyageOverboard(TestContext ctx) => Voyage(ctx, anchor: false, overboard: true);
+
+        private static IEnumerable<Wait> Voyage(TestContext ctx, bool anchor, bool thrust = false, bool visuals = false, bool overboard = false)
         {
             Map map = DepthRimFixture.EnsureOcean();
             yield return Updates(1);
@@ -97,6 +103,25 @@ namespace DepthRim.Acceptance
             Thing battery = Build("Battery", center + new IntVec3(-3, 0, -3), Rot4.North);
             Thing cargo = GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.Steel), center + new IntVec3(0, 0, 0) + new IntVec3(1, 0, -3), map);
             cargo.stackCount = 37;
+            // 抽乾的密閉艙室（甲板角落，耐壓隔牆圍出一格、有屋頂；避開中央的龍骨）：出港、航行、下錨後都要維持乾的
+            List<IntVec3> dryRoom = new List<IntVec3>();
+            if (anchor || thrust || overboard)
+            {
+                foreach (IntVec3 c in CellRect.FromLimits(center.x + 2, center.z + 2, center.x + 4, center.z + 4))
+                {
+                    bool ringCell = c.x == center.x + 2 || c.x == center.x + 4 || c.z == center.z + 2 || c.z == center.z + 4;
+                    if (ringCell)
+                    {
+                        Build("DepthRim_PressureHullWall", c, Rot4.North);
+                    }
+                    else
+                    {
+                        dryRoom.Add(c);
+                    }
+                    map.roofGrid.SetRoof(c, RoofDefOf.RoofConstructed);
+                }
+                map.Flooding().MarkDry(dryRoom);
+            }
             battery.TryGetComp<CompPowerBattery>().AddEnergy(10000f);
             yield return new WaitTicks(5);
             battery.TryGetComp<CompPowerBattery>().AddEnergy(10000f);
@@ -193,6 +218,12 @@ namespace DepthRim.Acceptance
             ctx.Check(estimate.maxDistance >= seaDistance, "the destination is within battery range");
             float chargeBefore = batteryComp.StoredEnergy;
 
+            if (dryRoom.Count > 0)
+            {
+                float before0 = dryRoom.Max(c => map.Flooding().LevelAt(c));
+                ctx.Check(before0 < 0.05f, $"the compartment is drained in the shipyard ({before0:F2})");
+            }
+
             // ── 起飛 ──
             console.SetPlan(new TransferPlan(origin, dest, false));
             string blocked = console.LaunchBlockedReason();
@@ -222,11 +253,24 @@ namespace DepthRim.Acceptance
             WorldObject_Submarine sub = null;
             yield return new WaitUntil(() => (sub = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_Submarine>().FirstOrDefault(s => s.HasMap)) != null, 3000);
             ctx.Require(sub != null, "a submarine world object was created");
+            // 出港時 DMSE 把船體移到航行地圖正中央（海洋層的 centerHullOnShipMap）：航行地圖上的座標都要加上這個位移
+            IntVec3 shift = HullMoveHooks.LastOffsetTo(sub.Map);
+            ctx.Check(shift != IntVec3.Zero, $"the hull was centred on the voyage map ({shift})");
+            IntVec3 subCenter = center + shift;
+            CellRect subDeck = deck.MovedBy(shift);
             if (visuals)
             {
                 yield return new WaitRealtime(() => Find.WindowStack.IsOpen<TransferTakeoffCutscene>(), 5f);
                 ctx.Note($"takeoff cutscene open: {Find.WindowStack.IsOpen<TransferTakeoffCutscene>()} (Odyssey {ModsConfig.OdysseyActive})");
                 ctx.Check(!ModsConfig.OdysseyActive || Find.WindowStack.IsOpen<SubmarineTakeoffCutscene>(), "the cast-off cutscene is the submarine's");
+                // 2026-11-15：過場暫停遊戲，原地空出來的船形要立刻是開放水域（外海層才會畫），不能等下一次水位更新
+                MapComponent_Flooding originFlooding = map.Flooding();
+                if (originFlooding != null && originFlooding.Active)
+                {
+                    int seaCells = deck.Cells.Count(c => c.GetRoom(map) is Room r && originFlooding.IsOpenWater(r));
+                    int drawn = deck.Cells.Count(c => c.GetRoom(map) is Room r && originFlooding.IsOpenWater(r) && originFlooding.IsOpenAt(c));
+                    ctx.Check(seaCells > 0 && drawn == seaCells, $"the vacated hull is open water during the cutscene ({drawn}/{seaCells} cells)");
+                }
                 float cutsceneStart = Time.realtimeSinceStartup;
                 foreach (float at in new[] { 1.2f, 4f, 7f, 9f })
                 {
@@ -240,8 +284,57 @@ namespace DepthRim.Acceptance
                 AcceptanceDriver.KeepWindowOpen = null;
                 yield return new WaitFrames(10);
                 Current.Game.CurrentMap = sub.Map;
-                foreach (Wait w in ctx.ScreenshotOn(sub.Map, center, 12f, "under_way_close", 30)) { yield return w; }
-                foreach (Wait w in ctx.ScreenshotOn(sub.Map, center, 24f, "under_way_wide", 30)) { yield return w; }
+                foreach (Wait w in ctx.ScreenshotOn(sub.Map, subCenter, 12f, "under_way_close", 30)) { yield return w; }
+                foreach (Wait w in ctx.ScreenshotOn(sub.Map, subCenter, 24f, "under_way_wide", 30)) { yield return w; }
+
+                // 艙外淡出到界外色、鏡頭持續搖晃
+                Map voyageMap = sub.Map;
+                ctx.Check(VoyageView.IsVoyageMap(voyageMap), "the submarine map counts as under way");
+                ctx.Check(DefDatabase<ShaderTypeDef>.GetNamedSilentFail("DepthRim_VoyageDarkness")?.Shader != null, "the voyage darkness shader resolves");
+                IntVec3 far = new IntVec3(2, 0, 2);
+                SectionLayer farLayer = voyageMap.mapDrawer.SectionAt(far).GetLayer(typeof(SectionLayer_VoyageDarkness));
+                int farVerts = farLayer?.subMeshes.Where(s => s.verts != null).Sum(s => s.verts.Count) ?? 0;
+                ctx.Check(farVerts > 0, $"the open sea far from the hull is covered ({farVerts} verts)");
+                SectionLayer hullLayer = voyageMap.mapDrawer.SectionAt(subCenter).GetLayer(typeof(SectionLayer_VoyageDarkness));
+                ctx.Check(hullLayer != null, "the hull's section has the darkness layer");
+                ctx.Check(SectionLayer_VoyageDarkness.IsHull(subCenter, voyageMap), "the deck centre is hull (not covered)");
+                ctx.Check(SectionLayer_VoyageDarkness.FieldFor(voyageMap)[far.z * voyageMap.Size.x + far.x] >= VoyageView.FadeCells, "the map corner is fully faded");
+                Vector2 o1 = Patch_SeaCameraSway.lastVoyageOffset;
+                yield return new WaitRealtime(() => false, 1.5f);
+                Vector2 o2 = Patch_SeaCameraSway.lastVoyageOffset;
+                ctx.Check(o1 != Vector2.zero && o2 != o1 && o2.magnitude < 0.1f, $"the camera sways gently under way ({o1} → {o2})");
+
+                // 巡航：微粒往航向反方向流過
+                yield return new WaitTicks(240);
+                Vector2 heading = VoyageMotion.Heading, flowNow = VoyageMotion.Flow;
+                ctx.Note($"heading {heading}, flow {flowNow}, thrust {sub.ThrustFraction:P0}");
+                ctx.Check(heading.sqrMagnitude > 0.5f, "the voyage knows its heading from the thrusters");
+                ctx.Check(Vector2.Dot(flowNow, heading) < -0.5f, $"cruising, the specks stream past against the heading ({flowNow})");
+                ctx.Check(VoyageMotion.DiveMix < 0.05f, "not changing depth while cruising");
+                Vector2 off1 = VoyageMotion.Offset;
+                yield return new WaitTicks(60);
+                ctx.Check((VoyageMotion.Offset - off1).magnitude > 0.3f, "the specks keep moving");
+                foreach (Wait w in ctx.ScreenshotOn(voyageMap, subCenter, 24f, "cruising", 30)) { yield return w; }
+
+                // 下潛／上浮：放射狀擴散或收攏，鏡頭改成前後俯仰（只改畫面狀態，不真的換層）
+                DepthTier savedTarget = sub.targetTier;
+                int savedDiveTick = sub.nextDiveTick;
+                foreach (int dir in new[] { 1, -1 })
+                {
+                    DepthTier other = dir > 0 ? (sub.cruiseTier < DepthTier.Seabed ? sub.cruiseTier + 1 : sub.cruiseTier - 1)
+                                              : (sub.cruiseTier > DepthTier.Shallow ? sub.cruiseTier - 1 : sub.cruiseTier + 1);
+                    int expect = other > sub.cruiseTier ? 1 : -1;
+                    sub.targetTier = other;
+                    sub.nextDiveTick = Find.TickManager.TicksGame + 999999;
+                    yield return new WaitTicks(360);
+                    ctx.Check(VoyageMotion.DiveMix > 0.8f && Mathf.Sign(VoyageMotion.ZoomRate) == expect,
+                        $"{(expect > 0 ? "diving" : "surfacing")}: the specks {(expect > 0 ? "spread out" : "draw in")} (mix {VoyageMotion.DiveMix:F2}, rate {VoyageMotion.ZoomRate:F3})");
+                    foreach (Wait w in ctx.ScreenshotOn(voyageMap, subCenter, 24f, expect > 0 ? "diving" : "surfacing", 30)) { yield return w; }
+                }
+                sub.targetTier = savedTarget;
+                sub.nextDiveTick = savedDiveTick;
+                yield return new WaitTicks(360);
+                ctx.Check(VoyageMotion.DiveMix < 0.2f, $"back to cruising, the dive motion fades out ({VoyageMotion.DiveMix:F2})");
                 CameraJumper.TryJump(sub);
                 yield return new WaitFrames(40);
                 ctx.Screenshot("world_map_submarine");
@@ -260,11 +353,91 @@ namespace DepthRim.Acceptance
             ctx.Check(TransferText.Key("DMSE.Transfer.UI.Footprint", sub) == "DMSE.Transfer.UI.Footprint", "texts the submarine does not override fall back to DMSE's");
             ctx.Check(chargeBefore - batteryComp.StoredEnergy < 20f, $"casting off draws no voyage charge up front ({chargeBefore:0} -> {batteryComp.StoredEnergy:0} Wd)");
             ctx.Check(helm.Map == subMap && thruster.Map == subMap && keel.Map == subMap && battery.Map == subMap, "the hull buildings moved to the submarine map");
-            ctx.Check(cargo.Map == subMap && cargo.Position == center + new IntVec3(1, 0, -3), "cargo kept its position aboard");
-            ctx.Check(deck.Cells.All(c => subMap.terrainGrid.TerrainAt(c) == platform), "the deck is on the submarine map at the same coordinates");
-            ctx.Check(subMap.AllCells.Where(c => !deck.Contains(c)).All(c => subMap.terrainGrid.TerrainAt(c) == abyss), "everything outside the hull is abyss");
+            ctx.Check(cargo.Map == subMap && cargo.Position == subCenter + new IntVec3(1, 0, -3), "cargo kept its position aboard");
+            ctx.Check(subDeck.CenterCell.DistanceTo(subMap.Center) <= 1.5f, $"the hull sits in the middle of the submarine map (deck centre {subDeck.CenterCell}, map centre {subMap.Center}, shift {shift})");
+            ctx.Check(subDeck.Cells.All(c => subMap.terrainGrid.TerrainAt(c) == platform), "the whole deck is on the submarine map");
+            ctx.Check(subMap.AllCells.Where(c => !subDeck.Contains(c)).All(c => subMap.terrainGrid.TerrainAt(c) == abyss), "everything outside the hull is abyss");
             ctx.Check(deck.Cells.All(c => map.terrainGrid.TerrainAt(c) == abyss), "the shipyard is open abyss again");
             ctx.Check(!map.AllCells.Any(c => map.terrainGrid.TerrainAt(c) == TerrainDefOf.Space), "no space terrain on the shipyard map");
+            if (dryRoom.Count > 0)
+            {
+                float shipyardWater = dryRoom.Max(c => subMap.Flooding().LevelAt(c + shift));
+                ctx.Check(shipyardWater < 0.05f, $"the drained compartment is still dry after casting off ({shipyardWater:F2})");
+                yield return Updates(2);
+                float afterUpdates = dryRoom.Max(c => subMap.Flooding().LevelAt(c + shift));
+                ctx.Check(afterUpdates < 0.05f, $"and stays dry at sea ({afterUpdates:F2})");
+                ctx.Check(subMap.Flooding().LevelAt(subCenter + new IntVec3(-4, 0, -4)) > 0.9f, "while the open deck is flooded");
+            }
+
+            // 收掉潛艇地圖、還原船塢地形與附近的海洋格
+            void RemoveSubmarine()
+            {
+                Current.Game.CurrentMap = map;
+                Current.Game.DeinitAndRemoveMap(subMap, false);
+                if (!sub.Destroyed) { sub.Destroy(); }
+                foreach (KeyValuePair<IntVec3, TerrainDef> kv in before)
+                {
+                    if (map.terrainGrid.TerrainAt(kv.Key) != kv.Value)
+                    {
+                        map.terrainGrid.SetTerrain(kv.Key, kv.Value);
+                    }
+                }
+                foreach (KeyValuePair<PlanetTile, BiomeDef> kv in biomeBefore)
+                {
+                    kv.Key.Tile.PrimaryBiome = kv.Value;
+                }
+                OceanRouting.ClearCache();
+            }
+
+            if (overboard)
+            {
+                // ── 航行中落海：艙外的人失蹤，艙室裡的人沒事，不在航行時什麼都不會發生 ──
+                yield return new WaitTicks(VoyageMath.ThrustCheckInterval + 10);
+                ctx.Require(VoyageOverboard.Underway(sub), $"under way with thrust ({sub.phase}, thrust {sub.ThrustFraction:P0})");
+                ctx.Require(dryRoom.Count > 0, "the shipyard has a sealed compartment");
+                IntVec3 cabinCell = dryRoom[0] + shift;
+                IntVec3 deckCell = subCenter + new IntVec3(-4, 0, -4);
+                IntVec3 seaCell = subDeck.ExpandedBy(2).EdgeCells.FirstOrDefault(c => c.InBounds(subMap) && c.Walkable(subMap));
+                ctx.Require(seaCell.IsValid && !subDeck.Contains(seaCell), $"an open-sea cell next to the hull ({seaCell})");
+
+                // 不在航行：視為已抵達（DMSE 的 Arrived），等兩輪檢查
+                TransferPhase savedPhase = sub.phase;
+                sub.phase = TransferPhase.Arrived;
+                Pawn inside = DepthRimFixture.SpawnColonist(subMap, cabinCell);
+                Pawn onDeck = DepthRimFixture.SpawnColonist(subMap, deckCell);
+                Pawn inSea = DepthRimFixture.SpawnColonist(subMap, seaCell);
+                ctx.Check(!VoyageOverboard.IsOutside(inside), $"the sealed compartment counts as inside ({cabinCell})");
+                ctx.Check(VoyageOverboard.IsOutside(onDeck), $"the unroofed deck counts as outside ({deckCell})");
+                ctx.Check(VoyageOverboard.IsOutside(inSea), $"the open sea counts as outside ({seaCell})");
+                int lettersBefore = Find.LetterStack.LettersListForReading.Count(l => l.Label == "DepthRim.Voyage.OverboardLabel".Translate());
+                yield return new WaitTicks(VoyageOverboard.CheckInterval * 2 + 10);
+                ctx.Check(!VoyageOverboard.Underway(sub), "not under way after arriving");
+                ctx.Check(inside.Spawned && onDeck.Spawned && inSea.Spawned && onDeck.Map == subMap && inSea.Map == subMap, "not under way: nobody outside goes missing");
+                ctx.Check(VoyageOverboard.Sweep(sub).Count == 0, "a sweep while not under way loses nobody");
+
+                // 回到航行
+                sub.phase = savedPhase;
+                yield return new WaitTicks(VoyageMath.ThrustCheckInterval + VoyageOverboard.CheckInterval + 20);
+                ctx.Check(VoyageOverboard.Underway(sub), $"under way again ({sub.phase}, thrust {sub.ThrustFraction:P0})");
+                ctx.Check(inside.Spawned && inside.Map == subMap && inside.Position == cabinCell, "the colonist in the sealed compartment stays aboard");
+                foreach (Pawn p in new[] { onDeck, inSea })
+                {
+                    ctx.Check(!p.Spawned && !p.Dead && p.IsWorldPawn(), $"{p.LabelShort} outside the hull went missing (spawned {p.Spawned}, dead {p.Dead}, world pawn {p.IsWorldPawn()})");
+                }
+                int lettersAfter = Find.LetterStack.LettersListForReading.Count(l => l.Label == "DepthRim.Voyage.OverboardLabel".Translate());
+                ctx.Check(lettersAfter == lettersBefore + 1, $"one lost-overboard letter ({lettersBefore} -> {lettersAfter})");
+                Letter letter = Find.LetterStack.LettersListForReading.LastOrDefault(l => l.Label == "DepthRim.Voyage.OverboardLabel".Translate());
+                string text = (letter as ChoiceLetter)?.Text.ToString() ?? "";
+                ctx.Check(text.Contains(onDeck.LabelCap) && text.Contains(inSea.LabelCap) && !text.Contains(inside.LabelCap), "the letter names the two lost colonists only");
+
+                foreach (Pawn p in new[] { onDeck, inSea })
+                {
+                    if (p.IsWorldPawn()) { Find.WorldPawns.RemoveAndDiscardPawnViaGC(p); }
+                }
+                RemoveSubmarine();
+                yield return Updates(1);
+                yield break;
+            }
 
             if (thrust)
             {
@@ -305,21 +478,7 @@ namespace DepthRim.Acceptance
                 CompTransferConsole subConsole = helm.TryGetComp<CompTransferConsole>();
                 ctx.Check(!TransferReadiness.Check(subConsole, null, includeWarnings: false).Any(i => i.IsError && i.text == TransferText.Key("DMSE.Transfer.Issue.InFlight", subConsole).Translate()), "a new voyage can be planned from where it stopped");
 
-                Current.Game.CurrentMap = map;
-                Current.Game.DeinitAndRemoveMap(subMap, false);
-                if (!sub.Destroyed) { sub.Destroy(); }
-                foreach (KeyValuePair<IntVec3, TerrainDef> kv in before)
-                {
-                    if (map.terrainGrid.TerrainAt(kv.Key) != kv.Value)
-                    {
-                        map.terrainGrid.SetTerrain(kv.Key, kv.Value);
-                    }
-                }
-                foreach (KeyValuePair<PlanetTile, BiomeDef> kv in biomeBefore)
-                {
-                    kv.Key.Tile.PrimaryBiome = kv.Value;
-                }
-                OceanRouting.ClearCache();
+                RemoveSubmarine();
                 yield return Updates(1);
                 yield break;
             }
@@ -339,23 +498,74 @@ namespace DepthRim.Acceptance
                 string anchorBlocked = sub.AnchorBlockedReason(out PlanetTile anchorage);
                 ctx.Require(anchorBlocked == null, $"can anchor here ({anchorBlocked})");
                 ctx.Check(WorldObject_Submarine.SeafloorAt(anchorage) == floor, "the anchorage has the same seafloor depth");
-                sub.Anchor();
+
+                // 玩家自己選下錨的鄰格：只有符合規則的鄰格可選
+                List<PlanetTile> choices = sub.Anchorages();
+                ctx.Note($"{choices.Count} anchorages to choose from");
+                ctx.Check(choices.Contains(anchorage) && choices.All(t => sub.AnchorageBlockReason(t) == null), "every offered anchorage is valid");
+                ctx.Check(sub.AnchorageBlockReason(sub.Tile) != null, "the submarine's own tile is not an anchorage");
+                List<PlanetTile> around = new List<PlanetTile>();
+                Find.WorldGrid.GetTileNeighbors(sub.Tile, around);
+                PlanetTile farTile = PlanetTile.Invalid;
+                for (int i = 0; i < sub.Tile.Layer.TilesCount && !farTile.Valid; i++)
+                {
+                    PlanetTile t = new PlanetTile(i, sub.Tile.Layer);
+                    if (t != sub.Tile && !around.Contains(t)) { farTile = t; }
+                }
+                ctx.Check(sub.AnchorageBlockReason(farTile) == "DepthRim.Anchor.Spot.NotAdjacent".Translate(), "a tile further away is rejected");
+                // 下錨併入航行指令：選旁邊的海域時選單裡有「下錨」
+                Command_Action navCmd = sub.GetGizmos().OfType<Command_Action>().FirstOrDefault(g => g.icon == SubmarineNavigation.NavigateIcon);
+                ctx.Check(navCmd != null && !navCmd.Disabled, "the navigate command is offered");
+                Thing subHelm = SubmarineNavigation.HelmOf(sub);
+                ctx.Check(SubmarineNavigation.TileBlockReason(subHelm, anchorage, 0) == null, "a neighbouring anchorage can be picked");
+                ctx.Check(SubmarineNavigation.OptionsFor(subHelm, anchorage).Any(o => o.Label == "DepthRim.Nav.Anchor".Translate() && !o.Disabled), "picking it offers an enabled anchor option");
+                ctx.Check(SubmarineNavigation.OptionsFor(subHelm, sub.Tile).Any(o => o.Label.StartsWith("DepthRim.Sub.Cruise".Translate(DepthTier.Shallow.Label()))), "picking its own tile offers depth changes");
+                navCmd?.action();
+                ctx.Check(Find.WorldTargeter.IsTargeting, "the navigate command asks where on the world map");
+                Find.WorldTargeter.StopTargeting();
+                CameraJumper.TryHideWorld();
+                yield return new WaitFrames(5);
+
+                sub.AnchorAt(anchorage);
                 MapParent site = Find.WorldObjects.MapParentAt(anchorage);
                 ctx.Require(site != null && site.def == DepthRimDefOf.DepthRim_OceanSite, "anchoring created an ocean site next to the submarine");
                 ctx.Check(sub.landingTarget == anchorage, "the submarine is landing at the anchorage");
                 yield return new WaitUntil(() => site.HasMap, 6000);
                 ctx.Require(site.HasMap, "the anchorage map was generated");
                 Map seafloorMap = site.Map;
+                // 地圖產生後由 DMSE 的降落選位讓玩家決定船體停在哪裡
+                yield return new WaitRealtime(() => Find.DesignatorManager.SelectedDesignator is Designator_LandTransferShip, 10f);
+                ctx.Check(Find.DesignatorManager.SelectedDesignator is Designator_LandTransferShip, "then the player places the hull on the seafloor map");
+                Find.DesignatorManager.Deselect();
                 yield return new WaitFrames(10);
                 TransferLandingUtility.LandAutomatically(sub);
                 yield return new WaitUntil(() => sub.Destroyed, 3000);
                 ctx.Require(sub.Destroyed, "the submarine settled and its world object is gone");
+                // 觸底揚塵：船體壓到海床的地方周圍揚起沉積物
+                MapComponent_TouchdownDust dust = seafloorMap.GetComponent<MapComponent_TouchdownDust>();
+                int dustAtLanding = dust.emitted;
+                bool dustActive = dust.Active;
+                ctx.Note($"touchdown dust: {dust.lastRingCells} ring cells, {dustAtLanding} puffs at touchdown, active={dustActive}");
                 ctx.Check(helm.Map == seafloorMap && thruster.Map == seafloorMap && keel.Map == seafloorMap, "the hull is on the seafloor map");
                 List<IntVec3> deckCells = seafloorMap.AllCells.Where(c => seafloorMap.terrainGrid.TerrainAt(c) == platform).ToList();
                 ctx.Check(deckCells.Count == deck.Area, $"the whole deck landed ({deckCells.Count} cells)");
+                IntVec3 landOffset = helm.Position - (center + new IntVec3(-2, 0, 3));
+                yield return Updates(1);
+                float anchoredWater = dryRoom.Max(c => seafloorMap.Flooding().LevelAt(c + landOffset));
+                ctx.Check(anchoredWater < 0.05f, $"the drained compartment is still dry after anchoring ({anchoredWater:F2}, offset {landOffset})");
                 MapComponent_SeabedMemory memory = seafloorMap.GetComponent<MapComponent_SeabedMemory>();
                 int onSeabed = deckCells.Count(c => memory.TryGetUnder(c, out _));
                 ctx.Note($"{onSeabed} of {deckCells.Count} deck cells rest on seabed");
+                if (onSeabed > 0)
+                {
+                    ctx.Check(dust.lastRingCells > 0 && dustAtLanding > 0, $"touching down on the seabed kicks up a ring of dust ({dust.lastRingCells} cells, {dustAtLanding} puffs)");
+                    ctx.Check(dust.emitted > dustAtLanding, $"the dust keeps billowing after touchdown ({dust.emitted} puffs)");
+                    ctx.Check(!dust.Active, "and settles within a few seconds");
+                }
+                else
+                {
+                    ctx.Check(dust.emitted == 0, "no seabed under the hull: no touchdown dust");
+                }
                 ctx.Check(seafloorMap.IsPlayerHome || seafloorMap.Parent.Faction == Faction.OfPlayer, "the anchorage belongs to the player");
                 IntVec3 rest = deckCells.FirstOrDefault(c => memory.TryGetUnder(c, out _));
                 if (rest.IsValid)
@@ -404,7 +614,7 @@ namespace DepthRim.Acceptance
             ctx.Check(sub.HullRating(out Building none) == HullPressure.Unlimited && none == null, "an open deck has no hull limit");
 
             // 朝外海的一般牆 → 船殼只算淺海；換成水密隔牆 → 撐到海床
-            IntVec3 edge = new IntVec3(deck.minX, 0, deck.CenterCell.z);
+            IntVec3 edge = new IntVec3(subDeck.minX, 0, subDeck.CenterCell.z);
             Thing wall = GenSpawn.Spawn(ThingMaker.MakeThing(ThingDefOf.Wall, ThingDefOf.Steel), edge, subMap);
             wall.SetFaction(Faction.OfPlayer);
             yield return Updates(1);
@@ -416,7 +626,7 @@ namespace DepthRim.Acceptance
             ctx.Check(sub.HullRating(out _) == DepthTier.Seabed, "a pressure hull wall is rated to the seabed");
 
             Current.Game.CurrentMap = subMap;
-            foreach (Wait w in ctx.ScreenshotOn(subMap, center, 9f, "submarine_under_way", 40)) { yield return w; }
+            foreach (Wait w in ctx.ScreenshotOn(subMap, subCenter, 9f, "submarine_under_way", 40)) { yield return w; }
             yield return new WaitFrames(30);
 
             // ── 收尾：拆掉潛艇與它的地圖，還原船塢地形 ──

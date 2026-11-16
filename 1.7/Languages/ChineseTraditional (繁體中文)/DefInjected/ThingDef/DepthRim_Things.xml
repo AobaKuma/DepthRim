@@ -71,4 +71,18 @@
   <DepthRim_MoonPool.description>甲板上一口密封的井，底下直通大海，可以在這裡建造、停靠與放出突擊艇。在上面建一艘突擊艇吧。</DepthRim_MoonPool.description>
   <DepthRim_PlayerBoardingCraft.label>突擊艇</DepthRim_PlayerBoardingCraft.label>
   <DepthRim_PlayerBoardingCraft.description>你自己的突擊艇。殖民者從右鍵選單登艇，然後選海路 8 格內的任一海洋格出發。它會切入目標的密閉艙室而不破壞密閉；沒有艙室就降在海床上，再放出船員。\n\n必須造在月池上。</DepthRim_PlayerBoardingCraft.description>
+
+  <DepthRim_PlatformPillar.label>平台支柱</DepthRim_PlatformPillar.label>
+  <DepthRim_PlatformPillar.description>打進海床、高高伸出海面的巨大鋼筋混凝土支柱。完工時頂端會開出一小塊海上平台；支撐半徑內的海上平台都靠它撐住，範圍內沒有任何支柱的平台會塌進海裡。\n\n支柱裡的升降梯連接下方的水面與上方的平台。要蓋在浮船旁邊的開放海面上：9×9 的佔地至少有一邊緊貼浮船，緊貼的那一格（放置時綠框）就是升降點。</DepthRim_PlatformPillar.description>
+
+  <DepthRim_Pressurizer.label>加壓機</DepthRim_Pressurizer.label>
+  <DepthRim_Pressurizer.description>把所在的密閉艙室推到指定壓力等級的壓縮機，讓裡面的人照艙內的壓力適應，不受外面影響。可以讓從深處上來的人分段減壓，也可以在下潛前先加壓。\n\n艙室必須有屋頂而且密閉，地板全部是耐壓甲板或船體平台，所有的門都是水密門。一台加壓機最多控制 80 格的艙室。密閉的艙室在加壓機關掉或斷電後仍會保持原有的壓力；不符合條件的房間則會慢慢洩壓。\n\n牆和門必須撐得住壓差，否則會慢慢被壓壞，和對著海水時一樣：單層一般牆撐得住淺海、水密門撐得住變溫層、水密隔牆不限。開門會洩掉一些壓力。走過水密門會不適的人不會自己通過。需要電力。</DepthRim_Pressurizer.description>
+  <DepthRim_PlatformPillarTop.label>平台支柱頂</DepthRim_PlatformPillarTop.label>
+  <DepthRim_PlatformPillarTop.description>平台支柱的頂端，裡面有通往水面的升降梯。</DepthRim_PlatformPillarTop.description>
+
+  <DR_Rock.label>玄武岩塊</DR_Rock.label>
+  <DR_Rock.description>熔岩碰上冰冷海水後留下的黑色玄武岩塊。大約到腰的高度，可以當掩體，也能開採出一塊石塊。</DR_Rock.description>
+  <DR_UnderwaterVolcano.label>海底火山</DR_UnderwaterVolcano.label>
+  <DR_UnderwaterVolcano.description>黑色火山岩堆成的煙囪，由噴湧而出、富含礦物的熱水一層層堆積而成，從不停止冒煙。如果被圍在房間裡，會讓房間迅速升溫。</DR_UnderwaterVolcano.description>
+
 </LanguageData>
