@@ -237,4 +237,18 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.Alert.UntetheredSeaDesc>The sea is rough. These are outside without a safety line and can be swept away by the waves:\n\n{0}\n\nBring them inside, or build a safety rope anchor within 9 cells of where they work.</DepthRim.Alert.UntetheredSeaDesc>
 
   <!-- 海面的惡劣海況 -->\n  <DepthRim.SeaWeather.ItemSwept>The waves carried off {0}.</DepthRim.SeaWeather.ItemSwept>\n  <DepthRim.SeaWeather.ItemsSwept>The waves carried off {0} and {1} other stacks stored outside.</DepthRim.SeaWeather.ItemsSwept>\n  <DepthRim.SeaWeather.BuildingsBattered>Waves are pounding the structures at the water's edge.</DepthRim.SeaWeather.BuildingsBattered>\n
+
+  <!-- 海底採樣器 -->
+  <DepthRim.Sampler.MustBeOcean>Must be built on the sea floor.</DepthRim.Sampler.MustBeOcean>
+  <DepthRim.Sampler.MustBeAdjacent>Must be placed right next to a cold seep, an underwater volcano or a hydrothermal vent.</DepthRim.Sampler.MustBeAdjacent>
+  <DepthRim.Sampler.OnSource>Cannot be built on top of the site it samples.</DepthRim.Sampler.OnSource>
+  <DepthRim.Sampler.GhostRemaining>{0}: {1} seabed research left</DepthRim.Sampler.GhostRemaining>
+  <DepthRim.Sampler.NotOcean>Not on the sea floor: nothing to sample.</DepthRim.Sampler.NotOcean>
+  <DepthRim.Sampler.NoSource>No cold seep, underwater volcano or hydrothermal vent next to it.</DepthRim.Sampler.NoSource>
+  <DepthRim.Sampler.SourceExhausted>{0} has been fully sampled.</DepthRim.Sampler.SourceExhausted>
+  <DepthRim.Sampler.Sampling>Sampling {0}: {1} seabed research left</DepthRim.Sampler.Sampling>
+  <DepthRim.Sampler.NoProject>No seabed research project to work on.</DepthRim.Sampler.NoProject>
+  <DepthRim.Sampler.Rate>Seabed research: {0} per day</DepthRim.Sampler.Rate>
+  <DepthRim.Sampler.Exhausted>{0} has been fully sampled. Find another cold seep, underwater volcano or hydrothermal vent to keep the seafloor sampler working.</DepthRim.Sampler.Exhausted>
+
 </LanguageData>

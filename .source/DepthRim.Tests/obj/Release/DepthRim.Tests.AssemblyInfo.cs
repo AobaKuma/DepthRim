@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DepthRim.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe0da1ae30045d18a67c81cbcae17d5387d13329")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+169ef6c4c75de350b753ef4bdb99e6fafc8dc1af")]
 [assembly: System.Reflection.AssemblyProductAttribute("DepthRim.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DepthRim.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

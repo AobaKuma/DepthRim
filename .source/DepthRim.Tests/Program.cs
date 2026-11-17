@@ -45,6 +45,7 @@ static partial class Test
         Run("RopeAnchorMath", RopeAnchorMath);
         Run("SeaWeather", SeaWeather);
         Run("ContentResearch", ContentResearch);
+        Run("SeafloorSampler", SeafloorSampler);
         Run("UnderwaterRange", UnderwaterRange);
         Run("ContentPressure", ContentPressure);
         Run("ContentXml", ContentXml);

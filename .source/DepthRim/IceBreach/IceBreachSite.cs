@@ -136,23 +136,52 @@ namespace DepthRim
         }
     }
 
-    /// <summary>冰面地圖：整張鋪海冰板。冰厚記在 <see cref="MapComponent_IceSheet"/>（由地點的冰厚決定）。</summary>
+    /// <summary>
+    /// 冰面地圖。冰厚記在 <see cref="MapComponent_IceSheet"/>（由地點的冰厚決定）。
+    /// 多年冰（地表格是原版 <c>SeaIce</c>）：照原版生態區生成地形（冰、淺水坑、靠海那側的海水），
+    /// 再把冰換成海冰板、水換成正在重新結冰的開放水（當成冰間水道）。一年冰（地表格是海洋生態區）：整張鋪海冰板。
+    /// </summary>
     public class GenStep_IceFloe : GenStep
     {
         public override int SeedPart => 0x1CEF10E;
 
+        public const string VanillaSeaIce = "SeaIce";
+
         public override void Generate(Map map, GenStepParams parms)
         {
-            TerrainDef ice = DepthRimDefOf.DepthRim_SeaIceSheet;
-            foreach (IntVec3 c in map.AllCells)
-            {
-                map.terrainGrid.SetTerrain(c, ice);
-            }
+            WorldObject_IceBreachSite site = map.Parent as WorldObject_IceBreachSite;
             MapComponent_IceSheet sheet = map.GetComponent<MapComponent_IceSheet>();
-            if (sheet != null && map.Parent is WorldObject_IceBreachSite site)
+            if (sheet != null && site != null)
             {
                 sheet.baseThickness = site.iceThickness;
             }
+            TerrainDef ice = DepthRimDefOf.DepthRim_SeaIceSheet;
+            if (!UsesVanillaTerrain(map, site))
+            {
+                foreach (IntVec3 c in map.AllCells)
+                {
+                    map.terrainGrid.SetTerrain(c, ice);
+                }
+                return;
+            }
+            new GenStep_ElevationFertility().Generate(map, parms);
+            new GenStep_Terrain().Generate(map, parms);
+            TerrainDef water = DepthRimDefOf.DepthRim_BreachWater;
+            foreach (IntVec3 c in map.AllCells)
+            {
+                bool isWater = c.GetTerrain(map)?.IsWater ?? false;
+                map.terrainGrid.SetTerrain(c, isWater ? water : ice);
+                if (isWater)
+                {
+                    sheet?.TrackOpenWater(c);
+                }
+            }
+        }
+
+        /// <summary>多年冰、而且地圖生態區就是原版海冰時，照原版生態區生成地形。</summary>
+        public static bool UsesVanillaTerrain(Map map, WorldObject_IceBreachSite site)
+        {
+            return site != null && site.iceKind == IceKind.MultiYear && map.Biome?.defName == VanillaSeaIce;
         }
     }
 

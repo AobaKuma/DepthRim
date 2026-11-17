@@ -92,7 +92,8 @@ namespace DepthRim.Acceptance
                 new AcceptanceTest("B3", "A moon pool on a sea surface map launches from the ocean tile below it", Tests_Boarding2.B3_SeaSurfaceLaunch),
                 new AcceptanceTest("X1", "Pirate submarine: abstract defence node, sonar classification, patrol, torpedo hits sink it, boarding craft pursuit, dry hull map with crew, scuttling; fish school; torpedo boat sinks", Tests_Pirates.X1_PirateSubmarine),
                 new AcceptanceTest("N1","Sonar: powered sonars make the map a BVR node; active hears farther and pings; passive alone still listens; off means deaf", Tests_Sonar.N1_Sonar),
-                new AcceptanceTest("K1", "No skyfallers underwater: vanilla skyfaller incidents blocked even forced, still fire on the surface; drop arrivals and siege unusable", Tests_NoSkyfallers.K1_NoSkyfallersUnderwater),
+                new AcceptanceTest("D1", "Seafloor sampler: placed next to an underwater volcano or vent on the sea floor only; powered, it feeds the current research project until the site runs out, then moves on", Tests_SeafloorSampler.D1_SeafloorSampler),
+                new AcceptanceTest("K1","No skyfallers underwater: vanilla skyfaller incidents blocked even forced, still fire on the surface; drop arrivals and siege unusable", Tests_NoSkyfallers.K1_NoSkyfallersUnderwater),
                 new AcceptanceTest("R1","Water-line materials are created on the main thread and used for pawns in water", Tests_Pawns.R1_WaterLineMaterial),
             };
         }

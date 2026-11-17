@@ -3,4 +3,8 @@
 
   <DepthRim_ResearchTab.label>水下</DepthRim_ResearchTab.label>
 
+  <DepthRim_SeabedResearchTab.label>海底研究</DepthRim_SeabedResearchTab.label>
+  <DepthRim_SeabedResearchTab.generalTitle>海底研究</DepthRim_SeabedResearchTab.generalTitle>
+  <DepthRim_SeabedResearchTab.generalDescription>只有在海底才學得到的知識。海底研究無法在研究台進行，要靠架在冷泉、海底火山與熱液泉旁的海底採樣器收集。</DepthRim_SeabedResearchTab.generalDescription>
+
 </LanguageData>

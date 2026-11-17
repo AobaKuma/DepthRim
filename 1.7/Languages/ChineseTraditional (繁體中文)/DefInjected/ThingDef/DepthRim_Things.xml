@@ -88,4 +88,10 @@
   <DR_RopeAnchor.label>安全繩錨點</DR_RopeAnchor.label>
   <DR_RopeAnchor.description>甲板上的鋼製錨點，附兩個扣環和一捲安全繩。潛艇航行中、或水面海況惡劣時，9 格內在艙外工作的人會自動扣上（最多兩人），繩子能防止他們被沖走。牆會擋住繩子，門不會。\n\n錨點被摧毀或拆除時，繩子會立刻斷開。</DR_RopeAnchor.description>
 
+  <DR_ColdSeep.label>冷泉</DR_ColdSeep.label>
+  <DR_ColdSeep.description>海床上的裂縫，甲烷與硫化氫從沉積物裡慢慢滲出。以這些氣體維生的細菌在周圍長成灰白色的菌墊，奇特的生物聚集在菌墊上。在旁邊架設海底採樣器就能研究它。</DR_ColdSeep.description>
+
+  <DR_SeafloorSampler.label>海底採樣器</DR_SeafloorSampler.label>
+  <DR_SeafloorSampler.description>架在冷泉、海底火山或熱液泉旁的鑽探與感測設備。通電時會採集岩芯、水樣與微生物樣本，轉成海底研究點數，這是取得海底研究的唯一方式。\n\n每個地點能提供的研究有限：採樣完畢後就得另找新的地點。同一個地點旁的多台採樣器共用同一份。</DR_SeafloorSampler.description>
+
 </LanguageData>

@@ -238,3 +238,13 @@ C:\Users\user\AppData\Local\Temp\claude\4632b6801fdb6935\503af897-949c-4d2e-820f
 C:\Users\user\AppData\Local\Temp\claude\4632b6801fdb6935\503af897-949c-4d2e-820f-e11330380f41\scratchpad\unit\DepthRim.Tests.runtimeconfig.json
 C:\Users\user\AppData\Local\Temp\claude\4632b6801fdb6935\503af897-949c-4d2e-820f-e11330380f41\scratchpad\unit\DepthRim.Tests.dll
 C:\Users\user\AppData\Local\Temp\claude\4632b6801fdb6935\503af897-949c-4d2e-820f-e11330380f41\scratchpad\unit\DepthRim.Tests.pdb
+C:\Users\user\AppData\Local\Temp\claude\8504d9ca7bcc8f41\770eea00-b372-4191-a364-d8a240e4e158\scratchpad\ut\DepthRim.Tests.exe
+C:\Users\user\AppData\Local\Temp\claude\8504d9ca7bcc8f41\770eea00-b372-4191-a364-d8a240e4e158\scratchpad\ut\DepthRim.Tests.deps.json
+C:\Users\user\AppData\Local\Temp\claude\8504d9ca7bcc8f41\770eea00-b372-4191-a364-d8a240e4e158\scratchpad\ut\DepthRim.Tests.runtimeconfig.json
+C:\Users\user\AppData\Local\Temp\claude\8504d9ca7bcc8f41\770eea00-b372-4191-a364-d8a240e4e158\scratchpad\ut\DepthRim.Tests.dll
+C:\Users\user\AppData\Local\Temp\claude\8504d9ca7bcc8f41\770eea00-b372-4191-a364-d8a240e4e158\scratchpad\ut\DepthRim.Tests.pdb
+C:\Users\user\AppData\Local\Temp\claude\69bc241e161f5b78\bae839af-46ac-4b60-84e8-20c22049119d\scratchpad\unit\DepthRim.Tests.exe
+C:\Users\user\AppData\Local\Temp\claude\69bc241e161f5b78\bae839af-46ac-4b60-84e8-20c22049119d\scratchpad\unit\DepthRim.Tests.deps.json
+C:\Users\user\AppData\Local\Temp\claude\69bc241e161f5b78\bae839af-46ac-4b60-84e8-20c22049119d\scratchpad\unit\DepthRim.Tests.runtimeconfig.json
+C:\Users\user\AppData\Local\Temp\claude\69bc241e161f5b78\bae839af-46ac-4b60-84e8-20c22049119d\scratchpad\unit\DepthRim.Tests.dll
+C:\Users\user\AppData\Local\Temp\claude\69bc241e161f5b78\bae839af-46ac-4b60-84e8-20c22049119d\scratchpad\unit\DepthRim.Tests.pdb

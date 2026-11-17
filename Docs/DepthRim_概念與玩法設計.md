@@ -280,7 +280,9 @@
 | 航線 | 不能穿過陸地：`OceanRouting` 只走海洋格的廣度優先搜尋，取代 DMSE 的距離（`TransferFlightMath.Distance`）、航線（`BuildPath`），目的地也不能是陸地或海路到不了的地方。 |
 | 深度 | `WorldObject_Submarine`（繼承 DMSE 的 `WorldObject_TransferShip`）實作 `IDepthTierProvider`。巡航深度由玩家設定，每小時換一層；實際層級不會比腳下的海床更深（航行經過淺海時自動被推上來）。往下潛不能超過海床，也不能超過船殼耐壓（`HullPressure`：朝外海的艙壁中最弱的那一個；一般牆與門算淺海、水密艙門算變溫層、水密隔牆算海床）。層級一變，整張地圖的水體重建。 |
 
-**研究**（分頁「水下」，`1.7/Defs/Research/DepthRim_Research.xml`）：水下生存（500，需電力：升降井、潛水服、水密艙門、排水泵）→ 耐壓工程（1200：水密隔牆、船體平台）→ 潛航器建造（1600：龍骨框架、艦橋、水下推進器）→ 深淵潛航（4000：先進水下推進器）。→ 水下戰鬥（2400：主動聲納、被動聲納、魚雷發射管、魚雷）。深海科研點數還沒做，目前都用一般研究點數。
+**研究**（`1.7/Defs/Research/DepthRim_Research.xml`，2026-11-17 改版）：分頁「水下」只剩初始科技水下生存（500 一般研究點數，需電力：升降井、潛水服、水密艙門、排水泵、海底採樣器）。其餘改用**海底研究點數**（FFF 知識類別 `DepthRim_Seabed`，分頁「海底研究」掛 `Fortified.ModExtension_UniqueResearchTab`），研究台做不出來：耐壓工程（800：水密隔牆、船體平台）→ 潛航器建造（1200：龍骨框架、艦橋、水下推進器）→ 深淵潛航（3000）、水下戰鬥（2000）、極地航行（1500）。有 Anomaly 時要在分頁裡選目前的專案；沒有 Anomaly 時 FFF 依分頁位置自動灌進可研究的專案。潛艇開局直接給耐壓工程與潛航器建造（沒有 Anomaly 時靠 FFF 的 `Patch_ResearchManager_FinishProject` 把知識進度記進 KnowledgeStore）。
+
+**海底採樣器**（`DR_SeafloorSampler`，2×1，水下生存解鎖，`1.7/Defs/Buildings/SeafloorSampler.xml`）：海底研究點數的唯一來源。只能蓋在海洋地圖、緊貼（含斜角）冷泉、海底火山或熱液泉。通電時每天 360 點（乘難度研究速度）經 `Fortified.KnowledgeUtility.AddKnowledge` 注入海底研究；每處冷泉 1200、海底火山 2500、熱液泉 1200 點，採完就停（同一地標旁多台共用），會自動換到旁邊另一個還有剩的地標。沒有可推進的海底研究或沒東西可採時只吃 20 W 待機電力。剩餘量記在 `MapComponent_SeafloorResearch`（熱液泉是原版間歇泉，所以不用 FFF 的 CompOccultechSource）。冷泉（`DR_ColdSeep`，`Ocean_ColdSeep.xml`）每張淺海／變溫層地圖 2~3 處，讓只有升降井的前期也拿得到海底研究。貼圖暫借原版大型引擎缸體與蒸汽間歇泉。
 
 **世界地圖圖示**：`Textures/World/WorldObjects/Expanding/DepthRim_Submarine`（`.source/Tools/gen_submarine_icon.py` 產生的白色剪影，由 expandingIconColor 上色）。
 

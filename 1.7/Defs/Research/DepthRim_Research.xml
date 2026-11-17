@@ -2,19 +2,46 @@
 <Defs>
 
   <!--
-    DepthRim 研究分頁「水下」（設計見 Google 文件「科技」段落）。
-    水下戰鬥解鎖聲納、魚雷發射管與魚雷；反魚雷魚雷、近防等做出來再加進去（設計稿 §11 M5）。深海科研點數（數據採集器）還沒做，
-    所以目前全部用一般研究點數。
+    DepthRim 研究（設計見 Google 文件「科技」段落）：
+    - 「水下」分頁（一般研究點數）：只有初始科技「水下生存」，解鎖升降井與海底採樣器等。
+    - 「海底研究」分頁（2026-11-17，FFF 的知識類別分頁 Fortified.ModExtension_UniqueResearchTab）：其餘水下科技都改用
+      海底研究點數（KnowledgeCategoryDef DepthRim_Seabed），研究台做不出來，只能靠海底採樣器從冷泉、海底火山、熱液泉提取
+      （DepthRim.CompSeafloorSampler → Fortified.KnowledgeUtility.AddKnowledge）。
+      有 Anomaly 時要在分頁裡選目前研究的專案；沒有 Anomaly 時 FFF 依分頁位置自動灌進可研究的專案。
+    水下戰鬥解鎖聲納、魚雷發射管與魚雷；反魚雷魚雷、近防等做出來再加進去（設計稿 §11 M5）。
   -->
   <ResearchTabDef>
     <defName>DepthRim_ResearchTab</defName>
     <label>underwater</label>
   </ResearchTabDef>
 
+  <!-- 海底研究點數：只有海底採樣器產出 -->
+  <KnowledgeCategoryDef>
+    <defName>DepthRim_Seabed</defName>
+    <label>seabed</label>
+    <color>(0.35, 0.75, 0.85, 1)</color>
+    <texPath>UI/Descent</texPath>
+  </KnowledgeCategoryDef>
+
+  <ResearchTabDef>
+    <defName>DepthRim_SeabedResearchTab</defName>
+    <label>seabed research</label>
+    <generalTitle>Seabed research</generalTitle>
+    <generalDescription>What can only be learned on the sea floor itself. Seabed research cannot be done at a research bench: seafloor samplers set beside cold seeps, underwater volcanoes and hydrothermal vents gather it.</generalDescription>
+    <visibleByDefault>true</visibleByDefault>
+    <modExtensions>
+      <li Class="Fortified.ModExtension_UniqueResearchTab">
+        <categories>
+          <li>DepthRim_Seabed</li>
+        </categories>
+      </li>
+    </modExtensions>
+  </ResearchTabDef>
+
   <ResearchProjectDef>
     <defName>DepthRim_UnderwaterSurvival</defName>
     <label>underwater survival</label>
-    <description>Drilling rigs to bore through the ice sea, and the basic techniques and life support that let colonists work and survive underwater.\n\nUnlocks the ice shaft, diving suit, watertight door and bilge pump.</description>
+    <description>Drilling rigs to bore through the ice sea, and the basic techniques and life support that let colonists work and survive underwater.\n\nUnlocks the ice shaft, diving suit, watertight door, bilge pump and seafloor sampler. Further underwater technology needs seabed research, which only seafloor samplers can gather.</description>
     <baseCost>500</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>DepthRim_ResearchTab</tab>
@@ -29,13 +56,14 @@
     <defName>DepthRim_PressureEngineering</defName>
     <label>pressure engineering</label>
     <description>Thick-walled structures that can hold back the water pressure below the thermocline, and pressure-rated decks laid over open water. Ordinary walls are slowly crushed at that depth; going further down means switching to a pressure-rated hull.\n\nUnlocks the pressure hull wall, the hull platform, the pressure deck, the pressuriser, and the platform pillar and ocean platform for building over the open sea.</description>
-    <baseCost>1200</baseCost>
+    <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
+    <knowledgeCost>800</knowledgeCost>
     <techLevel>Industrial</techLevel>
-    <tab>DepthRim_ResearchTab</tab>
+    <tab>DepthRim_SeabedResearchTab</tab>
     <prerequisites>
       <li>DepthRim_UnderwaterSurvival</li>
     </prerequisites>
-    <researchViewX>1.00</researchViewX>
+    <researchViewX>0.00</researchViewX>
     <researchViewY>0.00</researchViewY>
   </ResearchProjectDef>
 
@@ -43,13 +71,14 @@
     <defName>DepthRim_SubmarineConstruction</defName>
     <label>submarine construction</label>
     <description>Assembling pressure compartments into a submarine that can sail on its own. Once built, it can leave the ice shaft behind and travel to other parts of the ocean.\n\nUnlocks the keel frames, the submarine helm, the underwater thruster and the safety rope anchor.</description>
-    <baseCost>1600</baseCost>
+    <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
+    <knowledgeCost>1200</knowledgeCost>
     <techLevel>Industrial</techLevel>
-    <tab>DepthRim_ResearchTab</tab>
+    <tab>DepthRim_SeabedResearchTab</tab>
     <prerequisites>
       <li>DepthRim_PressureEngineering</li>
     </prerequisites>
-    <researchViewX>2.00</researchViewX>
+    <researchViewX>1.00</researchViewX>
     <researchViewY>0.00</researchViewY>
   </ResearchProjectDef>
 
@@ -57,13 +86,14 @@
     <defName>DepthRim_AbyssalNavigation</defName>
     <label>abyssal navigation</label>
     <description>The limits of what a hull and a crew can endure in the deep: magnetohydrodynamic propulsion that is almost silent, hard suits for leaving the hull at depth, and the pressurisation procedures needed before stepping out into the abyss.\n\nUnlocks the advanced underwater thruster.</description>
-    <baseCost>4000</baseCost>
+    <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
+    <knowledgeCost>3000</knowledgeCost>
     <techLevel>Spacer</techLevel>
-    <tab>DepthRim_ResearchTab</tab>
+    <tab>DepthRim_SeabedResearchTab</tab>
     <prerequisites>
       <li>DepthRim_SubmarineConstruction</li>
     </prerequisites>
-    <researchViewX>3.00</researchViewX>
+    <researchViewX>2.00</researchViewX>
     <researchViewY>0.00</researchViewY>
   </ResearchProjectDef>
 
@@ -71,13 +101,14 @@
     <defName>DepthRim_UnderwaterCombat</defName>
     <label>underwater combat</label>
     <description>Finding and fighting other vessels in the dark: sonar arrays that hear across the ocean, and the tactics of hiding behind the thermocline.\n\nUnlocks the active, passive and fire-control sonars, the torpedo tube, torpedoes and anti-torpedo torpedoes, the supercavitating point-defence gun, the moon pool and boarding craft, and the underwater rifle, whose range does not suffer underwater.</description>
-    <baseCost>2400</baseCost>
+    <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
+    <knowledgeCost>2000</knowledgeCost>
     <techLevel>Industrial</techLevel>
-    <tab>DepthRim_ResearchTab</tab>
+    <tab>DepthRim_SeabedResearchTab</tab>
     <prerequisites>
       <li>DepthRim_SubmarineConstruction</li>
     </prerequisites>
-    <researchViewX>3.00</researchViewX>
+    <researchViewX>2.00</researchViewX>
     <researchViewY>1.00</researchViewY>
   </ResearchProjectDef>
 

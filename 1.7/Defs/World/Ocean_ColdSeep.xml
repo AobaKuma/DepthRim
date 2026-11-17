@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    冷泉（2026-11-17）：淺海與變溫層（升降井到得了的生態區）的海底地標，海底研究點數的前期來源（海底採樣器，SeafloorSampler.xml）。
+    甲烷與硫化氫從海床的裂縫慢慢滲出，周圍長著白色的細菌墊。2×2、可以走過去、不能摧毀、不冒熱。
+    散佈數量由生態區的 WaterMapExtension.seafloorFeatures 決定（GenStep_OceanFeatures）。
+    貼圖暫借原版蒸汽間歇泉，染成細菌墊的灰白色。
+  -->
+  <ThingDef ParentName="BuildingNaturalBase">
+    <defName>DR_ColdSeep</defName>
+    <label>cold seep</label>
+    <description>A crack in the sea floor where methane and hydrogen sulfide slowly leak out of the sediment. Pale mats of bacteria that live off the gas spread around it, and strange life gathers on the mats. A seafloor sampler set beside it can study it.</description>
+    <thingClass>Building</thingClass>
+    <graphicData>
+      <texPath>Things/Building/Natural/SteamGeyser</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>Transparent</shaderType>
+      <drawSize>(3.5,3.5)</drawSize>
+      <color>(215,215,190)</color>
+    </graphicData>
+    <uiIconScale>0.5</uiIconScale>
+    <size>(2,2)</size>
+    <altitudeLayer>Floor</altitudeLayer>
+    <passability>Standable</passability>
+    <rotatable>false</rotatable>
+    <destroyable>false</destroyable>
+    <useHitPoints>false</useHitPoints>
+    <selectable>true</selectable>
+    <neverOverlapFloors>true</neverOverlapFloors>
+    <blockPlants>true</blockPlants>
+    <canOverlapZones>false</canOverlapZones>
+    <fertility>0</fertility>
+    <building>
+      <isEdifice>false</isEdifice>
+      <isInert>true</isInert>
+      <claimable>false</claimable>
+      <deconstructible>false</deconstructible>
+      <repairable>false</repairable>
+      <expandHomeArea>false</expandHomeArea>
+      <relatedBuildCommands>
+        <li>DR_SeafloorSampler</li>
+      </relatedBuildCommands>
+      <alwaysShowRelatedBuildCommands>true</alwaysShowRelatedBuildCommands>
+    </building>
+  </ThingDef>
+
+</Defs>

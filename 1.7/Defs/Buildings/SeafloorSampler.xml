@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海底採樣器（2026-11-17）：2×1，緊貼（含斜角）海底地標蓋，通電時自動把地標的海底研究點數（FFF 知識類別 DepthRim_Seabed）
+    灌進「海底研究」分頁（DepthRim.CompSeafloorSampler → Fortified.KnowledgeUtility.AddKnowledge）。初始科技「水下生存」解鎖。
+    - 來源：冷泉 DR_ColdSeep（淺海、變溫層，升降井到得了）、海底火山 DR_UnderwaterVolcano、
+      熱液泉（暫用原版 SteamGeyser，只在海洋地圖上算）。
+    - 每個地標有總量上限（MapComponent_SeafloorResearch 記帳），採完就沒了，鼓勵潛艇去找新的地點；同一地標旁多台共用同一份。
+    - 點數會乘上難度的研究速度倍率；分頁裡沒有可推進的專案（FFF KnowledgeUtility.HasResearchTarget）或沒東西可採時只吃待機電力。
+    - 貼圖暫借原版的大型引擎缸體（Things/Building/Ruins/LargeEngineBlock），之後換成專用美術。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DR_SeafloorSampler</defName>
+    <label>seafloor sampler</label>
+    <description>A drilling and sensor rig set down beside a cold seep, an underwater volcano or a hydrothermal vent. While powered, it takes rock cores, water and microbe samples and turns them into seabed research, the only way to gather it.\n\nEach site only has so much to teach: once it has been fully sampled, move on and find another. Several samplers beside the same site share it.</description>
+    <graphicData>
+      <texPath>Things/Building/Ruins/LargeEngineBlock</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,1)</drawSize>
+      <color>(150,175,190)</color>
+    </graphicData>
+    <size>(2,1)</size>
+    <rotatable>true</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>42</pathCost>
+    <fillPercent>0.4</fillPercent>
+    <tickerType>Rare</tickerType>
+    <castEdgeShadows>false</castEdgeShadows>
+    <canOverlapZones>false</canOverlapZones>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>2400</uiOrder>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterSurvival</li>
+    </researchPrerequisites>
+    <costList>
+      <Steel>120</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <constructionSkillPrerequisite>5</constructionSkillPrerequisite>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <WorkToBuild>4000</WorkToBuild>
+      <Mass>60</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>300</basePowerConsumption>
+        <!-- 沒有可推進的海底研究或地標已採完時只吃待機電力，見 CompSeafloorSampler.HasWork -->
+        <idlePowerDraw>20</idlePowerDraw>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="DepthRim.CompProperties_SeafloorSampler">
+        <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
+        <pointsPerDay>360</pointsPerDay>
+        <sources>
+          <li>
+            <thing>DR_ColdSeep</thing>
+            <totalPoints>1200</totalPoints>
+          </li>
+          <li>
+            <thing>DR_UnderwaterVolcano</thing>
+            <totalPoints>2500</totalPoints>
+          </li>
+          <li>
+            <thing>SteamGeyser</thing>
+            <totalPoints>1200</totalPoints>
+          </li>
+        </sources>
+      </li>
+    </comps>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_SeafloorSampler</li>
+    </placeWorkers>
+  </ThingDef>
+
+</Defs>

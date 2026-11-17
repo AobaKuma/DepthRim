@@ -73,6 +73,13 @@
     <modExtensions>
       <li Class="DepthRim.WaterMapExtension">
         <depthTier>Shallow</depthTier>
+        <!-- 冷泉：升降井到得了的海域裡，海底研究點數的前期來源（Ocean_ColdSeep.xml） -->
+        <seafloorFeatures>
+          <li>
+            <thing>DR_ColdSeep</thing>
+            <count>2~3</count>
+          </li>
+        </seafloorFeatures>
         <seafloorDepth>3~200</seafloorDepth>
         <!-- 冰架下的深坑：升降井的地圖只有這裡，潛艇船塢（深淵上的船體平台）要有地方蓋 -->
         <abyssPockets>1~2</abyssPockets>
@@ -119,6 +126,13 @@
     <modExtensions>
       <li Class="DepthRim.WaterMapExtension">
         <depthTier>Thermocline</depthTier>
+        <!-- 冷泉：升降井到得了的海域裡，海底研究點數的前期來源（Ocean_ColdSeep.xml） -->
+        <seafloorFeatures>
+          <li>
+            <thing>DR_ColdSeep</thing>
+            <count>2~3</count>
+          </li>
+        </seafloorFeatures>
         <seafloorDepth>200~2000</seafloorDepth>
         <!-- 冰架下的深坑：升降井的地圖只有這裡，潛艇船塢（深淵上的船體平台）要有地方蓋 -->
         <abyssPockets>1~2</abyssPockets>
@@ -253,6 +267,13 @@
     <modExtensions>
       <li Class="DepthRim.WaterMapExtension">
         <depthTier>Shallow</depthTier>
+        <!-- 冷泉：升降井到得了的海域裡，海底研究點數的前期來源（Ocean_ColdSeep.xml） -->
+        <seafloorFeatures>
+          <li>
+            <thing>DR_ColdSeep</thing>
+            <count>2~3</count>
+          </li>
+        </seafloorFeatures>
         <seafloorDepth>5~180</seafloorDepth>
         <hilliness>
           <li>SmallHills</li>
@@ -296,6 +317,13 @@
     <modExtensions>
       <li Class="DepthRim.WaterMapExtension">
         <depthTier>Shallow</depthTier>
+        <!-- 冷泉：升降井到得了的海域裡，海底研究點數的前期來源（Ocean_ColdSeep.xml） -->
+        <seafloorFeatures>
+          <li>
+            <thing>DR_ColdSeep</thing>
+            <count>2~3</count>
+          </li>
+        </seafloorFeatures>
         <seafloorDepth>3~180</seafloorDepth>
         <hilliness>
           <li>LargeHills</li>
@@ -336,6 +364,13 @@
     <modExtensions>
       <li Class="DepthRim.WaterMapExtension">
         <depthTier>Thermocline</depthTier>
+        <!-- 冷泉：升降井到得了的海域裡，海底研究點數的前期來源（Ocean_ColdSeep.xml） -->
+        <seafloorFeatures>
+          <li>
+            <thing>DR_ColdSeep</thing>
+            <count>2~3</count>
+          </li>
+        </seafloorFeatures>
         <seafloorDepth>200~2000</seafloorDepth>
         <hilliness>
           <li>LargeHills</li>

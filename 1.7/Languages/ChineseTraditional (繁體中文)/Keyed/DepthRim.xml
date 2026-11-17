@@ -237,4 +237,18 @@
   <DepthRim.Alert.UntetheredSeaDesc>海況惡劣。以下人員待在艙外、沒扣安全繩，可能被浪捲走：\n\n{0}\n\n把他們叫回艙內，或在他們工作處 9 格內蓋安全繩錨點。</DepthRim.Alert.UntetheredSeaDesc>
 
   <!-- 海面的惡劣海況 -->\n  <DepthRim.SeaWeather.ItemSwept>海浪捲走了{0}。</DepthRim.SeaWeather.ItemSwept>\n  <DepthRim.SeaWeather.ItemsSwept>海浪捲走了{0}，以及另外 {1} 堆存放在戶外的物品。</DepthRim.SeaWeather.ItemsSwept>\n  <DepthRim.SeaWeather.BuildingsBattered>海浪正拍打著海邊的建築。</DepthRim.SeaWeather.BuildingsBattered>\n
+
+  <!-- 海底採樣器 -->
+  <DepthRim.Sampler.MustBeOcean>只能蓋在海底。</DepthRim.Sampler.MustBeOcean>
+  <DepthRim.Sampler.MustBeAdjacent>必須緊貼冷泉、海底火山或熱液泉。</DepthRim.Sampler.MustBeAdjacent>
+  <DepthRim.Sampler.OnSource>不能蓋在要採樣的地標上。</DepthRim.Sampler.OnSource>
+  <DepthRim.Sampler.GhostRemaining>{0}：剩 {1} 海底研究點數</DepthRim.Sampler.GhostRemaining>
+  <DepthRim.Sampler.NotOcean>不在海底，沒有東西可以採樣。</DepthRim.Sampler.NotOcean>
+  <DepthRim.Sampler.NoSource>旁邊沒有冷泉、海底火山或熱液泉。</DepthRim.Sampler.NoSource>
+  <DepthRim.Sampler.SourceExhausted>{0}已經採樣完畢。</DepthRim.Sampler.SourceExhausted>
+  <DepthRim.Sampler.Sampling>正在採樣{0}：剩 {1} 海底研究點數</DepthRim.Sampler.Sampling>
+  <DepthRim.Sampler.NoProject>海底研究分頁沒有可以推進的專案。</DepthRim.Sampler.NoProject>
+  <DepthRim.Sampler.Rate>海底研究：每天 {0} 點</DepthRim.Sampler.Rate>
+  <DepthRim.Sampler.Exhausted>{0}已經採樣完畢。找另一處冷泉、海底火山或熱液泉，海底採樣器才能繼續運作。</DepthRim.Sampler.Exhausted>
+
 </LanguageData>

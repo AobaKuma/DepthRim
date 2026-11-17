@@ -204,6 +204,11 @@ namespace DepthRim.Acceptance
             ctx.Check(map.Tile.LayerDef == DepthRimDefOf.DepthRim_Ocean && map.Tile.tileId == mapTile, "after loading, the start map is still on the ocean tile");
             ctx.Check(map.Parent is Settlement && map.IsPlayerHome, "it is still the player's home settlement");
             ctx.Check(ScenPart_SubmarineStart.Current != null, "the scenario part survived the save");
+            // 耐壓工程、潛航器建造是海底研究（FFF 知識型專案）：沒有 Anomaly 時進度存在 FFF 的 KnowledgeStore，讀檔後要還在
+            foreach (string r in new[] { "DepthRim_PressureEngineering", "DepthRim_SubmarineConstruction" })
+            {
+                ctx.Check(DefDatabase<ResearchProjectDef>.GetNamed(r).IsFinished, $"after loading, {r} is still researched");
+            }
             hull = SubmarinePrefab.HullCells(map, rect);
             ctx.Check(hull.Count > 600 && map.mapPawns.FreeColonistsSpawned.Count == 3, $"the submarine and the crew are still there ({hull.Count} hull cells, {map.mapPawns.FreeColonistsSpawned.Count} colonists)");
             yield return new WaitTicks(600);

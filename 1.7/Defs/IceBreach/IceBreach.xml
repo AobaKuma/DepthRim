@@ -13,13 +13,14 @@
     <defName>DepthRim_PolarNavigation</defName>
     <label>polar navigation</label>
     <description>Reinforced crowns and jacking frames that let a submarine punch up through sea ice by blowing its main ballast, and the upward sonar to measure the ice first.\n\nUnlocks the ice-breaker frame.</description>
-    <baseCost>1800</baseCost>
+    <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
+    <knowledgeCost>1500</knowledgeCost>
     <techLevel>Industrial</techLevel>
-    <tab>DepthRim_ResearchTab</tab>
+    <tab>DepthRim_SeabedResearchTab</tab>
     <prerequisites>
       <li>DepthRim_SubmarineConstruction</li>
     </prerequisites>
-    <researchViewX>3.00</researchViewX>
+    <researchViewX>2.00</researchViewX>
     <researchViewY>2.00</researchViewY>
   </ResearchProjectDef>
 
@@ -207,7 +208,10 @@
     </inspectorTabs>
   </WorldObjectDef>
 
-  <!-- 冰面地圖：整張海冰板，沒有迷霧（冰原一覽無遺）。天氣、溫度、季節照原版地表格。 -->
+  <!--
+    冰面地圖，沒有迷霧（冰原一覽無遺）。天氣、溫度、季節、野生動物照原版地表格。
+    多年冰（原版 SeaIce 格）照原版生態區生成地形，冰換成海冰板、水坑與海水換成正在重新結冰的開放水；一年冰整張海冰板。
+  -->
   <MapGeneratorDef>
     <defName>DepthRim_IceFloe</defName>
     <label>ice floe</label>
@@ -215,6 +219,7 @@
     <ignoreAreaRevealedLetter>true</ignoreAreaRevealedLetter>
     <genSteps>
       <li>DepthRim_IceFloe</li>
+      <li>Animals</li>
     </genSteps>
   </MapGeneratorDef>
 

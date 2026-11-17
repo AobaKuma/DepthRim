@@ -300,7 +300,8 @@ namespace DepthRim.Acceptance
             yield return new WaitUntil(() => sub.iceBreachAtTick < 0, SubmarineSurfacing.HoverTicks + 300);
             ctx.Check(!sub.Destroyed, "the hull waits for the cutscene before it moves");
 
-            int beforeBreakCracks = -1, beforeBreakWater = -1, afterBreakWater = -1, flying = 0;
+            // 多年冰照原版海冰生成，地圖上本來就有水坑與海水（開放水）：以演出還沒套任何變化時的開放水為基準
+            int beforeBreakCracks = -1, beforeBreakWater = -1, afterBreakWater = -1, flying = 0, naturalWater = -1;
             Map iceMap = null;
             void Count(SubmarineSurfacingCutscene scene, float s)
             {
@@ -308,6 +309,10 @@ namespace DepthRim.Acceptance
                 int cracks = iceMap.AllCells.Count(c => c.GetTerrain(iceMap) == DepthRimDefOf.DepthRim_IceCracked);
                 int water = iceMap.AllCells.Count(c => c.GetTerrain(iceMap) == DepthRimDefOf.DepthRim_BreachWater);
                 ctx.Note($"{s:0.0} s: cracks {cracks}, open water {water}, flying ice {scene.FlyingChunks}, changes left {scene.Show.Remaining}/{scene.Show.Total}");
+                if (naturalWater < 0 && scene.Show.Remaining == scene.Show.Total)
+                {
+                    naturalWater = water;
+                }
                 if (s < IceCrackPattern.BreakTime)
                 {
                     beforeBreakCracks = cracks;
@@ -321,8 +326,9 @@ namespace DepthRim.Acceptance
             }
             foreach (Wait w in WatchCutscene(ctx, "ice", new[] { 0.5f, 2.5f, 3.6f, 6f, 9f }, Count)) { yield return w; }
             ctx.Check(beforeBreakCracks > 0, $"radial cracks run out before the break ({beforeBreakCracks})");
-            ctx.Check(beforeBreakWater == 0, "no open water before the break");
-            ctx.Check(afterBreakWater > 0, $"the break opens the water around the hull ({afterBreakWater})");
+            ctx.Require(naturalWater >= 0, "saw the ice map before the cutscene changed it");
+            ctx.Check(beforeBreakWater == naturalWater, $"no new open water before the break ({beforeBreakWater} vs {naturalWater} natural)");
+            ctx.Check(afterBreakWater > naturalWater, $"the break opens the water around the hull ({afterBreakWater} vs {naturalWater} natural)");
             ctx.Check(flying > 50, $"ice chunks fly when it breaks ({flying})");
             yield return new WaitUntil(() => sub.Destroyed, 600);
             ctx.Require(sub.Destroyed && iceMap != null, "after the cutscene the hull is on the ice");
@@ -442,6 +448,10 @@ namespace DepthRim.Acceptance
             int sheetIce = iceMap.AllCells.Count(c => c.GetTerrain(iceMap) == DepthRimDefOf.DepthRim_SeaIceSheet);
             ctx.Note($"ice map: rubble {rubble}, cracks {cracks}, sea ice {sheetIce}, refreezing {sheet.RefreezingCount}");
             ctx.Check(rubble > 0 && cracks > 0 && sheetIce > rubble, "rubble and cracks around the hole, sea ice beyond");
+            ctx.Check(GenStep_IceFloe.UsesVanillaTerrain(iceMap, (WorldObject_IceBreachSite)site), "multi-year ice: the map follows the vanilla sea ice biome");
+            ctx.Check(iceMap.AllCells.All(c => !c.GetTerrain(iceMap).IsWater || c.GetTerrain(iceMap) == DepthRimDefOf.DepthRim_BreachWater
+                || c.GetTerrain(iceMap).defName == "DepthRim_HullPlatform"), "vanilla water on the ice map became breach water");
+            ctx.Check(!iceMap.AllCells.Any(c => c.GetTerrain(iceMap) == TerrainDefOf.Ice), "vanilla ice became sea ice sheet");
             ctx.Check(sheet.RefreezingCount >= ring.Count, "the open water is freezing over");
             ctx.Check(crew.Map == iceMap && hull.Contains(crew.Position), "the crew came up with the hull");
             ctx.Check(Find.LetterStack.LettersListForReading.Any(l => l.Label == "DepthRim.IceBreach.SurfacedLabel".Translate()), "a letter reports the breakthrough");

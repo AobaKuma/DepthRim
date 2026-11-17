@@ -44,3 +44,5 @@ C:\Users\user\AppData\Local\Temp\claude\bbf44ba4c14f7d5b\430be6fe-1179-411d-9212
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\430be6fe-1179-411d-9212-2450e6992cac\scratchpad\ut\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\806ed9f35c11418e\9c493883-d54c-47c5-9984-2cdb3f23febc\scratchpad\ut\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\4632b6801fdb6935\503af897-949c-4d2e-820f-e11330380f41\scratchpad\unit\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\8504d9ca7bcc8f41\770eea00-b372-4191-a364-d8a240e4e158\scratchpad\ut\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\69bc241e161f5b78\bae839af-46ac-4b60-84e8-20c22049119d\scratchpad\unit\DepthRim.dll
