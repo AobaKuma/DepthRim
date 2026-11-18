@@ -54,6 +54,10 @@ static partial class Test
         Run("ImplosionMath", ImplosionMathTests);
         Run("ContentImplosion", ContentImplosion);
         Run("ContentPressure", ContentPressure);
+        Run("GenePressureMath", GenePressureMath);
+        Run("GeneBreathing", GeneBreathing);
+        Run("SeasicknessMath", SeasicknessMathTests);
+        Run("ContentGenes", ContentGenes);
         Run("ContentXml", ContentXml);
         Run("ContentOcean", ContentOcean);
         Run("ContentSounds", ContentSounds);

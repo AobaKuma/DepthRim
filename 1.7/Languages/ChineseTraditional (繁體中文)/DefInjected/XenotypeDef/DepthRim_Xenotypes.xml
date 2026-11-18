@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Mariner.label>水手</DepthRim_Mariner.label>
+  <DepthRim_Mariner.description>水手是為了在寒冷、多浪的海上生活而培育的船員。他們在顛簸的甲板上站得穩，憋氣比基準人類久得多，不在意浪花與極地的寒冷，不穿潛水服也能承受一些水壓。\n\n大多數水手血統來自長途破冰貨船的船員：比起替船加熱，船主寧可改造水手。</DepthRim_Mariner.description>
+  <DepthRim_Mariner.descriptionShort>為寒冷多浪的海培育的船員：不會暈船、憋氣久、在極地寒冷中舒適、能承受一些水壓。</DepthRim_Mariner.descriptionShort>
+
+  <DepthRim_Deepdiver.label>深潛者</DepthRim_Deepdiver.label>
+  <DepthRim_Deepdiver.description>深潛者是為了在潛艇與海底站生活、工作而造的人。他們用鰓在水中呼吸，承受得住深海的水壓，在水下游得好、做得好，也看得見黑暗中的東西。強光會刺痛他們的眼睛，起伏的海面則讓他們暈船。\n\n打撈業者和海盜都很看重深潛者船員，而他們大多數人從沒見過天空。</DepthRim_Deepdiver.description>
+  <DepthRim_Deepdiver.descriptionShort>有鰓的潛艇船員：能在水中呼吸、承受深海水壓、水下游泳與工作都強、看得見黑暗。怕強光，在海面上會暈船。</DepthRim_Deepdiver.descriptionShort>
+
+  <DepthRim_Abyssal.label>淵民</DepthRim_Abyssal.label>
+  <DepthRim_Abyssal.description>淵民是來自深海海床遺跡、由 archite 造出來的人。任何水壓都傷不了他們；他們用鰓呼吸，在黑暗中發出柔光，只有在海底才真正平靜。到了陸地上，他們遲緩又不安，普通的燈就足以讓他們目眩。\n\n沒有人知道是誰造了他們、又為了什麼。找到的少數幾個人，都沉睡在海底密封的艙室裡。</DepthRim_Abyssal.description>
+  <DepthRim_Abyssal.descriptionShort>archite 造出的海床居民：不受水壓影響、用鰓呼吸、在黑暗中發光、在水下平靜。到陸地上遲緩不安，燈光會讓他們目眩。</DepthRim_Abyssal.descriptionShort>
+
+</LanguageData>

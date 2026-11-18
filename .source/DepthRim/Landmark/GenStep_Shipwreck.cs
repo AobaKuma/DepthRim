@@ -134,6 +134,15 @@ namespace DepthRim
                 }
             }
 
+            // 海洋基因包（基因設計稿 §7，只在 Biotech 啟用時）
+            Thing genepack = MarineXenotypes.TryMakeShipwreckGenepack();
+            if (genepack != null && rooms.Count > 0)
+            {
+                CellRect room = rooms.RandomElement();
+                IntVec3 at = room.Cells.Where(c => c.Standable(map) && c.GetFirstItem(map) == null).RandomElementWithFallback(room.CenterCell);
+                GenPlace.TryPlaceThing(genepack, at, map, ThingPlaceMode.Near);
+            }
+
             // 四周的鋼渣
             int slag = slagChunks.RandomInRange;
             for (int i = 0; i < slag; i++)

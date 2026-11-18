@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海洋基因用到的 hediff、統計與想法（基因設計稿 Docs/基因_Biotech設計.md）。
+    暈船（§3）對沒有基因的人也生效，所以沒有 Biotech 也會用到這些 Def。
+  -->
+
+  <!-- ── 暈船（§3）：嚴重度由 DepthRim.Hediff_Seasick 自己結算；低於 0.15 不顯示 ── -->
+  <StatDef>
+    <defName>DepthRim_SeasicknessSensitivity</defName>
+    <label>seasickness sensitivity</label>
+    <description>How strongly this person reacts to the motion of the sea: rough water on the sea surface, and a submarine changing depth or running in the shallows.\n\n100% is normal. At 0% a person never gets seasick.</description>
+    <category>BasicsPawn</category>
+    <defaultBaseValue>1</defaultBaseValue>
+    <minValue>0</minValue>
+    <toStringStyle>PercentZero</toStringStyle>
+    <showOnAnimals>false</showOnAnimals>
+    <showOnMechanoids>false</showOnMechanoids>
+    <displayPriorityInCategory>2010</displayPriorityInCategory>
+  </StatDef>
+
+  <HediffDef>
+    <defName>DepthRim_Seasick</defName>
+    <label>seasickness</label>
+    <description>Nausea and dizziness from the motion of the sea. It builds up in rough water and while a submarine changes depth, and fades within hours on steady ground. People who spend a few days at sea slowly get used to it.</description>
+    <hediffClass>DepthRim.Hediff_Seasick</hediffClass>
+    <defaultLabelColor>(0.7, 0.85, 0.55)</defaultLabelColor>
+    <isBad>true</isBad>
+    <everCurableByItem>false</everCurableByItem>
+    <initialSeverity>0.001</initialSeverity>
+    <minSeverity>0.001</minSeverity>
+    <maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <becomeVisible>false</becomeVisible>
+      </li>
+      <li>
+        <label>queasy</label>
+        <minSeverity>0.15</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.05</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>seasick</label>
+        <minSeverity>0.4</minSeverity>
+        <vomitMtbDays>0.5</vomitMtbDays>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.1</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.1</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>severe seasickness</label>
+        <minSeverity>0.75</minSeverity>
+        <vomitMtbDays>0.15</vomitMtbDays>
+        <hungerRateFactor>0.7</hungerRateFactor>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.2</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.1</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.1</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <ThoughtDef>
+    <defName>DepthRim_Seasick</defName>
+    <workerClass>DepthRim.ThoughtWorker_Seasick</workerClass>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>queasy</label>
+        <description>The deck won't stop moving. My stomach doesn't like it.</description>
+        <baseMoodEffect>-3</baseMoodEffect>
+      </li>
+      <li>
+        <label>seasick</label>
+        <description>Everything is swaying. I just want to lie down somewhere that stays still.</description>
+        <baseMoodEffect>-6</baseMoodEffect>
+      </li>
+      <li>
+        <label>severely seasick</label>
+        <description>I can't keep anything down. Make the sea stop.</description>
+        <baseMoodEffect>-10</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <!-- ── 鰓乾燥（§2）：有鰓的人離水時由 DepthRim.Gene_DepthRim 累積；不致命 ── -->
+  <HediffDef>
+    <defName>DepthRim_GillDrying</defName>
+    <label>drying gills</label>
+    <description>Gills that have been out of the water for too long. They dry out over a few days, faster in the heat. Soaking in water at least waist-deep, or standing in the rain, wets them again at once.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.85, 0.7, 0.45)</defaultLabelColor>
+    <isBad>true</isBad>
+    <everCurableByItem>false</everCurableByItem>
+    <initialSeverity>0.01</initialSeverity>
+    <maxSeverity>1</maxSeverity>
+    <stages>
+      <li>
+        <minSeverity>0</minSeverity>
+        <becomeVisible>false</becomeVisible>
+      </li>
+      <li>
+        <label>dry</label>
+        <minSeverity>0.25</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>-0.05</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>parched</label>
+        <minSeverity>0.5</minSeverity>
+        <capMods>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>-0.15</offset>
+          </li>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.1</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <label>cracked</label>
+        <minSeverity>0.85</minSeverity>
+        <painOffset>0.1</painOffset>
+        <capMods>
+          <li>
+            <capacity>Breathing</capacity>
+            <offset>-0.3</offset>
+          </li>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.2</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- ── 眩光（§5）：強烈畏光的人在燈下或日光下；離開亮處立刻移除 ── -->
+  <HediffDef>
+    <defName>DepthRim_Dazzled</defName>
+    <label>dazzled</label>
+    <description>Eyes made for the dark, overwhelmed by light. Sight returns as soon as the light is gone.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.95, 0.9, 0.6)</defaultLabelColor>
+    <isBad>true</isBad>
+    <everCurableByItem>false</everCurableByItem>
+    <stages>
+      <li>
+        <capMods>
+          <li>
+            <capacity>Sight</capacity>
+            <offset>-0.3</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <!-- ── 畏光的心情（§5）：DepthRim.ThoughtWorker_* 讀基因的畏光等級 ── -->
+  <ThoughtDef>
+    <defName>DepthRim_BrightLight</defName>
+    <workerClass>DepthRim.ThoughtWorker_BrightLight</workerClass>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>glaring light</label>
+        <description>This light hurts my eyes.</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+      <li>
+        <label>blinding light</label>
+        <description>Too bright. I can barely see, and it burns.</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>DepthRim_ComfortingDark</defName>
+    <workerClass>DepthRim.ThoughtWorker_ComfortingDark</workerClass>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>comforting dark</label>
+        <description>Finally, a place where the light doesn't sting.</description>
+        <baseMoodEffect>2</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+</Defs>

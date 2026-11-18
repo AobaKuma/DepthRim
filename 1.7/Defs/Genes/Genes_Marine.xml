@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海洋基因（基因設計稿 Docs/基因_Biotech設計.md）。
+    比照 Odyssey 的基因放在一般 Defs：GeneDef 是核心類別，沒有 Biotech 時也能載入，只是玩家拿不到。
+    只引用核心與 Odyssey 的 Def；Biotech 的分類與基因一律加 MayRequire。
+    圖示暫時借用原版（Odyssey 的 Breathless／VacuumResistance／LowGravityAdapted 一定在，其餘是 Biotech 的）。
+  -->
+
+  <GeneCategoryDef>
+    <defName>DepthRim_Marine</defName>
+    <label>marine adaptation</label>
+    <displayPriorityInXenotype>395</displayPriorityInXenotype>
+  </GeneCategoryDef>
+
+  <GeneDef Name="DepthRim_MarineGeneBase" Abstract="True">
+    <displayCategory>DepthRim_Marine</displayCategory>
+  </GeneDef>
+
+  <!-- ══ 水下呼吸（§2） ══════════════════════════════════════════════ -->
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_LongBreath</defName>
+    <label>long breath</label>
+    <labelShortAdj>long-breathed</labelShortAdj>
+    <description>Carriers of this gene have enlarged lungs and blood that holds more oxygen. They can stay underwater almost three times as long before drowning, and use less air from a diving tank.</description>
+    <iconPath>UI/Icons/Genes/Gene_VacuumResistance</iconPath>
+    <displayOrderInCategory>10</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_WaterBreathing</li>
+    </exclusionTags>
+    <customEffectDescriptions>
+      <li>Drowns 65% slower.</li>
+      <li>Uses 40% less air from diving tanks.</li>
+    </customEffectDescriptions>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <drowningFactor>0.35</drowningFactor>
+        <airUseFactor>0.6</airUseFactor>
+      </li>
+    </modExtensions>
+    <symbolPack>
+      <prefixSymbols>
+        <li><symbol>deep</symbol></li>
+        <li><symbol>still</symbol></li>
+      </prefixSymbols>
+    </symbolPack>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_Gills</defName>
+    <geneClass>DepthRim.Gene_DepthRim</geneClass>
+    <label>gills</label>
+    <labelShortAdj>gilled</labelShortAdj>
+    <description>Carriers of this gene grow gill slits along the neck that draw oxygen straight from the water. They never drown and need no diving tank.\n\nOut of the water the gills slowly dry out over a few days, faster in the heat, and breathing suffers. Soaking in water at least waist-deep, or standing in the rain, wets them again.</description>
+    <iconPath>UI/Icons/Genes/Gene_Breathless</iconPath>
+    <displayOrderInCategory>20</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_WaterBreathing</li>
+    </exclusionTags>
+    <customEffectDescriptions>
+      <li>Breathes underwater: never drowns and uses no air from diving tanks.</li>
+      <li>Gills dry out after days away from water.</li>
+    </customEffectDescriptions>
+    <biostatCpx>3</biostatCpx>
+    <biostatMet>-2</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <gills>true</gills>
+      </li>
+    </modExtensions>
+    <symbolPack>
+      <prefixSymbols>
+        <li><symbol>gill</symbol></li>
+        <li><symbol>brine</symbol></li>
+        <li><symbol>tide</symbol></li>
+      </prefixSymbols>
+      <suffixSymbols>
+        <li><symbol>fin</symbol></li>
+      </suffixSymbols>
+    </symbolPack>
+  </GeneDef>
+
+  <!-- ══ 暈船（§3） ══════════════════════════════════════════════════ -->
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_SeasickProne</defName>
+    <label>seasick-prone</label>
+    <labelShortAdj>seasick</labelShortAdj>
+    <description>Carriers of this gene have an overly sensitive inner ear. They get seasick twice as easily, and never get used to the motion of the sea.</description>
+    <iconPath>UI/Icons/Genes/Gene_Delicate</iconPath>
+    <displayOrderInCategory>30</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_Seasickness</li>
+    </exclusionTags>
+    <customEffectDescriptions>
+      <li>Never gets used to seasickness.</li>
+    </customEffectDescriptions>
+    <statOffsets>
+      <DepthRim_SeasicknessSensitivity>1</DepthRim_SeasicknessSensitivity>
+    </statOffsets>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>2</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <noSeasickAcclimation>true</noSeasickAcclimation>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_SeaLegs</defName>
+    <label>sea legs</label>
+    <labelShortAdj>sea-legged</labelShortAdj>
+    <description>Carriers of this gene have a balance sense tuned to a moving deck. They never get seasick, and they move and shoot more steadily on the swaying sea surface.</description>
+    <iconPath>UI/Icons/Genes/Gene_LowGravityAdapted</iconPath>
+    <displayOrderInCategory>40</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_Seasickness</li>
+    </exclusionTags>
+    <statFactors>
+      <DepthRim_SeasicknessSensitivity>0</DepthRim_SeasicknessSensitivity>
+    </statFactors>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_OnSeaSurface">
+        <statOffsets>
+          <MoveSpeed>0.1</MoveSpeed>
+          <ShootingAccuracyPawn>0.05</ShootingAccuracyPawn>
+        </statOffsets>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+    <symbolPack>
+      <prefixSymbols>
+        <li><symbol>sail</symbol></li>
+        <li><symbol>deck</symbol></li>
+        <li><symbol>salt</symbol></li>
+      </prefixSymbols>
+    </symbolPack>
+  </GeneDef>
+
+  <!-- ══ 耐壓四級（§4，exclusionTag DepthRim_PressureTolerance） ═════════ -->
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_PressureFragile</defName>
+    <label>pressure-fragile</label>
+    <labelShortAdj>pressure-fragile</labelShortAdj>
+    <description>Carriers of this gene have stiff blood vessels and joints that cope badly with pressure changes. They feel even small changes in pressure, adapt at half the normal speed, and can never fully adapt to the abyssal seabed. Water pressure hurts them more.</description>
+    <iconPath>UI/Icons/Genes/Gene_MildCellInstability</iconPath>
+    <displayOrderInCategory>50</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_PressureTolerance</li>
+    </exclusionTags>
+    <customEffectDescriptions>
+      <li>Uncomfortable half a pressure level away from what the body is used to (normally one level).</li>
+      <li>Adapts to pressure at half speed, and only down to the deep sea.</li>
+      <li>Water pressure damage x150%.</li>
+    </customEffectDescriptions>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>2</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <pressureTolerance>0.5</pressureTolerance>
+        <pressureSpeedFactor>0.5</pressureSpeedFactor>
+        <pressureMaxLevel>2</pressureMaxLevel>
+        <barotraumaFactor>1.5</barotraumaFactor>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_PressureTolerant</defName>
+    <label>pressure-tolerant</label>
+    <labelShortAdj>pressure-tolerant</labelShortAdj>
+    <description>Carriers of this gene have flexible tissues that withstand some water pressure on their own, and adjust a little faster to changes in pressure.</description>
+    <iconPath>UI/Icons/Genes/Gene_Tough</iconPath>
+    <displayOrderInCategory>51</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_PressureTolerance</li>
+    </exclusionTags>
+    <customEffectDescriptions>
+      <li>Comfortable within 1.25 pressure levels of what the body is used to.</li>
+      <li>Adapts to pressure 25% faster.</li>
+    </customEffectDescriptions>
+    <statOffsets>
+      <DepthRim_PressureResistance>1</DepthRim_PressureResistance>
+    </statOffsets>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <pressureTolerance>1.25</pressureTolerance>
+        <pressureSpeedFactor>1.25</pressureSpeedFactor>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_PressureAdapted</defName>
+    <label>deep-adapted</label>
+    <labelShortAdj>deep-adapted</labelShortAdj>
+    <description>Carriers of this gene have collapsible lungs and pressure-stable proteins like those of deep-diving whales. They withstand the pressure of the deep sea without a suit and adapt quickly when changing depth.</description>
+    <iconPath>UI/Icons/Genes/Gene_Unstoppable</iconPath>
+    <displayOrderInCategory>52</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_PressureTolerance</li>
+    </exclusionTags>
+    <customEffectDescriptions>
+      <li>Comfortable within 1.5 pressure levels of what the body is used to.</li>
+      <li>Adapts to pressure 50% faster.</li>
+      <li>Water pressure damage x75%.</li>
+    </customEffectDescriptions>
+    <statOffsets>
+      <DepthRim_PressureResistance>2</DepthRim_PressureResistance>
+    </statOffsets>
+    <biostatCpx>2</biostatCpx>
+    <biostatMet>-2</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <pressureTolerance>1.5</pressureTolerance>
+        <pressureSpeedFactor>1.5</pressureSpeedFactor>
+        <barotraumaFactor>0.75</barotraumaFactor>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_PressureImmune</defName>
+    <label>abyssal body</label>
+    <labelShortAdj>abyssal</labelShortAdj>
+    <description>Carriers of this gene have archites woven through every tissue that hold the body's shape against any pressure. They can swim the abyssal seabed unprotected and never suffer from pressure changes.</description>
+    <iconPath>UI/Icons/Genes/Gene_ArchiteMetabolism</iconPath>
+    <displayOrderInCategory>53</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_PressureTolerance</li>
+    </exclusionTags>
+    <customEffectDescriptions>
+      <li>Never suffers from pressure changes.</li>
+      <li>Immune to water pressure damage.</li>
+    </customEffectDescriptions>
+    <statOffsets>
+      <DepthRim_PressureResistance>3</DepthRim_PressureResistance>
+    </statOffsets>
+    <biostatCpx>3</biostatCpx>
+    <biostatMet>-1</biostatMet>
+    <biostatArc>1</biostatArc>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <pressureTolerance>3</pressureTolerance>
+        <barotraumaFactor>0</barotraumaFactor>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+  <!-- ══ 畏光（§5，exclusionTag DepthRim_LightSensitivity） ═════════════ -->
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_Photophobia</defName>
+    <label>photophobic</label>
+    <labelShortAdj>photophobic</labelShortAdj>
+    <description>Carriers of this gene have wide pupils that cannot close fully. Daylight and very bright lamps sting their eyes, making them less accurate and slower to work, but they feel at ease in the dark.\n\nTheir diving suit lamp switches to a dim red light by default.</description>
+    <iconPath>UI/Icons/Genes/Gene_MildUVSensitivity</iconPath>
+    <displayOrderInCategory>60</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_LightSensitivity</li>
+    </exclusionTags>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_BrightLight">
+        <minGlow>0.51</minGlow>
+        <statFactors>
+          <ShootingAccuracyPawn>0.85</ShootingAccuracyPawn>
+          <WorkSpeedGlobal>0.9</WorkSpeedGlobal>
+        </statFactors>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>2</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <photophobia>1</photophobia>
+      </li>
+    </modExtensions>
+    <symbolPack>
+      <prefixSymbols>
+        <li><symbol>dim</symbol></li>
+        <li><symbol>murk</symbol></li>
+      </prefixSymbols>
+    </symbolPack>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_PhotophobiaIntense</defName>
+    <geneClass>DepthRim.Gene_DepthRim</geneClass>
+    <label>light-blind</label>
+    <labelShortAdj>light-blind</labelShortAdj>
+    <description>Carriers of this gene have eyes made only for the deep. Any ordinary lamp dazzles them, reducing their sight, accuracy and work speed, and direct sunlight slows them down. In the dark they are at ease.\n\nTheir diving suit lamp is switched off by default.</description>
+    <iconPath>UI/Icons/Genes/Gene_IntenseUVSensitivity</iconPath>
+    <displayOrderInCategory>61</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_LightSensitivity</li>
+    </exclusionTags>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_BrightLight">
+        <minGlow>0.45</minGlow>
+        <statFactors>
+          <ShootingAccuracyPawn>0.7</ShootingAccuracyPawn>
+          <WorkSpeedGlobal>0.8</WorkSpeedGlobal>
+        </statFactors>
+      </li>
+      <li Class="DepthRim.ConditionalStatAffecter_BrightLight">
+        <minGlow>0.75</minGlow>
+        <statFactors>
+          <MoveSpeed>0.9</MoveSpeed>
+        </statFactors>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>4</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <photophobia>2</photophobia>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+  <!-- ══ 低成本 A：純 XML（§6.0 A） ══════════════════════════════════ -->
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_ConfinedAdapted</defName>
+    <label>confined-adapted</label>
+    <labelShortAdj>confined</labelShortAdj>
+    <description>Carriers of this gene feel at home in tight spaces. Small cabins and narrow submarine compartments never bother them.</description>
+    <iconPath>UI/Icons/Genes/Gene_CaveDweller</iconPath>
+    <displayOrderInCategory>100</displayOrderInCategory>
+    <disablesNeeds>
+      <li>RoomSize</li>
+    </disablesNeeds>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_RawSeafood</defName>
+    <label>seafood digester</label>
+    <labelShortAdj>seafood-eating</labelShortAdj>
+    <description>Carriers of this gene have a gut adapted to raw fish and kelp. They don't mind eating raw food and get food poisoning half as often.</description>
+    <iconPath>UI/Icons/Genes/Gene_RobustDigestion</iconPath>
+    <displayOrderInCategory>110</displayOrderInCategory>
+    <dontMindRawFood>true</dontMindRawFood>
+    <foodPoisoningChanceFactor>0.5</foodPoisoningChanceFactor>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_Waterproof</defName>
+    <label>waterproof skin</label>
+    <labelShortAdj>waterproof</labelShortAdj>
+    <description>Carriers of this gene have oily skin that sheds water. Being soaking wet doesn't bother them.</description>
+    <iconPath>UI/Icons/Genes/Gene_FoamSpray</iconPath>
+    <displayOrderInCategory>120</displayOrderInCategory>
+    <customEffectDescriptions>
+      <li>No mood penalty for being soaking wet.</li>
+    </customEffectDescriptions>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>0</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_ConcussionResistant</defName>
+    <label>concussion-resistant</label>
+    <labelShortAdj>blast-hardened</labelShortAdj>
+    <description>Carriers of this gene have a dense, fluid-cushioned body like that of a deep-diving whale. Explosions, such as a torpedo striking the hull, hurt them less.</description>
+    <iconPath>UI/Icons/Genes/Gene_PainReduced</iconPath>
+    <displayOrderInCategory>130</displayOrderInCategory>
+    <damageFactors>
+      <Bomb>0.6</Bomb>
+    </damageFactors>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_ScaledSkin</defName>
+    <label>scaled skin</label>
+    <labelShortAdj>scaled</labelShortAdj>
+    <description>Carriers of this gene grow small overlapping scales on their arms, back and neck. The scales turn blades and blows, but most people find them unattractive.</description>
+    <iconPath>UI/Icons/Genes/Gene_Furskin</iconPath>
+    <displayOrderInCategory>140</displayOrderInCategory>
+    <statOffsets>
+      <ArmorRating_Sharp>0.1</ArmorRating_Sharp>
+      <ArmorRating_Blunt>0.05</ArmorRating_Blunt>
+      <PawnBeauty>-1</PawnBeauty>
+    </statOffsets>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_ColdWaterBody</defName>
+    <label>cold-water body</label>
+    <labelShortAdj>cold-water</labelShortAdj>
+    <description>Carriers of this gene have a thick insulating layer of fat and a slowed blood flow to the skin, like polar seals. They are comfortable in polar cold, but heat bothers them sooner.</description>
+    <iconPath>UI/Icons/Genes/Gene_MinTemperatureLargeDecrease</iconPath>
+    <displayOrderInCategory>150</displayOrderInCategory>
+    <statOffsets>
+      <ComfyTemperatureMin>-15</ComfyTemperatureMin>
+      <ComfyTemperatureMax>-5</ComfyTemperatureMax>
+    </statOffsets>
+    <biostatCpx>2</biostatCpx>
+    <biostatMet>-2</biostatMet>
+  </GeneDef>
+
+  <!-- 膚色：自己的抽象 Def（原版的 GeneSkinColorOverride 只在 Biotech 裡） -->
+  <GeneDef Name="DepthRim_SkinColorBase" Abstract="True">
+    <biostatCpx>0</biostatCpx>
+    <displayCategory MayRequire="Ludeon.RimWorld.Biotech">Cosmetic_Skin</displayCategory>
+    <iconPath>UI/Icons/Genes/Gene_SkinColorOverride</iconPath>
+    <exclusionTags>
+      <li>SkinColorOverride</li>
+    </exclusionTags>
+    <randomBrightnessFactor>0.1</randomBrightnessFactor>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_SkinColorBase">
+    <defName>DepthRim_Skin_AbyssGrey</defName>
+    <label>abyss-grey skin</label>
+    <labelShortAdj>abyss-grey</labelShortAdj>
+    <description>Carriers of this gene have skin the blue-grey of deep water.</description>
+    <skinColorOverride>(96, 112, 128)</skinColorOverride>
+    <displayOrderInCategory>200</displayOrderInCategory>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_SkinColorBase">
+    <defName>DepthRim_Skin_Pearl</defName>
+    <label>pearl skin</label>
+    <labelShortAdj>pearl</labelShortAdj>
+    <description>Carriers of this gene have pale, faintly lustrous skin that has never seen the sun.</description>
+    <skinColorOverride>(226, 228, 232)</skinColorOverride>
+    <displayOrderInCategory>201</displayOrderInCategory>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_SkinColorBase">
+    <defName>DepthRim_Skin_Coral</defName>
+    <label>coral skin</label>
+    <labelShortAdj>coral</labelShortAdj>
+    <description>Carriers of this gene have skin the warm red-orange of reef coral.</description>
+    <skinColorOverride>(214, 120, 100)</skinColorOverride>
+    <displayOrderInCategory>202</displayOrderInCategory>
+  </GeneDef>
+
+  <!-- ══ 低成本 B：共用條件類別（§6.0 B） ═════════════════════════════ -->
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_StrongSwimmer</defName>
+    <label>strong swimmer</label>
+    <labelShortAdj>swimming</labelShortAdj>
+    <description>Carriers of this gene have webbed fingers and toes and powerful legs. They swim much faster than other people.</description>
+    <iconPath>UI/Icons/Genes/Gene_WebbedPhalanges</iconPath>
+    <displayOrderInCategory>300</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_Swimming</li>
+    </exclusionTags>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_Submerged">
+        <statFactors>
+          <MoveSpeed>1.4</MoveSpeed>
+        </statFactors>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_UnderwaterWorker</defName>
+    <label>underwater worker</label>
+    <labelShortAdj>diver</labelShortAdj>
+    <description>Carriers of this gene keep their grip and coordination underwater. They work much faster while submerged, making up for most of the clumsiness of a diving suit.</description>
+    <iconPath>UI/Icons/Genes/Gene_ElongatedFingers</iconPath>
+    <displayOrderInCategory>310</displayOrderInCategory>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_Submerged">
+        <statOffsets>
+          <WorkSpeedGlobal>0.2</WorkSpeedGlobal>
+        </statOffsets>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_DeepCalm</defName>
+    <label>deep calm</label>
+    <labelShortAdj>calm</labelShortAdj>
+    <description>Carriers of this gene feel settled and clear-headed under the sea. Underwater they are harder to break and learn faster.</description>
+    <iconPath>UI/Icons/Genes/Gene_DeadCalm</iconPath>
+    <displayOrderInCategory>320</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_SeaHome</li>
+    </exclusionTags>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_UnderwaterMap">
+        <statOffsets>
+          <MentalBreakThreshold>-0.05</MentalBreakThreshold>
+          <GlobalLearningFactor>0.1</GlobalLearningFactor>
+        </statOffsets>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_LandSick</defName>
+    <label>land-sick</label>
+    <labelShortAdj>land-sick</labelShortAdj>
+    <description>Carriers of this gene belong under the sea. Anywhere else they feel heavy, slow and on edge.</description>
+    <iconPath>UI/Icons/Genes/Gene_SlowMovespeed</iconPath>
+    <displayOrderInCategory>330</displayOrderInCategory>
+    <exclusionTags>
+      <li>DepthRim_SeaHome</li>
+    </exclusionTags>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_NotUnderwaterMap">
+        <statOffsets>
+          <MoveSpeed>-0.15</MoveSpeed>
+          <WorkSpeedGlobal>-0.1</WorkSpeedGlobal>
+          <MentalBreakThreshold>0.05</MentalBreakThreshold>
+        </statOffsets>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>2</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_DarkWorker</defName>
+    <label>dark worker</label>
+    <labelShortAdj>dark-working</labelShortAdj>
+    <description>Carriers of this gene are at their sharpest in the dark. They work faster and shoot better in places without light.</description>
+    <iconPath>UI/Icons/Genes/Gene_Darkvision</iconPath>
+    <displayOrderInCategory>340</displayOrderInCategory>
+    <conditionalStatAffecters>
+      <li Class="DepthRim.ConditionalStatAffecter_Dark">
+        <statOffsets>
+          <WorkSpeedGlobal>0.1</WorkSpeedGlobal>
+          <ShootingAccuracyPawn>0.05</ShootingAccuracyPawn>
+        </statOffsets>
+      </li>
+    </conditionalStatAffecters>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <!-- ══ 第一批（§6.1） ═════════════════════════════════════════════ -->
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_Bioluminescent</defName>
+    <geneClass>DepthRim.Gene_Bioluminescent</geneClass>
+    <label>bioluminescent</label>
+    <labelShortAdj>glowing</labelShortAdj>
+    <description>Carriers of this gene have patterns of light-producing cells under the skin. Underwater and at night they give off a soft blue-green glow that lights a small area around them. Many people find it beautiful.</description>
+    <iconPath>UI/Icons/Genes/Gene_RedEyes</iconPath>
+    <displayOrderInCategory>400</displayOrderInCategory>
+    <customEffectDescriptions>
+      <li>Glows (radius 2) underwater and at night.</li>
+    </customEffectDescriptions>
+    <statOffsets>
+      <PawnBeauty>1</PawnBeauty>
+    </statOffsets>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+  </GeneDef>
+
+  <GeneDef ParentName="DepthRim_MarineGeneBase">
+    <defName>DepthRim_DecompressionResistant</defName>
+    <geneClass>DepthRim.Gene_DepthRim</geneClass>
+    <label>decompression-resistant</label>
+    <labelShortAdj>bends-proof</labelShortAdj>
+    <description>Carriers of this gene clear dissolved gas from their blood quickly. Water pressure injuries heal twice as fast.</description>
+    <iconPath>UI/Icons/Genes/Gene_WoundHealingRateFast</iconPath>
+    <displayOrderInCategory>410</displayOrderInCategory>
+    <customEffectDescriptions>
+      <li>Water pressure damage heals twice as fast.</li>
+    </customEffectDescriptions>
+    <biostatCpx>1</biostatCpx>
+    <biostatMet>-1</biostatMet>
+    <modExtensions>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <barotraumaRecoveryFactor>2</barotraumaRecoveryFactor>
+      </li>
+    </modExtensions>
+  </GeneDef>
+
+</Defs>

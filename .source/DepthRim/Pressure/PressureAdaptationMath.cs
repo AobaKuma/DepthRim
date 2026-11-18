@@ -37,18 +37,52 @@ namespace DepthRim
             return Math.Min(MaxDaysPerLevel, Math.Max(MinDaysPerLevel, BaseDaysPerLevel / filtration));
         }
 
+        /// <summary>有基因時適應 1 級最快幾天（基因的適應速度不被 <see cref="MinDaysPerLevel"/> 夾掉）。</summary>
+        public const float MinDaysPerLevelWithGenes = 0.25f;
+
+        /// <summary>有基因時適應 1 級最慢幾天。</summary>
+        public const float MaxDaysPerLevelWithGenes = 4f;
+
+        /// <summary>
+        /// 適應 1 級要幾天，再除以基因的適應速度（基因設計稿 §4）：速度 1 時和 <see cref="DaysPerLevel(float)"/> 一樣，
+        /// 其他速度限制在 <see cref="MinDaysPerLevelWithGenes"/>～<see cref="MaxDaysPerLevelWithGenes"/> 天。
+        /// </summary>
+        public static float DaysPerLevel(float filtration, float speed)
+        {
+            float days = DaysPerLevel(filtration);
+            if (Math.Abs(speed - 1f) < 0.0001f)
+            {
+                return days;
+            }
+            if (speed <= 0f || float.IsNaN(speed))
+            {
+                return MaxDaysPerLevelWithGenes;
+            }
+            return Math.Min(MaxDaysPerLevelWithGenes, Math.Max(MinDaysPerLevelWithGenes, days / speed));
+        }
+
         /// <summary>經過 <paramref name="ticks"/> 之後的適應值：往環境壓力移動，不會超過。</summary>
         public static float Step(float adapted, float ambient, float filtration, int ticks)
+        {
+            return Step(adapted, ambient, filtration, ticks, PressureProfile.Baseline);
+        }
+
+        /// <summary>
+        /// 同上，用基因的參數：適應速度乘上 <see cref="PressureProfile.speed"/>，適應值最多到 <see cref="PressureProfile.maxLevel"/>
+        /// （不耐壓的人在海床也只會適應到深海）。已經超過上限的適應值會往上限退。
+        /// </summary>
+        public static float Step(float adapted, float ambient, float filtration, int ticks, PressureProfile profile)
         {
             if (ticks <= 0)
             {
                 return adapted;
             }
-            float move = ticks / (DaysPerLevel(filtration) * TicksPerDay);
-            float gap = ambient - adapted;
+            float target = Math.Min(ambient, profile.maxLevel);
+            float move = ticks / (DaysPerLevel(filtration, profile.speed) * TicksPerDay);
+            float gap = target - adapted;
             if (Math.Abs(gap) <= move)
             {
-                return ambient;
+                return target;
             }
             return adapted + Math.Sign(gap) * move;
         }
@@ -56,14 +90,36 @@ namespace DepthRim
         /// <summary>壓力不適的嚴重度：適應值和環境的差距超過容許範圍的部分（0 = 沒有不適，最多 2）。</summary>
         public static float Mismatch(float adapted, float ambient)
         {
-            return Math.Max(0f, Math.Abs(ambient - adapted) - Tolerance);
+            return Mismatch(adapted, ambient, Tolerance);
+        }
+
+        /// <summary>同上，容許差由基因決定（<see cref="PressureProfile.tolerance"/>）。</summary>
+        public static float Mismatch(float adapted, float ambient, float tolerance)
+        {
+            return Math.Max(0f, Math.Abs(ambient - adapted) - tolerance);
         }
 
         /// <summary>還要多久才不會不適（ticks）；已經沒有不適時為 0。</summary>
         public static int TicksUntilComfortable(float adapted, float ambient, float filtration)
         {
-            return (int)Math.Ceiling(Mismatch(adapted, ambient) * DaysPerLevel(filtration) * TicksPerDay);
+            return TicksUntilComfortable(adapted, ambient, filtration, PressureProfile.Baseline);
         }
+
+        /// <summary>
+        /// 同上，用基因的參數。適應到上限也還是不適時（不耐壓的人在海床）回傳 <see cref="Never"/>。
+        /// </summary>
+        public static int TicksUntilComfortable(float adapted, float ambient, float filtration, PressureProfile profile)
+        {
+            float best = Math.Min(ambient, profile.maxLevel);
+            if (Mismatch(best, ambient, profile.tolerance) > 0.0001f)
+            {
+                return Never;
+            }
+            return (int)Math.Ceiling(Mismatch(adapted, ambient, profile.tolerance) * DaysPerLevel(filtration, profile.speed) * TicksPerDay);
+        }
+
+        /// <summary><see cref="TicksUntilComfortable(float, float, float, PressureProfile)"/>：永遠不會舒適。</summary>
+        public const int Never = -1;
 
         /// <summary>
         /// 水密門的壓差通行規則：門另一側的壓力會讓這個人比現在更不適時，他不會自己走過去（徵召中照命令走）。
@@ -71,7 +127,13 @@ namespace DepthRim
         /// </summary>
         public static bool DoorAllows(bool drafted, float adapted, float here, float there)
         {
-            return drafted || Mismatch(adapted, there) <= Mismatch(adapted, here) + 0.001f;
+            return DoorAllows(drafted, adapted, here, there, Tolerance);
+        }
+
+        /// <summary>同上，容許差由基因決定。</summary>
+        public static bool DoorAllows(bool drafted, float adapted, float here, float there, float tolerance)
+        {
+            return drafted || Mismatch(adapted, there, tolerance) <= Mismatch(adapted, here, tolerance) + 0.001f;
         }
 
         /// <summary>

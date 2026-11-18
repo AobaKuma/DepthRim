@@ -89,11 +89,17 @@ namespace DepthRim
         /// <summary>扣除 ticks 的氣量；氣瓶已空時回傳 false。</summary>
         public bool TryConsume(int ticks)
         {
+            return TryConsume(ticks, 1f);
+        }
+
+        /// <summary>同上，耗氣乘上 <paramref name="rate"/>（屏息基因 0.6，基因設計稿 §2）。</summary>
+        public bool TryConsume(int ticks, float rate)
+        {
             if (Air <= 0f)
             {
                 return false;
             }
-            airTicks = Mathf.Max(0f, Air - ticks);
+            airTicks = Mathf.Max(0f, Air - ticks * Mathf.Max(0f, rate));
             return true;
         }
 

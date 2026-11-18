@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Seasick.label>暈船</DepthRim_Seasick.label>
+  <DepthRim_Seasick.description>海的晃動造成的噁心與頭暈。在惡劣海況或潛艇換深度時累積，回到平穩的地方幾小時內就會消退。在海上待上幾天的人會慢慢習慣。</DepthRim_Seasick.description>
+  <DepthRim_Seasick.stages.1.label>頭暈</DepthRim_Seasick.stages.1.label>
+  <DepthRim_Seasick.stages.2.label>暈船</DepthRim_Seasick.stages.2.label>
+  <DepthRim_Seasick.stages.3.label>嚴重暈船</DepthRim_Seasick.stages.3.label>
+
+  <DepthRim_GillDrying.label>鰓乾燥</DepthRim_GillDrying.label>
+  <DepthRim_GillDrying.description>離水太久的鰓。幾天內會乾掉，炎熱時更快，呼吸也跟著變差。泡在及腰以上的水裡或站在雨中，鰓會立刻濕回來。</DepthRim_GillDrying.description>
+  <DepthRim_GillDrying.stages.1.label>乾燥</DepthRim_GillDrying.stages.1.label>
+  <DepthRim_GillDrying.stages.2.label>乾裂</DepthRim_GillDrying.stages.2.label>
+  <DepthRim_GillDrying.stages.3.label>龜裂</DepthRim_GillDrying.stages.3.label>
+
+  <DepthRim_Dazzled.label>眩光</DepthRim_Dazzled.label>
+  <DepthRim_Dazzled.description>為黑暗而生的眼睛承受不了光。光一消失，視力就會恢復。</DepthRim_Dazzled.description>
+
+</LanguageData>

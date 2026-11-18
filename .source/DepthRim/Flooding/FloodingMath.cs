@@ -33,6 +33,19 @@ namespace DepthRim
             return System.Math.Max(0f, RequiredPressureResistance(tier) - resistance - adapted);
         }
 
+        /// <summary>
+        /// 溺水每次更新要加的嚴重度：HediffDef 的自然消退（<paramref name="recovery"/>）照舊抵掉，
+        /// 基因的倍率只乘在淨增量上（屏息 0.35 = 撐 2.9 倍久；基因設計稿 §2）。
+        /// </summary>
+        public static float DrowningAdded(float perUpdate, float recovery, float factor)
+        {
+            if (factor <= 0f)
+            {
+                return 0f;
+            }
+            return recovery + System.Math.Max(0f, perUpdate - recovery) * factor;
+        }
+
         /// <summary>沒入水中時需要的環境水壓抗性 = 水深層級（淺海 0 … 海床 3）。</summary>
         public static int RequiredPressureResistance(DepthTier tier)
         {

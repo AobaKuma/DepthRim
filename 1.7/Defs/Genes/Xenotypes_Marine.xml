@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海洋種族（基因設計稿 §7）。原版基因（DarkVision）只在 Biotech 裡，所以加 MayRequire。
+    船員：DepthRim.MarineXenotypes.TryAssignCrew 讓突擊艇與海盜潛艇的基準人類船員有機會變成水手或深潛者。
+    圖示暫用原版種族圖示（待補內容清單 §1）。
+  -->
+
+  <XenotypeDef>
+    <defName>DepthRim_Mariner</defName>
+    <label>mariner</label>
+    <description>Mariners are crews bred for life aboard ships on cold, rough seas. They keep their footing on a pitching deck, hold their breath far longer than baseliners, shrug off spray and polar cold, and take some water pressure without a suit.\n\nMost mariner lines descend from the crews of long-haul ice freighters, whose owners preferred to adjust their sailors rather than heat their ships.</description>
+    <descriptionShort>Ship crews bred for cold, rough seas: never seasick, hold their breath long, comfortable in polar cold and some water pressure.</descriptionShort>
+    <iconPath>UI/Icons/Xenotypes/Baseliner</iconPath>
+    <inheritable>true</inheritable>
+    <factionlessGenerationWeight>0</factionlessGenerationWeight>
+    <genes>
+      <li>DepthRim_SeaLegs</li>
+      <li>DepthRim_LongBreath</li>
+      <li>DepthRim_PressureTolerant</li>
+      <li>DepthRim_ColdWaterBody</li>
+      <li>DepthRim_Waterproof</li>
+    </genes>
+  </XenotypeDef>
+
+  <XenotypeDef>
+    <defName>DepthRim_Deepdiver</defName>
+    <label>deepdiver</label>
+    <description>Deepdivers are made to live and work in submarines and seabed stations. They breathe water through gills, withstand the pressure of the deep sea, swim and work well underwater, and see in the dark. Bright light hurts their eyes, and the rolling sea surface makes them sick.\n\nDeepdiver crews are prized by salvagers and pirates alike, and most of them have never seen the sky.</description>
+    <descriptionShort>Submarine crews with gills: breathe water, withstand the deep sea, swim and work well underwater, see in the dark. Bright light and the sea surface bother them.</descriptionShort>
+    <iconPath>UI/Icons/Xenotypes/Dirtmole</iconPath>
+    <inheritable>true</inheritable>
+    <factionlessGenerationWeight>0</factionlessGenerationWeight>
+    <genes>
+      <li>DepthRim_Gills</li>
+      <li>DepthRim_PressureAdapted</li>
+      <li>DepthRim_StrongSwimmer</li>
+      <li>DepthRim_UnderwaterWorker</li>
+      <li>DepthRim_ConfinedAdapted</li>
+      <li MayRequire="Ludeon.RimWorld.Biotech">DarkVision</li>
+      <li>DepthRim_Photophobia</li>
+      <li>DepthRim_SeasickProne</li>
+      <li>DepthRim_Skin_AbyssGrey</li>
+    </genes>
+  </XenotypeDef>
+
+  <XenotypeDef>
+    <defName>DepthRim_Abyssal</defName>
+    <label>abyssal</label>
+    <description>Abyssals are an archite-made people from the ruins of the abyssal seabed. No pressure can harm them, they breathe water, glow softly in the dark and feel truly calm only beneath the sea. On land they are slow and uneasy, and ordinary lamps blind them.\n\nNo one knows who made them or why. The few who have been found were sleeping in sealed chambers at the bottom of the sea.</description>
+    <descriptionShort>Archite-made seabed dwellers: immune to pressure, breathe water, glow in the dark, calm underwater. Slow and uneasy on land, blinded by lamps.</descriptionShort>
+    <iconPath>UI/Icons/Xenotypes/Sanguophage</iconPath>
+    <inheritable>false</inheritable>
+    <factionlessGenerationWeight>0</factionlessGenerationWeight>
+    <genes>
+      <li>DepthRim_Gills</li>
+      <li>DepthRim_PressureImmune</li>
+      <li>DepthRim_Bioluminescent</li>
+      <li>DepthRim_StrongSwimmer</li>
+      <li>DepthRim_DeepCalm</li>
+      <li MayRequire="Ludeon.RimWorld.Biotech">DarkVision</li>
+      <li>DepthRim_PhotophobiaIntense</li>
+      <li>DepthRim_RawSeafood</li>
+      <li>DepthRim_SeasickProne</li>
+      <li>DepthRim_Skin_Pearl</li>
+    </genes>
+  </XenotypeDef>
+
+</Defs>

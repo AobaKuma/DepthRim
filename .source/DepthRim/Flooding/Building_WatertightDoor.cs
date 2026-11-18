@@ -169,7 +169,8 @@ namespace DepthRim
             float adapted = PressureAdaptationUtility.AdaptedLevel(p);
             float here = PressureEnvironment.At(Map, p.Position);
             bool drafted = p.Drafted;
-            return PressureAdaptationMath.DoorAllows(drafted, adapted, here, low) && PressureAdaptationMath.DoorAllows(drafted, adapted, here, high);
+            float tolerance = DepthRimGenes.PressureOf(p).tolerance;
+            return PressureAdaptationMath.DoorAllows(drafted, adapted, here, low, tolerance) && PressureAdaptationMath.DoorAllows(drafted, adapted, here, high, tolerance);
         }
 
         /// <summary>門每開一次，兩側的加壓艙就洩一點壓。</summary>

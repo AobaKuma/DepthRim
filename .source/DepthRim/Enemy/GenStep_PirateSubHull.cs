@@ -109,6 +109,7 @@ namespace DepthRim
             }).ToList();
             foreach (Pawn pawn in crew)
             {
+                MarineXenotypes.TryAssignCrew(pawn);
                 BoardingUtility.GiveDivingGear(pawn);
                 IntVec3 cell = interior.Where(c => c.Standable(map) && c.GetFirstPawn(map) == null).RandomElementWithFallback(inner.CenterCell);
                 GenSpawn.Spawn(pawn, cell, map);

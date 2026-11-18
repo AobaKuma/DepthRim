@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Seasick.stages.0.label>頭暈</DepthRim_Seasick.stages.0.label>
+  <DepthRim_Seasick.stages.0.description>甲板一直在動，胃不太舒服。</DepthRim_Seasick.stages.0.description>
+  <DepthRim_Seasick.stages.1.label>暈船</DepthRim_Seasick.stages.1.label>
+  <DepthRim_Seasick.stages.1.description>什麼都在晃。我只想找個不會動的地方躺下。</DepthRim_Seasick.stages.1.description>
+  <DepthRim_Seasick.stages.2.label>嚴重暈船</DepthRim_Seasick.stages.2.label>
+  <DepthRim_Seasick.stages.2.description>吃什麼吐什麼。拜託讓海停下來。</DepthRim_Seasick.stages.2.description>
+
+  <DepthRim_BrightLight.stages.0.label>刺眼</DepthRim_BrightLight.stages.0.label>
+  <DepthRim_BrightLight.stages.0.description>這光刺得眼睛好痛。</DepthRim_BrightLight.stages.0.description>
+  <DepthRim_BrightLight.stages.1.label>強光灼眼</DepthRim_BrightLight.stages.1.label>
+  <DepthRim_BrightLight.stages.1.description>太亮了。我幾乎看不見，眼睛像在燒。</DepthRim_BrightLight.stages.1.description>
+
+  <DepthRim_ComfortingDark.stages.0.label>安心的黑暗</DepthRim_ComfortingDark.stages.0.label>
+  <DepthRim_ComfortingDark.stages.0.description>終於有個光不會刺眼的地方。</DepthRim_ComfortingDark.stages.0.description>
+
+</LanguageData>

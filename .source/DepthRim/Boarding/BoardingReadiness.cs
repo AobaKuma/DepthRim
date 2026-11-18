@@ -37,14 +37,21 @@ namespace DepthRim
         /// <summary>氣瓶低於這個比例就提醒。</summary>
         public const float LowAirPercent = 0.5f;
 
-        public static BoardingReadinessIssue Assess(bool flesh, bool suit, float airPercent, float resistance, float adapted, DepthTier destination)
+        /// <param name="tolerance">基因的壓力容許差（基因設計稿 §4；基準 1）。</param>
+        /// <param name="breathesWater">有鰓：不需要潛水服與氣瓶（基因設計稿 §2）。</param>
+        public static BoardingReadinessIssue Assess(bool flesh, bool suit, float airPercent, float resistance, float adapted, DepthTier destination,
+            float tolerance = PressureAdaptationMath.Tolerance, bool breathesWater = false)
         {
             if (!flesh)
             {
                 return BoardingReadinessIssue.None;
             }
             BoardingReadinessIssue issues = BoardingReadinessIssue.None;
-            if (!suit)
+            if (breathesWater)
+            {
+                // 鰓：不需要氣瓶
+            }
+            else if (!suit)
             {
                 issues |= BoardingReadinessIssue.NoSuit;
             }
@@ -56,7 +63,7 @@ namespace DepthRim
             {
                 issues |= BoardingReadinessIssue.PressureShortfall;
             }
-            if (PressureAdaptationMath.Mismatch(adapted, (int)destination) > 0f)
+            if (PressureAdaptationMath.Mismatch(adapted, (int)destination, tolerance) > 0f)
             {
                 issues |= BoardingReadinessIssue.Maladapted;
             }
@@ -73,13 +80,16 @@ namespace DepthRim
         public static BoardingReadinessIssue Assess(Pawn pawn, DepthTier destination)
         {
             CompDivingAir air = CompDivingAir.WornBy(pawn);
+            MarineGeneProfile genes = DepthRimGenes.Of(pawn);
             return BoardingReadinessMath.Assess(
                 PressureAdaptationUtility.Applies(pawn),
                 air != null,
                 air?.AirPercent ?? 0f,
                 pawn.GetStatValue(DepthRimDefOf.DepthRim_PressureResistance),
                 PressureAdaptationUtility.AdaptedLevel(pawn),
-                destination);
+                destination,
+                genes.pressure.tolerance,
+                genes.BreathesWater);
         }
 
         /// <summary>整份報告；<paramref name="anyIssue"/> 表示至少一位乘員有問題。</summary>
@@ -112,8 +122,12 @@ namespace DepthRim
             float adapted = PressureAdaptationUtility.AdaptedLevel(pawn);
             List<string> lines = new List<string>();
 
-            // 潛水服與氣瓶
-            if (air == null)
+            // 潛水服與氣瓶（有鰓的人不需要）
+            if (DepthRimGenes.Of(pawn).BreathesWater)
+            {
+                lines.Add(Good("DepthRim.Readiness.Gills".Translate()));
+            }
+            else if (air == null)
             {
                 lines.Add(Bad("DepthRim.Readiness.NoSuit".Translate()));
             }
@@ -131,13 +145,15 @@ namespace DepthRim
                 : Good(pressure));
 
             // 壓力適應
-            float mismatch = PressureAdaptationMath.Mismatch(adapted, (int)destination);
+            PressureProfile profile = DepthRimGenes.PressureOf(pawn);
+            float mismatch = PressureAdaptationMath.Mismatch(adapted, (int)destination, profile.tolerance);
             string adaptation = "DepthRim.Readiness.Adaptation".Translate(adapted.ToString("0.0"), (int)destination);
             if (mismatch > 0f)
             {
                 float filtration = pawn.health?.capacities?.GetLevel(PawnCapacityDefOf.BloodFiltration) ?? 1f;
-                int ticks = PressureAdaptationMath.TicksUntilComfortable(adapted, (int)destination, filtration);
-                lines.Add(Warn(adaptation + "DepthRim.Readiness.Maladapted".Translate(mismatch.ToString("0.0"), ticks.ToStringTicksToPeriod())));
+                int ticks = PressureAdaptationMath.TicksUntilComfortable(adapted, (int)destination, filtration, profile);
+                string time = ticks == PressureAdaptationMath.Never ? "DepthRim.Adaptation.NeverShort".Translate().ToString() : ticks.ToStringTicksToPeriod();
+                lines.Add(Warn(adaptation + "DepthRim.Readiness.Maladapted".Translate(mismatch.ToString("0.0"), time)));
             }
             else
             {

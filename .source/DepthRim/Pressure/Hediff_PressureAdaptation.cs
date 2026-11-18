@@ -39,7 +39,13 @@ namespace DepthRim
         /// <summary>最近一次結算時所在環境的壓力等級。</summary>
         public float Ambient => ambient;
 
-        public float Mismatch => PressureAdaptationMath.Mismatch(adapted, ambient);
+        public float Mismatch => PressureAdaptationMath.Mismatch(adapted, ambient, Profile.tolerance);
+
+        /// <summary>基因給的壓力參數（基因設計稿 §4）。</summary>
+        public PressureProfile Profile => DepthRimGenes.PressureOf(pawn);
+
+        /// <summary>還要多久才不會不適；<see cref="PressureAdaptationMath.Never"/> = 適應到上限也不會舒適。</summary>
+        public int TicksUntilComfortable => PressureAdaptationMath.TicksUntilComfortable(adapted, ambient, BloodFiltration, Profile);
 
         /// <summary>血液過濾能力：決定適應速度。</summary>
         public float BloodFiltration => pawn?.health?.capacities?.GetLevel(PawnCapacityDefOf.BloodFiltration) ?? 1f;
@@ -61,11 +67,22 @@ namespace DepthRim
             get
             {
                 string s = base.TipStringExtra;
-                string line = "DepthRim.Adaptation.Rate".Translate(PressureAdaptationMath.DaysPerLevel(BloodFiltration).ToString("0.#"));
-                int left = PressureAdaptationMath.TicksUntilComfortable(adapted, ambient, BloodFiltration);
-                if (left > 0)
+                PressureProfile profile = Profile;
+                string line = "DepthRim.Adaptation.Rate".Translate(PressureAdaptationMath.DaysPerLevel(BloodFiltration, profile.speed).ToString("0.##"));
+                int left = TicksUntilComfortable;
+                if (left == PressureAdaptationMath.Never)
+                {
+                    line += "\n" + "DepthRim.Adaptation.Never".Translate();
+                }
+                else if (left > 0)
                 {
                     line += "\n" + "DepthRim.Adaptation.TimeLeft".Translate(left.ToStringTicksToPeriod());
+                }
+                if (!profile.Equals(PressureProfile.Baseline))
+                {
+                    line += "\n" + (profile.NeverUncomfortable
+                        ? "DepthRim.Adaptation.GenesImmune".Translate()
+                        : "DepthRim.Adaptation.Genes".Translate(profile.tolerance.ToString("0.##"), profile.speed.ToStringPercent(), PressureAdaptationUtility.LevelLabel(profile.maxLevel)));
                 }
                 return s.NullOrEmpty() ? line : s + "\n" + line;
             }
@@ -100,7 +117,7 @@ namespace DepthRim
                 return;
             }
             ambient = now.Value;
-            adapted = PressureAdaptationMath.Step(adapted, ambient, BloodFiltration, ticks);
+            adapted = PressureAdaptationMath.Step(adapted, ambient, BloodFiltration, ticks, Profile);
             RefreshSeverity();
             // 水密門依適應值決定放不放行；適應值每變 0.1 級，清一次這張地圖的可達性快取（有加壓機才需要）
             int key = Mathf.RoundToInt(adapted * 10f);

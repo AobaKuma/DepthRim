@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!-- 防水皮膚（基因設計稿 §6.0 A）：原版「濕透」想法被這個基因抵銷 -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/ThoughtDef[defName="SoakingWet"]/nullifyingGenes</xpath>
+    <match Class="PatchOperationAdd">
+      <xpath>Defs/ThoughtDef[defName="SoakingWet"]/nullifyingGenes</xpath>
+      <value>
+        <li>DepthRim_Waterproof</li>
+      </value>
+    </match>
+    <nomatch Class="PatchOperationAdd">
+      <xpath>Defs/ThoughtDef[defName="SoakingWet"]</xpath>
+      <value>
+        <nullifyingGenes>
+          <li>DepthRim_Waterproof</li>
+        </nullifyingGenes>
+      </value>
+    </nomatch>
+  </Operation>
+
+  <!-- Odyssey 的 breathless（VacuumResistance_Total）在水裡算屏息（基因設計稿 §9 Q2）：溺水 × 0.35，不算鰓 -->
+  <Operation Class="PatchOperationAddModExtension">
+    <xpath>Defs/GeneDef[defName="VacuumResistance_Total"]</xpath>
+    <value>
+      <li Class="DepthRim.GeneExtension_DepthRim">
+        <drowningFactor>0.35</drowningFactor>
+        <airUseFactor>0.6</airUseFactor>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

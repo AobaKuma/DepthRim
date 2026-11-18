@@ -27,6 +27,18 @@ namespace DepthRim
 
         public static StatDef DepthRim_PressureResistance;
 
+        // ── 基因（基因設計稿；hediff 與統計放主資料夾，沒有 Biotech 也會載入） ──
+        /// <summary>鰓乾燥：有鰓的人離水太久（<see cref="Gene_DepthRim"/>）。</summary>
+        public static HediffDef DepthRim_GillDrying;
+
+        /// <summary>強烈畏光的人在燈下眩光。</summary>
+        public static HediffDef DepthRim_Dazzled;
+
+        /// <summary>暈船（<see cref="Hediff_Seasick"/>）。</summary>
+        public static HediffDef DepthRim_Seasick;
+
+        public static StatDef DepthRim_SeasicknessSensitivity;
+
         /// <summary>水下 AI：缺氧或睡覺處淹水時游到安全處（<see cref="JobDriver_SeekAir"/>）。</summary>
         public static JobDef DepthRim_SeekAir;
 

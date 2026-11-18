@@ -1,6 +1,6 @@
 # DepthRim 基因（Biotech）設計稿
 
-整理日期：2026-11-18。狀態：**計畫中，尚未實作**。
+整理日期：2026-11-18。狀態：**2026-11-18 全部實作**（還沒 commit）。實作時和計畫不同的地方見 §10；§9 的待決定事項都照「建議」那欄做。
 
 目標：讓 Biotech 的基因系統接上 DepthRim 已有的水下機制（溺水、壓力適應、水壓抗性、海況、黑暗），做出「為深海改造的人」與「天生不適合下海的人」。基因只改既有公式的參數，不另起一套平行系統。
 
@@ -25,24 +25,15 @@
 ## 1. 相依與載入
 
 - `GeneDef` 是核心類別，Odyssey 自己的基因（`VacuumResistance_*`）就放在一般 Defs 裡，只在 `displayCategory` 加 `MayRequire="Ludeon.RimWorld.Biotech"`。
-- DepthRim **不把 Biotech 加為相依**。基因、種族（Xenotype）、相關想法放在條件資料夾：
-
-```xml
-<v1.7>
-  <li>/</li>
-  <li>1.7</li>
-  <li IfModActive="Ludeon.RimWorld.Biotech">1.7/Biotech</li>
-</v1.7>
-```
-
-- 檔案：`1.7/Biotech/Defs/Genes/DepthRim_Genes.xml`、`DepthRim_Xenotypes.xml`、`DepthRim_GeneCategory.xml`。
-- 暈船的 hediff、統計與 C# 鉤子放主資料夾：沒有 Biotech 時基準值照樣運作（見 §3），只是沒有基因去改它。
+- DepthRim **不把 Biotech 加為相依**。實作時改成比照 Odyssey：全部放在一般的 `1.7/Defs/Genes/`，不用條件資料夾（這樣單元測試的內容檢查、DefInjected 檢查都涵蓋得到）。只引用核心與 Odyssey 的 Def；Biotech 的分類（`Cosmetic_Skin`）與基因（`DarkVision`）一律加 `MayRequire`，也不繼承 Biotech 的抽象 Def（膚色用自己的 `DepthRim_SkinColorBase`）。
+- 檔案：`Genes_Marine.xml`（分類與 28 個基因）、`Xenotypes_Marine.xml`、`Genes_Effects.xml`（暈船、鰓乾燥、眩光、統計、想法）；補丁 `1.7/Patches/Genes_Patches.xml`。
+- 暈船的 hediff、統計與 C# 鉤子沒有 Biotech 時也運作（見 §3），只是沒有基因去改它。船員種族與沉船基因包只在 `ModsConfig.BiotechActive` 時作用。
 - C# 只用核心的 `pawn.genes`（沒有 Biotech 時為空清單），不需要條件編譯。
 
 ### 1.1 程式結構
 
 - `GeneExtension_DepthRim`（`DefModExtension`，掛在 GeneDef 上）：所有數值參數，見各節。
-- `DepthRimGenes`（靜態工具）：彙整一個角色所有基因的參數，結果快取在 `Pawn` 的 thingIDNumber 上，`Pawn_GeneTracker.Notify_GenesChanged` 的後置補丁清快取。
+- `DepthRimGenes`（靜態工具）：彙整一個角色所有有效基因（`Gene.Active`）的參數，結果依 thingIDNumber 快取 250 ticks（實作時沒有補丁 `Notify_GenesChanged`：基因變動最多晚 250 ticks 生效，`Gene_DepthRim` 加上／移除時與 `MarineXenotypes` 換種族時會立刻清快取）。
 - 純計算放進現有的 `FloodingMath`／`PressureAdaptationMath`／新的 `SeasicknessMath`，維持單元測試可直接驗。
 - 基因分類：新增 `GeneCategoryDef DepthRim_Marine`（「海洋適應」），排在 `ResistanceAndWeakness` 之後。
 
@@ -246,3 +237,39 @@
 | Q6 | 不耐壓的「最多適應到深海」會讓海床基地永遠不適，是否太重？ | 保留；它是 Met +2 的負面基因，玩家可用加壓艙之外的方式（不派他下海床）處理 |
 | Q7 | 鰓的乾燥是否對潛艇生活太煩？ | 3 天到 0.5、泡一下就重設；若太煩，鰓本身不加代價，改成在種族裡搭配 §6.0 的陸地不適 |
 | Q8 | 冷水體質（失溫免疫）在極地設定會不會太強？ | Cpx 2、Met −2；若太強改成只給 ComfyTemperatureMin −15，不免疫失溫 |
+
+---
+
+## 10. 實作紀錄（2026-11-18）
+
+### 10.1 程式與檔案
+
+| 檔案 | 內容 |
+|---|---|
+| `.source/DepthRim/Genes/MarineGeneMath.cs` | `PressureProfile`、`MarineGeneProfile`、鰓乾燥與畏光門檻的純計算 |
+| `.source/DepthRim/Genes/SeasicknessMath.cs` | 暈船的暴露量、目標、升降速度、習慣計時 |
+| `.source/DepthRim/Genes/DepthRimGenes.cs` | `GeneExtension_DepthRim`（GeneDef 上的參數）、`DepthRimGenes`（彙整與快取） |
+| `.source/DepthRim/Genes/Gene_DepthRim.cs` | `Gene_DepthRim`（鰓乾燥、強烈畏光的眩光、抗減壓病）、`Gene_Bioluminescent`、`Patch_PawnDeSpawnGlow` |
+| `.source/DepthRim/Genes/Seasickness.cs` | `Hediff_Seasick`、`SeasicknessExposure`、`MapComponent_Seasickness`、三個 ThoughtWorker |
+| `.source/DepthRim/Genes/ConditionalStatAffecters.cs` | `Submerged`、`UnderwaterMap`、`NotUnderwaterMap`、`OnSeaSurface`、`BrightLight`、`Dark` |
+| `.source/DepthRim/Genes/MarineXenotypes.cs` | 船員種族、沉船基因包 |
+| 改動 | `PressureAdaptationMath`（基因參數的多載，原本的簽名不變）、`Hediff_PressureAdaptation`、`Building_WatertightDoor`、`Alert_PressureSickness`、`BoardingReadiness`（鰓不需要潛水服）、`FloodingPawnEffects`、`FloodingMath.DrowningAdded`、`CompDivingAir.TryConsume(ticks, rate)`、`CompSuitLamp`（頭燈模式與按鈕）、`BoardingRaid`、`GenStep_PirateSubHull`、`GenStep_Shipwreck` |
+
+### 10.2 和計畫不同的地方
+
+- **載入方式**：不用條件資料夾，見 §1。
+- **屏息的倍率乘在淨增量上**：溺水 hediff 本身每天消退 12，每次更新加 0.15、淨增約 0.1。直接把 0.15 × 0.35 會小於消退量，等於不會溺水；改成「消退量 + 淨增 × 倍率」（`FloodingMath.DrowningAdded`），屏息撐約 2.9 倍久。
+- **畏光門檻**：原版 `GlowGrid.GroundGlowAt` 把人造光夾在 0.5，只有日光與過曝範圍到 1。所以畏光 = 光照 ≥ 0.51（日光、過曝、太陽燈），強烈畏光 = ≥ 0.45（一般的燈就算）。暗紅光頭燈沒有過曝，畏光的人用它不刺眼；強烈畏光的人連暗紅光也刺眼，所以自動模式直接關燈。
+- **冷水體質不免疫失溫**：原版 `HediffGiver_Hypothermia` 不經過 `TryApply`，`hediffGiversCannotGive` 對它沒有效果（§9 Q8 的退路）。只給 ComfyTemperatureMin −15、ComfyTemperatureMax −5。
+- **暈船沒有破冰上浮的暴露量**：破冰演出很短，沒有接。航行的暴露量讀潛艇的 `Diving` 與 `VoyageOverboard.Underway`，不讀渲染用的 `VoyageMotion`（只在畫面上的地圖才有值）。
+- **暈船的心情**：用自己的 `ThoughtWorker_Seasick`（hediff 階段 1–3 → 想法階段 0–2），不用原版 `ThoughtWorker_Hediff`，因為第 0 階段不該有心情。嚴重暈船的「食慾 −30%」做成 `hungerRateFactor 0.7`。
+- **善泳**改用 `ConditionalStatAffecter_Submerged` 的 MoveSpeed × 1.4（§6.0 B），沒有做 HediffComp。
+- **鯨脂取消**（和冷水體質重疊）；**第二批（§6.2）沒做**，等相關系統。
+- **Odyssey 的 breathless** 用補丁加上同一個 `GeneExtension_DepthRim`（溺水 × 0.35、耗氣 × 0.6），不寫程式。
+- **生物發光**：水下地圖與航行中的潛艇一律發光，其他地圖只在夜裡（天光 < 0.3）。用每 30 ticks 檢查、換格才搬移，和潛水服頭燈一樣。
+- **基因圖示、種族圖示**全部暫借原版（Odyssey 的 Breathless／VacuumResistance／LowGravityAdapted，其餘是 Biotech；種族用 Baseliner／Dirtmole／Sanguophage），要補專屬圖示。
+
+### 10.3 測試
+
+- 單元測試（`.source/DepthRim.Tests/Tests_Genes.cs`）：`GenePressureMath`（基準和舊公式一致、速度與新上下限、容許差、不耐壓的適應上限與「永遠」、水密門、出航確認）、`GeneBreathing`（溺水淨增、氣瓶倍率、鰓乾燥、畏光門檻）、`SeasicknessMath`（暴露量、平衡表、升降速度、習慣）、`ContentGenes`（四級耐壓的互斥與抗性、互斥組、geneClass、不依賴 Biotech、種族基因都存在且不互斥、hediff 與想法的階段、補丁）。
+- 驗收測試（`Tests_Genes.cs`，需要 Biotech）：GN1 呼吸與耐壓、GN2 暈船、GN3 畏光／頭燈／生物發光／鰓乾燥／船員種族／沉船基因包。

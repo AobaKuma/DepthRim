@@ -37,6 +37,26 @@ namespace DepthRim
     /// </summary>
     public class CompSuitLamp : ThingComp
     {
+        /// <summary>
+        /// 頭燈模式（基因設計稿 §5）：自動 = 畏光的人用暗紅光、強烈畏光的人關燈，其他人白光。
+        /// </summary>
+        public enum LampMode
+        {
+            Auto,
+            White,
+            Dim,
+            Off,
+        }
+
+        /// <summary>暗紅光的半徑倍率。</summary>
+        public const float DimRadiusFactor = 0.55f;
+
+        public static readonly Color DimColor = new Color(150f / 255f, 45f / 255f, 35f / 255f);
+
+        private LampMode mode = LampMode.Auto;
+
+        private LampMode litMode = LampMode.White;
+
         private bool lit;
 
         /// <summary>注意：原版第一個 handle 是 0，所以不能用 0 當「沒有光源」，要用 <see cref="lit"/>。</summary>
@@ -57,6 +77,23 @@ namespace DepthRim
 
         private Pawn Wearer => (parent as Apparel)?.Wearer;
 
+        public LampMode Mode
+        {
+            get => mode;
+            set => mode = value;
+        }
+
+        /// <summary>實際的模式：自動依穿著者的畏光等級決定。</summary>
+        public LampMode Resolved(Pawn wearer)
+        {
+            if (mode != LampMode.Auto)
+            {
+                return mode;
+            }
+            int photophobia = wearer != null ? DepthRimGenes.Of(wearer).photophobia : 0;
+            return photophobia >= 2 ? LampMode.Off : (photophobia == 1 ? LampMode.Dim : LampMode.White);
+        }
+
         /// <summary>由 <see cref="SuitLampUpdater"/> 呼叫；只在必要時才動光源。</summary>
         public void UpdateLamp()
         {
@@ -70,21 +107,25 @@ namespace DepthRim
             {
                 downedTicks = 0;
             }
-            if (!WantLamp(wearer, map))
+            LampMode resolved = Resolved(wearer);
+            if (resolved == LampMode.Off || !WantLamp(wearer, map))
             {
                 TurnOff();
                 return;
             }
             // 已經亮著、而且人還在同一格：什麼都不用做
-            if (lit && lampMap == map && lampCell == parent.PositionHeld)
+            if (lit && lampMap == map && lampCell == parent.PositionHeld && litMode == resolved)
             {
                 return;
             }
             TurnOff();
             lampMap = map;
             lampCell = parent.PositionHeld;
+            float radius = DepthRimModSettings.LampRadiusOf(Props.glowRadius);
+            bool dim = resolved == LampMode.Dim;
             lampHandle = lampMap.glowGrid.RegisterCustomGlower(lampCell,
-                DepthRimModSettings.LampRadiusOf(Props.glowRadius), new ColorInt(Props.glowColor), Props.overlightRadius);
+                dim ? radius * DimRadiusFactor : radius, new ColorInt(dim ? DimColor : Props.glowColor), dim ? 0f : Props.overlightRadius);
+            litMode = resolved;
             lit = true;
         }
 
@@ -138,6 +179,7 @@ namespace DepthRim
         {
             base.PostExposeData();
             Scribe_Values.Look(ref downedTicks, "suitLampDownedTicks", 0);
+            Scribe_Values.Look(ref mode, "suitLampMode", LampMode.Auto);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 // 光源是執行期狀態，不存檔：讀檔後一律重新註冊
@@ -145,6 +187,37 @@ namespace DepthRim
                 lampHandle = 0;
                 lampMap = null;
             }
+        }
+
+        public override IEnumerable<Gizmo> CompGetWornGizmosExtra()
+        {
+            foreach (Gizmo g in base.CompGetWornGizmosExtra())
+            {
+                yield return g;
+            }
+            Pawn wearer = Wearer;
+            if (wearer == null || !wearer.IsColonistPlayerControlled)
+            {
+                yield break;
+            }
+            LampMode resolved = Resolved(wearer);
+            string current = ("DepthRim.SuitLamp.Mode." + mode).Translate();
+            if (mode == LampMode.Auto)
+            {
+                current += " (" + ("DepthRim.SuitLamp.Mode." + resolved).Translate() + ")";
+            }
+            yield return new Command_Action
+            {
+                defaultLabel = "DepthRim.SuitLamp.Label".Translate(current),
+                defaultDesc = "DepthRim.SuitLamp.Desc".Translate(),
+                icon = parent.def.uiIcon,
+                defaultIconColor = resolved == LampMode.Off ? UnityEngine.Color.gray : (resolved == LampMode.Dim ? DimColor : UnityEngine.Color.white),
+                action = () =>
+                {
+                    mode = (LampMode)(((int)mode + 1) % 4);
+                    UpdateLamp();
+                },
+            };
         }
 
         public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)

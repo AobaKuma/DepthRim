@@ -277,4 +277,25 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.Gangway.PawnFell>{0} fell into the sea and climbed back onto a deck.</DepthRim.Gangway.PawnFell>
   <DepthRim.Gangway.PawnLost>{0} fell into the sea with no deck in reach and was lost.</DepthRim.Gangway.PawnLost>
 
+  <!-- 海洋基因（Docs/基因_Biotech設計.md） -->
+  <DepthRim.Adaptation.Never>This body cannot adapt far enough to be comfortable here.</DepthRim.Adaptation.Never>
+  <DepthRim.Adaptation.NeverShort>never</DepthRim.Adaptation.NeverShort>
+  <DepthRim.Adaptation.Genes>Genes: comfortable within {0} levels, adapts at {1} speed, adapts down to {2} at most.</DepthRim.Adaptation.Genes>
+  <DepthRim.Adaptation.GenesImmune>Genes: never suffers from pressure changes.</DepthRim.Adaptation.GenesImmune>
+  <DepthRim.Readiness.Gills>Gills: breathes underwater without a suit.</DepthRim.Readiness.Gills>
+  <DepthRim.Seasick.Exposure>Sea motion here: {0}</DepthRim.Seasick.Exposure>
+  <DepthRim.Seasick.Acclimated>Used to the sea: less seasick.</DepthRim.Seasick.Acclimated>
+  <DepthRim.StatsReport.Submerged>Submerged</DepthRim.StatsReport.Submerged>
+  <DepthRim.StatsReport.UnderwaterMap>Under the sea</DepthRim.StatsReport.UnderwaterMap>
+  <DepthRim.StatsReport.NotUnderwaterMap>Away from the sea depths</DepthRim.StatsReport.NotUnderwaterMap>
+  <DepthRim.StatsReport.OnSeaSurface>On the sea surface</DepthRim.StatsReport.OnSeaSurface>
+  <DepthRim.StatsReport.BrightLight>In bright light</DepthRim.StatsReport.BrightLight>
+  <DepthRim.StatsReport.Dark>In the dark</DepthRim.StatsReport.Dark>
+  <DepthRim.SuitLamp.Label>Lamp: {0}</DepthRim.SuitLamp.Label>
+  <DepthRim.SuitLamp.Desc>Switch the diving suit lamp between automatic, white light, dim red light and off.\n\nAutomatic uses white light, dim red light for photophobic wearers, and switches the lamp off for light-blind wearers.</DepthRim.SuitLamp.Desc>
+  <DepthRim.SuitLamp.Mode.Auto>auto</DepthRim.SuitLamp.Mode.Auto>
+  <DepthRim.SuitLamp.Mode.White>white</DepthRim.SuitLamp.Mode.White>
+  <DepthRim.SuitLamp.Mode.Dim>dim red</DepthRim.SuitLamp.Mode.Dim>
+  <DepthRim.SuitLamp.Mode.Off>off</DepthRim.SuitLamp.Mode.Off>
+
 </LanguageData>

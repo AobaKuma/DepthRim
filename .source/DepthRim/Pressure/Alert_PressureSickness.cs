@@ -52,9 +52,10 @@ namespace DepthRim
             for (int i = 0; i < pawns.Count; i++)
             {
                 Hediff_PressureAdaptation hediff = PressureAdaptationUtility.Get(pawns[i]);
-                int left = PressureAdaptationMath.TicksUntilComfortable(hediff.Adapted, hediff.Ambient, hediff.BloodFiltration);
+                int left = hediff.TicksUntilComfortable;
+                string time = left == PressureAdaptationMath.Never ? "DepthRim.Adaptation.NeverShort".Translate().ToString() : left.ToStringTicksToPeriod();
                 list.AppendLine("  - " + "DepthRim.Alert.PressureSickness.Line".Translate(
-                    pawns[i].LabelShortCap, hediff.Adapted.ToString("0.0"), hediff.Ambient.ToString("0.#"), left.ToStringTicksToPeriod()));
+                    pawns[i].LabelShortCap, hediff.Adapted.ToString("0.0"), hediff.Ambient.ToString("0.#"), time));
             }
             return "DepthRim.Alert.PressureSickness.Desc".Translate(list.ToString().TrimEndNewlines());
         }

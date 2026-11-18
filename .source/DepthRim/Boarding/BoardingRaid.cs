@@ -187,6 +187,7 @@ namespace DepthRim
                 craft.SetFaction(parms.faction);
                 foreach (Pawn pawn in list.Skip(start).Take(PawnsPerCraft))
                 {
+                    MarineXenotypes.TryAssignCrew(pawn);
                     BoardingUtility.GiveDivingGear(pawn);
                     craft.Load(pawn);
                 }

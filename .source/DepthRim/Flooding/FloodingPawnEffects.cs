@@ -28,6 +28,9 @@ namespace DepthRim
         /// <summary>每次更新（250 ticks）加上的溺水嚴重度：扣掉衰減後淨增約 0.1，約 1 小時（2500 ticks）致死。</summary>
         private const float DrowningPerUpdate = 0.15f;
 
+        /// <summary>同一段時間 HediffDef 的 SeverityPerDay（−12）消退的量：倍率只乘在淨增量上。</summary>
+        private const float DrowningRecoveryPerUpdate = 12f * MapComponent_Flooding.UpdateInterval / 60000f;
+
         /// <summary>每差一級水壓抗性，每次更新加上的水壓傷害（淨增約 0.02）。</summary>
         private const float BarotraumaPerUpdatePerTier = 0.025f;
 
@@ -80,7 +83,7 @@ namespace DepthRim
         /// <summary>能不能在水中呼吸：非血肉（機械體）不用呼吸；穿著潛水服且氣量 ≥ 20%。</summary>
         public static bool CanBreatheUnderwater(Pawn pawn)
         {
-            if (!pawn.RaceProps.IsFlesh)
+            if (!pawn.RaceProps.IsFlesh || DepthRimGenes.Of(pawn).BreathesWater)
             {
                 return true;
             }
@@ -124,12 +127,18 @@ namespace DepthRim
             {
                 return;
             }
-            if (air != null && air.TryConsume(MapComponent_Flooding.UpdateInterval))
+            // 基因（基因設計稿 §2）：鰓不溺水也不耗氣；屏息少溺水、少耗氣
+            MarineGeneProfile genes = DepthRimGenes.Of(pawn);
+            if (genes.BreathesWater)
+            {
+                return;
+            }
+            if (air != null && air.TryConsume(MapComponent_Flooding.UpdateInterval, genes.airUseFactor))
             {
                 FloodingAudio.PlayDiverBreath(pawn, air);
                 return;
             }
-            HealthUtility.AdjustSeverity(pawn, DepthRimDefOf.DepthRim_Drowning, DrowningPerUpdate);
+            HealthUtility.AdjustSeverity(pawn, DepthRimDefOf.DepthRim_Drowning, FloodingMath.DrowningAdded(DrowningPerUpdate, DrowningRecoveryPerUpdate, genes.drowningFactor));
         }
 
         private static void ApplyPressure(Pawn pawn, bool submerged, DepthTier tier)
@@ -141,7 +150,11 @@ namespace DepthRim
             float shortfall = FloodingMath.PressureShortfall(tier, pawn.GetStatValue(DepthRimDefOf.DepthRim_PressureResistance), PressureAdaptationUtility.AdaptedLevel(pawn));
             if (shortfall > 0f)
             {
-                HealthUtility.AdjustSeverity(pawn, DepthRimDefOf.DepthRim_Barotrauma, BarotraumaPerUpdatePerTier * shortfall);
+                float factor = DepthRimGenes.PressureOf(pawn).damageFactor;
+                if (factor > 0f)
+                {
+                    HealthUtility.AdjustSeverity(pawn, DepthRimDefOf.DepthRim_Barotrauma, BarotraumaPerUpdatePerTier * shortfall * factor);
+                }
             }
         }
     }

@@ -268,3 +268,8 @@ C:\Users\user\AppData\Local\Temp\claude\6a3d079d3bf4009a\8619c1a8-2db2-404f-b93f
 C:\Users\user\AppData\Local\Temp\claude\6a3d079d3bf4009a\8619c1a8-2db2-404f-b93f-84a46b4c8974\scratchpad\ut\DepthRim.Tests.runtimeconfig.json
 C:\Users\user\AppData\Local\Temp\claude\6a3d079d3bf4009a\8619c1a8-2db2-404f-b93f-84a46b4c8974\scratchpad\ut\DepthRim.Tests.dll
 C:\Users\user\AppData\Local\Temp\claude\6a3d079d3bf4009a\8619c1a8-2db2-404f-b93f-84a46b4c8974\scratchpad\ut\DepthRim.Tests.pdb
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.exe
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.deps.json
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.runtimeconfig.json
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.dll
+C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.pdb

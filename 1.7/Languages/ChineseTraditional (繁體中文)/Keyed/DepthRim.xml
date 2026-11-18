@@ -277,4 +277,25 @@
   <DepthRim.Gangway.PawnFell>{0}掉進海裡，爬回了甲板。</DepthRim.Gangway.PawnFell>
   <DepthRim.Gangway.PawnLost>{0}掉進海裡，附近沒有甲板可以爬上去，失蹤了。</DepthRim.Gangway.PawnLost>
 
+  <!-- 海洋基因（Docs/基因_Biotech設計.md） -->
+  <DepthRim.Adaptation.Never>這個身體再怎麼適應，在這裡也不會舒適。</DepthRim.Adaptation.Never>
+  <DepthRim.Adaptation.NeverShort>永遠</DepthRim.Adaptation.NeverShort>
+  <DepthRim.Adaptation.Genes>基因：容許 {0} 級的壓力差，適應速度 {1}，最多適應到{2}。</DepthRim.Adaptation.Genes>
+  <DepthRim.Adaptation.GenesImmune>基因：任何壓力變化都不會不適。</DepthRim.Adaptation.GenesImmune>
+  <DepthRim.Readiness.Gills>有鰓：不用潛水服也能在水中呼吸。</DepthRim.Readiness.Gills>
+  <DepthRim.Seasick.Exposure>這裡的晃動程度：{0}</DepthRim.Seasick.Exposure>
+  <DepthRim.Seasick.Acclimated>已經習慣海上：比較不會暈船。</DepthRim.Seasick.Acclimated>
+  <DepthRim.StatsReport.Submerged>沒入水中</DepthRim.StatsReport.Submerged>
+  <DepthRim.StatsReport.UnderwaterMap>在海裡</DepthRim.StatsReport.UnderwaterMap>
+  <DepthRim.StatsReport.NotUnderwaterMap>離開深海</DepthRim.StatsReport.NotUnderwaterMap>
+  <DepthRim.StatsReport.OnSeaSurface>在海面上</DepthRim.StatsReport.OnSeaSurface>
+  <DepthRim.StatsReport.BrightLight>在強光下</DepthRim.StatsReport.BrightLight>
+  <DepthRim.StatsReport.Dark>在黑暗中</DepthRim.StatsReport.Dark>
+  <DepthRim.SuitLamp.Label>頭燈：{0}</DepthRim.SuitLamp.Label>
+  <DepthRim.SuitLamp.Desc>切換潛水服頭燈：自動、白光、暗紅光、關閉。\n\n自動：一般人用白光，畏光的人用暗紅光，強烈畏光的人關燈。</DepthRim.SuitLamp.Desc>
+  <DepthRim.SuitLamp.Mode.Auto>自動</DepthRim.SuitLamp.Mode.Auto>
+  <DepthRim.SuitLamp.Mode.White>白光</DepthRim.SuitLamp.Mode.White>
+  <DepthRim.SuitLamp.Mode.Dim>暗紅光</DepthRim.SuitLamp.Mode.Dim>
+  <DepthRim.SuitLamp.Mode.Off>關閉</DepthRim.SuitLamp.Mode.Off>
+
 </LanguageData>
