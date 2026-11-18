@@ -117,6 +117,11 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.Boarding.Launch>Launch</DepthRim.Boarding.Launch>
   <DepthRim.Boarding.LaunchDesc>Choose an ocean tile within {0} tiles by sea. The craft cuts into the target's sealed compartments without breaking the seal, or settles on the seabed if there are none.</DepthRim.Boarding.LaunchDesc>
   <DepthRim.Boarding.NoCrew>Nobody is aboard.</DepthRim.Boarding.NoCrew>
+  <DepthRim.Boarding.BrokenDown>The craft is broken down. Repair it with a component first.</DepthRim.Boarding.BrokenDown>
+  <DepthRim.Boarding.NoFuel>Not enough fuel. Even the shortest round trip needs {0} chemfuel.</DepthRim.Boarding.NoFuel>
+  <DepthRim.Boarding.NotEnoughFuel>Not enough fuel for the round trip: needs {0}, has {1}.</DepthRim.Boarding.NotEnoughFuel>
+  <DepthRim.Boarding.FuelNeeded>Fuel for the round trip: {0} (aboard: {1})</DepthRim.Boarding.FuelNeeded>
+  <DepthRim.Boarding.InspectFuelRange>Round-trip range on current fuel: {0} tiles</DepthRim.Boarding.InspectFuelRange>
   <DepthRim.Boarding.Unload>Unload</DepthRim.Boarding.Unload>
   <DepthRim.Boarding.UnloadDesc>Let everyone and everything out of the craft.</DepthRim.Boarding.UnloadDesc>
   <DepthRim.Boarding.SameTile>The craft is already here.</DepthRim.Boarding.SameTile>
@@ -250,5 +255,26 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.Sampler.NoProject>No seabed research project to work on.</DepthRim.Sampler.NoProject>
   <DepthRim.Sampler.Rate>Seabed research: {0} per day</DepthRim.Sampler.Rate>
   <DepthRim.Sampler.Exhausted>{0} has been fully sampled. Find another cold seep, underwater volcano or hydrothermal vent to keep the seafloor sampler working.</DepthRim.Sampler.Exhausted>
+
+  <!-- 舷梯 -->
+  <DepthRim.Gangway.Extend>Extend gangway</DepthRim.Gangway.Extend>
+  <DepthRim.Gangway.ExtendDesc>Reach across the open sea in front (up to {0} cells) to the next deck.</DepthRim.Gangway.ExtendDesc>
+  <DepthRim.Gangway.Retract>Retract gangway</DepthRim.Gangway.Retract>
+  <DepthRim.Gangway.RetractDesc>Fold the gangway back. It waits for anyone still standing on it; items on it are moved back to the deck.</DepthRim.Gangway.RetractDesc>
+  <DepthRim.Gangway.AlreadyExtended>The gangway is already out.</DepthRim.Gangway.AlreadyExtended>
+  <DepthRim.Gangway.NoLanding>No deck within {0} cells of open sea in front to reach.</DepthRim.Gangway.NoLanding>
+  <DepthRim.Gangway.Interrupted>{0} could not reach the far side and is folding back.</DepthRim.Gangway.Interrupted>
+  <DepthRim.Gangway.Connected>{0} is across.</DepthRim.Gangway.Connected>
+  <DepthRim.Gangway.Collapsed>The far side of {0} is gone: the gangway dropped into the sea.</DepthRim.Gangway.Collapsed>
+  <DepthRim.Gangway.State.Retracted>Retracted</DepthRim.Gangway.State.Retracted>
+  <DepthRim.Gangway.State.Extending>Extending ({0}/{1})</DepthRim.Gangway.State.Extending>
+  <DepthRim.Gangway.State.Extended>Extended ({1} cells)</DepthRim.Gangway.State.Extended>
+  <DepthRim.Gangway.State.Retracting>Retracting ({0}/{1})</DepthRim.Gangway.State.Retracting>
+  <DepthRim.Gangway.WaitingFor>Waiting for {0} to step off.</DepthRim.Gangway.WaitingFor>
+  <DepthRim.Gangway.SeaLevelOnly>Can only be built at the water level of the sea.</DepthRim.Gangway.SeaLevelOnly>
+  <DepthRim.Gangway.MustBeOnDeck>Must be placed on a deck.</DepthRim.Gangway.MustBeOnDeck>
+  <DepthRim.Gangway.MustFaceSea>Must face open sea.</DepthRim.Gangway.MustFaceSea>
+  <DepthRim.Gangway.PawnFell>{0} fell into the sea and climbed back onto a deck.</DepthRim.Gangway.PawnFell>
+  <DepthRim.Gangway.PawnLost>{0} fell into the sea with no deck in reach and was lost.</DepthRim.Gangway.PawnLost>
 
 </LanguageData>

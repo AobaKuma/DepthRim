@@ -61,6 +61,18 @@ namespace DepthRim
 
         public static SoundDef DepthRim_DiverLowAir;
 
+        // ── 水中內爆 ──
+        /// <summary>火焰類爆炸在水中改成的燙傷（<see cref="UnderwaterImplosion.ConvertsToScald"/>）。</summary>
+        public static DamageDef DepthRim_Scald;
+
+        public static FleckDef DepthRim_ImplosionFlash;
+
+        public static FleckDef DepthRim_ImplosionInward;
+
+        public static FleckDef DepthRim_ImplosionBubble;
+
+        public static FleckDef DepthRim_ImplosionMurk;
+
         /// <summary>加壓艙的門打開、兩側壓差夠大時的洩壓嘶聲。</summary>
         public static SoundDef DepthRim_PressureHiss;
 
@@ -111,6 +123,11 @@ namespace DepthRim
 
         // ── 安全繩錨點 ──
         public static ThingDef DR_RopeAnchor;
+
+        /// <summary>可收放的舷梯（<see cref="Building_Gangway"/>）與它伸出時鋪的臨時甲板（地基）。</summary>
+        public static ThingDef DepthRim_Gangway;
+
+        public static TerrainDef DepthRim_GangwayDeck;
 
         /// <summary>航行中掛在安全繩上被水流拖著：移動、操作變差。</summary>
         public static HediffDef DepthRim_TetheredInCurrent;

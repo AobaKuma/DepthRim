@@ -234,6 +234,14 @@ namespace DepthRim
             {
                 Messages.Message("DepthRim.Boarding.CraftLeft".Translate(AboardCount), new TargetInfo(pos, map), MessageTypeDefOf.NeutralEvent);
             }
+            else if (IsPlayerCraft)
+            {
+                PlanetTile from = LaunchTile(map);
+                if (from.Valid)
+                {
+                    BurnFuelFor(OceanRouting.Distance(from, destination));
+                }
+            }
             landedTick = -1;
             ejected = false;
             returnRequestedTick = -1;
@@ -291,7 +299,6 @@ namespace DepthRim
             {
                 yield break;
             }
-            int crew = aboard.Count(t => t is Pawn);
             Command_Action launch = new Command_Action
             {
                 defaultLabel = "DepthRim.Boarding.Launch".Translate(),
@@ -299,13 +306,10 @@ namespace DepthRim
                 icon = ContentFinder<Texture2D>.Get("UI/Commands/LaunchShip"),
                 action = StartChoosingDestination,
             };
-            if (crew == 0)
+            string blocked = LaunchBlockReason();
+            if (blocked != null)
             {
-                launch.Disable("DepthRim.Boarding.NoCrew".Translate());
-            }
-            else if (!LaunchTile(Map).Valid)
-            {
-                launch.Disable("DepthRim.Torpedo.SeaOnly".Translate());
+                launch.Disable(blocked);
             }
             yield return launch;
             if (aboard.Any)
@@ -317,6 +321,58 @@ namespace DepthRim
                     icon = ContentFinder<Texture2D>.Get("UI/Designators/Cancel"),
                     action = Eject,
                 };
+            }
+        }
+
+        // ── 燃料與故障（玩家艇；敵方艇的 def 沒有這兩個 comp）──────────────────
+
+        public CompRefuelable Fuel => GetComp<CompRefuelable>();
+
+        public bool BrokenDown => GetComp<CompBreakdownable>()?.BrokenDown ?? false;
+
+        /// <summary>現有燃料夠來回幾格海路（沒有燃料 comp 時不限）。</summary>
+        public int FuelRangeTiles => Fuel == null ? int.MaxValue : BoardingCraftFuel.RoundTripTiles(Fuel.Fuel);
+
+        /// <summary>「出發」按鈕不能用的原因；可以出發時回傳 null。</summary>
+        public string LaunchBlockReason()
+        {
+            if (!aboard.Any(t => t is Pawn))
+            {
+                return "DepthRim.Boarding.NoCrew".Translate();
+            }
+            if (BrokenDown)
+            {
+                return "DepthRim.Boarding.BrokenDown".Translate();
+            }
+            if (!LaunchTile(Map).Valid)
+            {
+                return "DepthRim.Torpedo.SeaOnly".Translate();
+            }
+            if (FuelRangeTiles < 1)
+            {
+                return "DepthRim.Boarding.NoFuel".Translate(BoardingCraftFuel.RoundTrip(1).ToString("0"));
+            }
+            return null;
+        }
+
+        /// <summary>燃料不夠來回 <paramref name="distance"/> 格時的原因；夠的話回傳 null。</summary>
+        public string FuelBlockReason(int distance)
+        {
+            CompRefuelable fuel = Fuel;
+            if (fuel == null || BoardingCraftFuel.CanReach(fuel.Fuel, distance))
+            {
+                return null;
+            }
+            return "DepthRim.Boarding.NotEnoughFuel".Translate(BoardingCraftFuel.RoundTrip(distance).ToString("0"), fuel.Fuel.ToString("0"));
+        }
+
+        /// <summary>出發或回程時燒掉單程的燃料（不夠就燒到零，不會因此擱淺）。</summary>
+        public void BurnFuelFor(int distance)
+        {
+            CompRefuelable fuel = Fuel;
+            if (fuel != null && distance > 0)
+            {
+                fuel.ConsumeFuel(Mathf.Min(fuel.Fuel, BoardingCraftFuel.OneWay(distance)));
             }
         }
 
@@ -357,7 +413,7 @@ namespace DepthRim
             {
                 return key;
             }
-            WorldObject other = Find.WorldObjects.AllWorldObjects.FirstOrDefault(o => o.Tile == to && !(o is MapParent));
+            WorldObject other = Find.WorldObjects.AllWorldObjects.FirstOrDefault(o => o.Tile == to && !(o is MapParent) && !(o is WorldObject_OceanLandmark));
             return other != null ? "DepthRim.Boarding.Occupied" : null;
         }
 
@@ -382,15 +438,44 @@ namespace DepthRim
                     Messages.Message(reason.Translate(RangeTiles), MessageTypeDefOf.RejectInput, historical: false);
                     return false;
                 }
+                string fuelReason = FuelBlockReason(OceanRouting.Distance(from, target.Tile));
+                if (fuelReason != null)
+                {
+                    Messages.Message(fuelReason, MessageTypeDefOf.RejectInput, historical: false);
+                    return false;
+                }
                 PlanetTile to = target.Tile;
-                BoardingReadiness.Confirm(this, to, () => Launch(to));
+                if (OceanLandmarkUtility.EncounterAt(to) != null)
+                {
+                    // 遭遇型地標不下艇，不用檢查潛水裝備
+                    Launch(to);
+                }
+                else
+                {
+                    BoardingReadiness.Confirm(this, to, () => Launch(to));
+                }
                 return true;
             }, canTargetTiles: true, closeWorldTabWhenFinished: true,
             extraLabelGetter: target =>
             {
                 string reason = DestinationBlockReason(from, target.Tile);
-                return reason != null ? reason.Translate(RangeTiles).ToString()
-                    : "DepthRim.Boarding.SeaDistance".Translate(OceanRouting.Distance(from, target.Tile)).ToString();
+                if (reason != null)
+                {
+                    return reason.Translate(RangeTiles).ToString();
+                }
+                int tiles = OceanRouting.Distance(from, target.Tile);
+                string fuelReason = FuelBlockReason(tiles);
+                if (fuelReason != null)
+                {
+                    return fuelReason;
+                }
+                string distance = "DepthRim.Boarding.SeaDistance".Translate(tiles).ToString();
+                if (Fuel != null)
+                {
+                    distance += "\n" + "DepthRim.Boarding.FuelNeeded".Translate(BoardingCraftFuel.RoundTrip(tiles).ToString("0"), Fuel.Fuel.ToString("0"));
+                }
+                WorldObject landmark = Find.WorldObjects.AllWorldObjects.FirstOrDefault(o => o.Tile == target.Tile && o is IOceanLandmark);
+                return landmark != null ? landmark.Label + "\n" + distance : distance;
             });
         }
 
@@ -413,6 +498,10 @@ namespace DepthRim
             string line = ReturnRequested
                 ? "DepthRim.Boarding.InspectWaiting".Translate(AboardCount, RaidersStillOut().Count)
                 : "DepthRim.Boarding.InspectAboard".Translate(crew);
+            if (IsPlayerCraft && Fuel != null)
+            {
+                line += "\n" + "DepthRim.Boarding.InspectFuelRange".Translate(Mathf.Min(FuelRangeTiles, RangeTiles));
+            }
             return text.NullOrEmpty() ? line : text + "\n" + line;
         }
 
@@ -446,7 +535,7 @@ namespace DepthRim
                 innerContainer.Remove(craft);
                 WorldObject_TravelingBoardingCraft traveling =
                     (WorldObject_TravelingBoardingCraft)WorldObjectMaker.MakeWorldObject(BoardingDefOf.DepthRim_TravelingBoardingCraft);
-                traveling.Setup(craft, origin, craft.destinationTile);
+                traveling.Setup(craft, origin, craft.destinationTile, Map.Parent);
                 Find.WorldObjects.Add(traveling);
             }
             else
@@ -457,129 +546,4 @@ namespace DepthRim
         }
     }
 
-    /// <summary>
-    /// 玩家突擊艇在世界地圖上的航跡：沿海路前進，抵達後在目的地的地圖降落（沒有地圖就開一個海洋地點）。
-    /// 降落點與敵方的突擊艇一樣：優先切入對方的密閉艙室，否則降在海床上。
-    /// </summary>
-    public class WorldObject_TravelingBoardingCraft : WorldObject, IThingHolder
-    {
-        public const int TicksPerTile = 250;
-
-        private ThingOwner<Building_BoardingCraft> craftHolder;
-
-        public PlanetTile from = PlanetTile.Invalid;
-
-        public PlanetTile to = PlanetTile.Invalid;
-
-        public int departTick;
-
-        public int arriveTick;
-
-        /// <summary>出發時目的地上的據點（例如會移動的海盜潛艇）：抵達時它走了就追過去。</summary>
-        public MapParent targetParent;
-
-        public WorldObject_TravelingBoardingCraft()
-        {
-            craftHolder = new ThingOwner<Building_BoardingCraft>(this);
-        }
-
-        public Building_BoardingCraft Craft => craftHolder.InnerListForReading.FirstOrDefault();
-
-        public ThingOwner GetDirectlyHeldThings() => craftHolder;
-
-        public void GetChildHolders(List<IThingHolder> outChildren)
-        {
-            ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
-        }
-
-        public void Setup(Building_BoardingCraft craft, PlanetTile origin, PlanetTile destination)
-        {
-            craftHolder.TryAdd(craft);
-            from = origin;
-            to = destination;
-            Tile = origin;
-            SetFaction(craft.Faction);
-            targetParent = Find.WorldObjects.MapParentAt(destination);
-            SetCourse(origin, destination);
-        }
-
-        private void SetCourse(PlanetTile origin, PlanetTile destination)
-        {
-            from = origin;
-            to = destination;
-            departTick = Find.TickManager.TicksGame;
-            int distance = Mathf.Max(1, OceanRouting.Distance(origin, destination));
-            arriveTick = departTick + distance * TicksPerTile;
-        }
-
-        public float Progress => arriveTick <= departTick ? 1f
-            : Mathf.Clamp01((float)(Find.TickManager.TicksGame - departTick) / (arriveTick - departTick));
-
-        public override Vector3 DrawPos => Vector3.Slerp(Find.WorldGrid.GetTileCenter(from), Find.WorldGrid.GetTileCenter(to), Progress);
-
-        protected override void TickInterval(int delta)
-        {
-            base.TickInterval(delta);
-            if (Find.TickManager.TicksGame < arriveTick)
-            {
-                return;
-            }
-            if (targetParent != null && !targetParent.Destroyed && targetParent.Tile != to && OceanRouting.Navigable(targetParent.Tile))
-            {
-                Tile = to;
-                SetCourse(to, targetParent.Tile);
-                return;
-            }
-            Arrive();
-        }
-
-        public void Arrive()
-        {
-            Building_BoardingCraft craft = Craft;
-            if (craft == null)
-            {
-                Destroy();
-                return;
-            }
-            craftHolder.Remove(craft);
-            craft.destinationTile = PlanetTile.Invalid;
-            MapParent parent = Find.WorldObjects.MapParentAt(to);
-            Map map = parent?.Map;
-            if (map == null)
-            {
-                if (parent == null)
-                {
-                    parent = (MapParent)WorldObjectMaker.MakeWorldObject(DepthRimDefOf.DepthRim_OceanSite);
-                    parent.Tile = to;
-                    parent.SetFaction(Faction.OfPlayer);
-                    Find.WorldObjects.Add(parent);
-                }
-                IntVec3 size = parent is WorldObject_PirateSubmarine pirate ? pirate.Ext.mapSize : Find.World.info.initialMapSize;
-                map = GetOrGenerateMapUtility.GetOrGenerateMap(to, size, parent.def);
-            }
-            Faction target = parent.Faction != null && parent.Faction != craft.Faction ? parent.Faction : null;
-            if (!BoardingUtility.TryFindLandingCell(map, target ?? craft.Faction, out IntVec3 cell, out _))
-            {
-                cell = CellFinder.RandomCell(map);
-            }
-            SkyfallerMaker.SpawnSkyfaller(BoardingDefOf.DepthRim_BoardingCraftIncoming, craft, cell, map);
-            Messages.Message("DepthRim.Boarding.Arrived".Translate(parent.LabelCap), new LookTargets(cell, map), MessageTypeDefOf.PositiveEvent);
-            Destroy();
-        }
-
-        public override void ExposeData()
-        {
-            base.ExposeData();
-            Scribe_Deep.Look(ref craftHolder, "craft", this);
-            Scribe_Values.Look(ref from, "from", PlanetTile.Invalid);
-            Scribe_Values.Look(ref to, "to", PlanetTile.Invalid);
-            Scribe_Values.Look(ref departTick, "departTick", 0);
-            Scribe_Values.Look(ref arriveTick, "arriveTick", 0);
-            Scribe_References.Look(ref targetParent, "targetParent");
-            if (Scribe.mode == LoadSaveMode.PostLoadInit)
-            {
-                craftHolder ??= new ThingOwner<Building_BoardingCraft>(this);
-            }
-        }
-    }
 }

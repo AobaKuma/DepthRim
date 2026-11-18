@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    燙傷（Docs/水中內爆_實作計畫.md §3.4，2026-11-18 決定）：火焰類爆炸在水中點不著，改成把周圍的水瞬間煮沸。
+    比照原版 Burn：繼承 Flame（燒傷 hediff、Heat 護甲、對建築依可燃性縮放），但 worker 是 AddInjury，所以不會起火。
+    傷害量、穿甲、半徑都照呼叫端原本的數值，只換傷害類型。
+  -->
+  <DamageDef ParentName="Flame">
+    <defName>DepthRim_Scald</defName>
+    <label>scald</label>
+    <workerClass>DamageWorker_AddInjury</workerClass>
+    <deathMessage>{0} has been scalded to death.</deathMessage>
+    <modExtensions>
+      <li Class="DepthRim.UnderwaterImplosionExtension">
+        <scald>true</scald>
+      </li>
+    </modExtensions>
+  </DamageDef>
+
+</Defs>

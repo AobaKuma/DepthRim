@@ -79,6 +79,36 @@ namespace DepthRim
             Find.WindowStack.Add(new Dialog_DebugOptionListLister(options, "Midwater creature"));
         }
 
+        /// <summary>在點選的格子引爆，檢查水中內爆（Docs/水中內爆_實作計畫.md）。乾地、半淹與排除類型會照原版爆炸。</summary>
+        [DebugAction("DepthRim", "Explosion: bomb r3", actionType = DebugActionType.ToolMap, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void ExplodeBomb()
+        {
+            Explode(DamageDefOf.Bomb, 3f);
+        }
+
+        [DebugAction("DepthRim", "Explosion: flame r3", actionType = DebugActionType.ToolMap, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void ExplodeFlame()
+        {
+            Explode(DamageDefOf.Flame, 3f);
+        }
+
+        [DebugAction("DepthRim", "Explosion: EMP r3", actionType = DebugActionType.ToolMap, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+        public static void ExplodeEmp()
+        {
+            Explode(DamageDefOf.EMP, 3f);
+        }
+
+        private static void Explode(DamageDef damage, float radius)
+        {
+            Map map = Find.CurrentMap;
+            IntVec3 cell = UI.MouseCell();
+            if (map == null || !cell.InBounds(map))
+            {
+                return;
+            }
+            GenExplosion.DoExplosion(cell, map, radius, damage, null);
+        }
+
         private static void Apply(MapComponent_Flooding flooding, DepthTier? tier)
         {
             if (flooding == null || flooding.map == null)

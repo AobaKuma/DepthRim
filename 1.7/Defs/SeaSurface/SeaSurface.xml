@@ -31,7 +31,7 @@
   <TerrainDef>
     <defName>DepthRim_OpenSea</defName>
     <label>open sea</label>
-    <description>Open ocean. Nothing can stand on the water; platforms and pillars can be built over it.</description>
+    <description>Open ocean. Nothing can stand on the water; platforms, pillars and bridges can be built over it.</description>
     <dontRender>true</dontRender>
     <color>(0.08, 0.22, 0.32)</color>
     <fertility>0</fertility>
@@ -41,10 +41,14 @@
     <avoidWander>true</avoidWander>
     <!-- 雷擊打在海上不會留下火（2026-11-17：暴風雨中的惡劣海況） -->
     <extinguishesFire>true</extinguishesFire>
+    <!-- Bridgeable：可以蓋原版的橋與重型橋（地基層，TerrainAt 回傳橋，所以那一格不再算開放海面）。
+         龍骨樁的 allowedTerrains 看的是 BaseTerrainAt（開放海面），所以船旁邊的橋不會被當成船體帶走。
+         橋被拆掉或炸毀時，上面的東西照 DepthRim.Patch_FoundationRemovedOverSea 處理。 -->
     <affordances>
       <li>DepthRim_OpenSea</li>
       <li>DepthRim_OpenWater</li>
       <li>DepthRim_HullBase</li>
+      <li>Bridgeable</li>
     </affordances>
     <tags>
       <li>DepthRim_OpenSea</li>

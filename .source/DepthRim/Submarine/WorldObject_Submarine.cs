@@ -311,6 +311,14 @@ namespace DepthRim
             {
                 yield return StopGizmo();
             }
+            if (HasMap && !isImpact)
+            {
+                Command investigate = LandmarkEncounter.SubmarineGizmo(this);
+                if (investigate != null)
+                {
+                    yield return investigate;
+                }
+            }
             if (HasMap && !landingTarget.Valid && !InFlight)
             {
                 foreach (Gizmo g in SubmarineSurfacing.SubmarineGizmos(this))

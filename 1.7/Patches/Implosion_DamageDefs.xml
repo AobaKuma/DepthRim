@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!--
+    水中內爆的排除名單（Docs/水中內爆_實作計畫.md §2.2，2026-11-18 決定）：EMP、煙霧、眩暈、消防泡沫在水中照原版爆炸。
+    其他爆炸（含毒氣、Deadlife 等放氣體的）都改成內爆，附帶的氣體照放。
+    用 PatchOperationConditional：defName 不存在（被其他模組移除）時不報錯。
+  -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/DamageDef[defName="EMP"]</xpath>
+    <match Class="PatchOperationAddModExtension">
+      <xpath>Defs/DamageDef[defName="EMP"]</xpath>
+      <value>
+        <li Class="DepthRim.UnderwaterImplosionExtension"><exempt>true</exempt></li>
+      </value>
+    </match>
+  </Operation>
+
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/DamageDef[defName="Smoke"]</xpath>
+    <match Class="PatchOperationAddModExtension">
+      <xpath>Defs/DamageDef[defName="Smoke"]</xpath>
+      <value>
+        <li Class="DepthRim.UnderwaterImplosionExtension"><exempt>true</exempt></li>
+      </value>
+    </match>
+  </Operation>
+
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/DamageDef[defName="Stun"]</xpath>
+    <match Class="PatchOperationAddModExtension">
+      <xpath>Defs/DamageDef[defName="Stun"]</xpath>
+      <value>
+        <li Class="DepthRim.UnderwaterImplosionExtension"><exempt>true</exempt></li>
+      </value>
+    </match>
+  </Operation>
+
+  <!-- 消防泡沫 -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/DamageDef[defName="Extinguish"]</xpath>
+    <match Class="PatchOperationAddModExtension">
+      <xpath>Defs/DamageDef[defName="Extinguish"]</xpath>
+      <value>
+        <li Class="DepthRim.UnderwaterImplosionExtension"><exempt>true</exempt></li>
+      </value>
+    </match>
+  </Operation>
+
+</Patch>

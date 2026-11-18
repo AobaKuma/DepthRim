@@ -117,6 +117,11 @@
   <DepthRim.Boarding.Launch>出發</DepthRim.Boarding.Launch>
   <DepthRim.Boarding.LaunchDesc>選一格海路 {0} 格內的海洋格。突擊艇會切入對方的密閉艙室而不破壞密閉；沒有艙室就降在海床上。</DepthRim.Boarding.LaunchDesc>
   <DepthRim.Boarding.NoCrew>艇上沒有人。</DepthRim.Boarding.NoCrew>
+  <DepthRim.Boarding.BrokenDown>突擊艇故障了，要先用零件修好。</DepthRim.Boarding.BrokenDown>
+  <DepthRim.Boarding.NoFuel>燃料不足。最短的來回也要 {0} 化學燃料。</DepthRim.Boarding.NoFuel>
+  <DepthRim.Boarding.NotEnoughFuel>燃料不夠來回：需要 {0}，現有 {1}。</DepthRim.Boarding.NotEnoughFuel>
+  <DepthRim.Boarding.FuelNeeded>來回所需燃料：{0}（艇上：{1}）</DepthRim.Boarding.FuelNeeded>
+  <DepthRim.Boarding.InspectFuelRange>現有燃料可來回 {0} 格</DepthRim.Boarding.InspectFuelRange>
   <DepthRim.Boarding.Unload>卸下</DepthRim.Boarding.Unload>
   <DepthRim.Boarding.UnloadDesc>讓艇上所有的人和東西出來。</DepthRim.Boarding.UnloadDesc>
   <DepthRim.Boarding.SameTile>突擊艇已經在這裡了。</DepthRim.Boarding.SameTile>
@@ -250,5 +255,26 @@
   <DepthRim.Sampler.NoProject>海底研究分頁沒有可以推進的專案。</DepthRim.Sampler.NoProject>
   <DepthRim.Sampler.Rate>海底研究：每天 {0} 點</DepthRim.Sampler.Rate>
   <DepthRim.Sampler.Exhausted>{0}已經採樣完畢。找另一處冷泉、海底火山或熱液泉，海底採樣器才能繼續運作。</DepthRim.Sampler.Exhausted>
+
+  <!-- 舷梯 -->
+  <DepthRim.Gangway.Extend>伸出舷梯</DepthRim.Gangway.Extend>
+  <DepthRim.Gangway.ExtendDesc>往前跨過開放海面（最多 {0} 格），接到對面的甲板。</DepthRim.Gangway.ExtendDesc>
+  <DepthRim.Gangway.Retract>收回舷梯</DepthRim.Gangway.Retract>
+  <DepthRim.Gangway.RetractDesc>把舷梯收回來。還有人站在上面時會等他離開；上面的物品會移回甲板。</DepthRim.Gangway.RetractDesc>
+  <DepthRim.Gangway.AlreadyExtended>舷梯已經伸出去了。</DepthRim.Gangway.AlreadyExtended>
+  <DepthRim.Gangway.NoLanding>前方 {0} 格開放海面內沒有可以接上的甲板。</DepthRim.Gangway.NoLanding>
+  <DepthRim.Gangway.Interrupted>{0}接不到對岸，正在收回。</DepthRim.Gangway.Interrupted>
+  <DepthRim.Gangway.Connected>{0}已經接上對岸。</DepthRim.Gangway.Connected>
+  <DepthRim.Gangway.Collapsed>{0}的對岸不見了，舷梯掉進海裡。</DepthRim.Gangway.Collapsed>
+  <DepthRim.Gangway.State.Retracted>已收回</DepthRim.Gangway.State.Retracted>
+  <DepthRim.Gangway.State.Extending>伸出中（{0}/{1}）</DepthRim.Gangway.State.Extending>
+  <DepthRim.Gangway.State.Extended>已伸出（{1} 格）</DepthRim.Gangway.State.Extended>
+  <DepthRim.Gangway.State.Retracting>收回中（{0}/{1}）</DepthRim.Gangway.State.Retracting>
+  <DepthRim.Gangway.WaitingFor>等{0}離開舷梯。</DepthRim.Gangway.WaitingFor>
+  <DepthRim.Gangway.SeaLevelOnly>只能蓋在海面的水面層。</DepthRim.Gangway.SeaLevelOnly>
+  <DepthRim.Gangway.MustBeOnDeck>只能裝在甲板上。</DepthRim.Gangway.MustBeOnDeck>
+  <DepthRim.Gangway.MustFaceSea>正前方必須是開放海面。</DepthRim.Gangway.MustFaceSea>
+  <DepthRim.Gangway.PawnFell>{0}掉進海裡，爬回了甲板。</DepthRim.Gangway.PawnFell>
+  <DepthRim.Gangway.PawnLost>{0}掉進海裡，附近沒有甲板可以爬上去，失蹤了。</DepthRim.Gangway.PawnLost>
 
 </LanguageData>

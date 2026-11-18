@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- 聲納地標（Docs/聲納地標與穿梭艇探索_機制設計.md） -->
+  <DepthRim.Landmark.Discovered>聲納捕捉到一個值得調查的新接觸。</DepthRim.Landmark.Discovered>
+  <DepthRim.Landmark.Unclassified>距離太遠，分辨不出是什麼。要進到聲納範圍的一半以內。</DepthRim.Landmark.Unclassified>
+  <DepthRim.Landmark.KindEncounter>地標：用突擊艇或潛艇抵達後調查（不下艇）。</DepthRim.Landmark.KindEncounter>
+  <DepthRim.Landmark.KindSite>地點：突擊艇可以載乘員下去實地探索。</DepthRim.Landmark.KindSite>
+  <DepthRim.Landmark.Skills>相關技能：{0}</DepthRim.Landmark.Skills>
+  <DepthRim.Landmark.FadesIn>{0}後從聲納上消失</DepthRim.Landmark.FadesIn>
+  <DepthRim.Landmark.Crew>乘員：{0}</DepthRim.Landmark.Crew>
+  <DepthRim.Landmark.OptionLabel>{0}（{1}，{2} {3}：{4}）</DepthRim.Landmark.OptionLabel>
+  <DepthRim.Landmark.NoActor>艇上沒有人會{0}。</DepthRim.Landmark.NoActor>
+  <DepthRim.Landmark.Leave>不去碰它</DepthRim.Landmark.Leave>
+  <DepthRim.Landmark.Result.Critical>大成功：{0}（{1}，成功率 {2}）。</DepthRim.Landmark.Result.Critical>
+  <DepthRim.Landmark.Result.Success>成功：{0}（{1}，成功率 {2}）。</DepthRim.Landmark.Result.Success>
+  <DepthRim.Landmark.Result.Failure>失敗：{0}（{1}，成功率 {2}）。</DepthRim.Landmark.Result.Failure>
+  <DepthRim.Landmark.GotThings>取得：{0}</DepthRim.Landmark.GotThings>
+  <DepthRim.Landmark.GotKnowledge>{1} {0} 點</DepthRim.Landmark.GotKnowledge>
+  <DepthRim.Landmark.Injured>{0}：{2}{1}</DepthRim.Landmark.Injured>
+  <DepthRim.Landmark.Survivor>{0}加入殖民地。</DepthRim.Landmark.Survivor>
+  <DepthRim.Landmark.Attracted>有東西正朝{0}過來。</DepthRim.Landmark.Attracted>
+  <DepthRim.Landmark.Returning>突擊艇正返回{0}。</DepthRim.Landmark.Returning>
+  <DepthRim.Landmark.Investigate>調查地標</DepthRim.Landmark.Investigate>
+  <DepthRim.Landmark.InvestigateDesc>由潛艇上所有人一起調查{0}。取得的物品會放在艦橋旁邊。</DepthRim.Landmark.InvestigateDesc>
+
+</LanguageData>

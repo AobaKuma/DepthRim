@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    聲納地標（Docs/聲納地標與穿梭艇探索_機制設計.md，2026-11-18 第一版）：
+    主動與被動聲納都找得到（只差範圍），WorldComponent_OceanLandmarks 每小時擲骰生成。
+    遭遇型（WorldObject_OceanLandmark）：突擊艇或停在旁邊的潛艇抵達時暫停、跳出對話，看乘員技能決定收益。
+    地點型（WorldObject_LandmarkSite）：突擊艇抵達時生成一張水下地圖。
+  -->
+
+  <WorldObjectDef>
+    <defName>DR_Landmark_Encounter</defName>
+    <label>sonar landmark</label>
+    <description>Something on the sonar worth a closer look.</description>
+    <worldObjectClass>DepthRim.WorldObject_OceanLandmark</worldObjectClass>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/OrbitalItemStash</expandingIconTexture>
+    <expandingIconColor>(230,200,120,255)</expandingIconColor>
+    <expandingIconPriority>45</expandingIconPriority>
+  </WorldObjectDef>
+
+  <WorldObjectDef>
+    <defName>DR_LandmarkSite_Shipwreck</defName>
+    <label>shipwreck</label>
+    <description>A wreck lying on the seafloor.</description>
+    <worldObjectClass>DepthRim.WorldObject_LandmarkSite</worldObjectClass>
+    <mapGenerator>DR_ShipwreckSite</mapGenerator>
+    <canBePlayerHome>false</canBePlayerHome>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <texture>World/WorldObjects/Camp</texture>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/DestroyedSettlement</expandingIconTexture>
+    <expandingIconColor>(230,200,120,255)</expandingIconColor>
+    <expandingIconPriority>45</expandingIconPriority>
+    <neverMultiSelect>true</neverMultiSelect>
+    <IncidentTargetTags>
+      <li>DepthRim_OceanMap</li>
+    </IncidentTargetTags>
+    <inspectorTabs>
+      <li>WITab_Terrain</li>
+      <li>WITab_Planet</li>
+    </inspectorTabs>
+  </WorldObjectDef>
+
+  <MapGeneratorDef ParentName="DepthRim_OceanBase">
+    <defName>DR_ShipwreckSite</defName>
+    <label>shipwreck</label>
+    <genSteps>
+      <li>DR_Shipwreck</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <!-- 排在海底地形（1460 熱液泉）之後、迷霧（1500）之前：迷霧照船殼破口揭開。 -->
+  <GenStepDef>
+    <defName>DR_Shipwreck</defName>
+    <order>1480</order>
+    <genStep Class="DepthRim.GenStep_Shipwreck">
+      <loot>
+        <Steel>30~60</Steel>
+        <ComponentIndustrial>2~5</ComponentIndustrial>
+        <MedicineIndustrial>3~6</MedicineIndustrial>
+        <MealSurvivalPack>4~10</MealSurvivalPack>
+        <Silver>80~200</Silver>
+        <Plasteel>10~25</Plasteel>
+      </loot>
+    </genStep>
+  </GenStepDef>
+
+  <!-- ── 遭遇型 ─────────────────────────────────────────────────────── -->
+
+  <DepthRim.OceanLandmarkDef>
+    <defName>DR_Landmark_SupplyPod</defName>
+    <label>sunken supply pod</label>
+    <description>A supply pod lies half-buried in silt, its hull dented but sealed. The hatch is held shut by a corroded manual lever and an electronic lock that still blinks faintly.</description>
+    <worldObjectDef>DR_Landmark_Encounter</worldObjectDef>
+    <depthTiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+      <li>Seabed</li>
+    </depthTiers>
+    <commonality>1.2</commonality>
+    <options>
+      <li>
+        <label>Pry the hatch open</label>
+        <skill>Construction</skill>
+        <difficulty>6</difficulty>
+        <criticalText>{PAWN_nameDef} braces against the hull and the hatch gives way cleanly. The cargo inside is bone dry.</criticalText>
+        <successText>{PAWN_nameDef} works the lever free. A gush of water floods in, but most of the cargo is still usable.</successText>
+        <failureText>The lever snaps. {PAWN_nameDef} cuts the hatch open in the end, but the sea gets in first and ruins most of the cargo.</failureText>
+        <critical>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <Steel>60~90</Steel>
+              <ComponentIndustrial>5~8</ComponentIndustrial>
+              <MedicineIndustrial>6~10</MedicineIndustrial>
+              <Silver>150~300</Silver>
+            </things>
+          </li>
+        </critical>
+        <success>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <Steel>40~70</Steel>
+              <ComponentIndustrial>3~6</ComponentIndustrial>
+              <MedicineIndustrial>4~8</MedicineIndustrial>
+            </things>
+          </li>
+        </success>
+        <failure>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <Steel>15~25</Steel>
+            </things>
+          </li>
+          <li Class="DepthRim.LandmarkOutcome_Injury">
+            <damage>Cut</damage>
+            <amount>4~9</amount>
+          </li>
+        </failure>
+      </li>
+      <li>
+        <label>Crack the electronic lock</label>
+        <skill>Intellectual</skill>
+        <difficulty>8</difficulty>
+        <criticalText>{PAWN_nameDef} finds a maintenance override. The pod opens and its manifest lists a sealed spacer crate.</criticalText>
+        <successText>{PAWN_nameDef} bypasses the lock. The pod opens without letting the sea in.</successText>
+        <failureText>The lock fries itself as {PAWN_nameDef} works on it. The pod is sealed for good.</failureText>
+        <critical>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <ComponentIndustrial>4~8</ComponentIndustrial>
+              <ComponentSpacer>1~2</ComponentSpacer>
+              <MedicineIndustrial>6~10</MedicineIndustrial>
+              <MealSurvivalPack>8~14</MealSurvivalPack>
+            </things>
+          </li>
+        </critical>
+        <success>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <ComponentIndustrial>4~8</ComponentIndustrial>
+              <MedicineIndustrial>6~10</MedicineIndustrial>
+              <MealSurvivalPack>8~14</MealSurvivalPack>
+            </things>
+          </li>
+        </success>
+      </li>
+    </options>
+  </DepthRim.OceanLandmarkDef>
+
+  <DepthRim.OceanLandmarkDef>
+    <defName>DR_Landmark_DistressBeacon</defName>
+    <label>distress beacon</label>
+    <description>A looping distress call on an emergency band. It comes from a small escape capsule tethered to the seafloor. Something inside is still knocking on the hull, unless the knocking is meant to lure you in.</description>
+    <worldObjectDef>DR_Landmark_Encounter</worldObjectDef>
+    <depthTiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+      <li>Deep</li>
+      <li>Seabed</li>
+    </depthTiers>
+    <commonality>0.8</commonality>
+    <lifetimeDays>4~8</lifetimeDays>
+    <options>
+      <li>
+        <label>Dock and talk them out</label>
+        <skill>Social</skill>
+        <difficulty>8</difficulty>
+        <criticalText>{PAWN_nameDef} talks the survivor through the docking procedure. They come aboard calm, and they bring their emergency stash with them.</criticalText>
+        <successText>{PAWN_nameDef} calms the frightened survivor long enough to dock and bring them aboard.</successText>
+        <failureText>The survivor panics and floods the capsule. As {PAWN_nameDef} pulls away, the sonar picks up a craft that was waiting nearby. The beacon was bait.</failureText>
+        <critical>
+          <li Class="DepthRim.LandmarkOutcome_Survivor" />
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <MedicineIndustrial>3~6</MedicineIndustrial>
+              <ComponentIndustrial>2~4</ComponentIndustrial>
+            </things>
+          </li>
+        </critical>
+        <success>
+          <li Class="DepthRim.LandmarkOutcome_Survivor" />
+        </success>
+        <failure>
+          <li Class="DepthRim.LandmarkOutcome_Incident">
+            <incident>DepthRim_BoardingRaid</incident>
+            <delayHours>3~8</delayHours>
+            <pointsFactor>0.7</pointsFactor>
+          </li>
+        </failure>
+      </li>
+      <li>
+        <label>Scan the capsule before docking</label>
+        <skill>Intellectual</skill>
+        <difficulty>6</difficulty>
+        <criticalText>{PAWN_nameDef}'s scan finds a single survivor and no ambush, and spots a cargo bay that came loose nearby.</criticalText>
+        <successText>{PAWN_nameDef}'s scan finds one survivor and nothing else around. The docking goes smoothly.</successText>
+        <failureText>{PAWN_nameDef} takes too long over the readings. By the time the scan is done, the beacon has gone silent.</failureText>
+        <critical>
+          <li Class="DepthRim.LandmarkOutcome_Survivor" />
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <Steel>30~50</Steel>
+              <MealSurvivalPack>6~10</MealSurvivalPack>
+            </things>
+          </li>
+        </critical>
+        <success>
+          <li Class="DepthRim.LandmarkOutcome_Survivor" />
+        </success>
+      </li>
+    </options>
+  </DepthRim.OceanLandmarkDef>
+
+  <DepthRim.OceanLandmarkDef>
+    <defName>DR_Landmark_AcousticArray</defName>
+    <label>ancient acoustic array</label>
+    <description>A ring of hydrophones the size of a building, older than any colony on this planet. Its core still hums and answers your sonar with a slow, patient rhythm.</description>
+    <worldObjectDef>DR_Landmark_Encounter</worldObjectDef>
+    <depthTiers>
+      <li>Thermocline</li>
+      <li>Deep</li>
+      <li>Seabed</li>
+    </depthTiers>
+    <commonality>0.5</commonality>
+    <lifetimeDays>10~20</lifetimeDays>
+    <options>
+      <li>
+        <label>Download its recordings</label>
+        <skill>Intellectual</skill>
+        <difficulty>12</difficulty>
+        <xp>1200</xp>
+        <criticalText>{PAWN_nameDef} decodes the array's archive: centuries of seafloor surveys, intact.</criticalText>
+        <successText>{PAWN_nameDef} pulls a large part of the archive before the core shuts the connection.</successText>
+        <failureText>{PAWN_nameDef} trips the array's defences. It blasts a deafening ping across the sea, and anyone listening now knows where your colony is.</failureText>
+        <critical>
+          <li Class="DepthRim.LandmarkOutcome_Knowledge">
+            <category>DepthRim_Seabed</category>
+            <amount>900~1300</amount>
+          </li>
+        </critical>
+        <success>
+          <li Class="DepthRim.LandmarkOutcome_Knowledge">
+            <category>DepthRim_Seabed</category>
+            <amount>500~800</amount>
+          </li>
+        </success>
+        <failure>
+          <li Class="DepthRim.LandmarkOutcome_Knowledge">
+            <category>DepthRim_Seabed</category>
+            <amount>100~200</amount>
+          </li>
+          <li Class="DepthRim.LandmarkOutcome_Incident">
+            <incident>DepthRim_BoardingRaid</incident>
+            <delayHours>6~18</delayHours>
+          </li>
+        </failure>
+      </li>
+      <li>
+        <label>Strip it for parts</label>
+        <skill>Construction</skill>
+        <difficulty>8</difficulty>
+        <criticalText>{PAWN_nameDef} unbolts a whole processing module in one piece.</criticalText>
+        <successText>{PAWN_nameDef} salvages advanced parts from the outer ring.</successText>
+        <failureText>A capacitor discharges as {PAWN_nameDef} cuts into the casing.</failureText>
+        <critical>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <ComponentSpacer>3~5</ComponentSpacer>
+              <Plasteel>40~70</Plasteel>
+            </things>
+          </li>
+        </critical>
+        <success>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <ComponentSpacer>1~3</ComponentSpacer>
+              <Plasteel>20~40</Plasteel>
+            </things>
+          </li>
+        </success>
+        <failure>
+          <li Class="DepthRim.LandmarkOutcome_Injury">
+            <damage>Burn</damage>
+            <amount>5~12</amount>
+          </li>
+          <li Class="DepthRim.LandmarkOutcome_Things">
+            <things>
+              <Plasteel>5~15</Plasteel>
+            </things>
+          </li>
+        </failure>
+      </li>
+    </options>
+  </DepthRim.OceanLandmarkDef>
+
+  <!-- ── 地點型 ─────────────────────────────────────────────────────── -->
+
+  <DepthRim.OceanLandmarkDef>
+    <defName>DR_Landmark_Shipwreck</defName>
+    <label>shipwreck</label>
+    <description>The sonar returns a long, hard outline: a steel hull broken into sections on the seafloor. Send a boarding craft and the crew can search the flooded holds in diving gear.</description>
+    <kind>Site</kind>
+    <worldObjectDef>DR_LandmarkSite_Shipwreck</worldObjectDef>
+    <depthTiers>
+      <li>Shallow</li>
+      <li>Thermocline</li>
+      <li>Seabed</li>
+    </depthTiers>
+    <commonality>0.8</commonality>
+    <lifetimeDays>10~20</lifetimeDays>
+    <siteMapSize>(100,1,100)</siteMapSize>
+  </DepthRim.OceanLandmarkDef>
+
+</Defs>

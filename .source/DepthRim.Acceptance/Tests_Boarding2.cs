@@ -112,7 +112,18 @@ namespace DepthRim.Acceptance
             colonist.jobs.TryTakeOrderedJob(board, JobTag.Misc);
             yield return new WaitUntil(() => !colonist.Spawned, 1200);
             ctx.Require(craft.Aboard.Contains(colonist), "the colonist boarded the craft");
-            ctx.Check(craft.GetGizmos().OfType<Command_Action>().Any(g => g.defaultLabel == "DepthRim.Boarding.Launch".Translate() && !g.Disabled), "launch is available with a crew aboard");
+            Command_Action LaunchGizmo() => craft.GetGizmos().OfType<Command_Action>().FirstOrDefault(g => g.defaultLabel == "DepthRim.Boarding.Launch".Translate());
+            CompRefuelable fuel = craft.Fuel;
+            ctx.Require(fuel != null && fuel.Fuel == 0f, "a newly built craft has a fuel tank and starts empty");
+            ctx.Check(LaunchGizmo()?.Disabled == true, "launch is disabled without fuel");
+            fuel.Refuel(fuel.Props.fuelCapacity);
+            ctx.Check(LaunchGizmo()?.Disabled == false, $"launch is available with a crew aboard and fuel ({LaunchGizmo()?.disabledReason})");
+            CompBreakdownable breakdown = craft.GetComp<CompBreakdownable>();
+            ctx.Require(breakdown != null, "the player craft can break down");
+            breakdown.DoBreakdown();
+            ctx.Check(LaunchGizmo()?.Disabled == true, "a broken-down craft cannot launch");
+            breakdown.Notify_Repaired();
+            ctx.Check(LaunchGizmo()?.Disabled == false, "a repaired craft can launch again");
 
             Dictionary<PlanetTile, BiomeDef> biomeBefore = Tests_TorpedoDefense.OceanRings(map.Tile, 3);
             MapParent arrivedAt = null;
@@ -194,7 +205,8 @@ namespace DepthRim.Acceptance
                 yield return new WaitTicks(Building_BoardingCraft.EjectDelayTicks + 40);
                 colonist = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
                 craft.Load(colonist);
-                Command_Action launch = craft.GetGizmos().OfType<Command_Action>().FirstOrDefault(g => g.defaultLabel == "DepthRim.Boarding.Launch".Translate());
+                craft.Fuel.Refuel(craft.Fuel.Props.fuelCapacity);
+                Command_Action launch =craft.GetGizmos().OfType<Command_Action>().FirstOrDefault(g => g.defaultLabel == "DepthRim.Boarding.Launch".Translate());
                 ctx.Check(launch != null && !launch.Disabled, $"launch is available on the sea surface ({launch?.disabledReason})");
 
                 PlanetTile dest = PlanetTile.Invalid;

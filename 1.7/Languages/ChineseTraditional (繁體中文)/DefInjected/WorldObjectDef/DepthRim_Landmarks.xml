@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DR_Landmark_Encounter.label>聲納地標</DR_Landmark_Encounter.label>
+  <DR_Landmark_Encounter.description>聲納上有個值得靠近看看的東西。</DR_Landmark_Encounter.description>
+
+  <DR_LandmarkSite_Shipwreck.label>沉船</DR_LandmarkSite_Shipwreck.label>
+  <DR_LandmarkSite_Shipwreck.description>一艘躺在海床上的沉船。</DR_LandmarkSite_Shipwreck.description>
+
+</LanguageData>

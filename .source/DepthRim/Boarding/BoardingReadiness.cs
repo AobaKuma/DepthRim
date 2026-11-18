@@ -158,6 +158,12 @@ namespace DepthRim
             DepthTier tier = SubmarineLandingWorker.SiteSeafloor(destination);
             List<Pawn> crew = craft.Aboard.ToList();
             string text = Report(crew, tier, out bool anyIssue);
+            PlanetTile from = Building_BoardingCraft.LaunchTile(craft.Map);
+            if (craft.Fuel != null && from.Valid)
+            {
+                text += "\n\n" + "DepthRim.Boarding.FuelNeeded".Translate(
+                    BoardingCraftFuel.RoundTrip(OceanRouting.Distance(from, destination)).ToString("0"), craft.Fuel.Fuel.ToString("0"));
+            }
             Find.WindowStack.Add(new Dialog_MessageBox(
                 text,
                 "DepthRim.Readiness.Go".Translate(),

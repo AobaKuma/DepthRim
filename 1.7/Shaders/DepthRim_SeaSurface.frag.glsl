@@ -87,6 +87,10 @@ float valueNoise(vec2 p)
     return mix(mix(a, b, w.x), mix(c, d, w.x), w.y);
 }
 
+// 每層 fbm 轉一個角度（約 37°）：值雜訊的等高線會沿著格子的橫線、直線走，各層對齊時門檻切出來的邊就是方的；
+// 每層轉開，格子方向就不會疊在一起（2026-11-18：暴風雨的白浪出現方形邊）
+const mat2 OCTAVE_ROT = mat2(0.8, 0.6, -0.6, 0.8);
+
 float fbm(vec2 p)
 {
     float v = 0.0;
@@ -94,10 +98,30 @@ float fbm(vec2 p)
     for (int i = 0; i < 4; i++)
     {
         v += valueNoise(p) * amp;
-        p = p * 2.03 + vec2(17.1, 9.2);
+        p = OCTAVE_ROT * p * 2.03 + vec2(17.1, 9.2);
         amp *= 0.5;
     }
     return v;
+}
+
+vec2 hash22(vec2 p)
+{
+    vec3 p3 = fract(vec3(p.xyx) * vec3(0.1031, 0.1030, 0.0973));
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.xx + p3.yz) * p3.zy);
+}
+
+// 梯度雜訊（Perlin）：0..1，平均 0.5。等高線不會像值雜訊那樣沿格線拉成直線，拿來切門檻（白浪的生滅）邊緣才是不規則的
+float gradientNoise(vec2 p)
+{
+    vec2 i = floor(p);
+    vec2 f = p - i;
+    vec2 w = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+    float a = dot(hash22(i) * 2.0 - 1.0, f);
+    float b = dot(hash22(i + vec2(1.0, 0.0)) * 2.0 - 1.0, f - vec2(1.0, 0.0));
+    float c = dot(hash22(i + vec2(0.0, 1.0)) * 2.0 - 1.0, f - vec2(0.0, 1.0));
+    float d = dot(hash22(i + vec2(1.0, 1.0)) * 2.0 - 1.0, f - vec2(1.0, 1.0));
+    return clamp(0.5 + mix(mix(a, b, w.x), mix(c, d, w.x), w.y), 0.0, 1.0);
 }
 
 // 脊狀雜訊：0..1，1 = 細長的浪峰線
@@ -311,7 +335,9 @@ void main()
     // 再用細的浪花雜訊打碎成一條一條；有平台影子的地方一樣有
     if (u._Rough.x > 0.0)
     {
-        float life = valueNoise(world * 0.11 + vec2(t * 0.17, -t * 0.11)) * 0.6 + valueNoise(world * 0.37 - vec2(t * 0.29, t * 0.21)) * 0.4;
+        // 生滅用梯度雜訊、兩層各轉不同角度：值雜訊在這裡切門檻會切出約 9 格長的筆直邊（方形的白浪區）
+        float life = gradientNoise(OCTAVE_ROT * world * 0.11 + vec2(t * 0.17, -t * 0.11)) * 0.6
+                   + gradientNoise(transpose(OCTAVE_ROT) * world * 0.37 - vec2(t * 0.29, t * 0.21)) * 0.4;
         float caps = smoothstep(0.30, 0.65, crest + 0.25 * fbm(foamUv * 0.6)) * smoothstep(0.62 - 0.22 * u._Rough.x, 0.80 - 0.15 * u._Rough.x, life);
         caps *= smoothstep(0.42, 0.68, foamNoise);
         // 被風吹開的細碎水沫：沿風向拉長的淡淡條紋

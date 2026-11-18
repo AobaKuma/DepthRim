@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <DepthRim_Scald.label>燙傷</DepthRim_Scald.label>
+  <DepthRim_Scald.deathMessage>{0}被燙死了。</DepthRim_Scald.deathMessage>
+
+</LanguageData>

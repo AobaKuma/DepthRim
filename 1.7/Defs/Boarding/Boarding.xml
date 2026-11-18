@@ -239,7 +239,7 @@
   <ThingDef ParentName="BuildingBase">
     <defName>DepthRim_PlayerBoardingCraft</defName>
     <label>boarding craft</label>
-    <description>Your own boarding craft. Colonists board it from the right-click menu, then launch it at any ocean tile within 8 tiles by sea. It cuts into the target's sealed compartments without breaking the seal, or settles on the seabed if there are none, and lets the crew out.
+    <description>Your own boarding craft. Colonists board it from the right-click menu, then launch it at any ocean tile within 8 tiles by sea. Each tile of sea costs 5 chemfuel, and the craft only launches with enough fuel for the round trip. It cuts into the target's sealed compartments without breaking the seal, or settles on the seabed if there are none, and lets the crew out.
 
 Must be built on a moon pool.</description>
     <thingClass>DepthRim.Building_BoardingCraft</thingClass>
@@ -283,6 +283,23 @@ Must be built on a moon pool.</description>
       <destroySound>BuildingDestroyed_Metal_Big</destroySound>
     </building>
     <uiOrder>2221</uiOrder>
+    <comps>
+      <!-- 燃料（BoardingCraftFuel）：每格海路 5 化學燃料，出發前要有來回的量；滿箱 80 剛好來回 8 格。新造好的艇是空的。 -->
+      <li Class="CompProperties_Refuelable">
+        <fuelConsumptionRate>0</fuelConsumptionRate>
+        <fuelCapacity>80</fuelCapacity>
+        <fuelFilter>
+          <thingDefs>
+            <li>Chemfuel</li>
+          </thingDefs>
+        </fuelFilter>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+        <initialFuelPercent>0</initialFuelPercent>
+        <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+      </li>
+      <!-- 原版故障：停在地圖上時偶爾故障，要用零件修好才能出發。 -->
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
   </ThingDef>
 
   <WorldObjectDef>

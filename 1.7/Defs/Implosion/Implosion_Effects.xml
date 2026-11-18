@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    水中內爆的粒子（Docs/水中內爆_實作計畫.md §4.3）。貼圖都是白色，顏色由程式依水深層級與燙傷型用 instanceColor 給。
+    renderQueue 3185：排在外海層（3177，半透明、蓋在一切之上）之後，和主氣泡同一層，否則開放水域裡的粒子會被水色洗淡。
+  -->
+
+  <!-- 0 秒的閃光：比原版爆炸閃光小、短 -->
+  <FleckDef ParentName="FleckBase">
+    <defName>DepthRim_ImplosionFlash</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0</fadeInTime>
+    <solidTime>0.03</solidTime>
+    <fadeOutTime>0.12</fadeOutTime>
+    <graphicData>
+      <texPath>Things/Mote/ExplosionFlash</texPath>
+      <shaderType>MoteGlow</shaderType>
+      <renderQueue>3185</renderQueue>
+    </graphicData>
+  </FleckDef>
+
+  <!-- 每格往中心吸的小氣泡：飛行時間由程式設定（到崩塌時剛好抵達中心） -->
+  <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+    <defName>DepthRim_ImplosionInward</defName>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>DepthRim/Implosion/BubbleSmall_A</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <renderQueue>3185</renderQueue>
+      </li>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>DepthRim/Implosion/BubbleSmall_B</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <renderQueue>3185</renderQueue>
+      </li>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>DepthRim/Implosion/BubbleSmall_C</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <renderQueue>3185</renderQueue>
+      </li>
+    </randomGraphics>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.04</fadeInTime>
+    <solidTime>0.3</solidTime>
+    <fadeOutTime>0.12</fadeOutTime>
+    <growthRate>-0.15</growthRate>
+  </FleckDef>
+
+  <!-- 崩塌後上升的氣泡柱：往畫面上方漂、邊漂邊變大 -->
+  <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
+    <defName>DepthRim_ImplosionBubble</defName>
+    <randomGraphics>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>DepthRim/Implosion/BubbleSmall_A</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <renderQueue>3185</renderQueue>
+      </li>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>DepthRim/Implosion/BubbleSmall_B</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <renderQueue>3185</renderQueue>
+      </li>
+      <li>
+        <graphicClass>Graphic_Fleck</graphicClass>
+        <texPath>DepthRim/Implosion/BubbleSmall_C</texPath>
+        <shaderType>TransparentPostLight</shaderType>
+        <renderQueue>3185</renderQueue>
+      </li>
+    </randomGraphics>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.1</fadeInTime>
+    <solidTime>0.7</solidTime>
+    <fadeOutTime>0.6</fadeOutTime>
+    <growthRate>0.08</growthRate>
+  </FleckDef>
+
+  <!-- 混濁水團：崩塌時揚起的水渦／沉積物，很慢地散開（燙傷型是偏白的蒸氣色） -->
+  <FleckDef ParentName="FleckBase_Thrown">
+    <defName>DepthRim_ImplosionMurk</defName>
+    <graphicData>
+      <texPath>Things/Mote/Smoke</texPath>
+      <shaderType>TransparentPostLight</shaderType>
+      <renderQueue>3184</renderQueue>
+      <renderInstanced>true</renderInstanced>
+    </graphicData>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.3</fadeInTime>
+    <solidTime>1.2</solidTime>
+    <fadeOutTime>2.4</fadeOutTime>
+    <growthRate>0.35</growthRate>
+  </FleckDef>
+
+</Defs>

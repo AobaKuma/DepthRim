@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- 聲納地標（Docs/聲納地標與穿梭艇探索_機制設計.md） -->
+  <DepthRim.Landmark.Discovered>Sonar picked up a new contact worth investigating.</DepthRim.Landmark.Discovered>
+  <DepthRim.Landmark.Unclassified>Too far away to tell what it is. Get it within half the sonar's range.</DepthRim.Landmark.Unclassified>
+  <DepthRim.Landmark.KindEncounter>Landmark: reach it with a boarding craft or a submarine to investigate (no landing).</DepthRim.Landmark.KindEncounter>
+  <DepthRim.Landmark.KindSite>Site: a boarding craft can land the crew here to explore it.</DepthRim.Landmark.KindSite>
+  <DepthRim.Landmark.Skills>Skills: {0}</DepthRim.Landmark.Skills>
+  <DepthRim.Landmark.FadesIn>Lost from sonar in {0}</DepthRim.Landmark.FadesIn>
+  <DepthRim.Landmark.Crew>Crew: {0}</DepthRim.Landmark.Crew>
+  <DepthRim.Landmark.OptionLabel>{0} ({1}, {2} {3}: {4})</DepthRim.Landmark.OptionLabel>
+  <DepthRim.Landmark.NoActor>Nobody aboard can do {0}.</DepthRim.Landmark.NoActor>
+  <DepthRim.Landmark.Leave>Leave it alone</DepthRim.Landmark.Leave>
+  <DepthRim.Landmark.Result.Critical>Great success: {0} ({1}, {2} chance).</DepthRim.Landmark.Result.Critical>
+  <DepthRim.Landmark.Result.Success>Success: {0} ({1}, {2} chance).</DepthRim.Landmark.Result.Success>
+  <DepthRim.Landmark.Result.Failure>Failure: {0} ({1}, {2} chance).</DepthRim.Landmark.Result.Failure>
+  <DepthRim.Landmark.GotThings>Recovered: {0}</DepthRim.Landmark.GotThings>
+  <DepthRim.Landmark.GotKnowledge>{0} {1} points</DepthRim.Landmark.GotKnowledge>
+  <DepthRim.Landmark.Injured>{0}: {1} on the {2}</DepthRim.Landmark.Injured>
+  <DepthRim.Landmark.Survivor>{0} joins the colony.</DepthRim.Landmark.Survivor>
+  <DepthRim.Landmark.Attracted>Something is heading for {0}.</DepthRim.Landmark.Attracted>
+  <DepthRim.Landmark.Returning>The boarding craft is heading back to {0}.</DepthRim.Landmark.Returning>
+  <DepthRim.Landmark.Investigate>Investigate landmark</DepthRim.Landmark.Investigate>
+  <DepthRim.Landmark.InvestigateDesc>Investigate {0} with everyone aboard the submarine. Recovered items are left beside the helm.</DepthRim.Landmark.InvestigateDesc>
+
+</LanguageData>

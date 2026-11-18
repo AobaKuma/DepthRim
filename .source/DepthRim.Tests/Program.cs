@@ -43,10 +43,16 @@ static partial class Test
         Run("PressureAdaptation", PressureAdaptation);
         Run("BoardingReadiness", BoardingReadiness);
         Run("RopeAnchorMath", RopeAnchorMath);
+        Run("Gangway", Gangway);
         Run("SeaWeather", SeaWeather);
         Run("ContentResearch", ContentResearch);
         Run("SeafloorSampler", SeafloorSampler);
+        Run("LandmarkMath", LandmarkMathTests);
+        Run("ContentLandmark", ContentLandmark);
+        Run("BoardingCraftFuel", BoardingCraftFuelTests);
         Run("UnderwaterRange", UnderwaterRange);
+        Run("ImplosionMath", ImplosionMathTests);
+        Run("ContentImplosion", ContentImplosion);
         Run("ContentPressure", ContentPressure);
         Run("ContentXml", ContentXml);
         Run("ContentOcean", ContentOcean);

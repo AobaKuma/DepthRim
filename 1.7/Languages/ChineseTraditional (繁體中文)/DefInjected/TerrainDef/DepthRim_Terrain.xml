@@ -19,7 +19,7 @@
 
 
   <DepthRim_OpenSea.label>開放海面</DepthRim_OpenSea.label>
-  <DepthRim_OpenSea.description>一望無際的海。水面上站不了任何東西，但可以在上面搭建平台與支柱。</DepthRim_OpenSea.description>
+  <DepthRim_OpenSea.description>一望無際的海。水面上站不了任何東西，但可以在上面搭建平台、支柱與橋。</DepthRim_OpenSea.description>
 
   <DepthRim_OceanPlatform.label>海上平台</DepthRim_OceanPlatform.label>
   <DepthRim_OceanPlatform.description>架在支柱上、高高離開浪頭的鋼製甲板，什麼都能蓋在上面。只能鋪在平台層、平台支柱的支撐範圍內，失去支撐就會塌進海裡。\n\n可以用「拆除平台」指令拆掉，露出底下的高空。</DepthRim_OceanPlatform.description>
@@ -28,5 +28,8 @@
   <DepthRim_PressureDeck.description>把船體平台的甲板鋪在實地上當地板。整間房間都鋪上它、再用水密門封起來，加壓機就能讓房間維持在指定的壓力。</DepthRim_PressureDeck.description>
   <DepthRim_OpenAir.label>高空</DepthRim_OpenAir.label>
   <DepthRim_OpenAir.description>遠高於海面的半空中。在平台支柱的支撐範圍內可以鋪海上平台。</DepthRim_OpenAir.description>
+
+  <DepthRim_GangwayDeck.label>舷梯</DepthRim_GangwayDeck.label>
+  <DepthRim_GangwayDeck.description>伸出的可收放舷梯步道，上面不能建造任何東西。</DepthRim_GangwayDeck.description>
 
 </LanguageData>

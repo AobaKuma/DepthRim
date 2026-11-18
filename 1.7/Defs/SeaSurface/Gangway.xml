@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    可收放的舷梯（DepthRim.Building_Gangway）：水面層浮船之間的臨時通道。
+    - 蓋在甲板邊上、正前方是開放海面（DepthRim.PlaceWorker_Gangway）。接不到對岸也能蓋（船晚點才來）。
+    - 伸出：往前逐格鋪臨時甲板 DepthRim_GangwayDeck（地基層，底下仍是開放海面），碰到對岸的甲板（浮船、潛艇、橋）就接上。最多跨 6 格。
+    - 收回：從遠端逐格拆掉；有人站在上面就等，物品挪回甲板。
+    - 對岸不見了（潛艇下潛、平台被拆）：立刻全部收回，上面的人落海爬回最近的甲板（DepthRim.SeaDrop）。
+    - 圖示暫用安全繩錨點的貼圖（待補內容清單）。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_Gangway</defName>
+    <thingClass>DepthRim.Building_Gangway</thingClass>
+    <researchPrerequisites>
+      <li>DepthRim_PressureEngineering</li>
+    </researchPrerequisites>
+    <label>retractable gangway</label>
+    <description>A folding steel walkway mounted on the edge of a floating deck. When extended it reaches across up to 6 cells of open sea to the next deck in front of it - another floating platform, a surfaced submarine or a bridge - so people can walk straight across.\n\nIt retracts on command, waiting for anyone still standing on it. If the far side moves away or is taken apart, the gangway drops at once and anyone on it falls into the sea.</description>
+    <graphicData>
+      <texPath>Thing/DR_RopeAnchor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <color>(170,180,190)</color>
+      <damageData>
+        <rect>(0.2,0.2,0.6,0.6)</rect>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <rotatable>true</rotatable>
+    <altitudeLayer>BuildingOnTop</altitudeLayer>
+    <passability>Standable</passability>
+    <pathCost>10</pathCost>
+    <fillPercent>0.1</fillPercent>
+    <blockWind>false</blockWind>
+    <castEdgeShadows>false</castEdgeShadows>
+    <canOverlapZones>true</canOverlapZones>
+    <tickerType>Normal</tickerType>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>200</MaxHitPoints>
+      <WorkToBuild>1500</WorkToBuild>
+      <Mass>30</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>60</Steel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_Gangway</li>
+    </placeWorkers>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>1025</uiOrder>
+    <modExtensions>
+      <li Class="DepthRim.GangwayExtension">
+        <maxReach>6</maxReach>
+        <ticksPerCell>30</ticksPerCell>
+        <deckTerrain>DepthRim_GangwayDeck</deckTerrain>
+      </li>
+    </modExtensions>
+  </ThingDef>
+
+  <!-- 舷梯伸出時鋪的臨時甲板：地基層（和原版的橋一樣蓋在開放海面上），不能建造、不能蓋東西，只能走。 -->
+  <TerrainDef>
+    <defName>DepthRim_GangwayDeck</defName>
+    <label>gangway</label>
+    <description>The extended walkway of a retractable gangway. Nothing can be built on it.</description>
+    <texturePath>Terrain/Surfaces/GenericFloorTile</texturePath>
+    <color>(0.55, 0.58, 0.6)</color>
+    <isFoundation>true</isFoundation>
+    <layerable>false</layerable>
+    <!-- 原版上限是 < 400（橋是 400 以下的最高，重力船底座 399） -->
+    <renderPrecedence>398</renderPrecedence>
+    <edgeType>Hard</edgeType>
+    <fertility>0</fertility>
+    <preventCraters>true</preventCraters>
+    <canEverTerraform>false</canEverTerraform>
+    <holdSnowOrSand>false</holdSnowOrSand>
+    <pathCost>2</pathCost>
+    <statBases>
+      <Flammability>0</Flammability>
+    </statBases>
+    <filthAcceptanceMask>
+      <li>Unnatural</li>
+    </filthAcceptanceMask>
+  </TerrainDef>
+
+</Defs>
