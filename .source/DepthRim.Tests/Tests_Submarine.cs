@@ -320,6 +320,22 @@ static partial class Test
         Check(File.ReadAllText(Path.Combine(zhRoot, "RaidStrategyDef", "DepthRim_Boarding.xml")).Contains("<DepthRim_Boarding.letterLabelEnemy>"), "the boarding raid letter is translated");
         Check(File.ReadAllText(Path.Combine(zhRoot, "PawnsArrivalModeDef", "DepthRim_Boarding.xml")).Contains("<DepthRim_BoardingArrival.textEnemy>"), "the boarding arrival text is translated");
 
+        // 乘員與容器改用奧德賽的穿梭機（CompShuttle + CompTransporter）：兩個突擊艇都要掛，且元件確實是原版元件的子類別
+        foreach (string craftName in new[] { "DepthRim_BoardingCraft", "DepthRim_PlayerBoardingCraft" })
+        {
+            List<XElement> comps = Def("ThingDef", craftName).Element("comps").Elements("li").ToList();
+            Check(comps.Any(e => (string)e.Attribute("Class") == "DepthRim.CompProperties_UnderwaterTransporter"), $"{craftName} carries the shuttle's transporter container");
+            Check(comps.Any(e => (string)e.Attribute("Class") == "DepthRim.CompProperties_UnderwaterShuttle"), $"{craftName} carries the shuttle's crew rules");
+        }
+        Check(typeof(CompUnderwaterShuttle).IsSubclassOf(typeof(RimWorld.CompShuttle)) && typeof(CompUnderwaterTransporter).IsSubclassOf(typeof(RimWorld.CompTransporter)),
+            "the boarding craft's comps derive from Odyssey's shuttle and transporter");
+        Check(new CompProperties_UnderwaterShuttle().compClass == typeof(CompUnderwaterShuttle) && new CompProperties_UnderwaterTransporter().compClass == typeof(CompUnderwaterTransporter),
+            "the boarding craft's comp properties instantiate their own comps");
+        Check(typeof(Building_BoardingCraft).GetProperty("Transporter") != null && typeof(Building_BoardingCraft).GetProperty("HeldThings") != null,
+            "the boarding craft reads its crew through the vanilla transporter, not a container of its own");
+        Check(typeof(Building_BoardingCraft).GetField("aboard", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic) == null,
+            "the boarding craft no longer keeps a private container beside the transporter");
+
         // 潛艇的演出（2026-11-11）：不沿用轉移船的火箭音、震動、火花、尾焰燒傷與升空過場
         XElement oceanLayer = XDocument.Load(Path.Combine(ModRoot, "1.7", "Defs", "World", "Ocean_Layer.xml")).Root.Elements("PlanetLayerDef").Single(e => (string)e.Element("defName") == "DepthRim_Ocean");
         XElement pres = oceanLayer.Descendants("presentation").SingleOrDefault();

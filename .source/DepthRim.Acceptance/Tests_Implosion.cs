@@ -89,6 +89,21 @@ namespace DepthRim.Acceptance
             flooding.debugTierOverride = null;
             map.mapDrawer.WholeMapChanged(DepthRimDefOf.DepthRim_Water);
 
+            // 淹滿的艙室（艙室水體層，renderQueue 2950）：內爆一樣要被水的混濁蓋住
+            yield return new WaitTicks(240);
+            foreach (IntVec3 c in area) { map.roofGrid.SetRoof(c, RoofDefOf.RoofConstructed); }
+            DepthRimFixture.BuildWallRing(area);
+            SetLevel(area.ContractedBy(1).Cells, 1f);
+            WaitUntil sealedWait = new WaitUntil(() => !flooding.IsOpenAt(center), 600);
+            yield return sealedWait;
+            ctx.Check(!sealedWait.TimedOut, "the test compartment is sealed");
+            SetLevel(area.ContractedBy(1).Cells, 1f);
+            map.mapDrawer.WholeMapChanged(DepthRimDefOf.DepthRim_Water);
+            yield return new WaitFrames(10);
+            GenExplosion.DoExplosion(center, map, 2.5f, DamageDefOf.Bomb, null, damAmount: 5);
+            ImplosionInstance room = Comp.Active.Last();
+            foreach (Wait w in ShotsAt(ctx, room, new[] { room.Period * ImplosionMath.ExpandFraction, room.Period + 0.3f }, new[] { "peak", "foam" }, "compartment_")) { yield return w; }
+
             ctx.allowPause = false;
             yield return new WaitTicks(240);
             ctx.Check(Comp.ActiveCount == 0, "the implosions finished");

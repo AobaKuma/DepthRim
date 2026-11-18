@@ -181,6 +181,14 @@ namespace DepthRim
             return t <= 0.5f ? 0.9f : 0.9f * (1f - (t - 0.5f) / 0.5f);
         }
 
+        /// <summary>向內的空間扭曲提前崩塌多少秒出現（剛好在氣泡塌回中心時收完）；不早於氣泡最大的時刻。</summary>
+        public const float WarpInLeadSeconds = 0.25f;
+
+        public static float WarpInSeconds(float period)
+        {
+            return Math.Max(period * ExpandFraction, period - WarpInLeadSeconds);
+        }
+
         /// <summary>泡沫團崩塌後往上漂的距離（格，畫面上方）。</summary>
         public static float FoamRise(float seconds, float period)
         {
@@ -218,12 +226,24 @@ namespace DepthRim
         }
 
         /// <summary>
-        /// 依所在處的水中光照（<see cref="WaterLight.At"/>，0–1）調暗：氣泡本身不發光，暗水裡只剩隱約的反光。
-        /// 留 0.45 的底，玩家在全黑的深海仍看得出發生了內爆。
+        /// 內爆在水的混濁裡（2026-11-18 使用者要求）：顏色往該處的水色混多少。<paramref name="turbidity"/> 是外海層同一個定義的混濁度
+        /// （<see cref="FloodingMath.WaterAlpha"/>，0–1）。最多混 65%：再多就和水色分不出來（試過整個畫在水層下面，夜裡完全看不見）。
         /// </summary>
-        public static float LightFactor(float light)
+        public static float MurkBlend(float turbidity)
         {
-            return 0.45f + 0.55f * Clamp(light, 0f, 1f);
+            return 0.65f * Clamp(turbidity, 0f, 1f);
+        }
+
+        /// <summary>混濁的水裡，內爆也跟著變淡：最多少掉 35% 的不透明度。</summary>
+        public static float MurkAlpha(float alpha, float turbidity)
+        {
+            return Clamp(alpha * (1f - 0.35f * Clamp(turbidity, 0f, 1f)), 0f, 1f);
+        }
+
+        /// <summary>水色在暗處與亮處之間的位置（0 = 深色、1 = 一般水色），和外海層的光照範圍一致。</summary>
+        public static float MurkLightness(float light, float lightMin, float lightMax)
+        {
+            return lightMax <= lightMin ? 1f : Clamp((light - lightMin) / (lightMax - lightMin), 0f, 1f);
         }
 
         /// <summary>

@@ -85,6 +85,11 @@ namespace DepthRim
 
         public static FleckDef DepthRim_ImplosionMurk;
 
+        /// <summary>原版靈能扭曲（MoteLargeDistortionWave）：爆炸瞬間向外、崩塌時向內。</summary>
+        public static FleckDef DepthRim_ImplosionWarpOut;
+
+        public static FleckDef DepthRim_ImplosionWarpIn;
+
         /// <summary>加壓艙的門打開、兩側壓差夠大時的洩壓嘶聲。</summary>
         public static SoundDef DepthRim_PressureHiss;
 

@@ -96,6 +96,7 @@ namespace DepthRim.Acceptance
                 new AcceptanceTest("B1", "Boarding raid: the craft cuts into a sealed compartment without breaching it, boarders in diving suits, fall back and leave by craft", Tests_Boarding.B1_BoardingRaid),
                 new AcceptanceTest("B2", "Boarding follow-ups: captives and loot taken away, a shot-down craft sinks, outside landings breach the hull, the player craft launches from a moon pool", Tests_Boarding2.B2_BoardingFollowUps),
                 new AcceptanceTest("B3", "A moon pool on a sea surface map launches from the ocean tile below it", Tests_Boarding2.B3_SeaSurfaceLaunch),
+                new AcceptanceTest("B4", "A launched boarding craft keeps its crew and cargo through a save and load while it is travelling inside a world object", Tests_Boarding2.B4_TravelingCraftSave),
                 new AcceptanceTest("LM1", "Sonar landmarks: placement and classification, skill checks, a boarding craft resolves an encounter by dialog and returns home, a shipwreck site generates its map", Tests_Landmark.LM1_Landmarks),
                 new AcceptanceTest("X1", "Pirate submarine: abstract defence node, sonar classification, patrol, torpedo hits sink it, boarding craft pursuit, dry hull map with crew, scuttling; fish school; torpedo boat sinks", Tests_Pirates.X1_PirateSubmarine),
                 new AcceptanceTest("N1","Sonar: powered sonars make the map a BVR node; active hears farther and pings; passive alone still listens; off means deaf", Tests_Sonar.N1_Sonar),

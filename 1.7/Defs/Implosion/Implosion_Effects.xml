@@ -3,7 +3,8 @@
 
   <!--
     水中內爆的粒子（Docs/水中內爆_實作計畫.md §4.3）。貼圖都是白色，顏色由程式依水深層級與燙傷型用 instanceColor 給。
-    renderQueue 3185：排在外海層（3177，半透明、蓋在一切之上）之後，和主氣泡同一層，否則開放水域裡的粒子會被水色洗淡。
+    renderQueue 3185：畫在水層（艙室 2950、外海 3177）之上，但顏色由程式依該處的水色與混濁度混過去，看起來是在水裡面
+    （2026-11-18 試過直接排在水層下面：夜裡外海層幾乎不透明，整個內爆都看不見）。迷霧格中心的內爆不畫。
   -->
 
   <!-- 0 秒的閃光：比原版爆炸閃光小、短 -->
@@ -17,6 +18,54 @@
       <texPath>Things/Mote/ExplosionFlash</texPath>
       <shaderType>MoteGlow</shaderType>
       <renderQueue>3185</renderQueue>
+    </graphicData>
+  </FleckDef>
+
+  <!--
+    空間扭曲（2026-11-18 使用者要求「原版靈能的那種扭曲效果」）：原版 Core 的 MoteLargeDistortionWave 著色器與貼圖
+    （ShockwaveFast、靈能收縮環用的同一套），不依賴 DLC。著色器換成複本 DepthRim_ImplosionWarp（Implosion_Shader.xml）：
+    原版在 3151 抓畫面、會被外海層蓋掉，複本改在 3188 抓，扭曲的是看得見的水與內爆。
+    向外：爆炸瞬間的壓力波；向內：氣泡塌回中心時，周圍的水被吸進去。
+  -->
+  <FleckDef ParentName="FleckBase">
+    <defName>DepthRim_ImplosionWarpOut</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0</fadeInTime>
+    <solidTime>0.05</solidTime>
+    <fadeOutTime>0.35</fadeOutTime>
+    <growthRate>16</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/Black</texPath>
+      <shaderType>DepthRim_ImplosionWarp</shaderType>
+      <shaderParameters>
+        <_DistortionTex>/Things/Mote/PsychicDistortionCurrents</_DistortionTex>
+        <_NoiseTex>/Things/Mote/PsycastNoise</_NoiseTex>
+        <_distortionIntensity>0.08</_distortionIntensity>
+        <_brightnessMultiplier>1.2</_brightnessMultiplier>
+      </shaderParameters>
+      <drawSize>1.0</drawSize>
+    </graphicData>
+  </FleckDef>
+
+  <FleckDef ParentName="FleckBase">
+    <defName>DepthRim_ImplosionWarpIn</defName>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <fadeInTime>0.05</fadeInTime>
+    <solidTime>0.05</solidTime>
+    <fadeOutTime>0.2</fadeOutTime>
+    <growthRate>-14</growthRate>
+    <graphicData>
+      <graphicClass>Graphic_FleckPulse</graphicClass>
+      <texPath>Things/Mote/Black</texPath>
+      <shaderType>DepthRim_ImplosionWarp</shaderType>
+      <shaderParameters>
+        <_DistortionTex>/Things/Mote/PsychicDistortionCurrents</_DistortionTex>
+        <_NoiseTex>/Things/Mote/PsycastNoise</_NoiseTex>
+        <_distortionIntensity>0.1</_distortionIntensity>
+        <_brightnessMultiplier>-0.2</_brightnessMultiplier>
+      </shaderParameters>
+      <drawSize>1.0</drawSize>
     </graphicData>
   </FleckDef>
 

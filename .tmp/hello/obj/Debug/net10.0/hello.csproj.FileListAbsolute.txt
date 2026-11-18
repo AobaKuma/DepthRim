@@ -1,0 +1,5 @@
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.tmp\hello\obj\Debug\net10.0\hello.GeneratedMSBuildEditorConfig.editorconfig
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.tmp\hello\obj\Debug\net10.0\hello.AssemblyInfoInputs.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.tmp\hello\obj\Debug\net10.0\hello.AssemblyInfo.cs
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.tmp\hello\obj\Debug\net10.0\hello.csproj.CoreCompileInputs.cache
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.tmp\hello\obj\Debug\net10.0\hello.sourcelink.json

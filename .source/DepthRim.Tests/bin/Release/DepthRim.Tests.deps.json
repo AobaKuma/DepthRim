@@ -10,8 +10,9 @@
         "dependencies": {
           "DepthRim": "1.0.0",
           "Lib.Harmony": "3.0.0-rc.2",
-          "Assembly-CSharp": "1.7.9800.9270",
+          "Assembly-CSharp": "1.7.9818.24066",
           "DMSE": "1.0.0.0",
+          "Fortified": "1.0.0.0",
           "UnityStubs": "1.0.0.0",
           "Waylith": "1.0.0.0"
         },
@@ -38,17 +39,25 @@
           }
         }
       },
-      "Assembly-CSharp/1.7.9800.9270": {
+      "Assembly-CSharp/1.7.9818.24066": {
         "runtime": {
           "Assembly-CSharp.dll": {
-            "assemblyVersion": "1.7.9800.9270",
-            "fileVersion": "1.7.9800.9270"
+            "assemblyVersion": "1.7.9818.24066",
+            "fileVersion": "1.7.9818.24066"
           }
         }
       },
       "DMSE/1.0.0.0": {
         "runtime": {
           "DMSE.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Fortified/1.0.0.0": {
+        "runtime": {
+          "Fortified.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -83,6 +92,14 @@
           "Brutal.Core.Logging.dll": {
             "assemblyVersion": "2026.9.0.0",
             "fileVersion": "2026.9.0.0"
+          }
+        }
+      },
+      "Waylith.Windowing/1.0.0.0": {
+        "runtime": {
+          "Waylith.Windowing.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -155,14 +172,6 @@
           "Waylith.VideoDecode.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "Brutal.Glfw/2026.9.0.0": {
-        "runtime": {
-          "Brutal.Glfw.dll": {
-            "assemblyVersion": "2026.9.0.0",
-            "fileVersion": "2026.9.0.0"
           }
         }
       },
@@ -291,6 +300,14 @@
           "K4os.Compression.LZ4.dll": {
             "assemblyVersion": "1.3.8.0",
             "fileVersion": "1.3.8.0"
+          }
+        }
+      },
+      "0MultiplayerAPI/0.6.0.0": {
+        "runtime": {
+          "0MultiplayerAPI.dll": {
+            "assemblyVersion": "0.6.0.0",
+            "fileVersion": "0.6.0.0"
           }
         }
       },
@@ -466,12 +483,17 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Assembly-CSharp/1.7.9800.9270": {
+    "Assembly-CSharp/1.7.9818.24066": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
     },
     "DMSE/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Fortified/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
@@ -492,6 +514,11 @@
       "sha512": ""
     },
     "Brutal.Core.Logging/2026.9.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Waylith.Windowing/1.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
@@ -537,11 +564,6 @@
       "sha512": ""
     },
     "Waylith.VideoDecode/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Brutal.Glfw/2026.9.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
@@ -622,6 +644,11 @@
       "sha512": ""
     },
     "K4os.Compression.LZ4/1.3.8.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "0MultiplayerAPI/0.6.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

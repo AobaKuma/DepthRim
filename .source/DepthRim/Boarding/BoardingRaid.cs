@@ -376,38 +376,6 @@ namespace DepthRim
         }
     }
 
-    /// <summary>玩家：右鍵自己的突擊艇「登艇」。</summary>
-    public class FloatMenuOptionProvider_BoardCraft : FloatMenuOptionProvider
-    {
-        protected override bool Drafted => true;
-
-        protected override bool Undrafted => true;
-
-        protected override bool Multiselect => true;
-
-        protected override FloatMenuOption GetSingleOptionFor(Thing clickedThing, FloatMenuContext context)
-        {
-            if (!(clickedThing is Building_BoardingCraft craft) || craft.Faction != Faction.OfPlayer)
-            {
-                return null;
-            }
-            List<Pawn> pawns = context.ValidSelectedPawns.Where(p => p.CanReach(craft, PathEndMode.Touch, Danger.Deadly)).ToList();
-            if (pawns.Count == 0)
-            {
-                return new FloatMenuOption("DepthRim.Boarding.CannotBoard".Translate() + ": " + "NoPath".Translate(), null);
-            }
-            return new FloatMenuOption("DepthRim.Boarding.BoardOption".Translate(craft.LabelShort), delegate
-            {
-                foreach (Pawn p in pawns)
-                {
-                    Job job = JobMaker.MakeJob(BoardingDefOf.DepthRim_BoardCraft, craft);
-                    job.playerForced = true;
-                    p.jobs.TryTakeOrderedJob(job, JobTag.Misc);
-                }
-            }, MenuOptionPriority.High);
-        }
-    }
-
     /// <summary>玩家的突擊艇只能造在月池上（整個佔地都在月池裡）。</summary>
     public class PlaceWorker_OnMoonPool : PlaceWorker
     {

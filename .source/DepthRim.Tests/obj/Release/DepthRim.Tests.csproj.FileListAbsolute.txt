@@ -41,7 +41,6 @@ D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Rel
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Microsoft.Extensions.Logging.Abstractions.dll
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Fmod5Sharp.dll
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Waylith.VideoDecode.dll
-D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Brutal.Glfw.dll
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Brutal.Core.Numerics.dll
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Brutal.Core.Collections.dll
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Brutal.Vulkan.Abstractions.dll
@@ -273,3 +272,6 @@ C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.runtimeconfig.json
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.dll
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e-ec48eae67d57\scratchpad\tests\DepthRim.Tests.pdb
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Fortified.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Waylith.Windowing.dll
+D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\0MultiplayerAPI.dll

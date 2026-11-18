@@ -37,8 +37,10 @@ namespace DepthRim
     /// 降落時不破壞屋頂（skyfaller 的 hitRoof 關掉），所以不會打破艙室的密閉；落地後放出艇上的人。
     /// 敵方：襲擊撤退時（<see cref="LordToil_ReturnToCraft"/>）存活的人回到艇上（可能扛著俘虜或戰利品），
     /// 全員上艇或等太久就離開。摧毀停著的艇，裡面的人和東西會掉出來。
-    /// 玩家：殖民者右鍵登艇，按「出發」選一格海路到得了的海洋格，確認出航前檢查（<see cref="BoardingReadiness"/>）後飛過去，一樣切入對方艙室。
-    /// 艇上的人放在自己的容器（不用 CompTransporter：它在離場時會倒出內容物，也不能在 skyfaller 裡存非世界 pawn）。
+    /// 玩家：殖民者右鍵登艇（原版 <see cref="CompShuttle"/> 的登艇選單），按「出發」選一格海路到得了的海洋格，
+    /// 確認出航前檢查（<see cref="BoardingReadiness"/>）後飛過去，一樣切入對方艙室。
+    /// 艇上的人與貨放在原版 <see cref="CompTransporter"/> 的容器裡（<see cref="CompUnderwaterTransporter"/> 負責存檔），
+    /// 登艇流程、載入/卸下 gizmo、檢視字串全部沿用原版穿梭機的實作。
     /// </summary>
     public class Building_BoardingCraft : Building, IThingHolder, IBVRPayloadHolder, IInterceptResolver, IBVRContactLabel
     {
@@ -49,7 +51,8 @@ namespace DepthRim
         /// <summary>玩家艇的航程（海路格數）。</summary>
         public const int RangeTiles = 8;
 
-        private ThingOwner<Thing> aboard;
+        /// <summary>舊存檔（自製容器）的內容物；載入後搬進 <see cref="CompTransporter.innerContainer"/>。</summary>
+        private ThingOwner<Thing> legacyAboard;
 
         /// <summary>這艘艇載來的人（含已經下艇的），撤退時等他們回來。</summary>
         public List<Pawn> raiders = new List<Pawn>();
@@ -63,19 +66,21 @@ namespace DepthRim
         /// <summary>玩家艇出發後的目的地（飛行中用）。</summary>
         public PlanetTile destinationTile = PlanetTile.Invalid;
 
-        public Building_BoardingCraft()
-        {
-            aboard = new ThingOwner<Thing>(this, oneStackOnly: false);
-        }
+        /// <summary>艇上的人與貨的容器（原版 CompTransporter）。</summary>
+        public CompTransporter Transporter => GetComp<CompTransporter>();
 
-        public ThingOwner GetDirectlyHeldThings() => aboard;
+        public CompUnderwaterShuttle Shuttle => GetComp<CompUnderwaterShuttle>();
+
+        public ThingOwner HeldThings => Transporter?.innerContainer;
+
+        public ThingOwner GetDirectlyHeldThings() => HeldThings;
 
         public void GetChildHolders(List<IThingHolder> outChildren)
         {
             ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
         }
 
-        public IEnumerable<Pawn> Aboard => aboard.OfType<Pawn>();
+        public IEnumerable<Pawn> Aboard => (HeldThings?.OfType<Pawn>() ?? Enumerable.Empty<Pawn>());
 
         /// <summary>聲納分類（§11 M7 7.4）：來襲的突擊艇在抵達前這麼多 tick 內才分得出來，之前只是「未知聲納接觸」。</summary>
         public const int ClassifyTicksBeforeImpact = 1200;
@@ -131,7 +136,7 @@ namespace DepthRim
             return true;
         }
 
-        public int AboardCount => aboard.Count(t => t is Pawn p && raiders.Contains(p));
+        public int AboardCount => HeldThings?.Count(t => t is Pawn p && raiders.Contains(p)) ?? 0;
 
         public bool ReturnRequested => returnRequestedTick >= 0;
 
@@ -140,7 +145,7 @@ namespace DepthRim
         /// <summary>出發前裝人（還沒生成的襲擊者）。</summary>
         public void Load(Pawn pawn)
         {
-            if (aboard.TryAdd(pawn) && !raiders.Contains(pawn))
+            if (HeldThings.TryAdd(pawn) && !raiders.Contains(pawn))
             {
                 raiders.Add(pawn);
             }
@@ -180,14 +185,29 @@ namespace DepthRim
         /// <summary>還在外面、還能自己走回來的襲擊者。</summary>
         public List<Pawn> RaidersStillOut()
         {
-            return raiders.Where(p => p != null && !p.Dead && !p.Downed && p.Spawned && p.Map == Map && !aboard.Contains(p)).ToList();
+            ThingOwner held = HeldThings;
+            return raiders.Where(p => p != null && !p.Dead && !p.Downed && p.Spawned && p.Map == Map
+                && (held == null || !held.Contains(p))).ToList();
         }
 
-        /// <summary>放出艇上的人（玩家艇也放出載的東西）。</summary>
+        /// <summary>放出艇上的人（玩家艇也放出載的東西）；原版載入程序有留下的 lord／清單也一併收掉。</summary>
         public void Eject()
         {
             ejected = true;
-            aboard.TryDropAll(Position, Map, ThingPlaceMode.Near);
+            CompTransporter transporter = Transporter;
+            if (transporter == null)
+            {
+                return;
+            }
+            if (transporter.LoadingInProgressOrReadyToLaunch)
+            {
+                // CleanUpLoadingVars 會把內容物倒在艇的位置，順便清掉 groupID 與 leftToLoad
+                transporter.CancelLoad(Map);
+            }
+            if (transporter.innerContainer.Any)
+            {
+                transporter.innerContainer.TryDropAll(Position, Map, ThingPlaceMode.Near);
+            }
         }
 
         public void RequestReturn()
@@ -199,18 +219,24 @@ namespace DepthRim
         }
 
         /// <summary>
-        /// 登艇（<see cref="JobDriver_BoardCraft"/>）：襲擊者離開 lord；扛著的東西（俘虜、戰利品）一起收進艇裡。
+        /// 登艇（<see cref="JobDriver_BoardCraft"/>，敵方襲擊者用）：襲擊者離開 lord；扛著的東西（俘虜、戰利品）一起收進艇裡。
+        /// 玩家的登艇走原版 <see cref="JobDriver_EnterTransporter"/>，直接放進同一個容器。
         /// </summary>
         public void Board(Pawn pawn)
         {
+            ThingOwner held = HeldThings;
+            if (held == null)
+            {
+                return;
+            }
             Thing carried = pawn.carryTracker?.CarriedThing;
             if (carried != null)
             {
-                pawn.carryTracker.innerContainer.TryTransferToContainer(carried, aboard);
+                pawn.carryTracker.innerContainer.TryTransferToContainer(carried, held);
             }
             pawn.GetLord()?.Notify_PawnLost(pawn, PawnLostCondition.ExitedMap);
             pawn.DeSpawnOrDeselect();
-            if (!aboard.TryAdd(pawn))
+            if (!held.TryAdd(pawn))
             {
                 GenSpawn.Spawn(pawn, Position, Map);
                 return;
@@ -245,6 +271,16 @@ namespace DepthRim
             landedTick = -1;
             ejected = false;
             returnRequestedTick = -1;
+            // 離場前收掉原版載入程序留下的 groupID／lord：CompTransporter.PostDeSpawn 看到「還在載入」
+            // 會把內容物倒在原地，這裡要保留艇上的人與貨。
+            CompTransporter transporter = Transporter;
+            if (transporter != null)
+            {
+                transporter.TryRemoveLord(map);
+                transporter.groupID = -1;
+                transporter.leftToLoad?.Clear();
+                Shuttle?.CleanUpLoadingVars();
+            }
             DeSpawn(DestroyMode.WillReplace);
             Skyfaller leaving = SkyfallerMaker.MakeSkyfaller(BoardingDefOf.DepthRim_BoardingCraftLeaving, this);
             GenSpawn.Spawn(leaving, pos, map);
@@ -258,9 +294,14 @@ namespace DepthRim
             Pawn kidnapper = Aboard.FirstOrDefault(p => !p.Dead && p.Faction == Faction);
             int captives = 0;
             float loot = 0f;
-            foreach (Thing t in aboard.ToList())
+            ThingOwner held = HeldThings;
+            if (held == null)
             {
-                aboard.Remove(t);
+                return;
+            }
+            foreach (Thing t in held.ToList())
+            {
+                held.Remove(t);
                 if (t is Pawn pawn)
                 {
                     if (pawn.Dead || pawn.Discarded)
@@ -312,8 +353,9 @@ namespace DepthRim
                 launch.Disable(blocked);
             }
             yield return launch;
-            if (aboard.Any)
+            if (Aboard.Any() && !(Transporter?.LoadingInProgressOrReadyToLaunch ?? false))
             {
+                // 載入程序中由原版 CompTransporter 提供「卸下／取消裝載」；這裡只補上著陸後的手動卸載。
                 yield return new Command_Action
                 {
                     defaultLabel = "DepthRim.Boarding.Unload".Translate(),
@@ -336,7 +378,7 @@ namespace DepthRim
         /// <summary>「出發」按鈕不能用的原因；可以出發時回傳 null。</summary>
         public string LaunchBlockReason()
         {
-            if (!aboard.Any(t => t is Pawn))
+            if (!Aboard.Any())
             {
                 return "DepthRim.Boarding.NoCrew".Translate();
             }
@@ -479,22 +521,10 @@ namespace DepthRim
             });
         }
 
-        public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
-        {
-            Map map = Map;
-            IntVec3 pos = Position;
-            if (mode != DestroyMode.Vanish && mode != DestroyMode.WillReplace && map != null)
-            {
-                aboard.TryDropAll(pos, map, ThingPlaceMode.Near);
-            }
-            base.Destroy(mode);
-            aboard.ClearAndDestroyContents();
-        }
-
         public override string GetInspectString()
         {
             string text = base.GetInspectString();
-            int crew = aboard.Count(t => t is Pawn);
+            int crew = Aboard.Count();
             string line = ReturnRequested
                 ? "DepthRim.Boarding.InspectWaiting".Translate(AboardCount, RaidersStillOut().Count)
                 : "DepthRim.Boarding.InspectAboard".Translate(crew);
@@ -508,18 +538,43 @@ namespace DepthRim
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Deep.Look(ref aboard, "aboard", this);
             Scribe_Collections.Look(ref raiders, "raiders", LookMode.Reference);
             Scribe_Values.Look(ref landedTick, "landedTick", -1);
             Scribe_Values.Look(ref ejected, "ejected", false);
             Scribe_Values.Look(ref returnRequestedTick, "returnRequestedTick", -1);
             Scribe_Values.Look(ref destinationTile, "destinationTile", PlanetTile.Invalid);
+            if (Scribe.mode == LoadSaveMode.LoadingVars)
+            {
+                // 舊存檔的自製容器；PostLoadInit 再搬進 CompTransporter。
+                Scribe_Deep.Look(ref legacyAboard, "aboard", this);
+            }
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 raiders ??= new List<Pawn>();
                 raiders.RemoveAll(p => p == null);
-                aboard ??= new ThingOwner<Thing>(this, oneStackOnly: false);
+                MigrateLegacyContainer();
             }
+        }
+
+        private void MigrateLegacyContainer()
+        {
+            if (legacyAboard == null)
+            {
+                return;
+            }
+            ThingOwner held = HeldThings;
+            if (held != null)
+            {
+                foreach (Thing t in legacyAboard.ToList())
+                {
+                    legacyAboard.Remove(t);
+                    if (!held.TryAddOrTransfer(t))
+                    {
+                        GenPlace.TryPlaceThing(t, Position, Map, ThingPlaceMode.Near);
+                    }
+                }
+            }
+            legacyAboard = null;
         }
     }
 

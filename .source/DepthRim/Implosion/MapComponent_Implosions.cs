@@ -6,6 +6,20 @@ using Verse.Sound;
 
 namespace DepthRim
 {
+    /// <summary>某一處的水色與混濁度（<see cref="MapComponent_Implosions"/> 用來把內爆混進水裡）。</summary>
+    public readonly struct MurkSample
+    {
+        public readonly Color color;
+
+        public readonly float turbidity;
+
+        public MurkSample(Color color, float turbidity)
+        {
+            this.color = color;
+            this.turbidity = turbidity;
+        }
+    }
+
     /// <summary>一次水中內爆的播放記錄（不存檔：整段特效只有幾秒，讀檔時遺失可以接受）。</summary>
     public class ImplosionInstance
     {
@@ -36,6 +50,8 @@ namespace DepthRim
         public int inwardThrown;
 
         public int collapseTick = -1;
+
+        public bool warpInSpawned;
 
         /// <summary>每個實例不同的相位與轉角（氣泡晃動、貼圖方向），弧度。</summary>
         public float seed;
@@ -100,17 +116,22 @@ namespace DepthRim
         private static bool ParticlesOn => DepthRimModSettings.Current.particles;
 
         /// <summary>
-        /// 中心那一格的水中光照換成的亮度倍率（<see cref="ImplosionMath.LightFactor"/>）：和外海層用同一個光照定義，
-        /// 所以暗水裡的氣泡不會比水還亮。
+        /// 中心那一格的水色與混濁度：和外海層用同一套定義（<see cref="WaterLight.At"/>、<see cref="FloodingMath.WaterAlpha"/>、
+        /// 層級 Def 的 waterColor／deepColor），所以內爆看起來在同一片水裡，暗水裡也不會比水還亮。
         /// </summary>
-        private float LightAt(ImplosionInstance inst)
+        private MurkSample LightAt(ImplosionInstance inst)
         {
             MapComponent_Flooding flooding = map.Flooding();
             WaterVisualTierDef def = flooding != null ? WaterVisualTierDef.For(flooding.RenderTier) : null;
-            return ImplosionMath.LightFactor(WaterLight.At(map, inst.center, def?.ambientReach ?? 1f));
+            float light = WaterLight.At(map, inst.center, def?.ambientReach ?? 1f);
+            float turbidity = FloodingMath.WaterAlpha(light, def?.clearAlpha ?? 0.15f, def?.murkAlpha ?? 0.85f, WaterTierMaterials.LightMin, WaterTierMaterials.LightMax);
+            Color deep = def?.deepColor ?? new Color(0.02f, 0.07f, 0.15f);
+            Color water = def?.waterColor ?? new Color(0.06f, 0.24f, 0.40f);
+            Color murk = Color.Lerp(deep, water, ImplosionMath.MurkLightness(light, WaterTierMaterials.LightMin, WaterTierMaterials.LightMax));
+            return new MurkSample(murk, turbidity);
         }
 
-        /// <summary>粒子的顏色：水深調色 × 光照，透明度也跟著光照降一些。</summary>
+        /// <summary>粒子的顏色：水深調色，再混進該處的水色與混濁度。</summary>
         private Color ParticleColor(ImplosionInstance inst, float alpha)
         {
             return ImplosionAssets.Lit(ImplosionAssets.Tint(inst.tier, inst.scald), LightAt(inst), alpha);
@@ -173,6 +194,8 @@ namespace DepthRim
             {
                 // 0 秒的閃光：暖白的火球（參考影片 1:05）；燙傷型偏橘。閃光本身就是光源，不跟著環境光調暗
                 Flash(instance, instance.radius * 2.5f, 0.75f);
+                // 壓力波：原版靈能扭曲往外擴散，把水扭一下
+                Warp(instance, DepthRimDefOf.DepthRim_ImplosionWarpOut, instance.radius * 0.8f);
             }
             instance.placeholderSound?.PlayOneShot(new TargetInfo(instance.center, map));
         }
@@ -188,6 +211,12 @@ namespace DepthRim
             {
                 ImplosionInstance inst = active[i];
                 int age = now - inst.startTick;
+                if (!inst.warpInSpawned && age >= Mathf.RoundToInt(ImplosionMath.WarpInSeconds(inst.Period) * GenTicks.TicksPerRealSecond))
+                {
+                    // 氣泡塌回中心前：周圍的水被吸進去（原版靈能收縮環同一套扭曲）
+                    inst.warpInSpawned = true;
+                    Warp(inst, DepthRimDefOf.DepthRim_ImplosionWarpIn, ImplosionMath.MaxBubbleRadius(inst.radius, inst.tier) * 2.6f);
+                }
                 if (!inst.collapsed && age >= inst.CollapseTicks)
                 {
                     inst.collapsed = true;
@@ -222,6 +251,17 @@ namespace DepthRim
             }
             float distance = (inst.center.ToVector3Shifted() - Find.Camera.transform.position).magnitude;
             Find.CameraDriver.shaker.DoShake(ImplosionMath.Shake(inst.radius, inst.screenShakeFactor, distance));
+        }
+
+        private void Warp(ImplosionInstance inst, FleckDef def, float size)
+        {
+            if (!ParticlesOn || !Visible(inst) || inst.simplified)
+            {
+                return;
+            }
+            FleckCreationData data = FleckMaker.GetDataStatic(inst.center.ToVector3Shifted(), map, def, size);
+            data.rotation = inst.seed * Mathf.Rad2Deg;
+            map.flecks.CreateFleck(data);
         }
 
         private void Flash(ImplosionInstance inst, float size, float alpha)
@@ -294,7 +334,7 @@ namespace DepthRim
         private void DrawInstance(ImplosionInstance inst, float seconds)
         {
             float period = inst.Period;
-            float light = LightAt(inst);
+            MurkSample light = LightAt(inst);
             Color tint = ImplosionAssets.Tint(inst.tier, inst.scald);
             Vector3 pos = inst.center.ToVector3Shifted();
             pos.y = AltitudeLayer.MoteOverhead.AltitudeFor();
@@ -353,8 +393,8 @@ namespace DepthRim
 
     /// <summary>
     /// 內爆的材質與顏色（主執行緒載入）。貼圖是白色，顏色靠 <c>_Color</c>。
-    /// renderQueue 拉到外海層（3177，半透明、蓋在一切之上）之後，和中層水域生物同一招，否則整團被水色洗淡。
-    /// 中心在迷霧格的實例本來就不畫，所以畫在迷霧之上不會洩漏未探索的地方（邊緣最多跨出幾格）。
+    /// renderQueue 3185：畫在兩種水層（艙室 2950、外海 3177）之上，顏色再依該處的水色與混濁度混過去（<see cref="InMurk"/>），
+    /// 看起來是在水裡面。2026-11-18 試過直接排在水層下面：夜裡外海層幾乎不透明，整個內爆都看不見。
     /// </summary>
     [StaticConstructorOnStartup]
     public static class ImplosionAssets
@@ -400,13 +440,13 @@ namespace DepthRim
         }
 
         /// <summary>
-        /// 套上光照：暗處主要是變透明（融進水色），顏色只稍微變暗。
-        /// 若整個乘暗，白色泡沫在夜裡會變成灰色黏土，比周圍的水還髒。
+        /// 放進水的混濁裡：顏色往該處的水色混（<see cref="ImplosionMath.MurkBlend"/>），不透明度也降一些。
+        /// 不直接乘暗：白色泡沫在夜裡會變成灰色黏土，比周圍的水還髒。
         /// </summary>
-        public static Color Lit(Color color, float lightFactor, float alpha)
+        public static Color Lit(Color color, MurkSample murk, float alpha)
         {
-            Color c = color * Mathf.Lerp(0.8f, 1f, lightFactor);
-            c.a = Mathf.Clamp01(alpha * lightFactor);
+            Color c = Color.Lerp(color, murk.color, ImplosionMath.MurkBlend(murk.turbidity));
+            c.a = ImplosionMath.MurkAlpha(alpha, murk.turbidity);
             return c;
         }
 

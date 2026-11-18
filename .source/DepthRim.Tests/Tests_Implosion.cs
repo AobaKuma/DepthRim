@@ -88,9 +88,11 @@ static partial class Test
         Check(ImplosionMath.FoamRise(period + 1f, period) > 0f && ImplosionMath.FoamRise(period * 0.5f, period) == 0f, "the foam drifts up only after the collapse");
 
         // 光照：暗水裡調暗但看得見；晃動在崩塌時最大、平常很小
-        Near(ImplosionMath.LightFactor(1f), 1f, "full light keeps full brightness");
-        Near(ImplosionMath.LightFactor(0f), 0.45f, "total darkness still shows a faint implosion");
-        Check(ImplosionMath.LightFactor(0.5f) < ImplosionMath.LightFactor(0.9f) && ImplosionMath.LightFactor(5f) == 1f, "brightness follows the light and is capped");
+        // 混進水的混濁：清水裡原色、最混濁也只混 65%（還看得見），不透明度最多少 35%
+        Check(ImplosionMath.MurkBlend(0f) == 0f && ImplosionMath.MurkBlend(1f) == 0.65f && ImplosionMath.MurkBlend(5f) == 0.65f, "murk blend runs 0..0.65 with turbidity");
+        Near(ImplosionMath.MurkAlpha(1f, 1f), 0.65f, "the murkiest water still leaves the implosion two-thirds opaque");
+        Check(ImplosionMath.MurkAlpha(0.8f, 0f) == 0.8f, "clear water keeps the implosion's opacity");
+        Check(ImplosionMath.MurkLightness(0f, 0.05f, 0.6f) == 0f && ImplosionMath.MurkLightness(1f, 0.05f, 0.6f) == 1f, "murk colour runs from deep to water colour with light");
         float calm = 0f, collapse = 0f;
         for (int i = 0; i < 100; i++)
         {
@@ -137,7 +139,7 @@ static partial class Test
         Check(scald.Element("modExtensions").Elements("li").Any(li => (string)li.Element("scald") == "true"), "scald is marked as scald");
         Check(!typeof(Verse.DamageWorker_Flame).IsAssignableFrom(typeof(Verse.DamageWorker_AddInjury)), "AddInjury is not a flame worker");
 
-        // 粒子：四個 FleckDef 都在；畫在外海層（renderQueue 3177）之後；模組自己的貼圖存在
+        // 粒子：四個 FleckDef 都在；畫在兩種水層（艙室 2950、外海 3177）之上（顏色由程式混進水色）；模組自己的貼圖存在
         XElement[] flecks = XDocument.Load(Path.Combine(ModRoot, "1.7", "Defs", "Implosion", "Implosion_Effects.xml")).Root.Elements("FleckDef").ToArray();
         foreach (string name in new[] { "DepthRim_ImplosionFlash", "DepthRim_ImplosionInward", "DepthRim_ImplosionBubble", "DepthRim_ImplosionMurk" })
         {
@@ -146,7 +148,7 @@ static partial class Test
             XElement[] graphics = def.Element("graphicData") != null ? new[] { def.Element("graphicData") } : def.Element("randomGraphics").Elements("li").ToArray();
             foreach (XElement g in graphics)
             {
-                Check((int?)g.Element("renderQueue") > 3177, $"{name} draws above the outer water layer");
+                Check((int?)g.Element("renderQueue") > 3177, $"{name} draws over the water layers (and is tinted into the murk in code)");
                 string tex = (string)g.Element("texPath");
                 if (tex.StartsWith("DepthRim/"))
                 {
@@ -154,6 +156,14 @@ static partial class Test
                 }
             }
         }
+        foreach (string warp in new[] { "DepthRim_ImplosionWarpOut", "DepthRim_ImplosionWarpIn" })
+        {
+            XElement def = flecks.SingleOrDefault(e => (string)e.Element("defName") == warp);
+            Check(def != null && (string)def.Element("graphicData")?.Element("shaderType") == "DepthRim_ImplosionWarp", $"{warp} uses the copy of the vanilla psychic distortion shader");
+        }
+        Near(ImplosionMath.WarpInSeconds(1f), 0.75f, "a long pulse warps in a quarter second before the collapse");
+        Check(ImplosionMath.WarpInSeconds(0.5f) == 0.5f * ImplosionMath.ExpandFraction, "a short pulse warps in no earlier than the bubble peak");
+        Check(ImplosionAssets.RenderQueue > 3177, $"the bubble, ring and foam draw over the water layers ({ImplosionAssets.RenderQueue})");
         foreach (string tex in new[] { "ShockRing", "Foam" })
         {
             Check(File.Exists(Path.Combine(ModRoot, "Textures", "DepthRim", "Implosion", tex + ".png")), $"bubble renderer texture {tex} exists");

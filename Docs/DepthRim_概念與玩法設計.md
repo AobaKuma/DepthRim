@@ -460,6 +460,7 @@
 - 突擊艇會留在艙內；襲擊撤退時，敵人會回到艇上**載人脫離**（可能帶走俘虜或物資）。
 - 摧毀停在艙內的突擊艇，就能切斷敵方退路。
 - **玩家方：** 可以在**月池**建造與整備自己的突擊艇，主動跳幫敵方潛艇（掠奪、俘虜、奪船）。
+- 實作上艇是 `Building_BoardingCraft`，乘員與容器直接掛奧德賽穿梭機的 `CompShuttle`＋`CompTransporter`（`DepthRim.CompUnderwaterShuttle`／`CompUnderwaterTransporter`）：玩家艇的登艇選單、載入清單、艇上內容物都走原版；敵方襲擊者仍走 lord 的 `JobDriver_BoardCraft`。艇自己的海路航行、水下切殼、回程與遭遇對話留在 `Building_BoardingCraft`。
 
 ### 6.3 下錨時的襲擊（淺海 / 海床）
 - 突擊艇不直接穿入船艙，而是降落在海床上，放下**穿重型潛水服的海盜突擊隊員**。

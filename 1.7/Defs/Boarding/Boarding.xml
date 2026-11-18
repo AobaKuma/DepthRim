@@ -47,6 +47,17 @@
       <ChunkSlagSteel>2</ChunkSlagSteel>
     </killedLeavings>
     <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <comps>
+      <!-- 艇上的人與貨：原版 CompTransporter 容器。存檔修正（艇在世界地圖上時仍 deep-scribe）由子類別負責。 -->
+      <li Class="DepthRim.CompProperties_UnderwaterTransporter">
+        <massCapacity>500</massCapacity>
+        <max1PerGroup>true</max1PerGroup>
+        <canChangeAssignedThingsAfterStarting>true</canChangeAssignedThingsAfterStarting>
+        <showMassInInspectString>true</showMassInInspectString>
+      </li>
+      <!-- 登艇流程、載入/卸下 gizmo、檢視字串沿用原版 CompShuttle；只覆寫誰可以上艇。 -->
+      <li Class="DepthRim.CompProperties_UnderwaterShuttle" />
+    </comps>
   </ThingDef>
 
   <ThingDef ParentName="SkyfallerBase">
@@ -284,6 +295,15 @@ Must be built on a moon pool.</description>
     </building>
     <uiOrder>2221</uiOrder>
     <comps>
+      <!-- 艇上的人與貨：原版 CompTransporter 容器。存檔修正（艇在世界地圖上時仍 deep-scribe）由子類別負責。 -->
+      <li Class="DepthRim.CompProperties_UnderwaterTransporter">
+        <massCapacity>500</massCapacity>
+        <max1PerGroup>true</max1PerGroup>
+        <canChangeAssignedThingsAfterStarting>true</canChangeAssignedThingsAfterStarting>
+        <showMassInInspectString>true</showMassInInspectString>
+      </li>
+      <!-- 登艇流程、載入/卸下 gizmo、檢視字串沿用原版 CompShuttle；只覆寫誰可以上艇。 -->
+      <li Class="DepthRim.CompProperties_UnderwaterShuttle" />
       <!-- 燃料（BoardingCraftFuel）：每格海路 5 化學燃料，出發前要有來回的量；滿箱 80 剛好來回 8 格。新造好的艇是空的。 -->
       <li Class="CompProperties_Refuelable">
         <fuelConsumptionRate>0</fuelConsumptionRate>

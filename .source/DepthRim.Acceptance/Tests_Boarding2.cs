@@ -242,5 +242,101 @@ namespace DepthRim.Acceptance
             }
             yield return Updates(1);
         }
+
+        /// <summary>
+        /// B4：玩家艇出發之後，艇連同艇上的人與貨都收在世界物件（<see cref="WorldObject_TravelingBoardingCraft"/>）裡，
+        /// 艇和容器都沒有 spawned 的父物件——這正是原版 <see cref="CompTransporter"/> 會把人改成 reference 存、
+        /// 結果把非世界 pawn 弄丟的情況（<see cref="CompUnderwaterTransporter"/> 就是為此改成一律 deep-scribe）。
+        /// 這裡在第 2～3 格海路的航程中存檔再讀檔，確認人與貨都還在艇上、航程也還在跑。
+        /// </summary>
+        public static IEnumerable<Wait> B4_TravelingCraftSave(TestContext ctx)
+        {
+            Map map = DepthRimFixture.EnsureOcean();
+            yield return Updates(1);
+            CellRect pad = CellRect.Empty;
+            foreach (IntVec3 c in map.AllCells)
+            {
+                CellRect r = new CellRect(c.x, c.z, 5, 4);
+                if (!r.ExpandedBy(3).InBounds(map)) { continue; }
+                if (r.ExpandedBy(1).Cells.All(n => n.Standable(map) && n.GetEdifice(map) == null && n.GetFirstItem(map) == null
+                    && n.GetFirstPawn(map) == null && n.GetFirstBuilding(map) == null && !n.Roofed(map)))
+                {
+                    pad = r;
+                    break;
+                }
+            }
+            ctx.Require(pad.Area > 0, "found open seabed for the player craft");
+            foreach (IntVec3 c in pad.ExpandedBy(2).ClipInsideMap(map)) { map.fogGrid.Unfog(c); }
+            Thing pool = DepthRimFixture.Spawn(BoardingDefOf.DepthRim_MoonPool, pad.CenterCell, map);
+            Building_BoardingCraft craft = (Building_BoardingCraft)DepthRimFixture.Spawn(BoardingDefOf.DepthRim_PlayerBoardingCraft, pool.Position, map, faction: Faction.OfPlayer);
+            yield return new WaitTicks(Building_BoardingCraft.EjectDelayTicks + 40);
+            ctx.Require(craft.Spawned && craft.ejected, "the player craft is ready on its moon pool");
+
+            Pawn colonist = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
+            string crewName = colonist.LabelShort;
+            craft.Load(colonist);
+            Thing silver = ThingMaker.MakeThing(ThingDefOf.Silver);
+            silver.stackCount = 250;
+            ctx.Require(craft.HeldThings.TryAdd(silver), "the cargo goes aboard");
+            craft.Fuel?.Refuel(craft.Fuel.Props.fuelCapacity);
+
+            PlanetTile dest = PlanetTile.Invalid;
+            Dictionary<PlanetTile, BiomeDef> biomeBefore = null;
+            string saveName = "DepthRim_Acceptance_Aboard";
+            try
+            {
+                biomeBefore = Tests_TorpedoDefense.OceanRings(map.Tile, 3);
+                foreach (PlanetTile t in biomeBefore.Keys)
+                {
+                    int d = OceanRouting.Distance(map.Tile, t);
+                    if (d >= 2 && d <= 3 && !Find.WorldObjects.AnyWorldObjectAt(t)) { dest = t; break; }
+                }
+                ctx.Require(dest.Valid, "found an empty ocean tile 2-3 tiles away by sea");
+                craft.Launch(dest);
+
+                WorldObject_TravelingBoardingCraft traveling = null;
+                yield return new WaitUntil(() =>
+                {
+                    traveling = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_TravelingBoardingCraft>().FirstOrDefault();
+                    return traveling != null;
+                }, 1200);
+                ctx.Require(traveling != null, "the craft is travelling inside a world object");
+                ctx.Require(traveling.Craft == craft && craft.Aboard.Contains(colonist), "the crew is aboard the travelling craft");
+                // 讓它在存讀檔前後都還在路上（不然讀完檔就降落了，看不到世界物件裡的那份存檔）
+                traveling.arriveTick = Find.TickManager.TicksGame + 100000;
+
+                Game before = Current.Game;
+                GameDataSaveLoader.SaveGame(saveName);
+                LongEventHandler.QueueLongEvent(() => SavedGameLoaderNow.LoadGameFromSaveFileNow(saveName), "LoadingLongEvent", false, null);
+                yield return new WaitRealtime(() => Current.Game != before && Current.ProgramState == ProgramState.Playing && Find.CurrentMap != null
+                                                          && !LongEventHandler.AnyEventNowOrWaiting, 180f);
+                ctx.Require(Current.Game != before, "the game reloaded");
+                yield return new WaitFrames(30);
+
+                WorldObject_TravelingBoardingCraft after = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_TravelingBoardingCraft>().FirstOrDefault();
+                ctx.Require(after != null, "after loading, the craft is still a travelling world object");
+                Building_BoardingCraft loaded = after.Craft;
+                ctx.Require(loaded != null, "after loading, the craft itself is still inside the world object");
+                List<Pawn> crew = loaded.Aboard.ToList();
+                ctx.Check(crew.Count == 1, $"the crew survived the save ({crew.Count} aboard)");
+                ctx.Check(crew.Count == 1 && crew[0].IsColonist, "the crew is still the player's colonist");
+                ctx.Check(crew.Count == 1 && crew[0].LabelShort == crewName, $"it is the same colonist ({crew.FirstOrDefault()?.LabelShort} vs {crewName})");
+                ctx.Check(loaded.HeldThings.TotalStackCountOfDef(ThingDefOf.Silver) == 250,
+                    $"the cargo survived the save ({loaded.HeldThings.TotalStackCountOfDef(ThingDefOf.Silver)} silver)");
+                ctx.Check(after.arriveTick > Find.TickManager.TicksGame, "it is still on its way (the course survived)");
+                ctx.Check(after.to == dest, $"the course still points at the same destination ({after.to} vs {dest})");
+            }
+            finally
+            {
+                foreach (WorldObject_TravelingBoardingCraft t in Find.WorldObjects.AllWorldObjects.OfType<WorldObject_TravelingBoardingCraft>().ToList()) { t.Destroy(); }
+                try { string path = GenFilePaths.FilePathForSavedGame(saveName); if (System.IO.File.Exists(path)) { System.IO.File.Delete(path); } } catch (System.Exception) { }
+                if (biomeBefore != null)
+                {
+                    foreach (KeyValuePair<PlanetTile, BiomeDef> kv in biomeBefore) { kv.Key.Tile.PrimaryBiome = kv.Value; }
+                }
+                OceanRouting.ClearCache();
+            }
+            yield return Updates(1);
+        }
     }
 }
