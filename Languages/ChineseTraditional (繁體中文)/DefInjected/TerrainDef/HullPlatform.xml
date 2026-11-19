@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: hull platform -->
+  <DepthRim_HullPlatform.label>船體平台</DepthRim_HullPlatform.label>
+  <!-- EN: A pressure-rated lattice deck laid over open water or the seabed: the abyss below the sea, the seabed itself, where it rests on the bottom, or the open sea surface, where it floats at the waterline. It is the base structure of a submarine: watertight walls, doors and machinery can all be built on it.\n\nIt can be taken apart with the 'remove platform' command, leaving open water below. -->
+  <DepthRim_HullPlatform.description>鋪在開放水域或海床上、可承受水壓的格狀甲板：水下的深淵、海床本身（坐在海床上），或是海面上（在海面上會浮在水線）。它是潛艇的基礎結構：水密隔牆、艙門與各種機械都能蓋在上面。\n\n可以用「拆除平台」指令拆掉，露出底下的水。</DepthRim_HullPlatform.description>
+  
+</LanguageData>

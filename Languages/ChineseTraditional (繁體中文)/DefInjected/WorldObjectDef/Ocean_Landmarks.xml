@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: sonar landmark -->
+  <DR_Landmark_Encounter.label>聲納地標</DR_Landmark_Encounter.label>
+  <!-- EN: Something on the sonar worth a closer look. -->
+  <DR_Landmark_Encounter.description>聲納上有個值得靠近看看的東西。</DR_Landmark_Encounter.description>
+  
+  <!-- EN: shipwreck -->
+  <DR_LandmarkSite_Shipwreck.label>沉船</DR_LandmarkSite_Shipwreck.label>
+  <!-- EN: A wreck lying on the seafloor. -->
+  <DR_LandmarkSite_Shipwreck.description>一艘躺在海床上的沉船。</DR_LandmarkSite_Shipwreck.description>
+  
+</LanguageData>

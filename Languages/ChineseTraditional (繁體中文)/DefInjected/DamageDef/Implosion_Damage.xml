@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: scald -->
+  <DepthRim_Scald.label>燙傷</DepthRim_Scald.label>
+  <!-- EN: {0} has been scalded to death. -->
+  <DepthRim_Scald.deathMessage>{0}被燙死了。</DepthRim_Scald.deathMessage>
+  
+</LanguageData>

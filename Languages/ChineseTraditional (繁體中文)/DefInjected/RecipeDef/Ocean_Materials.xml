@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: make coral blocks -->
+  <DepthRim_Make_BlocksCoral.label>製作珊瑚磚</DepthRim_Make_BlocksCoral.label>
+  <!-- EN: Cuts coral chunks into usable blocks. -->
+  <DepthRim_Make_BlocksCoral.description>把珊瑚石塊切成可用的石磚。</DepthRim_Make_BlocksCoral.description>
+  <!-- EN: Cutting stone blocks from chunk. -->
+  <DepthRim_Make_BlocksCoral.jobString>TODO</DepthRim_Make_BlocksCoral.jobString>
+  
+  <!-- EN: make dark coral blocks -->
+  <DepthRim_Make_BlocksDarkCoral.label>製作深色珊瑚磚</DepthRim_Make_BlocksDarkCoral.label>
+  <!-- EN: Cuts dark coral chunks into usable blocks. -->
+  <DepthRim_Make_BlocksDarkCoral.description>把深色珊瑚石塊切成可用的石磚。</DepthRim_Make_BlocksDarkCoral.description>
+  <!-- EN: Cutting stone blocks from chunk. -->
+  <DepthRim_Make_BlocksDarkCoral.jobString>TODO</DepthRim_Make_BlocksDarkCoral.jobString>
+  
+</LanguageData>

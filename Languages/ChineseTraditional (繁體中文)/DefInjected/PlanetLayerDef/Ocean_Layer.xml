@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: ocean -->
+  <DepthRim_Ocean.label>海洋</DepthRim_Ocean.label>
+  <!-- EN: {0}m -->
+  <DepthRim_Ocean.elevationString>{0} 公尺</DepthRim_Ocean.elevationString>
+  <!-- EN: in -->
+  <DepthRim_Ocean.gerundLabel>TODO</DepthRim_Ocean.gerundLabel>
+  <!-- EN: View the ocean beneath the surface. -->
+  <DepthRim_Ocean.viewGizmoTooltip>檢視地表之下的海洋。</DepthRim_Ocean.viewGizmoTooltip>
+  
+</LanguageData>

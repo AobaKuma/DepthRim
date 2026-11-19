@@ -1,27 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
 
   <!-- 聲納地標（Docs/聲納地標與穿梭艇探索_機制設計.md） -->
+  <!-- EN: Sonar picked up a new contact worth investigating. -->
   <DepthRim.Landmark.Discovered>聲納捕捉到一個值得調查的新接觸。</DepthRim.Landmark.Discovered>
+  <!-- EN: Too far away to tell what it is. Get it within half the sonar's range. -->
   <DepthRim.Landmark.Unclassified>距離太遠，分辨不出是什麼。要進到聲納範圍的一半以內。</DepthRim.Landmark.Unclassified>
+  <!-- EN: Landmark: reach it with a boarding craft or a submarine to investigate (no landing). -->
   <DepthRim.Landmark.KindEncounter>地標：用突擊艇或潛艇抵達後調查（不下艇）。</DepthRim.Landmark.KindEncounter>
+  <!-- EN: Site: a boarding craft can land the crew here to explore it. -->
   <DepthRim.Landmark.KindSite>地點：突擊艇可以載乘員下去實地探索。</DepthRim.Landmark.KindSite>
+  <!-- EN: Skills: {0} -->
   <DepthRim.Landmark.Skills>相關技能：{0}</DepthRim.Landmark.Skills>
+  <!-- EN: Lost from sonar in {0} -->
   <DepthRim.Landmark.FadesIn>{0}後從聲納上消失</DepthRim.Landmark.FadesIn>
+  <!-- EN: Crew: {0} -->
   <DepthRim.Landmark.Crew>乘員：{0}</DepthRim.Landmark.Crew>
+  <!-- EN: {0} ({1}, {2} {3}: {4}) -->
   <DepthRim.Landmark.OptionLabel>{0}（{1}，{2} {3}：{4}）</DepthRim.Landmark.OptionLabel>
+  <!-- EN: Nobody aboard can do {0}. -->
   <DepthRim.Landmark.NoActor>艇上沒有人會{0}。</DepthRim.Landmark.NoActor>
+  <!-- EN: Leave it alone -->
   <DepthRim.Landmark.Leave>不去碰它</DepthRim.Landmark.Leave>
+  <!-- EN: Great success: {0} ({1}, {2} chance). -->
   <DepthRim.Landmark.Result.Critical>大成功：{0}（{1}，成功率 {2}）。</DepthRim.Landmark.Result.Critical>
+  <!-- EN: Success: {0} ({1}, {2} chance). -->
   <DepthRim.Landmark.Result.Success>成功：{0}（{1}，成功率 {2}）。</DepthRim.Landmark.Result.Success>
+  <!-- EN: Failure: {0} ({1}, {2} chance). -->
   <DepthRim.Landmark.Result.Failure>失敗：{0}（{1}，成功率 {2}）。</DepthRim.Landmark.Result.Failure>
+  <!-- EN: Recovered: {0} -->
   <DepthRim.Landmark.GotThings>取得：{0}</DepthRim.Landmark.GotThings>
+  <!-- EN: {0} {1} points -->
   <DepthRim.Landmark.GotKnowledge>{1} {0} 點</DepthRim.Landmark.GotKnowledge>
+  <!-- EN: {0}: {1} on the {2} -->
   <DepthRim.Landmark.Injured>{0}：{2}{1}</DepthRim.Landmark.Injured>
+  <!-- EN: {0} joins the colony. -->
   <DepthRim.Landmark.Survivor>{0}加入殖民地。</DepthRim.Landmark.Survivor>
+  <!-- EN: Something is heading for {0}. -->
   <DepthRim.Landmark.Attracted>有東西正朝{0}過來。</DepthRim.Landmark.Attracted>
+  <!-- EN: The boarding craft is heading back to {0}. -->
   <DepthRim.Landmark.Returning>突擊艇正返回{0}。</DepthRim.Landmark.Returning>
+  <!-- EN: Investigate landmark -->
   <DepthRim.Landmark.Investigate>調查地標</DepthRim.Landmark.Investigate>
+  <!-- EN: Investigate {0} with everyone aboard the submarine. Recovered items are left beside the helm. -->
   <DepthRim.Landmark.InvestigateDesc>由潛艇上所有人一起調查{0}。取得的物品會放在艦橋旁邊。</DepthRim.Landmark.InvestigateDesc>
 
 </LanguageData>

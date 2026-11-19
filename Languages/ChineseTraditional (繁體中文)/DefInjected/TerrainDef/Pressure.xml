@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: pressure deck -->
+  <DepthRim_PressureDeck.label>耐壓甲板</DepthRim_PressureDeck.label>
+  <!-- EN: Hull platform plating laid on solid ground as a floor. A room floored entirely with it, closed with watertight doors, can be held at pressure by a pressuriser. -->
+  <DepthRim_PressureDeck.description>把船體平台的甲板鋪在實地上當地板。整間房間都鋪上它、再用水密門封起來，加壓機就能讓房間維持在指定的壓力。</DepthRim_PressureDeck.description>
+  
+</LanguageData>

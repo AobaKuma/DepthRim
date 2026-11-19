@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: pressuriser -->
+  <DepthRim_Pressurizer.label>加壓機</DepthRim_Pressurizer.label>
+  <!-- EN: A compressor that pushes the sealed chamber it stands in to a chosen pressure level, so the people inside adapt to that pressure instead of the one outside. Use it to bring a crew up from the deep in steps, or to prepare them before a dive.\n\nThe chamber must be roofed and enclosed, floored entirely with pressure deck or hull platform, and every door must be a watertight door. One pressuriser controls a chamber of up to 80 cells. A sealed chamber keeps its pressure when the pressuriser is switched off or loses power; a room that does not meet these conditions slowly loses it.\n\nWalls and doors must hold the pressure difference or they are slowly crushed, just as against the sea: a single ordinary wall holds the shallows, a watertight door the thermocline, a pressure hull wall anything. Opening a door lets some pressure out. People who would suffer on the other side of a watertight door will not walk through it on their own. Requires power. -->
+  <DepthRim_Pressurizer.description>把所在的密閉艙室推到指定壓力等級的壓縮機，讓裡面的人照艙內的壓力適應，不受外面影響。可以讓從深處上來的人分段減壓，也可以在下潛前先加壓。\n\n艙室必須有屋頂而且密閉，地板全部是耐壓甲板或船體平台，所有的門都是水密門。一台加壓機最多控制 80 格的艙室。密閉的艙室在加壓機關掉或斷電後仍會保持原有的壓力；不符合條件的房間則會慢慢洩壓。\n\n牆和門必須撐得住壓差，否則會慢慢被壓壞，和對著海水時一樣：單層一般牆撐得住淺海、水密門撐得住變溫層、水密隔牆不限。開門會洩掉一些壓力。走過水密門會不適的人不會自己通過。需要電力。</DepthRim_Pressurizer.description>
+  
+</LanguageData>

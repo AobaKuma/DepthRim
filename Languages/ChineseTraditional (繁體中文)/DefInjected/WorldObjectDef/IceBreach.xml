@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: ice breach -->
+  <DepthRim_IceBreachSite.label>破冰點</DepthRim_IceBreachSite.label>
+  <!-- EN: A hole a submarine broke through the sea ice. -->
+  <DepthRim_IceBreachSite.description>潛艇在海冰上撞開的破口。</DepthRim_IceBreachSite.description>
+  
+</LanguageData>

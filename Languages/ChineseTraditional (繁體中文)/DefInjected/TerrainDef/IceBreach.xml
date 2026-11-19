@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: open water -->
+  <DepthRim_BreachWater.label>開放水</DepthRim_BreachWater.label>
+  <!-- EN: Freezing open water in a hole broken through the sea ice. It slowly ices over again. -->
+  <DepthRim_BreachWater.description>海冰被撞開的破口裡冰冷的海水，會慢慢重新結冰。</DepthRim_BreachWater.description>
+  <!-- EN: water -->
+  <DepthRim_BreachWater.tools.water.label>TODO</DepthRim_BreachWater.tools.water.label>
+  
+  <!-- EN: cracked sea ice -->
+  <DepthRim_IceCracked.label>裂開的海冰</DepthRim_IceCracked.label>
+  <!-- EN: Sea ice split by the pressure of a surfacing hull. The cracks freeze shut again within a few days of frost. -->
+  <DepthRim_IceCracked.description>被浮上來的船體頂裂的海冰。結凍幾天之後裂縫會重新凍合。</DepthRim_IceCracked.description>
+  
+  <!-- EN: ice rubble -->
+  <DepthRim_IceRubble.label>碎冰堆</DepthRim_IceRubble.label>
+  <!-- EN: Slabs of sea ice shoved up and piled around a surfaced hull. Slow and awkward to cross. -->
+  <DepthRim_IceRubble.description>被推開、堆在浮出的船體四周的冰塊，走起來又慢又不穩。</DepthRim_IceRubble.description>
+  
+  <!-- EN: new ice -->
+  <DepthRim_NewIce.label>新冰</DepthRim_NewIce.label>
+  <!-- EN: A thin skin of ice freezing over open water. It holds a person, but nothing can be built on it. -->
+  <DepthRim_NewIce.description>開放水上剛結起來的一層薄冰。撐得住人，但不能在上面建造。</DepthRim_NewIce.description>
+  
+  <!-- EN: sea ice -->
+  <DepthRim_SeaIceSheet.label>海冰</DepthRim_SeaIceSheet.label>
+  <!-- EN: Floating sea ice, thick enough to walk and build on. -->
+  <DepthRim_SeaIceSheet.description>浮在海上的冰，厚到可以行走、建造。</DepthRim_SeaIceSheet.description>
+  
+</LanguageData>

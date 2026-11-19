@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: volcanic rock floor -->
+  <DR_RockFloor.label>火山岩床</DR_RockFloor.label>
+  <!-- EN: Bare, young basalt on the sea floor, cracked as it cooled. Hardly any sediment has settled on it yet. -->
+  <DR_RockFloor.description>海底裸露的年輕玄武岩，冷卻時裂成一塊一塊，上面幾乎還沒有沉積物。</DR_RockFloor.description>
+  
+</LanguageData>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: ocean platform -->
+  <DepthRim_OceanDeck.label>海上平台</DepthRim_OceanDeck.label>
+  
+  <!-- EN: open air -->
+  <DepthRim_OpenAir.label>高空</DepthRim_OpenAir.label>
+  
+  <!-- EN: open sea -->
+  <DepthRim_OpenSea.label>開放海面</DepthRim_OpenSea.label>
+  
+</LanguageData>

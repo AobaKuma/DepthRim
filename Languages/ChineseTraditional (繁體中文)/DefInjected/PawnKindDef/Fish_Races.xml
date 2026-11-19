@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: large fish -->
+  <DepthRim_Fish_Large.label>大型魚</DepthRim_Fish_Large.label>
+  
+  <!-- EN: fish -->
+  <DepthRim_Fish_Medium.label>魚</DepthRim_Fish_Medium.label>
+  
+  <!-- EN: small fish -->
+  <DepthRim_Fish_Small.label>小型魚</DepthRim_Fish_Small.label>
+  
+</LanguageData>

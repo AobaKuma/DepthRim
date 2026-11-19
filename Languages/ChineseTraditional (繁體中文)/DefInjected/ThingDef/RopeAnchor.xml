@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: safety rope anchor -->
+  <DR_RopeAnchor.label>安全繩錨點</DR_RopeAnchor.label>
+  <!-- EN: A steel deck anchor with two clasps and a coil of safety line. While a submarine is under way, or the sea is rough at the surface, up to two people working outside within 9 cells are clipped on automatically, and the line keeps them from being swept overboard. Walls block the line; doors do not.\n\nIf the anchor is destroyed or removed, the lines part at once. -->
+  <DR_RopeAnchor.description>甲板上的鋼製錨點，附兩個扣環和一捲安全繩。潛艇航行中、或水面海況惡劣時，9 格內在艙外工作的人會自動扣上（最多兩人），繩子能防止他們被沖走。牆會擋住繩子，門不會。\n\n錨點被摧毀或拆除時，繩子會立刻斷開。</DR_RopeAnchor.description>
+  
+</LanguageData>

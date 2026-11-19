@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: They will fight through the compartments, then fall back to their craft and leave. Destroy the craft and they cannot leave. -->
+  <DepthRim_Boarding.arrivalTextEnemy>他們會一路打穿各個艙室，然後撤回突擊艇離開。摧毀突擊艇，他們就走不了。</DepthRim_Boarding.arrivalTextEnemy>
+  <!-- EN: They are moving in to help you. -->
+  <DepthRim_Boarding.arrivalTextFriendly>他們正趕來幫你。</DepthRim_Boarding.arrivalTextFriendly>
+  <!-- EN: Boarding raid -->
+  <DepthRim_Boarding.letterLabelEnemy>跳幫襲擊</DepthRim_Boarding.letterLabelEnemy>
+  <!-- EN: Friendlies -->
+  <DepthRim_Boarding.letterLabelFriendly>友軍</DepthRim_Boarding.letterLabelFriendly>
+  
+</LanguageData>

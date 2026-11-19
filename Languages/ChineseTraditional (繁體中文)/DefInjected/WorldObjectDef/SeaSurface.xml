@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: sea platform -->
+  <DepthRim_SeaSurfaceSite.label>海上平台</DepthRim_SeaSurfaceSite.label>
+  <!-- EN: A platform on the open sea. -->
+  <DepthRim_SeaSurfaceSite.description>開放海面上的平台。</DepthRim_SeaSurfaceSite.description>
+  
+</LanguageData>

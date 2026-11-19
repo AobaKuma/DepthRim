@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: boarding TargetA. -->
+  <DepthRim_BoardCraft.reportString>登上TargetA。</DepthRim_BoardCraft.reportString>
+  
+  <!-- EN: carrying TargetA to TargetB. -->
+  <DepthRim_CarryToCraft.reportString>把TargetA扛上TargetB。</DepthRim_CarryToCraft.reportString>
+  
+</LanguageData>

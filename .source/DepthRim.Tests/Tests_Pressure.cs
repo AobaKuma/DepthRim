@@ -175,6 +175,12 @@ static partial class Test
         XDocument doors = XDocument.Load(Path.Combine(defs, "Flooding", "Flooding_Things.xml"));
         XElement door = doors.Root.Elements("ThingDef").Single(e => (string)e.Element("defName") == "DepthRim_WatertightDoor");
         Check((string)door.Element("terrainAffordanceNeeded") == "Heavy", "the watertight door can be built on ordinary ground and on pressure deck");
+        // 耐壓艙門：唯一耐壓到海床的門（沒有它，有朝外門的潛艇下不到變溫層以下）
+        XElement hatch = doors.Root.Elements("ThingDef").Single(e => (string)e.Element("defName") == "DepthRim_PressureHatch");
+        XElement hatchExt = hatch.Element("modExtensions").Elements("li").Single(e => (string)e.Attribute("Class") == "DepthRim.LeakResistanceExtension");
+        Check((string)hatch.Element("thingClass") == "DepthRim.Building_WatertightDoor", "the pressure hatch follows the watertight door rules");
+        Check((string)hatchExt.Element("pressureRating") == "Seabed", "the pressure hatch is rated to the seabed");
+        Check((string)hatch.Element("terrainAffordanceNeeded") == "Heavy", "the pressure hatch can be built on ordinary ground and on hull platform");
 
         CompProperties_Pressurizer props = new CompProperties_Pressurizer();
         Check(props.compClass == typeof(CompPressurizer), "props point at the comp class");

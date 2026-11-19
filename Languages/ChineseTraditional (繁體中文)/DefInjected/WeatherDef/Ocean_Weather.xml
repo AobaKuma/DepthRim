@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: under the ice -->
+  <DepthRim_UnderIce.label>冰下</DepthRim_UnderIce.label>
+  <!-- EN: Sea ice seals the water overhead. Barely any daylight filters through; without lamps it is almost pitch dark. -->
+  <DepthRim_UnderIce.description>頭頂被海冰封住，幾乎透不進日光；沒有燈就近乎伸手不見五指。</DepthRim_UnderIce.description>
+  
+  <!-- EN: undersea -->
+  <DepthRim_Undersea.label>海底</DepthRim_Undersea.label>
+  <!-- EN: There is no weather on the sea floor, only the cold, dark water. -->
+  <DepthRim_Undersea.description>海床上沒有天氣，只有冰冷黑暗的海水。</DepthRim_Undersea.description>
+  
+</LanguageData>

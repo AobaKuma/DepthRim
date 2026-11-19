@@ -85,7 +85,7 @@
   <ResearchProjectDef>
     <defName>DepthRim_AbyssalNavigation</defName>
     <label>abyssal navigation</label>
-    <description>The limits of what a hull and a crew can endure in the deep: magnetohydrodynamic propulsion that is almost silent, hard suits for leaving the hull at depth, and the pressurisation procedures needed before stepping out into the abyss.\n\nUnlocks the advanced underwater thruster.</description>
+    <description>The limits of what a hull and a crew can endure in the deep: magnetohydrodynamic propulsion that is almost silent, hard suits for leaving the hull at depth, and the pressurisation procedures needed before stepping out into the abyss.\n\nUnlocks the advanced underwater thruster and the pressure hatch.</description>
     <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
     <knowledgeCost>3000</knowledgeCost>
     <techLevel>Spacer</techLevel>

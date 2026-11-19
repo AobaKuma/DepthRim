@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: barotrauma -->
+  <DepthRim_Barotrauma.label>氣壓傷</DepthRim_Barotrauma.label>
+  <!-- EN: Crushing water pressure beyond what this body or its equipment can withstand. -->
+  <DepthRim_Barotrauma.description>水壓超過這個身體或裝備能承受的上限。</DepthRim_Barotrauma.description>
+  <!-- EN: minor -->
+  <DepthRim_Barotrauma.stages.minor.label>輕微</DepthRim_Barotrauma.stages.minor.label>
+  <!-- EN: serious -->
+  <DepthRim_Barotrauma.stages.serious.label>嚴重</DepthRim_Barotrauma.stages.serious.label>
+  <!-- EN: critical -->
+  <DepthRim_Barotrauma.stages.critical.label>危急</DepthRim_Barotrauma.stages.critical.label>
+  
+  <!-- EN: drowning -->
+  <DepthRim_Drowning.label>溺水</DepthRim_Drowning.label>
+  <!-- EN: Unable to breathe underwater. Get out of the water or into a diving suit before it is too late. -->
+  <DepthRim_Drowning.description>在水下無法呼吸。快離開水面或穿上潛水服，否則就來不及了。</DepthRim_Drowning.description>
+  <!-- EN: holding breath -->
+  <DepthRim_Drowning.stages.holding_breath.label>憋氣</DepthRim_Drowning.stages.holding_breath.label>
+  <!-- EN: choking -->
+  <DepthRim_Drowning.stages.choking.label>嗆水</DepthRim_Drowning.stages.choking.label>
+  <!-- EN: drowning -->
+  <DepthRim_Drowning.stages.drowning.label>溺水</DepthRim_Drowning.stages.drowning.label>
+  
+  <!-- EN: in water -->
+  <DepthRim_Wading.label>在水中</DepthRim_Wading.label>
+  <!-- EN: Standing in or swimming through water. Movement is slowed. -->
+  <DepthRim_Wading.description>站在水裡或游過水域。移動速度變慢。</DepthRim_Wading.description>
+  <!-- EN: ankle-deep -->
+  <DepthRim_Wading.stages.ankledeep.label>水深及踝</DepthRim_Wading.stages.ankledeep.label>
+  <!-- EN: waist-deep -->
+  <DepthRim_Wading.stages.waistdeep.label>水深及腰</DepthRim_Wading.stages.waistdeep.label>
+  <!-- EN: swimming -->
+  <DepthRim_Wading.stages.swimming.label>游泳</DepthRim_Wading.stages.swimming.label>
+  
+</LanguageData>

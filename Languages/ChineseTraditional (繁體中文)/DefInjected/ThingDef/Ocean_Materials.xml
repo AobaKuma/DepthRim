@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: coral blocks -->
+  <DepthRim_BlocksCoral.label>珊瑚磚</DepthRim_BlocksCoral.label>
+  <!-- EN: Blocks of cut reef coral. Light and pretty, but softer than true stone. -->
+  <DepthRim_BlocksCoral.description>切好的礁珊瑚磚。輕巧好看，但比真正的石頭軟。</DepthRim_BlocksCoral.description>
+  <!-- EN: coral -->
+  <DepthRim_BlocksCoral.stuffProps.stuffAdjective>珊瑚</DepthRim_BlocksCoral.stuffProps.stuffAdjective>
+  
+  <!-- EN: dark coral blocks -->
+  <DepthRim_BlocksDarkCoral.label>深色珊瑚磚</DepthRim_BlocksDarkCoral.label>
+  <!-- EN: Blocks of dense cold-water coral. Heavy and very tough. -->
+  <DepthRim_BlocksDarkCoral.description>緻密冷水珊瑚切成的石磚。很重，也非常堅固。</DepthRim_BlocksDarkCoral.description>
+  <!-- EN: dark coral -->
+  <DepthRim_BlocksDarkCoral.stuffProps.stuffAdjective>深色珊瑚</DepthRim_BlocksDarkCoral.stuffProps.stuffAdjective>
+  
+  <!-- EN: coral chunk -->
+  <DepthRim_ChunkCoral.label>珊瑚石塊</DepthRim_ChunkCoral.label>
+  <!-- EN: A chunk of reef coral. Can be cut into usable coral blocks. -->
+  <DepthRim_ChunkCoral.description>一塊礁珊瑚。可以切成珊瑚磚。</DepthRim_ChunkCoral.description>
+  
+  <!-- EN: dark coral chunk -->
+  <DepthRim_ChunkDarkCoral.label>深色珊瑚石塊</DepthRim_ChunkDarkCoral.label>
+  <!-- EN: A chunk of dense, dark coral. Can be cut into heavy coral blocks. -->
+  <DepthRim_ChunkDarkCoral.description>一塊緻密的深色珊瑚。可以切成厚重的珊瑚磚。</DepthRim_ChunkDarkCoral.description>
+  
+  <!-- EN: coral rock -->
+  <DepthRim_CoralRock.label>珊瑚岩</DepthRim_CoralRock.label>
+  <!-- EN: A ridge of pale reef coral, grown over centuries into solid stone. It can be quarried and cut into light, decorative blocks. -->
+  <DepthRim_CoralRock.description>淺色礁珊瑚經過數百年長成的堅硬岩脊。可以開採並切成輕巧、好看的石磚。</DepthRim_CoralRock.description>
+  
+  <!-- EN: dark coral rock -->
+  <DepthRim_DarkCoralRock.label>深色珊瑚岩</DepthRim_DarkCoralRock.label>
+  <!-- EN: A massive mound of slow-growing cold-water coral, dark and dense as basalt. It can be quarried and cut into heavy blocks. -->
+  <DepthRim_DarkCoralRock.description>生長緩慢的冷水珊瑚堆成的巨大丘塊，像玄武岩一樣深色而緻密。可以開採並切成厚重的石磚。</DepthRim_DarkCoralRock.description>
+  
+  <!-- EN: kelp -->
+  <DepthRim_Kelp.label>海藻</DepthRim_Kelp.label>
+  <!-- EN: Tall, swaying strands of kelp anchored to the silt. It grows without sunlight in the cold coastal water and can be harvested for food. -->
+  <DepthRim_Kelp.description>扎根在淤泥裡、隨水擺動的高大海藻。不需要日光也能在冰冷的近岸海水裡生長，可以採收當作食物。</DepthRim_Kelp.description>
+  
+  <!-- EN: raw kelp -->
+  <DepthRim_RawKelp.label>生海藻</DepthRim_RawKelp.label>
+  <!-- EN: Freshly harvested kelp. Salty and chewy, but edible raw and better cooked. -->
+  <DepthRim_RawKelp.description>剛採收的海藻。又鹹又有嚼勁，生吃可以，煮過更好。</DepthRim_RawKelp.description>
+  
+</LanguageData>

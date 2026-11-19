@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: glaring light -->
+  <DepthRim_BrightLight.stages.glaring_light.label>刺眼</DepthRim_BrightLight.stages.glaring_light.label>
+  <!-- EN: This light hurts my eyes. -->
+  <DepthRim_BrightLight.stages.glaring_light.description>這光刺得眼睛好痛。</DepthRim_BrightLight.stages.glaring_light.description>
+  <!-- EN: blinding light -->
+  <DepthRim_BrightLight.stages.blinding_light.label>強光灼眼</DepthRim_BrightLight.stages.blinding_light.label>
+  <!-- EN: Too bright. I can barely see, and it burns. -->
+  <DepthRim_BrightLight.stages.blinding_light.description>太亮了。我幾乎看不見，眼睛像在燒。</DepthRim_BrightLight.stages.blinding_light.description>
+  
+  <!-- EN: comforting dark -->
+  <DepthRim_ComfortingDark.stages.comforting_dark.label>安心的黑暗</DepthRim_ComfortingDark.stages.comforting_dark.label>
+  <!-- EN: Finally, a place where the light doesn't sting. -->
+  <DepthRim_ComfortingDark.stages.comforting_dark.description>終於有個光不會刺眼的地方。</DepthRim_ComfortingDark.stages.comforting_dark.description>
+  
+  <!-- EN: queasy -->
+  <DepthRim_Seasick.stages.queasy.label>頭暈</DepthRim_Seasick.stages.queasy.label>
+  <!-- EN: The deck won't stop moving. My stomach doesn't like it. -->
+  <DepthRim_Seasick.stages.queasy.description>甲板一直在動，胃不太舒服。</DepthRim_Seasick.stages.queasy.description>
+  <!-- EN: seasick -->
+  <DepthRim_Seasick.stages.seasick.label>暈船</DepthRim_Seasick.stages.seasick.label>
+  <!-- EN: Everything is swaying. I just want to lie down somewhere that stays still. -->
+  <DepthRim_Seasick.stages.seasick.description>什麼都在晃。我只想找個不會動的地方躺下。</DepthRim_Seasick.stages.seasick.description>
+  <!-- EN: severely seasick -->
+  <DepthRim_Seasick.stages.severely_seasick.label>嚴重暈船</DepthRim_Seasick.stages.severely_seasick.label>
+  <!-- EN: I can't keep anything down. Make the sea stop. -->
+  <DepthRim_Seasick.stages.severely_seasick.description>吃什麼吐什麼。拜託讓海停下來。</DepthRim_Seasick.stages.severely_seasick.description>
+  
+</LanguageData>

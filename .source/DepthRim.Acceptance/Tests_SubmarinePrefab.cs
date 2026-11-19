@@ -84,6 +84,16 @@ namespace DepthRim.Acceptance
             ctx.Check(rating == DepthTier.Thermocline, "the hull is rated to the thermocline");
             ctx.Check(weakest != null && weakest.def.defName == "DepthRim_WatertightDoor" && hull.EdgeCells.Contains(weakest.Position), "the weakest piece is the airlock's outer door");
 
+            // 換成耐壓艙門後，整艘船耐壓到海床（下得了變溫層以下）
+            IntVec3 outerDoor = weakest.Position;
+            weakest.Destroy();
+            Thing hatch = DepthRimFixture.Spawn(DepthRimDefOf.DepthRim_PressureHatch, outerDoor, map, null, Faction.OfPlayer);
+            rating = HullPressure.RatingFor(map, out Building weakest2);
+            ctx.Note($"with a pressure hatch: hull rating {rating}, weakest {weakest2?.def.defName}");
+            ctx.Check(rating == DepthTier.Seabed, "with a pressure hatch as the outer door, the hull is rated to the seabed");
+            hatch.Destroy();
+            DepthRimFixture.Spawn(DepthRimDefOf.DepthRim_WatertightDoor, outerDoor, map, null, Faction.OfPlayer);
+
             foreach (Wait w in ctx.ScreenshotOn(map, center, 14f, "prefab_submarine")) { yield return w; }
         }
     }

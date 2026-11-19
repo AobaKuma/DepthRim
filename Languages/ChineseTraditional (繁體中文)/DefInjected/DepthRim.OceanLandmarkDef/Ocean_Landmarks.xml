@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: ancient acoustic array -->
+  <DR_Landmark_AcousticArray.label>古代聲學陣列</DR_Landmark_AcousticArray.label>
+  <!-- EN: A ring of hydrophones the size of a building, older than any colony on this planet. Its core still hums and answers your sonar with a slow, patient rhythm. -->
+  <DR_Landmark_AcousticArray.description>一圈大如建築的水聽器陣列，比這顆星球上的任何殖民地都還古老。核心仍在低鳴，用緩慢而耐心的節奏回應你的聲納。</DR_Landmark_AcousticArray.description>
+  <!-- EN: Download its recordings -->
+  <DR_Landmark_AcousticArray.options.0.label>下載它的紀錄</DR_Landmark_AcousticArray.options.0.label>
+  <!-- EN: {PAWN_nameDef} decodes the array's archive: centuries of seafloor surveys, intact. -->
+  <DR_Landmark_AcousticArray.options.0.criticalText>{PAWN_nameDef}解開了陣列的檔案庫：數百年份的海床測繪資料，完整無缺。</DR_Landmark_AcousticArray.options.0.criticalText>
+  <!-- EN: {PAWN_nameDef} trips the array's defences. It blasts a deafening ping across the sea, and anyone listening now knows where your colony is. -->
+  <DR_Landmark_AcousticArray.options.0.failureText>{PAWN_nameDef}觸發了陣列的防禦機制。它朝整片海域發出一記震耳欲聾的聲波，所有在聽的人現在都知道你的殖民地在哪裡了。</DR_Landmark_AcousticArray.options.0.failureText>
+  <!-- EN: {PAWN_nameDef} pulls a large part of the archive before the core shuts the connection. -->
+  <DR_Landmark_AcousticArray.options.0.successText>{PAWN_nameDef}在核心切斷連線前，抓下了大部分的檔案。</DR_Landmark_AcousticArray.options.0.successText>
+  <!-- EN: Strip it for parts -->
+  <DR_Landmark_AcousticArray.options.1.label>拆零件</DR_Landmark_AcousticArray.options.1.label>
+  <!-- EN: {PAWN_nameDef} unbolts a whole processing module in one piece. -->
+  <DR_Landmark_AcousticArray.options.1.criticalText>{PAWN_nameDef}把一整個處理模組完整拆了下來。</DR_Landmark_AcousticArray.options.1.criticalText>
+  <!-- EN: A capacitor discharges as {PAWN_nameDef} cuts into the casing. -->
+  <DR_Landmark_AcousticArray.options.1.failureText>{PAWN_nameDef}切開外殼時，一顆電容放電了。</DR_Landmark_AcousticArray.options.1.failureText>
+  <!-- EN: {PAWN_nameDef} salvages advanced parts from the outer ring. -->
+  <DR_Landmark_AcousticArray.options.1.successText>{PAWN_nameDef}從外環拆下了一批先進零件。</DR_Landmark_AcousticArray.options.1.successText>
+  
+  <!-- EN: distress beacon -->
+  <DR_Landmark_DistressBeacon.label>求救信標</DR_Landmark_DistressBeacon.label>
+  <!-- EN: A looping distress call on an emergency band. It comes from a small escape capsule tethered to the seafloor. Something inside is still knocking on the hull, unless the knocking is meant to lure you in. -->
+  <DR_Landmark_DistressBeacon.description>緊急頻道上不斷重播一段求救訊號，來源是一具繫在海床上的小型逃生艙。裡面有東西還在敲著艙壁，除非那敲擊聲本來就是為了引你過去。</DR_Landmark_DistressBeacon.description>
+  <!-- EN: Dock and talk them out -->
+  <DR_Landmark_DistressBeacon.options.0.label>對接並說服對方出來</DR_Landmark_DistressBeacon.options.0.label>
+  <!-- EN: {PAWN_nameDef} talks the survivor through the docking procedure. They come aboard calm, and they bring their emergency stash with them. -->
+  <DR_Landmark_DistressBeacon.options.0.criticalText>{PAWN_nameDef}一步步引導倖存者完成對接。對方冷靜地登艇，還把自己的緊急物資一起帶了過來。</DR_Landmark_DistressBeacon.options.0.criticalText>
+  <!-- EN: The survivor panics and floods the capsule. As {PAWN_nameDef} pulls away, the sonar picks up a craft that was waiting nearby. The beacon was bait. -->
+  <DR_Landmark_DistressBeacon.options.0.failureText>倖存者一慌，弄得逃生艙進水。{PAWN_nameDef}撤離時，聲納捕捉到一艘早就埋伏在附近的艇。這個信標是誘餌。</DR_Landmark_DistressBeacon.options.0.failureText>
+  <!-- EN: {PAWN_nameDef} calms the frightened survivor long enough to dock and bring them aboard. -->
+  <DR_Landmark_DistressBeacon.options.0.successText>{PAWN_nameDef}安撫住驚慌的倖存者，撐到對接完成，把人接上艇。</DR_Landmark_DistressBeacon.options.0.successText>
+  <!-- EN: Scan the capsule before docking -->
+  <DR_Landmark_DistressBeacon.options.1.label>對接前先掃描逃生艙</DR_Landmark_DistressBeacon.options.1.label>
+  <!-- EN: {PAWN_nameDef}'s scan finds a single survivor and no ambush, and spots a cargo bay that came loose nearby. -->
+  <DR_Landmark_DistressBeacon.options.1.criticalText>{PAWN_nameDef}的掃描確認裡面只有一名倖存者、附近沒有埋伏，還發現旁邊有一節脫落的貨艙。</DR_Landmark_DistressBeacon.options.1.criticalText>
+  <!-- EN: {PAWN_nameDef} takes too long over the readings. By the time the scan is done, the beacon has gone silent. -->
+  <DR_Landmark_DistressBeacon.options.1.failureText>{PAWN_nameDef}判讀數據花了太久。等掃描結束，信標已經沒有聲音了。</DR_Landmark_DistressBeacon.options.1.failureText>
+  <!-- EN: {PAWN_nameDef}'s scan finds one survivor and nothing else around. The docking goes smoothly. -->
+  <DR_Landmark_DistressBeacon.options.1.successText>{PAWN_nameDef}的掃描只找到一名倖存者，附近沒有其他東西。對接很順利。</DR_Landmark_DistressBeacon.options.1.successText>
+  
+  <!-- EN: shipwreck -->
+  <DR_Landmark_Shipwreck.label>沉船</DR_Landmark_Shipwreck.label>
+  <!-- EN: The sonar returns a long, hard outline: a steel hull broken into sections on the seafloor. Send a boarding craft and the crew can search the flooded holds in diving gear. -->
+  <DR_Landmark_Shipwreck.description>聲納傳回一道又長又硬的輪廓：一艘斷成幾截的鋼殼船躺在海床上。派突擊艇過去，乘員就能穿著潛水裝備搜索進水的貨艙。</DR_Landmark_Shipwreck.description>
+  
+  <!-- EN: sunken supply pod -->
+  <DR_Landmark_SupplyPod.label>沉沒的補給艙</DR_Landmark_SupplyPod.label>
+  <!-- EN: A supply pod lies half-buried in silt, its hull dented but sealed. The hatch is held shut by a corroded manual lever and an electronic lock that still blinks faintly. -->
+  <DR_Landmark_SupplyPod.description>一具補給艙半埋在淤泥裡，艙殼凹陷但仍然密封。艙門由一支鏽蝕的手動拉桿和一道仍微微閃爍的電子鎖鎖著。</DR_Landmark_SupplyPod.description>
+  <!-- EN: Pry the hatch open -->
+  <DR_Landmark_SupplyPod.options.0.label>撬開艙門</DR_Landmark_SupplyPod.options.0.label>
+  <!-- EN: {PAWN_nameDef} braces against the hull and the hatch gives way cleanly. The cargo inside is bone dry. -->
+  <DR_Landmark_SupplyPod.options.0.criticalText>{PAWN_nameDef}抵住艙殼一使力，艙門乾淨俐落地開了。裡面的貨物一滴水都沒沾到。</DR_Landmark_SupplyPod.options.0.criticalText>
+  <!-- EN: The lever snaps. {PAWN_nameDef} cuts the hatch open in the end, but the sea gets in first and ruins most of the cargo. -->
+  <DR_Landmark_SupplyPod.options.0.failureText>拉桿斷了。{PAWN_nameDef}最後還是把艙門切開，但海水先灌了進去，貨物幾乎全毀。</DR_Landmark_SupplyPod.options.0.failureText>
+  <!-- EN: {PAWN_nameDef} works the lever free. A gush of water floods in, but most of the cargo is still usable. -->
+  <DR_Landmark_SupplyPod.options.0.successText>{PAWN_nameDef}扳鬆了拉桿。海水湧了進去，但大部分貨物還能用。</DR_Landmark_SupplyPod.options.0.successText>
+  <!-- EN: Crack the electronic lock -->
+  <DR_Landmark_SupplyPod.options.1.label>破解電子鎖</DR_Landmark_SupplyPod.options.1.label>
+  <!-- EN: {PAWN_nameDef} finds a maintenance override. The pod opens and its manifest lists a sealed spacer crate. -->
+  <DR_Landmark_SupplyPod.options.1.criticalText>{PAWN_nameDef}找到維修用的強制開啟程序。艙門打開，貨單上還列著一個密封的太空零件箱。</DR_Landmark_SupplyPod.options.1.criticalText>
+  <!-- EN: The lock fries itself as {PAWN_nameDef} works on it. The pod is sealed for good. -->
+  <DR_Landmark_SupplyPod.options.1.failureText>{PAWN_nameDef}弄到一半，電子鎖自己燒毀了。這具補給艙再也打不開。</DR_Landmark_SupplyPod.options.1.failureText>
+  <!-- EN: {PAWN_nameDef} bypasses the lock. The pod opens without letting the sea in. -->
+  <DR_Landmark_SupplyPod.options.1.successText>{PAWN_nameDef}繞過了電子鎖，艙門打開時沒有讓海水灌進去。</DR_Landmark_SupplyPod.options.1.successText>
+  
+</LanguageData>

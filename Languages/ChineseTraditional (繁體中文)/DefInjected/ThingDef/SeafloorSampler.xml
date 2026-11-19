@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: seafloor sampler -->
+  <DR_SeafloorSampler.label>海底採樣器</DR_SeafloorSampler.label>
+  <!-- EN: A drilling and sensor rig set down beside a cold seep, an underwater volcano or a hydrothermal vent. While powered, it takes rock cores, water and microbe samples and turns them into seabed research, the only way to gather it.\n\nEach site only has so much to teach: once it has been fully sampled, move on and find another. Several samplers beside the same site share it. -->
+  <DR_SeafloorSampler.description>架在冷泉、海底火山或熱液泉旁的鑽探與感測設備。通電時會採集岩芯、水樣與微生物樣本，轉成海底研究點數，這是取得海底研究的唯一方式。\n\n每個地點能提供的研究有限：採樣完畢後就得另找新的地點。同一個地點旁的多台採樣器共用同一份。</DR_SeafloorSampler.description>
+  
+</LanguageData>

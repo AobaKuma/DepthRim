@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: platform pillar -->
+  <DepthRim_PlatformPillar.label>平台支柱</DepthRim_PlatformPillar.label>
+  <!-- EN: A massive steel-and-concrete pillar driven into the seabed, rising high above the waves. When it is finished, a small ocean platform opens on top of it; the pillar holds up any ocean platform within its support radius, and platform left without any pillar in range collapses into the sea.\n\n      An elevator inside the pillar links the water below with the platform above. Build it on open sea right next to a floating platform: at least one side of its 9x9 footprint must touch it, and that cell (outlined green while placing) is the elevator spot. -->
+  <DepthRim_PlatformPillar.description>打進海床、高高伸出海面的巨大鋼筋混凝土支柱。完工時頂端會開出一小塊海上平台；支撐半徑內的海上平台都靠它撐住，範圍內沒有任何支柱的平台會塌進海裡。\n\n支柱裡的升降梯連接下方的水面與上方的平台。要蓋在浮船旁邊的開放海面上：9×9 的佔地至少有一邊緊貼浮船，緊貼的那一格（放置時綠框）就是升降點。</DepthRim_PlatformPillar.description>
+  
+  <!-- EN: platform pillar top -->
+  <DepthRim_PlatformPillarTop.label>平台支柱頂</DepthRim_PlatformPillarTop.label>
+  <!-- EN: The top of a platform pillar, with the elevator down to the water. -->
+  <DepthRim_PlatformPillarTop.description>平台支柱的頂端，裡面有通往水面的升降梯。</DepthRim_PlatformPillarTop.description>
+  
+</LanguageData>

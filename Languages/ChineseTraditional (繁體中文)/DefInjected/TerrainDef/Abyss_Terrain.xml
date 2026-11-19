@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: abyss -->
+  <DepthRim_Abyss.label>深淵</DepthRim_Abyss.label>
+  <!-- EN: A drop with no visible bottom. There is no ground here, only darkness going down. -->
+  <DepthRim_Abyss.description>水深不見底的地方。看不到地面，只有往下的黑暗。</DepthRim_Abyss.description>
+  
+  <!-- EN: seabed gravel -->
+  <DepthRim_Seabed_Gravel.label>海床碎石</DepthRim_Seabed_Gravel.label>
+  <!-- EN: Stony sediment on the ocean floor beneath the ice. -->
+  <DepthRim_Seabed_Gravel.description>冰層下海底的碎石沉積。</DepthRim_Seabed_Gravel.description>
+  
+  <!-- EN: seabed sand -->
+  <DepthRim_Seabed_Sand.label>海床細沙</DepthRim_Seabed_Sand.label>
+  <!-- EN: Fine sand drifted across the ocean floor. -->
+  <DepthRim_Seabed_Sand.description>被海流推到冰層下海底的細沙。</DepthRim_Seabed_Sand.description>
+  
+  <!-- EN: seabed silt -->
+  <DepthRim_Seabed_Silt.label>海床淤泥</DepthRim_Seabed_Silt.label>
+  <!-- EN: Soft, dark silt rich in organic matter. Kelp takes root in it. -->
+  <DepthRim_Seabed_Silt.description>富含有機物的柔軟深色淤泥，海藻會在上面扎根。</DepthRim_Seabed_Silt.description>
+  
+</LanguageData>

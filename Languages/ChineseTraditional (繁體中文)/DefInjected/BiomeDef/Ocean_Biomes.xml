@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: abyssal trench -->
+  <DepthRim_AbyssalTrench.label>深淵海溝</DepthRim_AbyssalTrench.label>
+  <!-- EN: The edge of an ocean trench, where the sea floor plunges beneath a continent along a subduction fault. Sheer cliffs fall away into bottomless dark. -->
+  <DepthRim_AbyssalTrench.description>隱沒帶海溝的邊緣：海床沿著斷層插進大陸底下。陡峭的崖壁直落進無底的黑暗。</DepthRim_AbyssalTrench.description>
+  
+  <!-- EN: deep coral reef -->
+  <DepthRim_DeepReef.label>深珊瑚礁</DepthRim_DeepReef.label>
+  <!-- EN: Cold, dim water on the continental slope or atop a seamount, where dark coral grows in slow, massive mounds below the reach of sunlight. -->
+  <DepthRim_DeepReef.description>大陸坡上或海山頂上日光照不到的冰冷幽暗水域，深色珊瑚在這裡緩慢長成巨大的丘塊。</DepthRim_DeepReef.description>
+  
+  <!-- EN: hydrothermal vent field -->
+  <DepthRim_HydrothermalField.label>熱液噴口區</DepthRim_HydrothermalField.label>
+  <!-- EN: A field of hydrothermal vents on the axis of a mid-ocean ridge. The water is warm, the young volcanic rock is fractured, and the vents can be tapped for geothermal power. -->
+  <DepthRim_HydrothermalField.description>中洋脊軸線上的熱液噴口群。海水溫暖、年輕的火山岩層破碎，噴口可以用來地熱發電。</DepthRim_HydrothermalField.description>
+  
+  <!-- EN: kelp forest -->
+  <DepthRim_KelpForest.label>海藻林</DepthRim_KelpForest.label>
+  <!-- EN: Cool coastal water thick with towering kelp. The silt floor is fertile, and the kelp can be harvested for food. -->
+  <DepthRim_KelpForest.description>長滿高大海藻的涼爽近岸海域。淤泥海床肥沃，海藻可以採收當作食物。</DepthRim_KelpForest.description>
+  
+  <!-- EN: landmass -->
+  <DepthRim_Landmass.label>陸塊</DepthRim_Landmass.label>
+  <!-- EN: Solid continental rock. There is no ocean beneath dry land. -->
+  <DepthRim_Landmass.description>堅實的大陸岩層。陸地之下沒有海洋。</DepthRim_Landmass.description>
+  
+  <!-- EN: mid-ocean ridge -->
+  <DepthRim_MidOceanRidge.label>中洋脊</DepthRim_MidOceanRidge.label>
+  <!-- EN: A volcanic mountain range running down the middle of the ocean basin, where new sea floor is born. The black rock is young and broken by rift valleys. -->
+  <DepthRim_MidOceanRidge.description>沿著洋盆正中央延伸的海底火山山脈，新的海床在這裡誕生。黑色的岩石很年輕，被裂谷切得支離破碎。</DepthRim_MidOceanRidge.description>
+  
+  <!-- EN: subglacial ocean (shallows) -->
+  <DepthRim_PolarIceCap.label>地下冰洋（淺海）</DepthRim_PolarIceCap.label>
+  <!-- EN: A dark, cold ocean sealed under the frozen sea, shallow here over the continental shelf. Mineral-rich, and within reach of an ice shaft dug through the sea ice. -->
+  <DepthRim_PolarIceCap.description>封在冰海底下的黑暗冰冷海洋，這裡在大陸棚上，水還淺。礦藏豐富，從海冰挖下去的升降井到得了。</DepthRim_PolarIceCap.description>
+  
+  <!-- EN: seabed plain -->
+  <DepthRim_SeabedPlain.label>海床平原</DepthRim_SeabedPlain.label>
+  <!-- EN: A vast, flat expanse of sediment on the deep sea floor. Few rocks break the silence. -->
+  <DepthRim_SeabedPlain.description>深海底一望無際的平坦沉積物，幾乎沒有岩石。</DepthRim_SeabedPlain.description>
+  
+  <!-- EN: shallow coral reef -->
+  <DepthRim_ShallowReef.label>淺珊瑚礁</DepthRim_ShallowReef.label>
+  <!-- EN: Warm, shallow water over a sprawling coral reef. Pale coral ridges can be quarried for building stone. -->
+  <DepthRim_ShallowReef.description>溫暖淺水裡綿延的珊瑚礁。淺色的珊瑚脊可以開採成建材。</DepthRim_ShallowReef.description>
+  
+  <!-- EN: subglacial ocean (deep sea) -->
+  <DepthRim_SubglacialDeep.label>地下冰洋（深海）</DepthRim_SubglacialDeep.label>
+  <!-- EN: The deep polar basin beneath the sea ice: kilometers of black, near-freezing water over a quiet sea floor. Too deep for an ice shaft. -->
+  <DepthRim_SubglacialDeep.description>冰海底下的極地深海盆：數公里深、接近冰點的黑水，海床一片寂靜。升降井到不了這麼深。</DepthRim_SubglacialDeep.description>
+  
+  <!-- EN: subglacial ocean (abyssal seabed) -->
+  <DepthRim_SubglacialSeabed.label>地下冰洋（深海海床）</DepthRim_SubglacialSeabed.label>
+  <!-- EN: A trench beneath the sea ice, where the polar sea floor plunges under a continent. Crushing pressure, total darkness, and ice overhead. -->
+  <DepthRim_SubglacialSeabed.description>冰海底下的海溝，極地海床在這裡沉入大陸底下。壓力驚人、一片漆黑，頭頂還是冰。</DepthRim_SubglacialSeabed.description>
+  
+  <!-- EN: subglacial ocean (thermocline) -->
+  <DepthRim_SubglacialThermocline.label>地下冰洋（變溫層）</DepthRim_SubglacialThermocline.label>
+  <!-- EN: Cold, dark water under the sea ice, a few hundred meters to two kilometers deep over the continental slope. An ice shaft can still reach it. -->
+  <DepthRim_SubglacialThermocline.description>冰海底下的大陸坡，水深數百公尺到兩公里，又冷又暗。升降井還到得了。</DepthRim_SubglacialThermocline.description>
+  
+</LanguageData>

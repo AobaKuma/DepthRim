@@ -1,301 +1,560 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
 
+  <!-- EN: shallows -->
   <DepthRim.DepthTier.Shallow>淺海</DepthRim.DepthTier.Shallow>
+  <!-- EN: thermocline -->
   <DepthRim.DepthTier.Thermocline>變溫層</DepthRim.DepthTier.Thermocline>
+  <!-- EN: deep sea -->
   <DepthRim.DepthTier.Deep>深海</DepthRim.DepthTier.Deep>
+  <!-- EN: abyssal seabed -->
   <DepthRim.DepthTier.Seabed>深海海床</DepthRim.DepthTier.Seabed>
 
+  <!-- EN: Cannot drain: this area is open to the ocean. -->
   <DepthRim.Pump.OpenWater>無法排水：這裡和外海相通。</DepthRim.Pump.OpenWater>
+  <!-- EN: Compartment water level: {0} -->
   <DepthRim.Pump.RoomLevel>艙室水位：{0}</DepthRim.Pump.RoomLevel>
+  <!-- EN: Air supply -->
   <DepthRim.DivingAir.Label>氧氣存量</DepthRim.DivingAir.Label>
+  <!-- EN: Air: {0} ({1}) -->
   <DepthRim.DivingAir.Inspect>氧氣：{0}（{1}）</DepthRim.DivingAir.Inspect>
+  <!-- EN: How long the wearer can breathe underwater on a full tank: {0}. The tank refills whenever the wearer is out of the water, from empty to full in {1}. -->
   <DepthRim.DivingAir.StatDesc>滿瓶時穿著者能在水下呼吸的時間：{0}。離開水面時會自動回充，從空到滿需要 {1}。</DepthRim.DivingAir.StatDesc>
+  <!-- EN: Only sealed when worn together with {0}. -->
   <DepthRim.DivingAir.StatRequires>必須同時穿著{0}才會密封。</DepthRim.DivingAir.StatRequires>
+  <!-- EN: Show water levels. -->
   <DepthRim.Overlay.Toggle>顯示水位。</DepthRim.Overlay.Toggle>
 
+  <!-- EN: Water visual tier: {0} -->
   <DepthRim.Debug.WaterTier>水體視覺層級：{0}</DepthRim.Debug.WaterTier>
+  <!-- EN: Water materials rebuilt. -->
   <DepthRim.Debug.WaterMaterialsReset>已重建水體材質。</DepthRim.Debug.WaterMaterialsReset>
 
+  <!-- EN: DepthRim -->
   <DepthRim.Settings.Category>DepthRim</DepthRim.Settings.Category>
+  <!-- EN: Suspended particles -->
   <DepthRim.Settings.Particles>懸浮物效果</DepthRim.Settings.Particles>
+  <!-- EN: Marine snow, bioluminescence and seabed sediment haze. Turning this off saves frame time; water colour and ripples are unaffected. -->
   <DepthRim.Settings.ParticlesTip>海洋雪、生物光、海床沉積霧氣。關掉可以省效能，水色與波紋不受影響。</DepthRim.Settings.ParticlesTip>
+  <!-- EN: Dark-water hints -->
   <DepthRim.Settings.Hints>暗處己方提示</DepthRim.Settings.Hints>
+  <!-- EN: Draw a pale cyan outline for your own pawns standing in murky water (enemies and wild animals never get one). -->
   <DepthRim.Settings.HintsTip>己方角色在濃濁的水裡時，畫一層淡青色輪廓（敵人與野生生物沒有）。</DepthRim.Settings.HintsTip>
+  <!-- EN: Hint strength: {0} -->
   <DepthRim.Settings.HintOpacity>提示強度：{0}</DepthRim.Settings.HintOpacity>
+  <!-- EN: Murkiness: {0} -->
   <DepthRim.Settings.Murk>混濁度：{0}</DepthRim.Settings.Murk>
+  <!-- EN: Daylight reach: {0} -->
   <DepthRim.Settings.Ambient>日光穿透：{0}</DepthRim.Settings.Ambient>
+  <!-- EN: Head lamp radius: {0} -->
   <DepthRim.Settings.LampRadius>頭燈半徑：{0}</DepthRim.Settings.LampRadius>
+  <!-- EN: per apparel -->
   <DepthRim.Settings.LampRadiusDef>依裝備設定</DepthRim.Settings.LampRadiusDef>
+  <!-- EN: Underwater audio -->
   <DepthRim.Settings.AudioHeader>水中音效</DepthRim.Settings.AudioHeader>
+  <!-- EN: Underwater muffling: {0} -->
   <DepthRim.Settings.Muffle>水中悶音強度：{0}</DepthRim.Settings.Muffle>
+  <!-- EN: Diver breathing and bubbles -->
   <DepthRim.Settings.Breathing>潛水呼吸與氣泡聲</DepthRim.Settings.Breathing>
+  <!-- EN: Hull creak frequency: {0} -->
   <DepthRim.Settings.HullCreak>船殼承壓聲頻率：{0}</DepthRim.Settings.HullCreak>
+  <!-- EN: Flooded side ({0}): colonists without a diving suit will not pass -->
   <DepthRim.WatertightDoor.Sealed>淹水側（{0}）：沒有潛水服的殖民者不會通過</DepthRim.WatertightDoor.Sealed>
+  <!-- EN: Both sides passable (deepest {0}) -->
   <DepthRim.WatertightDoor.Open>兩側都可通行（最深 {0}）</DepthRim.WatertightDoor.Open>
+  <!-- EN: The ocean below is {0} ({1}): too deep for an ice shaft. Ice shafts only reach shallow and mid-depth water; deeper seas need a submarine. -->
   <DepthRim.IceShaft.TooDeep>下方的海洋是{0}（{1}）：升降井只通得到淺海與變溫層，更深的海域要靠潛艇。</DepthRim.IceShaft.TooDeep>
+  <!-- EN: There is no ocean under land, ice sheets included. An ice shaft has to be dug through sea ice. -->
   <DepthRim.IceShaft.NoOcean>陸地（含冰原）正下方沒有海洋。升降井只能挖穿海冰。</DepthRim.IceShaft.NoOcean>
+  <!-- EN: Ocean below: {0} -->
   <DepthRim.IceShaft.Below>下方海洋：{0}</DepthRim.IceShaft.Below>
+  <!-- EN: Water level ({0}) -->
   <DepthRim.Readout.WaterLevel>水位（{0}）</DepthRim.Readout.WaterLevel>
+  <!-- EN: Open water ({0}) -->
   <DepthRim.Readout.WaterLevelOpen>開放水域（{0}）</DepthRim.Readout.WaterLevelOpen>
 
   <!-- 潛艇 -->
+  <!-- EN: Cruising depth: {0} -->
   <DepthRim.Sub.Cruise>巡航深度：{0}</DepthRim.Sub.Cruise>
+  <!-- EN:  (weakest: {0}) -->
   <DepthRim.Sub.WeakestPiece>（最弱：{0}）</DepthRim.Sub.WeakestPiece>
+  <!-- EN: Only works aboard a submarine that has cast off from the shipyard. -->
   <DepthRim.Sub.NotAboard>只有在已經離開船塢的潛艇上才能使用。</DepthRim.Sub.NotAboard>
+  <!-- EN: already set -->
   <DepthRim.Sub.Block.AlreadyThere>已經是這個深度</DepthRim.Sub.Block.AlreadyThere>
+  <!-- EN: below the seafloor here -->
   <DepthRim.Sub.Block.BelowSeafloor>比這裡的海床還深</DepthRim.Sub.Block.BelowSeafloor>
+  <!-- EN: the hull is not rated for it -->
   <DepthRim.Sub.Block.HullTooWeak>船殼撐不住</DepthRim.Sub.Block.HullTooWeak>
+  <!-- EN: {0} has reached the {1}. -->
   <DepthRim.Sub.DepthReached>{0}已抵達{1}。</DepthRim.Sub.DepthReached>
+  <!-- EN: Depth: {0} -->
   <DepthRim.Sub.InspectDepth>深度：{0}</DepthRim.Sub.InspectDepth>
+  <!-- EN: Depth: {0} (heading to {1}) -->
   <DepthRim.Sub.InspectDiving>深度：{0}（正前往{1}）</DepthRim.Sub.InspectDiving>
+  <!-- EN: A submarine cannot travel to dry land. -->
   <DepthRim.Route.Land>潛艇不能開到陸地上。</DepthRim.Route.Land>
+  <!-- EN: No sea route reaches that point. -->
   <DepthRim.Route.Unreachable>沒有海路能到那裡。</DepthRim.Route.Unreachable>
 
+  <!-- EN: {0} is being crushed by the water pressure. Use pressure hull walls at this depth. -->
   <DepthRim.Pressure.Crushing>{0}正被水壓慢慢壓壞。這個深度要用水密隔牆。</DepthRim.Pressure.Crushing>
 
+  <!-- EN: Navigate -->
   <DepthRim.Nav.Label>航行</DepthRim.Nav.Label>
+  <!-- EN: Navigate ({0}) -->
   <DepthRim.Nav.LabelDepth>航行（{0}）</DepthRim.Nav.LabelDepth>
-  <DepthRim.Nav.Desc>在世界地圖上選一格，再從選單選擇終端深度：
-・自己這一格：換巡航深度、上浮或破冰上浮
-・旁邊的海域：下錨
-・已經有的地點：停靠，抵達並到達那裡的海床深度後選擇停船位置
-・其他海域：規劃航線，確認後開始啟航程序
-航行中改終端深度；浮在海面上時選擇下潛到哪個深度。每換一個層級要一小時，不能潛得比海床更深，船殼也必須撐得住。
+  <!-- EN: Pick a tile on the world map, then the depth to end at:
+- This tile: change cruising depth, surface, or break through the ice
+- A neighbouring sea tile: anchor
+- An existing site: dock; once there and at its seafloor depth, choose where the hull stops
+- Any other sea tile: plan a voyage; confirming it starts the launch sequence
+Under way it changes the depth to end at; on the surface it picks how deep to dive. Each depth tier takes an hour, never below the seafloor, and the hull must be rated for it.
 
-此處海床：{0}
-船殼耐壓：{1}</DepthRim.Nav.Desc>
+Seafloor here: {0}
+Hull rating: {1} -->
+  <DepthRim.Nav.Desc>在世界地圖上選一格，再從選單選擇終端深度：\n・自己這一格：換巡航深度、上浮或破冰上浮\n・旁邊的海域：下錨\n・已經有的地點：停靠，抵達並到達那裡的海床深度後選擇停船位置\n・其他海域：規劃航線，確認後開始啟航程序\n航行中改終端深度；浮在海面上時選擇下潛到哪個深度。每換一個層級要一小時，不能潛得比海床更深，船殼也必須撐得住。\n\n此處海床：{0}\n船殼耐壓：{1}</DepthRim.Nav.Desc>
+  <!-- EN: Choose a destination -->
   <DepthRim.Nav.Choose>選擇目的地</DepthRim.Nav.Choose>
+  <!-- EN: The depth cannot change while docked. Choose a destination. -->
   <DepthRim.Nav.Docked>停在船塢時不能換深度，請選擇目的地。</DepthRim.Nav.Docked>
+  <!-- EN: Sail here, ending at {0} -->
   <DepthRim.Nav.SailTo>前往此處・終端深度：{0}</DepthRim.Nav.SailTo>
+  <!-- EN: End at {0} -->
   <DepthRim.Nav.EndAt>終端深度：{0}</DepthRim.Nav.EndAt>
+  <!-- EN: Dive to {0} -->
   <DepthRim.Nav.DiveTo>下潛至{0}</DepthRim.Nav.DiveTo>
+  <!-- EN: Anchor here (choose where to stop) -->
   <DepthRim.Nav.Anchor>在此下錨（選擇停船位置）</DepthRim.Nav.Anchor>
+  <!-- EN: Dock at {0} ({1}, choose where to stop) -->
   <DepthRim.Nav.Dock>停靠{0}（{1}・選擇停船位置）</DepthRim.Nav.Dock>
+  <!-- EN: {0} is heading to the {1}; once there, choose where to stop at {2}. -->
   <DepthRim.Nav.DockWhenReady>{0}正前往{1}，到達後選擇在{2}的停船位置。</DepthRim.Nav.DockWhenReady>
+  <!-- EN: Choose where to stop -->
   <DepthRim.Nav.PlaceLabel>選擇停船位置</DepthRim.Nav.PlaceLabel>
+  <!-- EN: Choose where the hull comes up. -->
   <DepthRim.Nav.PlaceDesc>選擇船體浮出水面的位置。</DepthRim.Nav.PlaceDesc>
+  <!-- EN: must float on open sea -->
   <DepthRim.Nav.PlaceNotOpenSea>只能浮在開放海面上</DepthRim.Nav.PlaceNotOpenSea>
+  <!-- EN: Cannot anchor while under way. -->
   <DepthRim.Anchor.InFlight>航行中不能下錨。</DepthRim.Anchor.InFlight>
+  <!-- EN: There is no bottom to anchor on at this depth ({0}). -->
   <DepthRim.Anchor.Block.NoBottom>這個深度（{0}）沒有能下錨的底。</DepthRim.Anchor.Block.NoBottom>
+  <!-- EN: Bring the submarine down to the seafloor ({0}) first. -->
   <DepthRim.Anchor.Block.NotAtBottom>先把潛艇下潛或上浮到海床的深度（{0}）。</DepthRim.Anchor.Block.NotAtBottom>
+  <!-- EN: There is no free stretch of seafloor next to here. -->
   <DepthRim.Anchor.NoSpot>這附近沒有空著的海床可以停。</DepthRim.Anchor.NoSpot>
+  <!-- EN: Choose a sea tile right next to the submarine. -->
   <DepthRim.Anchor.Spot.NotAdjacent>請選潛艇旁邊的海域。</DepthRim.Anchor.Spot.NotAdjacent>
+  <!-- EN: Not open sea. -->
   <DepthRim.Anchor.Spot.NotOcean>這裡不是開闊海域。</DepthRim.Anchor.Spot.NotOcean>
+  <!-- EN: Something is already there. -->
   <DepthRim.Anchor.Spot.Occupied>那裡已經有東西了。</DepthRim.Anchor.Spot.Occupied>
+  <!-- EN: The seafloor there is {0}, not {1} like here. -->
   <DepthRim.Anchor.Spot.OtherDepth>那裡的海床是{0}，和這裡的{1}不同。</DepthRim.Anchor.Spot.OtherDepth>
+  <!-- EN: Stop here -->
   <DepthRim.Voyage.Stop>就地停船</DepthRim.Voyage.Stop>
+  <!-- EN: Abandon the voyage and stop the submarine where it is now. The thrusters drop back to standby. -->
   <DepthRim.Voyage.StopDesc>放棄這趟航程，讓潛艇停在現在的位置。推進器會回到待機。</DepthRim.Voyage.StopDesc>
+  <!-- EN: {0} has stopped mid-voyage. -->
   <DepthRim.Voyage.Stopped>{0}在航程中途停船了。</DepthRim.Voyage.Stopped>
+  <!-- EN: {0} has no working thrusters and is drifting in place. Power them back up to continue the voyage. -->
   <DepthRim.Voyage.Stalled>{0}沒有運作中的推進器，正停在海中漂流。讓推進器重新通電就能繼續航行。</DepthRim.Voyage.Stalled>
+  <!-- EN: {0}'s thrusters are running again. -->
   <DepthRim.Voyage.Resumed>{0}的推進器重新運轉了。</DepthRim.Voyage.Resumed>
+  <!-- EN: Thrust: {0} -->
   <DepthRim.Voyage.InspectThrust>推力：{0}</DepthRim.Voyage.InspectThrust>
+  <!-- EN: Thrust: none (drifting) -->
   <DepthRim.Voyage.InspectStalled>推力：無（漂流中）</DepthRim.Voyage.InspectStalled>
+  <!-- EN: Standby (full power draw only while under way) -->
   <DepthRim.Voyage.ThrusterStandby>待機中（只有航行時才全速耗電）</DepthRim.Voyage.ThrusterStandby>
+  <!-- EN: Lost overboard -->
   <DepthRim.Voyage.OverboardLabel>航行中有人失蹤</DepthRim.Voyage.OverboardLabel>
+  <!-- EN: While {0} was under way, these were outside the hull. They could not keep up with the boat, were swept away by the current, and are now missing:\n\n{1}\n\nKeep everyone inside sealed compartments while under way. -->
   <DepthRim.Voyage.OverboardText>{0}航行時，以下人員待在艙外，跟不上船身被海流沖走，從此下落不明：\n\n{1}\n\n航行中不要讓人離開密閉艙室。</DepthRim.Voyage.OverboardText>
 
 
   <!-- 魚雷 -->
+  <!-- EN: Torpedoes can only travel by sea, to an ocean tile. -->
   <DepthRim.Torpedo.SeaOnly>魚雷只能走海路，打海洋格。</DepthRim.Torpedo.SeaOnly>
+  <!-- EN: No sea route reaches that tile. -->
   <DepthRim.Torpedo.NoSeaRoute>沒有海路到得了那一格。</DepthRim.Torpedo.NoSeaRoute>
+  <!-- EN: Out of range by sea (range {0} tiles). -->
   <DepthRim.Torpedo.OutOfRange>海路距離超出射程（射程 {0} 格）。</DepthRim.Torpedo.OutOfRange>
+  <!-- EN: Point defence: ready -->
   <DepthRim.PointDefense.Ready>近防：待命</DepthRim.PointDefense.Ready>
+  <!-- EN: Point defence: cycling ({0}) -->
   <DepthRim.PointDefense.Cycling>近防：循環中（{0}）</DepthRim.PointDefense.Cycling>
+  <!-- EN: Point defence: out of darts -->
   <DepthRim.PointDefense.NoAmmo>近防：沒有彈鏢</DepthRim.PointDefense.NoAmmo>
+  <!-- EN: Cruising depth: {0} -->
   <DepthRim.EnemyBoat.Depth>巡航深度：{0}</DepthRim.EnemyBoat.Depth>
 
   <!-- 跳幫 -->
+  <!-- EN: A boarding craft has left with {0} aboard. -->
   <DepthRim.Boarding.CraftLeft>一艘跳幫突擊艇載著 {0} 人離開了。</DepthRim.Boarding.CraftLeft>
+  <!-- EN: Aboard: {0} -->
   <DepthRim.Boarding.InspectAboard>艇上：{0} 人</DepthRim.Boarding.InspectAboard>
+  <!-- EN: Waiting to leave: {0} aboard, {1} still out -->
   <DepthRim.Boarding.InspectWaiting>等待離開：艇上 {0} 人，還有 {1} 人在外</DepthRim.Boarding.InspectWaiting>
+  <!-- EN: The {0} of {1} have taken heavy losses and are falling back to their boarding craft. -->
   <DepthRim.Boarding.RetreatLosses>{1}的{0}損失慘重，正撤回跳幫突擊艇。</DepthRim.Boarding.RetreatLosses>
+  <!-- EN: The {0} of {1} have given up and are falling back to their boarding craft. -->
   <DepthRim.Boarding.RetreatTimeout>{1}的{0}放棄了，正撤回跳幫突擊艇。</DepthRim.Boarding.RetreatTimeout>
+  <!-- EN: The {0} of {1} are satisfied with the damage and are falling back to their boarding craft. -->
   <DepthRim.Boarding.RetreatSatisfied>{1}的{0}破壞得夠了，正撤回跳幫突擊艇。</DepthRim.Boarding.RetreatSatisfied>
+  <!-- EN: The boarders got away with {0} captive(s) and {1} in loot. -->
   <DepthRim.Boarding.TookAway>跳幫者帶走了 {0} 名俘虜和價值 {1} 的戰利品。</DepthRim.Boarding.TookAway>
+  <!-- EN: A boarding craft was hit and sank with {0} aboard. -->
   <DepthRim.Boarding.CraftSunk>一艘跳幫突擊艇被擊中，載著 {0} 人沉沒了。</DepthRim.Boarding.CraftSunk>
+  <!-- EN: Launch -->
   <DepthRim.Boarding.Launch>出發</DepthRim.Boarding.Launch>
+  <!-- EN: Choose an ocean tile within {0} tiles by sea. The craft cuts into the target's sealed compartments without breaking the seal, or settles on the seabed if there are none. -->
   <DepthRim.Boarding.LaunchDesc>選一格海路 {0} 格內的海洋格。突擊艇會切入對方的密閉艙室而不破壞密閉；沒有艙室就降在海床上。</DepthRim.Boarding.LaunchDesc>
+  <!-- EN: Nobody is aboard. -->
   <DepthRim.Boarding.NoCrew>艇上沒有人。</DepthRim.Boarding.NoCrew>
+  <!-- EN: The craft is broken down. Repair it with a component first. -->
   <DepthRim.Boarding.BrokenDown>突擊艇故障了，要先用零件修好。</DepthRim.Boarding.BrokenDown>
+  <!-- EN: Not enough fuel. Even the shortest round trip needs {0} chemfuel. -->
   <DepthRim.Boarding.NoFuel>燃料不足。最短的來回也要 {0} 化學燃料。</DepthRim.Boarding.NoFuel>
+  <!-- EN: Not enough fuel for the round trip: needs {0}, has {1}. -->
   <DepthRim.Boarding.NotEnoughFuel>燃料不夠來回：需要 {0}，現有 {1}。</DepthRim.Boarding.NotEnoughFuel>
+  <!-- EN: Fuel for the round trip: {0} (aboard: {1}) -->
   <DepthRim.Boarding.FuelNeeded>來回所需燃料：{0}（艇上：{1}）</DepthRim.Boarding.FuelNeeded>
+  <!-- EN: Round-trip range on current fuel: {0} tiles -->
   <DepthRim.Boarding.InspectFuelRange>現有燃料可來回 {0} 格</DepthRim.Boarding.InspectFuelRange>
+  <!-- EN: Unload -->
   <DepthRim.Boarding.Unload>卸下</DepthRim.Boarding.Unload>
+  <!-- EN: Let everyone and everything out of the craft. -->
   <DepthRim.Boarding.UnloadDesc>讓艇上所有的人和東西出來。</DepthRim.Boarding.UnloadDesc>
+  <!-- EN: The craft is already here. -->
   <DepthRim.Boarding.SameTile>突擊艇已經在這裡了。</DepthRim.Boarding.SameTile>
+  <!-- EN: Something else is at that tile. -->
   <DepthRim.Boarding.Occupied>那一格有別的東西。</DepthRim.Boarding.Occupied>
+  <!-- EN: {0} tiles by sea -->
   <DepthRim.Boarding.SeaDistance>海路 {0} 格</DepthRim.Boarding.SeaDistance>
+  <!-- EN: The boarding craft has arrived at {0}. -->
   <DepthRim.Boarding.Arrived>突擊艇抵達{0}。</DepthRim.Boarding.Arrived>
+  <!-- EN: Cannot board -->
   <DepthRim.Boarding.CannotBoard>無法登艇</DepthRim.Boarding.CannotBoard>
+  <!-- EN: Board {0} -->
   <DepthRim.Boarding.BoardOption>登上{0}</DepthRim.Boarding.BoardOption>
+  <!-- EN: Must be built on a moon pool. -->
   <DepthRim.Boarding.NeedsMoonPool>必須造在月池上。</DepthRim.Boarding.NeedsMoonPool>
+  <!-- EN: Pre-launch check -->
   <DepthRim.Readiness.Title>出航前檢查</DepthRim.Readiness.Title>
+  <!-- EN: Destination depth: {0}. The craft may settle on the seabed, leaving the crew in open water. -->
   <DepthRim.Readiness.Intro>目的地水深：{0}。突擊艇可能降在海床上，乘員會直接泡在水裡。</DepthRim.Readiness.Intro>
+  <!-- EN: Not flesh: unaffected by water pressure and pressure adaptation. -->
   <DepthRim.Readiness.NotFlesh>不是血肉之軀，不受水壓與壓力適應影響。</DepthRim.Readiness.NotFlesh>
+  <!-- EN: No diving suit: will drown underwater. -->
   <DepthRim.Readiness.NoSuit>沒穿潛水服：在水中會溺水。</DepthRim.Readiness.NoSuit>
+  <!-- EN: Wearing {0}, air {1} -->
   <DepthRim.Readiness.Suit>穿著{0}，氣瓶 {1}</DepthRim.Readiness.Suit>
+  <!-- EN: (air below half) -->
   <DepthRim.Readiness.LowAir>（氣瓶不足一半）</DepthRim.Readiness.LowAir>
+  <!-- EN: Pressure resistance {0} + adaptation {1}, destination needs {2} -->
   <DepthRim.Readiness.Pressure>水壓抗性 {0} ＋ 適應 {1}，目的地需要 {2}</DepthRim.Readiness.Pressure>
+  <!-- EN: : will take pressure damage underwater ({0} short). -->
   <DepthRim.Readiness.PressureShort>：在水中會受水壓傷害（差 {0} 級）。</DepthRim.Readiness.PressureShort>
+  <!-- EN: Pressure adaptation {0}, destination pressure level {1} -->
   <DepthRim.Readiness.Adaptation>壓力適應 {0}，目的地壓力 {1} 級</DepthRim.Readiness.Adaptation>
+  <!-- EN: : will suffer pressure sickness on arrival (severity {0}, about {1} to adapt). -->
   <DepthRim.Readiness.Maladapted>：抵達後會壓力不適（嚴重度 {0}，約 {1} 後才適應）。</DepthRim.Readiness.Maladapted>
+  <!-- EN: All crew ready. -->
   <DepthRim.Readiness.OutroOk>全員準備就緒。</DepthRim.Readiness.OutroOk>
+  <!-- EN: Some crew are not ready. Launch anyway? -->
   <DepthRim.Readiness.OutroWarn>有乘員還沒準備好。仍要出航嗎？</DepthRim.Readiness.OutroWarn>
+  <!-- EN: Launch -->
   <DepthRim.Readiness.Go>出航</DepthRim.Readiness.Go>
 
   <!-- 敵方勢力 -->
+  <!-- EN: Torpedo hit on {0}: hull at {1} / {2}. -->
   <DepthRim.Pirate.SubHit>魚雷命中{0}：船殼剩 {1} / {2}。</DepthRim.Pirate.SubHit>
+  <!-- EN: Pirate submarine sunk -->
   <DepthRim.Pirate.SubSunkLabel>擊沉海盜潛艇</DepthRim.Pirate.SubSunkLabel>
+  <!-- EN: Your torpedoes have broken the pirate submarine's hull. It went down with all hands; {0} will have to find another boat. -->
   <DepthRim.Pirate.SubSunk>你的魚雷打穿了海盜潛艇的船殼，它連同全體船員沉了下去；{0}得另外找一艘船了。</DepthRim.Pirate.SubSunk>
+  <!-- EN: Boarding the pirate submarine -->
   <DepthRim.Pirate.BoardedLabel>跳幫海盜潛艇</DepthRim.Pirate.BoardedLabel>
+  <!-- EN: Your boarding craft has cut into {0}. Its crew will fight for every compartment.\n\nClear the crew and take what you want; when your people leave, the boat will be scuttled. -->
   <DepthRim.Pirate.Boarded>你的突擊艇切入了{0}。船員會死守每一個艙室。\n\n清空船員、拿走想要的東西；你的人離開後，這艘船會被鑿沉。</DepthRim.Pirate.Boarded>
+  <!-- EN: Hull: {0} / {1}\nDepth: {2} -->
   <DepthRim.Pirate.SubInspect>船殼：{0} / {1}\n深度：{2}</DepthRim.Pirate.SubInspect>
+  <!-- EN: A torpedo sank an attack boat of {0}. -->
   <DepthRim.Pirate.BoatSunk>一枚魚雷擊沉了{0}的攻擊艇。</DepthRim.Pirate.BoatSunk>
+  <!-- EN: unknown sonar contact -->
   <DepthRim.Sonar.UnknownContact>未知聲納接觸</DepthRim.Sonar.UnknownContact>
+  <!-- EN: Something is moving out there. Bring a sonar closer (within half its range) to tell what it is. -->
   <DepthRim.Sonar.UnknownInspect>有東西在那裡移動。讓聲納更靠近（偵測半徑一半以內）才分得出是什麼。</DepthRim.Sonar.UnknownInspect>
+  <!-- EN: A large school of fish. Harmless. -->
   <DepthRim.Sonar.FishInspect>一大群魚。無害。</DepthRim.Sonar.FishInspect>
+  <!-- EN: Torpedo boat gone -->
   <DepthRim.Enemy.BoatLeftLabel>魚雷艇離開</DepthRim.Enemy.BoatLeftLabel>
+  <!-- EN: The enemy torpedo boat has slipped away. Your ocean maps are out of its reach for now. -->
   <DepthRim.Enemy.BoatLeft>敵方魚雷艇悄悄離開了，你的海洋地圖暫時不在它的射程內。</DepthRim.Enemy.BoatLeft>
+  <!-- EN: Pirate submarine gone -->
   <DepthRim.Enemy.SubLeftLabel>海盜潛艇離開</DepthRim.Enemy.SubLeftLabel>
+  <!-- EN: The pirate submarine has left the area. Your sonar has lost contact. -->
   <DepthRim.Enemy.SubLeft>海盜潛艇離開了這片海域，聲納失去了接觸。</DepthRim.Enemy.SubLeft>
+  <!-- EN: Solid rock under a continent. There is no sea here. -->
   <DepthRim.OceanTab.Landmass>大陸下方的實心岩層，這裡沒有海。</DepthRim.OceanTab.Landmass>
+  <!-- EN: Seafloor depth -->
   <DepthRim.OceanTab.SeafloorDepth>海床深度</DepthRim.OceanTab.SeafloorDepth>
+  <!-- EN: {0} m -->
   <DepthRim.OceanTab.Meters>{0} 公尺</DepthRim.OceanTab.Meters>
+  <!-- EN: Depth zone -->
   <DepthRim.OceanTab.DepthTier>水深層級</DepthRim.OceanTab.DepthTier>
+  <!-- EN: Anchoring -->
   <DepthRim.OceanTab.Anchor>下錨</DepthRim.OceanTab.Anchor>
+  <!-- EN: Possible (there is a bottom to settle on) -->
   <DepthRim.OceanTab.AnchorYes>可以（有能停靠的底）</DepthRim.OceanTab.AnchorYes>
+  <!-- EN: Not possible (no reachable bottom) -->
   <DepthRim.OceanTab.AnchorNo>不行（到不了底）</DepthRim.OceanTab.AnchorNo>
 
   <!-- 海面地圖 -->
+  <!-- EN: Pick an ocean tile on the surface. -->
   <DepthRim.SeaSurface.NeedOceanTile>請選擇地表上的海洋格。</DepthRim.SeaSurface.NeedOceanTile>
+  <!-- EN: That tile already has a map. -->
   <DepthRim.SeaSurface.TileOccupied>那一格已經有地圖了。</DepthRim.SeaSurface.TileOccupied>
+  <!-- EN: Supports ocean platform within {0} cells. -->
   <DepthRim.Pillar.SupportRadius>支撐 {0} 格內的海上平台。</DepthRim.Pillar.SupportRadius>
+  <!-- EN: Must be within the support radius of a platform pillar. -->
   <DepthRim.Platform.NeedsSupport>必須在平台支柱的支撐範圍內。</DepthRim.Platform.NeedsSupport>
+  <!-- EN: {0} cells of ocean platform have lost their support (out of pillar range, or cut off from the platform on a pillar) and will collapse in {1} seconds unless they are joined back or a platform pillar is built in range. -->
   <DepthRim.Platform.Unsupported>{0} 格海上平台失去支撐（超出支柱範圍，或和支柱底下的平台斷開），{1} 秒後會崩塌，除非重新接上，或在範圍內蓋好平台支柱。</DepthRim.Platform.Unsupported>
+  <!-- EN: {0} cells of ocean platform collapsed into the sea. -->
   <DepthRim.Platform.Collapsed>{0} 格海上平台塌進海裡了。</DepthRim.Platform.Collapsed>
+  <!-- EN: {0} fell with the collapsing platform and climbed back up, injured. -->
   <DepthRim.Platform.PawnFell>{0} 隨著崩塌的平台掉下去，受傷爬了回來。</DepthRim.Platform.PawnFell>
+  <!-- EN: {0} fell into the sea with the collapsing platform and was lost. -->
   <DepthRim.Platform.PawnLost>{0} 隨著崩塌的平台落海，失蹤了。</DepthRim.Platform.PawnLost>
 
-  <!-- 壓力適應與加壓艙 -->
+  <!-- Pressure adaptation and the pressure chamber -->
+  <!-- EN: surface pressure -->
   <DepthRim.Pressure.Level0>常壓</DepthRim.Pressure.Level0>
+  <!-- EN: adapted {0}, surroundings {1} -->
   <DepthRim.Adaptation.Bracket>適應 {0}，環境 {1}</DepthRim.Adaptation.Bracket>
+  <!-- EN: Adapts by one pressure level every {0} days (depends on blood filtration). -->
   <DepthRim.Adaptation.Rate>每 {0} 天適應一級壓力（依血液過濾能力而定）。</DepthRim.Adaptation.Rate>
+  <!-- EN: Discomfort ends in about {0} if the surroundings stay the same. -->
   <DepthRim.Adaptation.TimeLeft>環境不變的話，大約 {0} 後不再不適。</DepthRim.Adaptation.TimeLeft>
+  <!-- EN: Target pressure: level {0} ({1}) -->
   <DepthRim.Pressurizer.Target>目標壓力：{0} 級（{1}）</DepthRim.Pressurizer.Target>
+  <!-- EN: Chamber pressure: level {0} -->
   <DepthRim.Pressurizer.Current>艙內壓力：{0} 級</DepthRim.Pressurizer.Current>
+  <!-- EN: Another pressuriser is already holding this chamber. -->
   <DepthRim.Pressurizer.Secondary>這間艙室已經由另一台加壓機控制。</DepthRim.Pressurizer.Secondary>
+  <!-- EN: Lower pressure -->
   <DepthRim.Pressurizer.Lower>降低壓力</DepthRim.Pressurizer.Lower>
+  <!-- EN: Lower the target pressure of this chamber by one level. -->
   <DepthRim.Pressurizer.LowerDesc>把這間艙室的目標壓力降低一級。</DepthRim.Pressurizer.LowerDesc>
+  <!-- EN: Raise pressure -->
   <DepthRim.Pressurizer.Raise>提高壓力</DepthRim.Pressurizer.Raise>
+  <!-- EN: Raise the target pressure of this chamber by one level. -->
   <DepthRim.Pressurizer.RaiseDesc>把這間艙室的目標壓力提高一級。</DepthRim.Pressurizer.RaiseDesc>
+  <!-- EN: Not a pressure chamber: the room must be roofed and fully enclosed. -->
   <DepthRim.Pressurizer.NotSealed>不是加壓艙：房間必須有屋頂而且完全密閉。</DepthRim.Pressurizer.NotSealed>
+  <!-- EN: Not a pressure chamber: the room is larger than {0} cells. -->
   <DepthRim.Pressurizer.TooLarge>不是加壓艙：房間超過 {0} 格。</DepthRim.Pressurizer.TooLarge>
+  <!-- EN: Not a pressure chamber: the whole floor must be pressure deck or hull platform. -->
   <DepthRim.Pressurizer.NeedsDeck>不是加壓艙：地板必須全部是耐壓甲板或船體平台。</DepthRim.Pressurizer.NeedsDeck>
+  <!-- EN: Not a pressure chamber: every door must be a watertight door. -->
   <DepthRim.Pressurizer.NeedsWatertightDoors>不是加壓艙：所有的門都必須是水密門。</DepthRim.Pressurizer.NeedsWatertightDoors>
+  <!-- EN: {0} wall or door sections cannot hold this pressure difference and are being damaged. -->
   <DepthRim.Pressurizer.Overloaded>有 {0} 塊艙壁（牆或門）撐不住這個壓差，正在受損。</DepthRim.Pressurizer.Overloaded>
+  <!-- EN: Pressure difference (level {0} / level {1}): people who would suffer on the other side will not pass on their own -->
   <DepthRim.WatertightDoor.PressureGap>壓差（{0} 級／{1} 級）：過去會不適的人不會自己通過</DepthRim.WatertightDoor.PressureGap>
+  <!-- EN: Pressure sickness -->
   <DepthRim.Alert.PressureSickness>壓力不適</DepthRim.Alert.PressureSickness>
+  <!-- EN: {0}: adapted {1}, surroundings {2}, about {3} left -->
   <DepthRim.Alert.PressureSickness.Line>{0}：適應 {1}，環境 {2}，大約還要 {3}</DepthRim.Alert.PressureSickness.Line>
+  <!-- EN: These colonists are more than one pressure level away from what their bodies are used to:\n\n{0}\n\nThey recover as their bodies adapt. To spare them, move them to a pressure chamber set within one level of their adapted level, then change the chamber one level at a time. -->
   <DepthRim.Alert.PressureSickness.Desc>這些殖民者所在的壓力和身體習慣的壓力相差超過一級：\n\n{0}\n\n身體適應之後就會好轉。想讓他們不難受，可以送進壓力設在適應值上下一級以內的加壓艙，再一級一級調整艙壓。</DepthRim.Alert.PressureSickness.Desc>
+  <!-- EN: Ride up to the platform -->
   <DepthRim.Pillar.GoUp>搭升降梯上平台</DepthRim.Pillar.GoUp>
+  <!-- EN: Cancel riding up -->
   <DepthRim.Pillar.CancelGoUp>取消上平台</DepthRim.Pillar.CancelGoUp>
+  <!-- EN: Ride down to the water -->
   <DepthRim.Pillar.GoDown>搭升降梯下到水面</DepthRim.Pillar.GoDown>
+  <!-- EN: Cancel riding down -->
   <DepthRim.Pillar.CancelGoDown>取消下到水面</DepthRim.Pillar.CancelGoDown>
+  <!-- EN: The pillar must stand on open sea right next to a floating platform: at least one side of its 9x9 footprint has to touch it (that cell becomes the elevator spot). -->
   <DepthRim.Pillar.NeedsLanding>支柱要蓋在浮船（船體平台）旁邊的開放海面上：9×9 的佔地至少有一邊緊貼浮船，那一格就是升降點。</DepthRim.Pillar.NeedsLanding>
+  <!-- EN: Blocked on the platform level by {0}. -->
   <DepthRim.Pillar.BlockedAbove>平台層同一位置有{0}擋住。</DepthRim.Pillar.BlockedAbove>
+  <!-- EN: {0} fell with the collapsing platform down to the water, injured. -->
   <DepthRim.Platform.PawnFellToSea>{0}隨著崩塌的平台掉到下面的水面，受了傷。</DepthRim.Platform.PawnFellToSea>
+  <!-- EN: Camera sways with the sea -->
   <DepthRim.Settings.SeaCameraSway>鏡頭隨海浪擺動</DepthRim.Settings.SeaCameraSway>
+  <!-- EN: On the sea surface (water level), the camera bobs up and down very slightly with the waves, more in strong wind and storms. Aboard a submarine under way, the view rocks slowly and gently. Turn off if it bothers you. -->
   <DepthRim.Settings.SeaCameraSwayTip>在海面地圖（水面層）上，鏡頭會隨海浪非常微小地上下擺動，風大或暴風雨時擺得多一點；航行中的潛艇上，畫面會持續緩慢地輕微搖晃。不習慣可以關掉。</DepthRim.Settings.SeaCameraSwayTip>
 
-  <!-- 潛艇開局 -->
+  <!-- Submarine start scenario -->
+  <!-- EN: Start aboard the submarine {0}, docked in the nearest {1} sea below the chosen site. -->
   <DepthRim.SubmarineStart.Summary>一開始就在潛艇 {0} 上，停在選定地點下方最近的{1}海域。</DepthRim.SubmarineStart.Summary>
+  <!-- EN: There is no {0} sea within {1} tiles of this site. Pick a site on or near the coast, or on sea ice. -->
   <DepthRim.SubmarineStart.NoSea>這個地點附近 {1} 格內沒有{0}海域。請選海岸、海面或海冰上的地點。</DepthRim.SubmarineStart.NoSea>
 
-  <!-- 魚 -->
+  <!-- Fish -->
+  <!-- EN: Catch when killed: {0} ×{1}~{2} -->
   <DepthRim.FishCatch>死後漁獲：{0} ×{1}~{2}</DepthRim.FishCatch>
 
   <!-- 安全繩錨點 -->
+  <!-- EN: Standing by (lines are clipped on only while under way or in rough seas) -->
   <DepthRim.Rope.Standby>待命（只在航行或惡劣海況時扣繩）</DepthRim.Rope.Standby>
+  <!-- EN: Safety lines: {0}/{1} ({2}) -->
   <DepthRim.Rope.Tethered>安全繩：{0}／{1}（{2}）</DepthRim.Rope.Tethered>
+  <!-- EN: Not clipping anyone new -->
   <DepthRim.Rope.AutoOff>不再扣新的人</DepthRim.Rope.AutoOff>
+  <!-- EN: Unclip all -->
   <DepthRim.Rope.UntieAll>解開全部</DepthRim.Rope.UntieAll>
+  <!-- EN: Unclip everyone on this anchor. They will not be clipped to it again for about an hour. -->
   <DepthRim.Rope.UntieAllDesc>解開這個錨點上所有人的安全繩。大約一小時內不會再自動扣到這個錨點。</DepthRim.Rope.UntieAllDesc>
+  <!-- EN: Nobody is clipped on. -->
   <DepthRim.Rope.NobodyTethered>沒有人扣著繩。</DepthRim.Rope.NobodyTethered>
+  <!-- EN: Clip on automatically -->
   <DepthRim.Rope.AutoTether>允許自動扣繩</DepthRim.Rope.AutoTether>
+  <!-- EN: When on, people working outside within reach are clipped to this anchor automatically while the submarine is under way or the sea is rough. When off, the anchor clips on nobody new; lines already clipped stay on. -->
   <DepthRim.Rope.AutoTetherDesc>開啟時，潛艇航行或海況惡劣期間，範圍內在艙外的人會自動扣上這個錨點。關閉時不再扣新的人，已經扣著的不受影響。</DepthRim.Rope.AutoTetherDesc>
+  <!-- EN: Clip {0} to this anchor -->
   <DepthRim.Rope.TieHere>把{0}扣在這個錨點</DepthRim.Rope.TieHere>
+  <!-- EN: already clipped here -->
   <DepthRim.Rope.AlreadyHere>已經扣在這裡</DepthRim.Rope.AlreadyHere>
+  <!-- EN: only while under way or in rough seas -->
   <DepthRim.Rope.NoHazard>只在航行或惡劣海況時可以扣繩</DepthRim.Rope.NoHazard>
+  <!-- EN: out of the line's reach -->
   <DepthRim.Rope.OutOfReach>繩子拉不到</DepthRim.Rope.OutOfReach>
+  <!-- EN: not outside -->
   <DepthRim.Rope.NotOutside>不在艙外</DepthRim.Rope.NotOutside>
+  <!-- EN: Must be placed on a hull platform or an ocean platform. -->
   <DepthRim.Rope.MustBeOnDeck>只能裝在船體平台或海上平台上。</DepthRim.Rope.MustBeOnDeck>
+  <!-- EN: Unclip safety line -->
   <DepthRim.Rope.Untie>解開安全繩</DepthRim.Rope.Untie>
+  <!-- EN: Unclip from the anchor at {0}. This anchor will not clip them on again for about an hour. -->
   <DepthRim.Rope.UntieDesc>從 {0} 的錨點解開。大約一小時內這個錨點不會再自動扣上這個人。</DepthRim.Rope.UntieDesc>
+  <!-- EN: Clipped to a safety line (anchor at {0}) -->
   <DepthRim.Rope.PawnTethered>扣著安全繩（錨點 {0}）</DepthRim.Rope.PawnTethered>
+  <!-- EN: Rough seas: people outside on the water level can be swept away by the waves. -->
   <DepthRim.RoughSea.Started>海況惡劣：水面層艙外的人可能被浪捲走。</DepthRim.RoughSea.Started>
+  <!-- EN: Swept away by the waves -->
   <DepthRim.RoughSea.OverboardLabel>被大浪捲走</DepthRim.RoughSea.OverboardLabel>
+  <!-- EN: A heavy sea broke over the deck and carried these away. They are now missing:\n\n{0}\n\nIn rough seas, keep people inside, or clip them to a safety rope anchor. -->
   <DepthRim.RoughSea.OverboardText>一道大浪打上甲板，把以下人員捲進海裡，從此下落不明：\n\n{0}\n\n海況惡劣時不要讓人待在艙外，或讓他們扣上安全繩錨點。</DepthRim.RoughSea.OverboardText>
+  <!-- EN: Outside without a safety line -->
   <DepthRim.Alert.Untethered>艙外沒扣安全繩</DepthRim.Alert.Untethered>
+  <!-- EN: The submarine is under way. These are outside without a safety line and will be swept away:\n\n{0}\n\nBring them inside, or build a safety rope anchor within 9 cells of where they work. -->
   <DepthRim.Alert.UntetheredVoyageDesc>潛艇正在航行。以下人員待在艙外、沒扣安全繩，會被海流沖走：\n\n{0}\n\n把他們叫回艙內，或在他們工作處 9 格內蓋安全繩錨點。</DepthRim.Alert.UntetheredVoyageDesc>
+  <!-- EN: The sea is rough. These are outside without a safety line and can be swept away by the waves:\n\n{0}\n\nBring them inside, or build a safety rope anchor within 9 cells of where they work. -->
   <DepthRim.Alert.UntetheredSeaDesc>海況惡劣。以下人員待在艙外、沒扣安全繩，可能被浪捲走：\n\n{0}\n\n把他們叫回艙內，或在他們工作處 9 格內蓋安全繩錨點。</DepthRim.Alert.UntetheredSeaDesc>
 
-  <!-- 海面的惡劣海況 -->\n  <DepthRim.SeaWeather.ItemSwept>海浪捲走了{0}。</DepthRim.SeaWeather.ItemSwept>\n  <DepthRim.SeaWeather.ItemsSwept>海浪捲走了{0}，以及另外 {1} 堆存放在戶外的物品。</DepthRim.SeaWeather.ItemsSwept>\n  <DepthRim.SeaWeather.BuildingsBattered>海浪正拍打著海邊的建築。</DepthRim.SeaWeather.BuildingsBattered>\n
+  <!-- 海面的惡劣海況 -->\n  <!-- EN: The waves carried off {0}. -->
+  <DepthRim.SeaWeather.ItemSwept>海浪捲走了{0}。</DepthRim.SeaWeather.ItemSwept>\n  <!-- EN: The waves carried off {0} and {1} other stacks stored outside. -->
+  <DepthRim.SeaWeather.ItemsSwept>海浪捲走了{0}，以及另外 {1} 堆存放在戶外的物品。</DepthRim.SeaWeather.ItemsSwept>\n  <!-- EN: Waves are pounding the structures at the water's edge. -->
+  <DepthRim.SeaWeather.BuildingsBattered>海浪正拍打著海邊的建築。</DepthRim.SeaWeather.BuildingsBattered>\n
 
   <!-- 海底採樣器 -->
+  <!-- EN: Must be built on the sea floor. -->
   <DepthRim.Sampler.MustBeOcean>只能蓋在海底。</DepthRim.Sampler.MustBeOcean>
+  <!-- EN: Must be placed right next to a cold seep, an underwater volcano or a hydrothermal vent. -->
   <DepthRim.Sampler.MustBeAdjacent>必須緊貼冷泉、海底火山或熱液泉。</DepthRim.Sampler.MustBeAdjacent>
+  <!-- EN: Cannot be built on top of the site it samples. -->
   <DepthRim.Sampler.OnSource>不能蓋在要採樣的地標上。</DepthRim.Sampler.OnSource>
+  <!-- EN: {0}: {1} seabed research left -->
   <DepthRim.Sampler.GhostRemaining>{0}：剩 {1} 海底研究點數</DepthRim.Sampler.GhostRemaining>
+  <!-- EN: Not on the sea floor: nothing to sample. -->
   <DepthRim.Sampler.NotOcean>不在海底，沒有東西可以採樣。</DepthRim.Sampler.NotOcean>
+  <!-- EN: No cold seep, underwater volcano or hydrothermal vent next to it. -->
   <DepthRim.Sampler.NoSource>旁邊沒有冷泉、海底火山或熱液泉。</DepthRim.Sampler.NoSource>
+  <!-- EN: {0} has been fully sampled. -->
   <DepthRim.Sampler.SourceExhausted>{0}已經採樣完畢。</DepthRim.Sampler.SourceExhausted>
+  <!-- EN: Sampling {0}: {1} seabed research left -->
   <DepthRim.Sampler.Sampling>正在採樣{0}：剩 {1} 海底研究點數</DepthRim.Sampler.Sampling>
+  <!-- EN: No seabed research project to work on. -->
   <DepthRim.Sampler.NoProject>海底研究分頁沒有可以推進的專案。</DepthRim.Sampler.NoProject>
+  <!-- EN: Seabed research: {0} per day -->
   <DepthRim.Sampler.Rate>海底研究：每天 {0} 點</DepthRim.Sampler.Rate>
+  <!-- EN: {0} has been fully sampled. Find another cold seep, underwater volcano or hydrothermal vent to keep the seafloor sampler working. -->
   <DepthRim.Sampler.Exhausted>{0}已經採樣完畢。找另一處冷泉、海底火山或熱液泉，海底採樣器才能繼續運作。</DepthRim.Sampler.Exhausted>
 
   <!-- 舷梯 -->
+  <!-- EN: Extend gangway -->
   <DepthRim.Gangway.Extend>伸出舷梯</DepthRim.Gangway.Extend>
+  <!-- EN: Reach across the open sea in front (up to {0} cells) to the next deck. -->
   <DepthRim.Gangway.ExtendDesc>往前跨過開放海面（最多 {0} 格），接到對面的甲板。</DepthRim.Gangway.ExtendDesc>
+  <!-- EN: Retract gangway -->
   <DepthRim.Gangway.Retract>收回舷梯</DepthRim.Gangway.Retract>
+  <!-- EN: Fold the gangway back. It waits for anyone still standing on it; items on it are moved back to the deck. -->
   <DepthRim.Gangway.RetractDesc>把舷梯收回來。還有人站在上面時會等他離開；上面的物品會移回甲板。</DepthRim.Gangway.RetractDesc>
+  <!-- EN: The gangway is already out. -->
   <DepthRim.Gangway.AlreadyExtended>舷梯已經伸出去了。</DepthRim.Gangway.AlreadyExtended>
+  <!-- EN: No deck within {0} cells of open sea in front to reach. -->
   <DepthRim.Gangway.NoLanding>前方 {0} 格開放海面內沒有可以接上的甲板。</DepthRim.Gangway.NoLanding>
+  <!-- EN: {0} could not reach the far side and is folding back. -->
   <DepthRim.Gangway.Interrupted>{0}接不到對岸，正在收回。</DepthRim.Gangway.Interrupted>
+  <!-- EN: {0} is across. -->
   <DepthRim.Gangway.Connected>{0}已經接上對岸。</DepthRim.Gangway.Connected>
+  <!-- EN: The far side of {0} is gone: the gangway dropped into the sea. -->
   <DepthRim.Gangway.Collapsed>{0}的對岸不見了，舷梯掉進海裡。</DepthRim.Gangway.Collapsed>
+  <!-- EN: Retracted -->
   <DepthRim.Gangway.State.Retracted>已收回</DepthRim.Gangway.State.Retracted>
+  <!-- EN: Extending ({0}/{1}) -->
   <DepthRim.Gangway.State.Extending>伸出中（{0}/{1}）</DepthRim.Gangway.State.Extending>
+  <!-- EN: Extended ({1} cells) -->
   <DepthRim.Gangway.State.Extended>已伸出（{1} 格）</DepthRim.Gangway.State.Extended>
+  <!-- EN: Retracting ({0}/{1}) -->
   <DepthRim.Gangway.State.Retracting>收回中（{0}/{1}）</DepthRim.Gangway.State.Retracting>
+  <!-- EN: Waiting for {0} to step off. -->
   <DepthRim.Gangway.WaitingFor>等{0}離開舷梯。</DepthRim.Gangway.WaitingFor>
+  <!-- EN: Can only be built at the water level of the sea. -->
   <DepthRim.Gangway.SeaLevelOnly>只能蓋在海面的水面層。</DepthRim.Gangway.SeaLevelOnly>
+  <!-- EN: Must be placed on a deck. -->
   <DepthRim.Gangway.MustBeOnDeck>只能裝在甲板上。</DepthRim.Gangway.MustBeOnDeck>
+  <!-- EN: Must face open sea. -->
   <DepthRim.Gangway.MustFaceSea>正前方必須是開放海面。</DepthRim.Gangway.MustFaceSea>
+  <!-- EN: {0} fell into the sea and climbed back onto a deck. -->
   <DepthRim.Gangway.PawnFell>{0}掉進海裡，爬回了甲板。</DepthRim.Gangway.PawnFell>
+  <!-- EN: {0} fell into the sea with no deck in reach and was lost. -->
   <DepthRim.Gangway.PawnLost>{0}掉進海裡，附近沒有甲板可以爬上去，失蹤了。</DepthRim.Gangway.PawnLost>
 
   <!-- 海洋基因（Docs/基因_Biotech設計.md） -->
+  <!-- EN: This body cannot adapt far enough to be comfortable here. -->
   <DepthRim.Adaptation.Never>這個身體再怎麼適應，在這裡也不會舒適。</DepthRim.Adaptation.Never>
+  <!-- EN: never -->
   <DepthRim.Adaptation.NeverShort>永遠</DepthRim.Adaptation.NeverShort>
+  <!-- EN: Genes: comfortable within {0} levels, adapts at {1} speed, adapts down to {2} at most. -->
   <DepthRim.Adaptation.Genes>基因：容許 {0} 級的壓力差，適應速度 {1}，最多適應到{2}。</DepthRim.Adaptation.Genes>
+  <!-- EN: Genes: never suffers from pressure changes. -->
   <DepthRim.Adaptation.GenesImmune>基因：任何壓力變化都不會不適。</DepthRim.Adaptation.GenesImmune>
+  <!-- EN: Gills: breathes underwater without a suit. -->
   <DepthRim.Readiness.Gills>有鰓：不用潛水服也能在水中呼吸。</DepthRim.Readiness.Gills>
+  <!-- EN: Sea motion here: {0} -->
   <DepthRim.Seasick.Exposure>這裡的晃動程度：{0}</DepthRim.Seasick.Exposure>
+  <!-- EN: Used to the sea: less seasick. -->
   <DepthRim.Seasick.Acclimated>已經習慣海上：比較不會暈船。</DepthRim.Seasick.Acclimated>
+  <!-- EN: Submerged -->
   <DepthRim.StatsReport.Submerged>沒入水中</DepthRim.StatsReport.Submerged>
+  <!-- EN: Under the sea -->
   <DepthRim.StatsReport.UnderwaterMap>在海裡</DepthRim.StatsReport.UnderwaterMap>
+  <!-- EN: Away from the sea depths -->
   <DepthRim.StatsReport.NotUnderwaterMap>離開深海</DepthRim.StatsReport.NotUnderwaterMap>
+  <!-- EN: On the sea surface -->
   <DepthRim.StatsReport.OnSeaSurface>在海面上</DepthRim.StatsReport.OnSeaSurface>
+  <!-- EN: In bright light -->
   <DepthRim.StatsReport.BrightLight>在強光下</DepthRim.StatsReport.BrightLight>
+  <!-- EN: In the dark -->
   <DepthRim.StatsReport.Dark>在黑暗中</DepthRim.StatsReport.Dark>
+  <!-- EN: Lamp: {0} -->
   <DepthRim.SuitLamp.Label>頭燈：{0}</DepthRim.SuitLamp.Label>
+  <!-- EN: Switch the diving suit lamp between automatic, white light, dim red light and off.\n\nAutomatic uses white light, dim red light for photophobic wearers, and switches the lamp off for light-blind wearers. -->
   <DepthRim.SuitLamp.Desc>切換潛水服頭燈：自動、白光、暗紅光、關閉。\n\n自動：一般人用白光，畏光的人用暗紅光，強烈畏光的人關燈。</DepthRim.SuitLamp.Desc>
+  <!-- EN: auto -->
   <DepthRim.SuitLamp.Mode.Auto>自動</DepthRim.SuitLamp.Mode.Auto>
+  <!-- EN: white -->
   <DepthRim.SuitLamp.Mode.White>白光</DepthRim.SuitLamp.Mode.White>
+  <!-- EN: dim red -->
   <DepthRim.SuitLamp.Mode.Dim>暗紅光</DepthRim.SuitLamp.Mode.Dim>
+  <!-- EN: off -->
   <DepthRim.SuitLamp.Mode.Off>關閉</DepthRim.SuitLamp.Mode.Off>
 
 </LanguageData>

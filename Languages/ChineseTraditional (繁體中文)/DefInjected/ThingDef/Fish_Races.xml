@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: large fish -->
+  <DepthRim_Fish_Large.label>大型魚</DepthRim_Fish_Large.label>
+  <!-- EN: A large, powerful fish of the open water. Its kind depends on the local sea and water temperature. Killed, it becomes a large catch of fish. -->
+  <DepthRim_Fish_Large.description>開放水域中強壯的大魚。是什麼魚取決於所在的海域與水溫。殺死後會變成大量漁獲。</DepthRim_Fish_Large.description>
+  <!-- EN: fish meat -->
+  <DepthRim_Fish_Large.race.meatLabel>TODO</DepthRim_Fish_Large.race.meatLabel>
+  <!-- EN: mouth -->
+  <DepthRim_Fish_Large.tools.mouth.label>嘴</DepthRim_Fish_Large.tools.mouth.label>
+  
+  <!-- EN: fish -->
+  <DepthRim_Fish_Medium.label>魚</DepthRim_Fish_Medium.label>
+  <!-- EN: A mid-sized fish of the open water. Its kind depends on the local sea and water temperature. Killed, it becomes a catch of fish. -->
+  <DepthRim_Fish_Medium.description>開放水域中的中型魚。是什麼魚取決於所在的海域與水溫。殺死後會變成漁獲。</DepthRim_Fish_Medium.description>
+  <!-- EN: fish meat -->
+  <DepthRim_Fish_Medium.race.meatLabel>魚肉</DepthRim_Fish_Medium.race.meatLabel>
+  <!-- EN: mouth -->
+  <DepthRim_Fish_Medium.tools.mouth.label>嘴</DepthRim_Fish_Medium.tools.mouth.label>
+  
+  <!-- EN: small fish -->
+  <DepthRim_Fish_Small.label>小型魚</DepthRim_Fish_Small.label>
+  <!-- EN: A small, quick fish of the open water. Its kind depends on the local sea and water temperature. Killed, it becomes a catch of fish. -->
+  <DepthRim_Fish_Small.description>開放水域中敏捷的小魚。是什麼魚取決於所在的海域與水溫。殺死後會變成漁獲。</DepthRim_Fish_Small.description>
+  <!-- EN: fish meat -->
+  <DepthRim_Fish_Small.race.meatLabel>TODO</DepthRim_Fish_Small.race.meatLabel>
+  <!-- EN: mouth -->
+  <DepthRim_Fish_Small.tools.mouth.label>嘴</DepthRim_Fish_Small.tools.mouth.label>
+  
+</LanguageData>

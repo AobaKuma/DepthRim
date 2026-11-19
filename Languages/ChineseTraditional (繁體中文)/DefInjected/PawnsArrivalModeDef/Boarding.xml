@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: A group of {0} from {1} are cutting their way aboard in boarding craft! -->
+  <DepthRim_BoardingArrival.textEnemy>一群來自{1}的{0}正搭著跳幫突擊艇切穿船殼登艦！</DepthRim_BoardingArrival.textEnemy>
+  <!-- EN: A group of friendly {0} from {1} are coming aboard in boarding craft. -->
+  <DepthRim_BoardingArrival.textFriendly>一群來自{1}的友善{0}正搭著跳幫突擊艇登艦。</DepthRim_BoardingArrival.textFriendly>
+  <!-- EN: {0_pawnsPluralDef} will come aboard in boarding craft. -->
+  <DepthRim_BoardingArrival.textWillArrive>{0_pawnsPluralDef}會搭跳幫突擊艇登艦。</DepthRim_BoardingArrival.textWillArrive>
+  
+</LanguageData>

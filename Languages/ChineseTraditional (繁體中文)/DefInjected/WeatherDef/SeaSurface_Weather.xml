@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: rough sea -->
+  <DepthRim_RoughSea.label>惡劣海況</DepthRim_RoughSea.label>
+  <!-- EN: A hard wind is driving the sea into steep, breaking waves. Spray washes over low decks: things stored outside can be carried off, structures at the water's edge take a pounding, and anyone outside without a safety line can be swept away. -->
+  <DepthRim_RoughSea.description>強風把海面推成又陡又碎的大浪，浪花漫過低矮的甲板：戶外存放的東西會被捲走，海邊的建築被浪拍打受損，艙外沒扣安全繩的人可能被沖進海裡。</DepthRim_RoughSea.description>
+  
+  <!-- EN: storm at sea -->
+  <DepthRim_RoughSeaStorm.label>海上暴風雨</DepthRim_RoughSeaStorm.label>
+  <!-- EN: A full storm over open water: driving rain, lightning and mountainous waves breaking right across the decks. Anything stored outside is soon lost, structures at the water's edge are badly battered, and nobody should be outside without a safety line. The rain reduces movement speed and shooting accuracy. -->
+  <DepthRim_RoughSeaStorm.description>開放海面上的一場大暴風雨：暴雨、雷擊，山一樣的大浪直接打過甲板。戶外存放的東西很快就會被捲走，海邊的建築會被打得很慘，沒扣安全繩的人不應該待在艙外。大雨也會降低移動速度與射擊準確度。</DepthRim_RoughSeaStorm.description>
+  
+</LanguageData>

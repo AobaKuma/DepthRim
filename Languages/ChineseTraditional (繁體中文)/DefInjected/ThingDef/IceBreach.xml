@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: ice chunks -->
+  <DepthRim_Filth_IceChunks.label>碎冰</DepthRim_Filth_IceChunks.label>
+  
+  <!-- EN: ice-breaker frame -->
+  <DepthRim_IceBreakerFrame.label>破冰結構</DepthRim_IceBreakerFrame.label>
+  <!-- EN: Reinforcing ribs and hydraulic jacks that brace the cabin roof against the keel. With one aboard, a submarine resting in the shallows under sea ice can blow its main ballast and punch up through the ice. Its built-in upward sonar measures the ice above.\n\nHow thick the ice can be is limited by the frame (half as much once it is below half health). Every attempt damages it; more frames share the damage but do not add lift.\n\nMust be built inside a roofed cabin on a hull platform. It is not part of the hull and does not affect how deep the submarine can dive. -->
+  <DepthRim_IceBreakerFrame.description>把艙頂頂在龍骨上的加強肋材與液壓千斤頂。船上有它，停在海冰下淺海的潛艇就能緊急吹除主壓載，把冰頂破。內建的上視聲納可以量測上方的冰。\n\n能頂多厚的冰由破冰結構決定（血量低於一半時減半）。每次嘗試都會讓它受損；多蓋幾座可以分攤受損，但不會增加上浮力。\n\n必須蓋在船體平台上、有屋頂的船艙裡。它不是船殼，不影響潛艇能下多深。</DepthRim_IceBreakerFrame.description>
+  
+</LanguageData>

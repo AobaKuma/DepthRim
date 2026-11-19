@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: Abyssal Crew -->
+  <DepthRim_SubmarineStart.label>深淵船員</DepthRim_SubmarineStart.label>
+  <!-- EN: Your crew wakes aboard a patrol submarine resting on the seabed. There is no colony above, no landing pad and no sky: only the hull, the sea, and whatever the crew can salvage from the dark.\n\nPick any site on the planet. The submarine starts in the nearest shallow sea below it. -->
+  <DepthRim_SubmarineStart.description>船員們在一艘巡邏潛艇裡醒來，潛艇就坐在海床上。上面沒有殖民地、沒有降落場，也沒有天空：只有船殼、海水，和船員能從黑暗裡撈回來的東西。\n\n可以選星球上任何地點，潛艇會在它下方最近的淺海開局。</DepthRim_SubmarineStart.description>
+  <!-- EN: Your crew wakes aboard a patrol submarine resting on the seabed. There is no colony above, no landing pad and no sky: only the hull, the sea, and whatever the crew can salvage from the dark.\n\nPick any site on the planet. The submarine starts in the nearest shallow sea below it. -->
+  <DepthRim_SubmarineStart.scenario.description>TODO</DepthRim_SubmarineStart.scenario.description>
+  <!-- EN: Abyssal Crew -->
+  <DepthRim_SubmarineStart.scenario.name>TODO</DepthRim_SubmarineStart.scenario.name>
+  <!-- EN: The ballast tanks settle and the hull creaks under the weight of the sea. Outside the viewports there is only black water and the faint shape of the seabed below the hull.\n\nThe submarine is your home now. Keep its compartments dry, keep the batteries charged, and when you are ready, take the helm and find somewhere worth surfacing. -->
+  <DepthRim_SubmarineStart.scenario.parts.GameStartDialog.text>TODO</DepthRim_SubmarineStart.scenario.parts.GameStartDialog.text>
+  <!-- EN: Three crew aboard a submarine on the seabed. DepthRim's underwater start. -->
+  <DepthRim_SubmarineStart.scenario.summary>三名船員在海床上的潛艇裡。DepthRim 的水下開局。</DepthRim_SubmarineStart.scenario.summary>
+  
+</LanguageData>

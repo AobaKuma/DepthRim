@@ -9,6 +9,8 @@
 
   <DepthRim_WatertightDoor.label>水密門</DepthRim_WatertightDoor.label>
   <DepthRim_WatertightDoor.description>加了密封墊的厚重鋼門。門的任一側水深超過頭頂時，沒有可用潛水服的殖民者不會自己走過去（徵召中仍然可以）。受損的水密門滲水量遠低於一般牆。</DepthRim_WatertightDoor.description>
+  <DepthRim_PressureHatch.label>耐壓艙門</DepthRim_PressureHatch.label>
+  <DepthRim_PressureHatch.description>以塑鋼鑄成、用多道卡榫鎖緊的厚重艙門，撐得住海床的水壓。通行規則和水密門一樣：一側淹水時，沒有可用潛水服的殖民者不會自己走過去（徵召中仍然可以）。潛艇只能潛到朝外海最弱的那面牆或門撐得住的深度，所以要下到變溫層以下，所有朝外的門都要換成耐壓艙門。</DepthRim_PressureHatch.description>
   <DepthRim_BilgePump.label>艙底排水泵</DepthRim_BilgePump.label>
   <DepthRim_BilgePump.description>把所在密閉艙室的積水抽出去的電動泵。抽不了和外海相通的開放水域。</DepthRim_BilgePump.description>
 

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: gangway -->
+  <DepthRim_GangwayDeck.label>舷梯</DepthRim_GangwayDeck.label>
+  <!-- EN: The extended walkway of a retractable gangway. Nothing can be built on it. -->
+  <DepthRim_GangwayDeck.description>伸出的可收放舷梯步道，上面不能建造任何東西。</DepthRim_GangwayDeck.description>
+  
+</LanguageData>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: deep sea -->
+  <DepthRim_WaterTier_Deep.label>深海</DepthRim_WaterTier_Deep.label>
+  <!-- EN: No daylight at all. A lamp lights up drifting marine snow; without one, only sparse bioluminescence remains. -->
+  <DepthRim_WaterTier_Deep.description>日光完全到不了。開燈照得到飄落的海洋雪；不開燈只剩稀疏的生物光。</DepthRim_WaterTier_Deep.description>
+  
+  <!-- EN: abyssal seabed -->
+  <DepthRim_WaterTier_Seabed.label>深海海床</DepthRim_WaterTier_Seabed.label>
+  <!-- EN: The bottom of the ocean: fine sediment hangs in the water and hides the ground, lit only by drifting sparks of light. -->
+  <DepthRim_WaterTier_Seabed.description>海的最底部：細沉積物懸在水裡、幾乎看不到地面，只有幾點漂動的冷光。</DepthRim_WaterTier_Seabed.description>
+  
+  <!-- EN: shallow water -->
+  <DepthRim_WaterTier_Shallow.label>淺海</DepthRim_WaterTier_Shallow.label>
+  <!-- EN: Ice shelf edge, sunlight still reaches the bottom through the ice. Large slow ripples and light shafts. -->
+  <DepthRim_WaterTier_Shallow.description>冰棚邊緣，陽光還穿得透冰層照到海底。大而緩慢的波紋與光柱。</DepthRim_WaterTier_Shallow.description>
+  
+  <!-- EN: thermocline -->
+  <DepthRim_WaterTier_Thermocline.label>變溫層</DepthRim_WaterTier_Thermocline.label>
+  <!-- EN: Where cold and warmer water meet: the surface seems to sway, and a faint shimmer of drifting particles appears. -->
+  <DepthRim_WaterTier_Thermocline.description>冷水與暖水交會的地方：水面像在搖晃，隱約有漂浮物的微光。</DepthRim_WaterTier_Thermocline.description>
+  
+</LanguageData>

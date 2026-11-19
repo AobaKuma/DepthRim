@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: anti-torpedo torpedo body -->
+  <DepthRim_AntiTorpedoBody.label>反魚雷魚雷彈體</DepthRim_AntiTorpedoBody.label>
+  <!-- EN: A short, fast torpedo built to meet an incoming torpedo and detonate beside it. It cannot hit anything else.\n\nHas a slot for a warhead. -->
+  <DepthRim_AntiTorpedoBody.description>短而快的魚雷，專門迎上來襲的魚雷，在它旁邊引爆。打不了其他東西。\n\n有一個戰鬥部槽。</DepthRim_AntiTorpedoBody.description>
+  <!-- EN: ATT -->
+  <DepthRim_AntiTorpedoBody.designWord>TODO</DepthRim_AntiTorpedoBody.designWord>
+  
+  <!-- EN: torpedo body -->
+  <DepthRim_TorpedoBody.label>魚雷彈體</DepthRim_TorpedoBody.label>
+  <!-- EN: A heavyweight torpedo hull with an electric motor. Slow, so the target has time to hear it coming, but it only travels by sea and keeps to the depth it was fired at.\n\nHas slots for a warhead, guidance and payload. -->
+  <DepthRim_TorpedoBody.description>裝電動馬達的重型魚雷彈體。速度慢，目標有時間聽見它接近；只能走海路，而且保持在發射時的深度。\n\n有戰鬥部、導引與酬載三個槽位。</DepthRim_TorpedoBody.description>
+  <!-- EN: Torpedo -->
+  <DepthRim_TorpedoBody.designWord>TODO</DepthRim_TorpedoBody.designWord>
+  
+</LanguageData>

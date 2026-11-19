@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: advanced underwater thruster -->
+  <DepthRim_AdvancedThruster.label>先進水下推進器</DepthRim_AdvancedThruster.label>
+  <!-- EN: A magnetohydrodynamic drive with no moving parts: it pushes seawater directly with electromagnetic force. Much stronger and more efficient than a propeller pod, and almost silent. -->
+  <DepthRim_AdvancedThruster.description>以磁流體推進的推進器，沒有任何轉動部件，直接以電磁力推動海水。推力與效率都遠勝螺旋槳，運轉時幾乎不發出聲音。</DepthRim_AdvancedThruster.description>
+  
+  <!-- EN: submarine helm -->
+  <DepthRim_Helm.label>潛艇艦橋</DepthRim_Helm.label>
+  <!-- EN: Navigation and dive controls for the submarine it stands on. Plan a voyage, check battery charge and readiness, set the cruising depth, and give the order to cast off. -->
+  <DepthRim_Helm.description>所在潛艇的航行與下潛控制台。在這裡規劃航程、確認電池存量與整備狀態、設定巡航深度，並下令離港。</DepthRim_Helm.description>
+  
+  <!-- EN: keel frame -->
+  <DepthRim_Keel.label>龍骨框架</DepthRim_Keel.label>
+  <!-- EN: A massive pressure frame that ties a section of hull platform into one rigid body. Keel frames joined by steel girders form a submarine: everything on the hull platform within their reach leaves with it. Small keel frames can be built within its link range.\n\nCan only be built on a hull platform. -->
+  <DepthRim_Keel.description>把一段船體平台綁成一個整體的巨型耐壓框架。以鋼樑相連的龍骨框架構成一艘潛艇：覆蓋範圍內船體平台上的一切都會跟著離開。小型龍骨框架可以蓋在它的連結範圍內。\n\n只能蓋在船體平台上。</DepthRim_Keel.description>
+  
+  <!-- EN: small keel frame -->
+  <DepthRim_KeelSmall.label>小型龍骨框架</DepthRim_KeelSmall.label>
+  <!-- EN: A lighter pressure frame for a smaller section of hull platform. It has no link range of its own: it must be built within the link range of a keel frame and can only be joined to one.\n\nCan only be built on a hull platform. -->
+  <DepthRim_KeelSmall.description>用於較小一段船體平台的輕型耐壓框架。本身沒有連結範圍：必須蓋在龍骨框架的連結範圍內，也只能連到龍骨框架。\n\n只能蓋在船體平台上。</DepthRim_KeelSmall.description>
+  
+  <!-- EN: underwater thruster -->
+  <DepthRim_Thruster.label>水下推進器</DepthRim_Thruster.label>
+  <!-- EN: An electric propeller pod mounted on the hull. Low thrust, but simple and easy to repair. It draws its full power from the batteries aboard only while the submarine is under way, and its noise can be heard by passive sonar. -->
+  <DepthRim_Thruster.description>裝在潛艇船體上的電動螺旋槳推進器。推力不大，但構造簡單、容易維修。只有潛艇航行時才從船上的電池全速取電，運轉時的噪音會被被動聲納聽見。</DepthRim_Thruster.description>
+  
+</LanguageData>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: boarding craft -->
+  <DepthRim_BoardingCraft.label>跳幫突擊艇</DepthRim_BoardingCraft.label>
+  <!-- EN: A squat assault craft that cuts its way into a hull without breaking the seal, then lets its boarding party out. It waits for them; when the raid falls back, the survivors climb back aboard and it leaves.\n\nDestroy it and the boarders have no way home. -->
+  <DepthRim_BoardingCraft.description>矮胖的突擊艇，切穿船殼時不會破壞密閉，然後放出跳幫小隊。它會等他們回來；襲擊撤退時，存活的人爬回艇上，艇就離開。\n\n摧毀它，跳幫的人就回不了家。</DepthRim_BoardingCraft.description>
+  
+  <!-- EN: boarding craft (incoming) -->
+  <DepthRim_BoardingCraftIncoming.label>跳幫突擊艇（來襲中）</DepthRim_BoardingCraftIncoming.label>
+  
+  <!-- EN: boarding craft (leaving) -->
+  <DepthRim_BoardingCraftLeaving.label>跳幫突擊艇（離開中）</DepthRim_BoardingCraftLeaving.label>
+  
+  <!-- EN: moon pool -->
+  <DepthRim_MoonPool.label>月池</DepthRim_MoonPool.label>
+  <!-- EN: A sealed well in the deck, open to the sea below, where a boarding craft can be built, docked and launched. Build a boarding craft on top of it. -->
+  <DepthRim_MoonPool.description>甲板上一口密封的井，底下直通大海，可以在這裡建造、停靠與放出突擊艇。在上面建一艘突擊艇吧。</DepthRim_MoonPool.description>
+  
+  <!-- EN: boarding craft -->
+  <DepthRim_PlayerBoardingCraft.label>突擊艇</DepthRim_PlayerBoardingCraft.label>
+  <!-- EN: Your own boarding craft. Colonists board it from the right-click menu, then launch it at any ocean tile within 8 tiles by sea. Each tile of sea costs 5 chemfuel, and the craft only launches with enough fuel for the round trip. It cuts into the target's sealed compartments without breaking the seal, or settles on the seabed if there are none, and lets the crew out.\n\nMust be built on a moon pool. -->
+  <DepthRim_PlayerBoardingCraft.description>你自己的突擊艇。殖民者從右鍵選單登艇，然後選海路 8 格內的任一海洋格出發。每格海路燒 5 化學燃料，燃料要夠來回才能出發。它會切入目標的密閉艙室而不破壞密閉；沒有艙室就降在海床上，再放出船員。\n\n必須造在月池上。</DepthRim_PlayerBoardingCraft.description>
+  
+</LanguageData>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: polar navigation -->
+  <DepthRim_PolarNavigation.label>極地潛航</DepthRim_PolarNavigation.label>
+  <!-- EN: Reinforced crowns and jacking frames that let a submarine punch up through sea ice by blowing its main ballast, and the upward sonar to measure the ice first.\n\nUnlocks the ice-breaker frame. -->
+  <DepthRim_PolarNavigation.description>加強的艙頂與千斤頂框架，讓停在海冰下的潛艇能緊急吹除主壓載、把冰頂破；還有先量冰厚的上視聲納。\n\n解鎖破冰結構。</DepthRim_PolarNavigation.description>
+  
+</LanguageData>

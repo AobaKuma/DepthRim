@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: submarine -->
+  <DepthRim_Submarine.label>潛艇</DepthRim_Submarine.label>
+  <!-- EN: A submarine: a pressure hull carried off the shipyard platform by its keel network. -->
+  <DepthRim_Submarine.description>潛艇：由龍骨網路從船塢平台上帶走的耐壓船體。</DepthRim_Submarine.description>
+  
+</LanguageData>

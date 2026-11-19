@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: active sonar -->
+  <DepthRim_ActiveSonar.label>主動聲納</DepthRim_ActiveSonar.label>
+  <!-- EN: A hull-mounted transducer array that sends out powerful sound pulses and listens for the echoes. It sees far, but every ping announces where you are: passive homing torpedoes steer for the loudest active sonar they can hear.\n\nThe thermocline bends sound: targets on the other side of the layer are only heard at half range, and anything hiding inside the layer at three quarters. -->
+  <DepthRim_ActiveSonar.description>裝在船體上的換能器陣列，發出強力聲脈衝再聆聽回波。看得很遠，但每一次發聲都在告訴別人你在哪裡：被動歸向魚雷會朝聽得到的最響的主動聲納衝過去。\n\n溫躍層會折射聲波：溫躍層另一側的目標只能在一半距離內聽見，躲在溫躍層裡的則是四分之三。</DepthRim_ActiveSonar.description>
+  
+  <!-- EN: fire-control sonar -->
+  <DepthRim_FireControlSonar.label>火控聲納</DepthRim_FireControlSonar.label>
+  <!-- EN: A narrow-beam sonar that tracks an incoming torpedo closely enough to steer an anti-torpedo torpedo onto it, two at a time. It needs anti-torpedo torpedoes loaded in a torpedo tube, and a search sonar (active or passive) on the same map to hear the torpedo coming. -->
+  <DepthRim_FireControlSonar.description>窄波束聲納，能把來襲的魚雷追得夠緊，引導反魚雷魚雷撞上去，一次兩枚。需要魚雷發射管裡裝著反魚雷魚雷，同一張地圖上也要有搜索聲納（主動或被動）先聽到魚雷。</DepthRim_FireControlSonar.description>
+  
+  <!-- EN: passive sonar -->
+  <DepthRim_PassiveSonar.label>被動聲納</DepthRim_PassiveSonar.label>
+  <!-- EN: A hydrophone array that only listens. It emits nothing, so homing torpedoes cannot find it, but it only hears what is close and loud, such as thrusters and incoming torpedoes.\n\nThe thermocline bends sound for passive sonar too. -->
+  <DepthRim_PassiveSonar.description>只聽不發的水聽器陣列。不發出任何聲音，歸向魚雷找不到它，但只聽得到近處的響亮聲音，例如推進器與來襲的魚雷。\n\n溫躍層對被動聲納一樣有遮蔽效果。</DepthRim_PassiveSonar.description>
+  
+</LanguageData>

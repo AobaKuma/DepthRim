@@ -152,6 +152,7 @@ static partial class Test
             { "DepthRim_IceShaft", "DepthRim_UnderwaterSurvival" },
             { "DepthRim_BilgePump", "DepthRim_UnderwaterSurvival" },
             { "DepthRim_WatertightDoor", "DepthRim_UnderwaterSurvival" },
+            { "DepthRim_PressureHatch", "DepthRim_AbyssalNavigation" },
             { "DepthRim_PressureHullWall", "DepthRim_PressureEngineering" },
             { "DepthRim_HullPlatform", "DepthRim_PressureEngineering" },
             { "DepthRim_Keel", "DepthRim_SubmarineConstruction" },

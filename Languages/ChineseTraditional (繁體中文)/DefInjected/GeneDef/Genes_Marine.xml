@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: bioluminescent -->
+  <DepthRim_Bioluminescent.label>生物發光</DepthRim_Bioluminescent.label>
+  <!-- EN: Carriers of this gene have patterns of light-producing cells under the skin. Underwater and at night they give off a soft blue-green glow that lights a small area around them. Many people find it beautiful. -->
+  <DepthRim_Bioluminescent.description>帶有這個基因的人皮膚下有會發光的細胞紋路。在水下和夜裡會發出柔和的藍綠光，照亮身邊一小片地方。很多人覺得很美。</DepthRim_Bioluminescent.description>
+  <!-- EN: Glows (radius 2) underwater and at night. -->
+  <DepthRim_Bioluminescent.customEffectDescriptions.0>在水下與夜裡發光（半徑 2）。</DepthRim_Bioluminescent.customEffectDescriptions.0>
+  <!-- EN: glowing -->
+  <DepthRim_Bioluminescent.labelShortAdj>發光</DepthRim_Bioluminescent.labelShortAdj>
+  
+  <!-- EN: cold-water body -->
+  <DepthRim_ColdWaterBody.label>冷水體質</DepthRim_ColdWaterBody.label>
+  <!-- EN: Carriers of this gene have a thick insulating layer of fat and a slowed blood flow to the skin, like polar seals. They are comfortable in polar cold, but heat bothers them sooner. -->
+  <DepthRim_ColdWaterBody.description>帶有這個基因的人像極地的海豹一樣有厚厚的保溫脂肪，皮膚的血流也比較慢。極地的寒冷對他們來說很舒適，但比較早就會覺得熱。</DepthRim_ColdWaterBody.description>
+  <!-- EN: cold-water -->
+  <DepthRim_ColdWaterBody.labelShortAdj>耐冷水</DepthRim_ColdWaterBody.labelShortAdj>
+  
+  <!-- EN: concussion-resistant -->
+  <DepthRim_ConcussionResistant.label>抗震</DepthRim_ConcussionResistant.label>
+  <!-- EN: Carriers of this gene have a dense, fluid-cushioned body like that of a deep-diving whale. Explosions, such as a torpedo striking the hull, hurt them less. -->
+  <DepthRim_ConcussionResistant.description>帶有這個基因的人身體緻密，有液體緩衝，就像深潛的鯨魚。爆炸（例如魚雷命中船殼）對他們的傷害比較輕。</DepthRim_ConcussionResistant.description>
+  <!-- EN: blast-hardened -->
+  <DepthRim_ConcussionResistant.labelShortAdj>抗震</DepthRim_ConcussionResistant.labelShortAdj>
+  
+  <!-- EN: confined-adapted -->
+  <DepthRim_ConfinedAdapted.label>幽閉適應</DepthRim_ConfinedAdapted.label>
+  <!-- EN: Carriers of this gene feel at home in tight spaces. Small cabins and narrow submarine compartments never bother them. -->
+  <DepthRim_ConfinedAdapted.description>帶有這個基因的人待在狹小的空間裡就像在家。小船艙與窄小的潛艇艙室從來不會讓他們不舒服。</DepthRim_ConfinedAdapted.description>
+  <!-- EN: confined -->
+  <DepthRim_ConfinedAdapted.labelShortAdj>不怕擠</DepthRim_ConfinedAdapted.labelShortAdj>
+  
+  <!-- EN: dark worker -->
+  <DepthRim_DarkWorker.label>暗處工作者</DepthRim_DarkWorker.label>
+  <!-- EN: Carriers of this gene are at their sharpest in the dark. They work faster and shoot better in places without light. -->
+  <DepthRim_DarkWorker.description>帶有這個基因的人在黑暗中最敏銳。在沒有光的地方工作更快、射得更準。</DepthRim_DarkWorker.description>
+  <!-- EN: dark-working -->
+  <DepthRim_DarkWorker.labelShortAdj>暗處</DepthRim_DarkWorker.labelShortAdj>
+  
+  <!-- EN: decompression-resistant -->
+  <DepthRim_DecompressionResistant.label>抗減壓病</DepthRim_DecompressionResistant.label>
+  <!-- EN: Carriers of this gene clear dissolved gas from their blood quickly. Water pressure injuries heal twice as fast. -->
+  <DepthRim_DecompressionResistant.description>帶有這個基因的人能很快排掉血液中溶解的氣體。水壓造成的傷好得快一倍。</DepthRim_DecompressionResistant.description>
+  <!-- EN: Water pressure damage heals twice as fast. -->
+  <DepthRim_DecompressionResistant.customEffectDescriptions.0>水壓傷害的恢復速度加倍。</DepthRim_DecompressionResistant.customEffectDescriptions.0>
+  <!-- EN: bends-proof -->
+  <DepthRim_DecompressionResistant.labelShortAdj>抗減壓</DepthRim_DecompressionResistant.labelShortAdj>
+  
+  <!-- EN: deep calm -->
+  <DepthRim_DeepCalm.label>深海安定</DepthRim_DeepCalm.label>
+  <!-- EN: Carriers of this gene feel settled and clear-headed under the sea. Underwater they are harder to break and learn faster. -->
+  <DepthRim_DeepCalm.description>帶有這個基因的人在海裡覺得安穩、頭腦清楚。在水下比較不容易崩潰，學得也比較快。</DepthRim_DeepCalm.description>
+  <!-- EN: calm -->
+  <DepthRim_DeepCalm.labelShortAdj>安定</DepthRim_DeepCalm.labelShortAdj>
+  
+  <!-- EN: gills -->
+  <DepthRim_Gills.label>鰓</DepthRim_Gills.label>
+  <!-- EN: Carriers of this gene grow gill slits along the neck that draw oxygen straight from the water. They never drown and need no diving tank.\n\nOut of the water the gills slowly dry out over a few days, faster in the heat, and breathing suffers. Soaking in water at least waist-deep, or standing in the rain, wets them again. -->
+  <DepthRim_Gills.description>帶有這個基因的人脖子兩側長出鰓裂，能直接從水中吸取氧氣。他們不會溺水，也不需要潛水氣瓶。\n\n離開水後，鰓會在幾天內慢慢乾掉（炎熱時更快），呼吸也跟著變差。泡在及腰以上的水裡或站在雨中，鰓就會濕回來。</DepthRim_Gills.description>
+  <!-- EN: Breathes underwater: never drowns and uses no air from diving tanks. -->
+  <DepthRim_Gills.customEffectDescriptions.0>能在水中呼吸：不會溺水，也不耗潛水氣瓶的氣。</DepthRim_Gills.customEffectDescriptions.0>
+  <!-- EN: Gills dry out after days away from water. -->
+  <DepthRim_Gills.customEffectDescriptions.1>離水幾天後鰓會乾燥。</DepthRim_Gills.customEffectDescriptions.1>
+  <!-- EN: gilled -->
+  <DepthRim_Gills.labelShortAdj>有鰓</DepthRim_Gills.labelShortAdj>
+  <!-- EN: gill -->
+  <DepthRim_Gills.symbolPack.prefixSymbols.0.symbol>TODO</DepthRim_Gills.symbolPack.prefixSymbols.0.symbol>
+  <!-- EN: brine -->
+  <DepthRim_Gills.symbolPack.prefixSymbols.1.symbol>TODO</DepthRim_Gills.symbolPack.prefixSymbols.1.symbol>
+  <!-- EN: tide -->
+  <DepthRim_Gills.symbolPack.prefixSymbols.2.symbol>TODO</DepthRim_Gills.symbolPack.prefixSymbols.2.symbol>
+  <!-- EN: fin -->
+  <DepthRim_Gills.symbolPack.suffixSymbols.0.symbol>TODO</DepthRim_Gills.symbolPack.suffixSymbols.0.symbol>
+  
+  <!-- EN: land-sick -->
+  <DepthRim_LandSick.label>陸地不適</DepthRim_LandSick.label>
+  <!-- EN: Carriers of this gene belong under the sea. Anywhere else they feel heavy, slow and on edge. -->
+  <DepthRim_LandSick.description>帶有這個基因的人屬於海底。離開深海的任何地方都讓他們覺得身體沉重、動作遲緩、心神不寧。</DepthRim_LandSick.description>
+  <!-- EN: land-sick -->
+  <DepthRim_LandSick.labelShortAdj>怕陸地</DepthRim_LandSick.labelShortAdj>
+  
+  <!-- EN: long breath -->
+  <DepthRim_LongBreath.label>屏息</DepthRim_LongBreath.label>
+  <!-- EN: Carriers of this gene have enlarged lungs and blood that holds more oxygen. They can stay underwater almost three times as long before drowning, and use less air from a diving tank. -->
+  <DepthRim_LongBreath.description>帶有這個基因的人肺比較大，血液也能攜帶更多氧氣。在水下撐到溺水的時間將近一般人的三倍，用氣瓶時也比較省氣。</DepthRim_LongBreath.description>
+  <!-- EN: Drowns 65% slower. -->
+  <DepthRim_LongBreath.customEffectDescriptions.0>溺水速度慢 65%。</DepthRim_LongBreath.customEffectDescriptions.0>
+  <!-- EN: Uses 40% less air from diving tanks. -->
+  <DepthRim_LongBreath.customEffectDescriptions.1>潛水氣瓶耗氣少 40%。</DepthRim_LongBreath.customEffectDescriptions.1>
+  <!-- EN: long-breathed -->
+  <DepthRim_LongBreath.labelShortAdj>長息</DepthRim_LongBreath.labelShortAdj>
+  <!-- EN: deep -->
+  <DepthRim_LongBreath.symbolPack.prefixSymbols.0.symbol>TODO</DepthRim_LongBreath.symbolPack.prefixSymbols.0.symbol>
+  <!-- EN: still -->
+  <DepthRim_LongBreath.symbolPack.prefixSymbols.1.symbol>TODO</DepthRim_LongBreath.symbolPack.prefixSymbols.1.symbol>
+  
+  <!-- EN: photophobic -->
+  <DepthRim_Photophobia.label>畏光</DepthRim_Photophobia.label>
+  <!-- EN: Carriers of this gene have wide pupils that cannot close fully. Daylight and very bright lamps sting their eyes, making them less accurate and slower to work, but they feel at ease in the dark.\n\nTheir diving suit lamp switches to a dim red light by default. -->
+  <DepthRim_Photophobia.description>帶有這個基因的人瞳孔大而無法完全收縮。日光和很亮的燈會刺痛他們的眼睛，射擊與工作都變差；在黑暗中則覺得安心。\n\n他們的潛水服頭燈預設改用暗紅光。</DepthRim_Photophobia.description>
+  <!-- EN: photophobic -->
+  <DepthRim_Photophobia.labelShortAdj>畏光</DepthRim_Photophobia.labelShortAdj>
+  <!-- EN: dim -->
+  <DepthRim_Photophobia.symbolPack.prefixSymbols.0.symbol>TODO</DepthRim_Photophobia.symbolPack.prefixSymbols.0.symbol>
+  <!-- EN: murk -->
+  <DepthRim_Photophobia.symbolPack.prefixSymbols.1.symbol>TODO</DepthRim_Photophobia.symbolPack.prefixSymbols.1.symbol>
+  
+  <!-- EN: light-blind -->
+  <DepthRim_PhotophobiaIntense.label>強烈畏光</DepthRim_PhotophobiaIntense.label>
+  <!-- EN: Carriers of this gene have eyes made only for the deep. Any ordinary lamp dazzles them, reducing their sight, accuracy and work speed, and direct sunlight slows them down. In the dark they are at ease.\n\nTheir diving suit lamp is switched off by default. -->
+  <DepthRim_PhotophobiaIntense.description>帶有這個基因的人眼睛只為深海而生。任何普通的燈都會讓他們眩光，視力、射擊與工作都變差；直射的日光還會拖慢腳步。在黑暗中則覺得安心。\n\n他們的潛水服頭燈預設關閉。</DepthRim_PhotophobiaIntense.description>
+  <!-- EN: light-blind -->
+  <DepthRim_PhotophobiaIntense.labelShortAdj>光盲</DepthRim_PhotophobiaIntense.labelShortAdj>
+  
+  <!-- EN: deep-adapted -->
+  <DepthRim_PressureAdapted.label>深海適應</DepthRim_PressureAdapted.label>
+  <!-- EN: Carriers of this gene have collapsible lungs and pressure-stable proteins like those of deep-diving whales. They withstand the pressure of the deep sea without a suit and adapt quickly when changing depth. -->
+  <DepthRim_PressureAdapted.description>帶有這個基因的人有能塌陷的肺和耐壓的蛋白質，就像深潛的鯨魚。不穿潛水服也撐得住深海的水壓，換深度時適應得很快。</DepthRim_PressureAdapted.description>
+  <!-- EN: Comfortable within 1.5 pressure levels of what the body is used to. -->
+  <DepthRim_PressureAdapted.customEffectDescriptions.0>和身體習慣的壓力差 1.5 級以內都不會不適。</DepthRim_PressureAdapted.customEffectDescriptions.0>
+  <!-- EN: Adapts to pressure 50% faster. -->
+  <DepthRim_PressureAdapted.customEffectDescriptions.1>壓力適應速度快 50%。</DepthRim_PressureAdapted.customEffectDescriptions.1>
+  <!-- EN: Water pressure damage x75%. -->
+  <DepthRim_PressureAdapted.customEffectDescriptions.2>水壓傷害 ×75%。</DepthRim_PressureAdapted.customEffectDescriptions.2>
+  <!-- EN: deep-adapted -->
+  <DepthRim_PressureAdapted.labelShortAdj>深海適應</DepthRim_PressureAdapted.labelShortAdj>
+  
+  <!-- EN: pressure-fragile -->
+  <DepthRim_PressureFragile.label>不耐壓</DepthRim_PressureFragile.label>
+  <!-- EN: Carriers of this gene have stiff blood vessels and joints that cope badly with pressure changes. They feel even small changes in pressure, adapt at half the normal speed, and can never fully adapt to the abyssal seabed. Water pressure hurts them more. -->
+  <DepthRim_PressureFragile.description>帶有這個基因的人血管與關節僵硬，承受不了壓力變化。一點點壓差就會不適，適應速度只有一般人的一半，而且永遠無法完全適應深海海床。水壓對他們的傷害也更重。</DepthRim_PressureFragile.description>
+  <!-- EN: Uncomfortable half a pressure level away from what the body is used to (normally one level). -->
+  <DepthRim_PressureFragile.customEffectDescriptions.0>和身體習慣的壓力差半級就會不適（一般人是一級）。</DepthRim_PressureFragile.customEffectDescriptions.0>
+  <!-- EN: Adapts to pressure at half speed, and only down to the deep sea. -->
+  <DepthRim_PressureFragile.customEffectDescriptions.1>壓力適應速度減半，而且最多只能適應到深海。</DepthRim_PressureFragile.customEffectDescriptions.1>
+  <!-- EN: Water pressure damage x150%. -->
+  <DepthRim_PressureFragile.customEffectDescriptions.2>水壓傷害 ×150%。</DepthRim_PressureFragile.customEffectDescriptions.2>
+  <!-- EN: pressure-fragile -->
+  <DepthRim_PressureFragile.labelShortAdj>不耐壓</DepthRim_PressureFragile.labelShortAdj>
+  
+  <!-- EN: abyssal body -->
+  <DepthRim_PressureImmune.label>淵體</DepthRim_PressureImmune.label>
+  <!-- EN: Carriers of this gene have archites woven through every tissue that hold the body's shape against any pressure. They can swim the abyssal seabed unprotected and never suffer from pressure changes. -->
+  <DepthRim_PressureImmune.description>帶有這個基因的人每一處組織裡都織著 archite，讓身體在任何壓力下都保持原狀。他們不穿任何防護就能在深海海床游泳，也永遠不會因壓力變化而不適。</DepthRim_PressureImmune.description>
+  <!-- EN: Never suffers from pressure changes. -->
+  <DepthRim_PressureImmune.customEffectDescriptions.0>壓力變化永遠不會造成不適。</DepthRim_PressureImmune.customEffectDescriptions.0>
+  <!-- EN: Immune to water pressure damage. -->
+  <DepthRim_PressureImmune.customEffectDescriptions.1>不受水壓傷害。</DepthRim_PressureImmune.customEffectDescriptions.1>
+  <!-- EN: abyssal -->
+  <DepthRim_PressureImmune.labelShortAdj>淵體</DepthRim_PressureImmune.labelShortAdj>
+  
+  <!-- EN: pressure-tolerant -->
+  <DepthRim_PressureTolerant.label>耐壓</DepthRim_PressureTolerant.label>
+  <!-- EN: Carriers of this gene have flexible tissues that withstand some water pressure on their own, and adjust a little faster to changes in pressure. -->
+  <DepthRim_PressureTolerant.description>帶有這個基因的人組織柔韌，身體本身就能承受一些水壓，適應壓力變化也快一點。</DepthRim_PressureTolerant.description>
+  <!-- EN: Comfortable within 1.25 pressure levels of what the body is used to. -->
+  <DepthRim_PressureTolerant.customEffectDescriptions.0>和身體習慣的壓力差 1.25 級以內都不會不適。</DepthRim_PressureTolerant.customEffectDescriptions.0>
+  <!-- EN: Adapts to pressure 25% faster. -->
+  <DepthRim_PressureTolerant.customEffectDescriptions.1>壓力適應速度快 25%。</DepthRim_PressureTolerant.customEffectDescriptions.1>
+  <!-- EN: pressure-tolerant -->
+  <DepthRim_PressureTolerant.labelShortAdj>耐壓</DepthRim_PressureTolerant.labelShortAdj>
+  
+  <!-- EN: seafood digester -->
+  <DepthRim_RawSeafood.label>海食</DepthRim_RawSeafood.label>
+  <!-- EN: Carriers of this gene have a gut adapted to raw fish and kelp. They don't mind eating raw food and get food poisoning half as often. -->
+  <DepthRim_RawSeafood.description>帶有這個基因的人腸胃適應生魚與海藻。他們不介意吃生食，食物中毒的機率也只有一半。</DepthRim_RawSeafood.description>
+  <!-- EN: seafood-eating -->
+  <DepthRim_RawSeafood.labelShortAdj>海食</DepthRim_RawSeafood.labelShortAdj>
+  
+  <!-- EN: scaled skin -->
+  <DepthRim_ScaledSkin.label>鱗皮</DepthRim_ScaledSkin.label>
+  <!-- EN: Carriers of this gene grow small overlapping scales on their arms, back and neck. The scales turn blades and blows, but most people find them unattractive. -->
+  <DepthRim_ScaledSkin.description>帶有這個基因的人手臂、背部與脖子長著細小交疊的鱗片。鱗片能擋開刀刃與鈍擊，但大多數人覺得不好看。</DepthRim_ScaledSkin.description>
+  <!-- EN: scaled -->
+  <DepthRim_ScaledSkin.labelShortAdj>有鱗</DepthRim_ScaledSkin.labelShortAdj>
+  
+  <!-- EN: sea legs -->
+  <DepthRim_SeaLegs.label>海腳</DepthRim_SeaLegs.label>
+  <!-- EN: Carriers of this gene have a balance sense tuned to a moving deck. They never get seasick, and they move and shoot more steadily on the swaying sea surface. -->
+  <DepthRim_SeaLegs.description>帶有這個基因的人平衡感天生適應晃動的甲板。他們永遠不會暈船，在搖晃的海面上走得更快、射得更穩。</DepthRim_SeaLegs.description>
+  <!-- EN: sea-legged -->
+  <DepthRim_SeaLegs.labelShortAdj>站得穩</DepthRim_SeaLegs.labelShortAdj>
+  <!-- EN: sail -->
+  <DepthRim_SeaLegs.symbolPack.prefixSymbols.0.symbol>TODO</DepthRim_SeaLegs.symbolPack.prefixSymbols.0.symbol>
+  <!-- EN: deck -->
+  <DepthRim_SeaLegs.symbolPack.prefixSymbols.1.symbol>TODO</DepthRim_SeaLegs.symbolPack.prefixSymbols.1.symbol>
+  <!-- EN: salt -->
+  <DepthRim_SeaLegs.symbolPack.prefixSymbols.2.symbol>TODO</DepthRim_SeaLegs.symbolPack.prefixSymbols.2.symbol>
+  
+  <!-- EN: seasick-prone -->
+  <DepthRim_SeasickProne.label>易暈船</DepthRim_SeasickProne.label>
+  <!-- EN: Carriers of this gene have an overly sensitive inner ear. They get seasick twice as easily, and never get used to the motion of the sea. -->
+  <DepthRim_SeasickProne.description>帶有這個基因的人內耳過度敏感。他們暈船的程度是一般人的兩倍，而且永遠習慣不了海的晃動。</DepthRim_SeasickProne.description>
+  <!-- EN: Never gets used to seasickness. -->
+  <DepthRim_SeasickProne.customEffectDescriptions.0>永遠不會習慣暈船。</DepthRim_SeasickProne.customEffectDescriptions.0>
+  <!-- EN: seasick -->
+  <DepthRim_SeasickProne.labelShortAdj>易暈</DepthRim_SeasickProne.labelShortAdj>
+  
+  <!-- EN: abyss-grey skin -->
+  <DepthRim_Skin_AbyssGrey.label>深淵灰藍膚</DepthRim_Skin_AbyssGrey.label>
+  <!-- EN: Carriers of this gene have skin the blue-grey of deep water. -->
+  <DepthRim_Skin_AbyssGrey.description>帶有這個基因的人皮膚是深水般的灰藍色。</DepthRim_Skin_AbyssGrey.description>
+  <!-- EN: abyss-grey -->
+  <DepthRim_Skin_AbyssGrey.labelShortAdj>灰藍</DepthRim_Skin_AbyssGrey.labelShortAdj>
+  
+  <!-- EN: coral skin -->
+  <DepthRim_Skin_Coral.label>珊瑚紅膚</DepthRim_Skin_Coral.label>
+  <!-- EN: Carriers of this gene have skin the warm red-orange of reef coral. -->
+  <DepthRim_Skin_Coral.description>帶有這個基因的人皮膚是珊瑚礁般溫暖的橘紅色。</DepthRim_Skin_Coral.description>
+  <!-- EN: coral -->
+  <DepthRim_Skin_Coral.labelShortAdj>珊瑚紅</DepthRim_Skin_Coral.labelShortAdj>
+  
+  <!-- EN: pearl skin -->
+  <DepthRim_Skin_Pearl.label>珍珠白膚</DepthRim_Skin_Pearl.label>
+  <!-- EN: Carriers of this gene have pale, faintly lustrous skin that has never seen the sun. -->
+  <DepthRim_Skin_Pearl.description>帶有這個基因的人皮膚蒼白、帶著淡淡的光澤，像從沒見過太陽。</DepthRim_Skin_Pearl.description>
+  <!-- EN: pearl -->
+  <DepthRim_Skin_Pearl.labelShortAdj>珍珠白</DepthRim_Skin_Pearl.labelShortAdj>
+  
+  <!-- EN: strong swimmer -->
+  <DepthRim_StrongSwimmer.label>善泳</DepthRim_StrongSwimmer.label>
+  <!-- EN: Carriers of this gene have webbed fingers and toes and powerful legs. They swim much faster than other people. -->
+  <DepthRim_StrongSwimmer.description>帶有這個基因的人手腳有蹼、雙腿有力，游得比別人快得多。</DepthRim_StrongSwimmer.description>
+  <!-- EN: swimming -->
+  <DepthRim_StrongSwimmer.labelShortAdj>善泳</DepthRim_StrongSwimmer.labelShortAdj>
+  
+  <!-- EN: underwater worker -->
+  <DepthRim_UnderwaterWorker.label>水中作業手</DepthRim_UnderwaterWorker.label>
+  <!-- EN: Carriers of this gene keep their grip and coordination underwater. They work much faster while submerged, making up for most of the clumsiness of a diving suit. -->
+  <DepthRim_UnderwaterWorker.description>帶有這個基因的人在水下也抓得穩、動作協調。沒入水中時工作快得多，幾乎抵掉潛水服的笨重。</DepthRim_UnderwaterWorker.description>
+  <!-- EN: diver -->
+  <DepthRim_UnderwaterWorker.labelShortAdj>水中作業</DepthRim_UnderwaterWorker.labelShortAdj>
+  
+  <!-- EN: waterproof skin -->
+  <DepthRim_Waterproof.label>防水皮膚</DepthRim_Waterproof.label>
+  <!-- EN: Carriers of this gene have oily skin that sheds water. Being soaking wet doesn't bother them. -->
+  <DepthRim_Waterproof.description>帶有這個基因的人皮膚油亮，水一沾就滑落。濕透了也不會在意。</DepthRim_Waterproof.description>
+  <!-- EN: No mood penalty for being soaking wet. -->
+  <DepthRim_Waterproof.customEffectDescriptions.0>濕透時沒有心情懲罰。</DepthRim_Waterproof.customEffectDescriptions.0>
+  <!-- EN: waterproof -->
+  <DepthRim_Waterproof.labelShortAdj>防水</DepthRim_Waterproof.labelShortAdj>
+  
+</LanguageData>

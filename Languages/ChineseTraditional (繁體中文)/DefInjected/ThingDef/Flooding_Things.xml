@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: bilge pump -->
+  <DepthRim_BilgePump.label>艙底排水泵</DepthRim_BilgePump.label>
+  <!-- EN: An electric pump that drains water out of the sealed compartment it stands in. It cannot drain open water. -->
+  <DepthRim_BilgePump.description>把所在密閉艙室的積水抽出去的電動泵。抽不了和外海相通的開放水域。</DepthRim_BilgePump.description>
+  
+  <!-- EN: diving suit -->
+  <DepthRim_DivingSuit.label>潛水服</DepthRim_DivingSuit.label>
+  <!-- EN: A sealed, insulated diving suit with an integrated air tank. It keeps the wearer alive under the ice, but it is heavy and clumsy. The tank refills automatically whenever the wearer is out of the water. -->
+  <DepthRim_DivingSuit.description>密封隔熱的潛水服，附整合式氧氣瓶。讓穿著者在冰層下活下來，但笨重遲緩。離開水面時氧氣瓶會自動回充。</DepthRim_DivingSuit.description>
+  <!-- EN: DepthRim diving suit -->
+  <DepthRim_DivingSuit.apparel.renderNodeProperties.0.debugLabel>TODO</DepthRim_DivingSuit.apparel.renderNodeProperties.0.debugLabel>
+  
+  <!-- EN: pressure hatch -->
+  <DepthRim_PressureHatch.label>耐壓艙門</DepthRim_PressureHatch.label>
+  <!-- EN: A massive, dogged plasteel hatch rated for the crushing pressure of the sea floor. It follows the same rules as a watertight door: colonists without a working diving suit will not walk through it on their own when one side is flooded (drafted colonists still can). A submarine can only dive as deep as its weakest outward-facing wall or door allows, so every outer door must be a pressure hatch to go below the thermocline. -->
+  <DepthRim_PressureHatch.description>以塑鋼鑄成、用多道卡榫鎖緊的厚重艙門，撐得住海床的水壓。通行規則和水密門一樣：一側淹水時，沒有可用潛水服的殖民者不會自己走過去（徵召中仍然可以）。潛艇只能潛到朝外海最弱的那面牆或門撐得住的深度，所以要下到變溫層以下，所有朝外的門都要換成耐壓艙門。</DepthRim_PressureHatch.description>
+  
+  <!-- EN: pressure hull wall -->
+  <DepthRim_PressureHullWall.label>抗壓水密牆</DepthRim_PressureHullWall.label>
+  <!-- EN: A thick, ribbed wall of steel and plasteel built to hold back the sea. It barely leaks even when damaged, and can take a great deal of punishment. -->
+  <DepthRim_PressureHullWall.description>鋼與塑鋼構成的厚實肋牆，專門用來擋住海水。即使受損也幾乎不滲水，而且非常耐打。</DepthRim_PressureHullWall.description>
+  
+  <!-- EN: watertight door -->
+  <DepthRim_WatertightDoor.label>水密門</DepthRim_WatertightDoor.label>
+  <!-- EN: A heavy, gasketed steel door. When one side is flooded deeper than a person's head, colonists without a working diving suit will not walk through it on their own (drafted colonists still can). A damaged watertight door leaks far less than an ordinary wall. -->
+  <DepthRim_WatertightDoor.description>加了密封墊的厚重鋼門。門的任一側水深超過頭頂時，沒有可用潛水服的殖民者不會自己走過去（徵召中仍然可以）。受損的水密門滲水量遠低於一般牆。</DepthRim_WatertightDoor.description>
+  
+</LanguageData>

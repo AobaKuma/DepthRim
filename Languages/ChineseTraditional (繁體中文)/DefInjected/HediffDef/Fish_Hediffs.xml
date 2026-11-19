@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: out of water -->
+  <DepthRim_FishOutOfWater.label>離水</DepthRim_FishOutOfWater.label>
+  <!-- EN: A fish stranded without water. It flops helplessly and will suffocate within minutes unless it gets back into the water. -->
+  <DepthRim_FishOutOfWater.description>擱淺在沒有水的地方的魚。牠只能無助地拍打，除非回到水裡，否則幾分鐘內就會窒息。</DepthRim_FishOutOfWater.description>
+  <!-- EN: suffocating -->
+  <DepthRim_FishOutOfWater.stages.suffocating.label>窒息中</DepthRim_FishOutOfWater.stages.suffocating.label>
+  
+</LanguageData>

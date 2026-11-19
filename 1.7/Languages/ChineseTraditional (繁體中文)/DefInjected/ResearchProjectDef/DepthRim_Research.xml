@@ -11,7 +11,7 @@
   <DepthRim_SubmarineConstruction.description>把耐壓艙室組裝成能自行航行的潛艇。完成後就能離開升降井，前往海洋的其他地方。\n\n解鎖：龍骨框架、潛艇艦橋、水下推進器、安全繩錨點。</DepthRim_SubmarineConstruction.description>
 
   <DepthRim_AbyssalNavigation.label>深淵潛航</DepthRim_AbyssalNavigation.label>
-  <DepthRim_AbyssalNavigation.description>撐住深海與淵底水壓的極限技術：幾乎無聲的磁流體推進、讓殖民者在深海出艙的硬殼潛水服，以及出艙前的加壓程序。\n\n解鎖：先進水下推進器。</DepthRim_AbyssalNavigation.description>
+  <DepthRim_AbyssalNavigation.description>撐住深海與淵底水壓的極限技術：幾乎無聲的磁流體推進、讓殖民者在深海出艙的硬殼潛水服，以及出艙前的加壓程序。\n\n解鎖：先進水下推進器、耐壓艙門。</DepthRim_AbyssalNavigation.description>
 
   <DepthRim_UnderwaterCombat.label>水下戰鬥</DepthRim_UnderwaterCombat.label>
   <DepthRim_UnderwaterCombat.description>在黑暗中找出並對付其他船艦：能聽遍海洋的聲納陣列，以及躲在溫躍層後面的戰術。\n\n解鎖：主動聲納、被動聲納、火控聲納、魚雷發射管、魚雷、反魚雷魚雷、超空泡近防砲、月池、突擊艇，以及在水中射程不打折的水下步槍。</DepthRim_UnderwaterCombat.description>

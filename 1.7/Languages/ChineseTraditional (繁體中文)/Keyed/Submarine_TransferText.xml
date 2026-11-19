@@ -1,136 +1,248 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
 
-  <!-- 潛艇版的 DMSE 轉移飛行文字。海洋層上 DMSE.Transfer.X 先找 DepthRim.Submarine.X（TransferPresentation.textKeyPrefix），
-       這裡沒有的鍵照用 DMSE 的。 -->
+  <!-- Submarine wording for DMSE's transfer-flight texts. On the ocean layer, DMSE.Transfer.X is looked up as
+       DepthRim.Submarine.X first (TransferPresentation.textKeyPrefix); keys missing here fall back to DMSE's. -->
 
-  <!-- 操舵台 -->
+  <!-- Helm -->
+  <!-- EN: Plan voyage -->
   <DepthRim.Submarine.Console.Plan>制定航行計畫</DepthRim.Submarine.Console.Plan>
+  <!-- EN: Choose a destination and review power, voyage time and readiness. -->
   <DepthRim.Submarine.Console.PlanDesc>選擇目的地，並檢視電力、航行時間與整備狀態。</DepthRim.Submarine.Console.PlanDesc>
+  <!-- EN: Abort voyage -->
   <DepthRim.Submarine.Console.Abort>中止航行</DepthRim.Submarine.Console.Abort>
+  <!-- EN: Discard the current voyage plan. -->
   <DepthRim.Submarine.Console.AbortDesc>放棄目前的航行計畫。</DepthRim.Submarine.Console.AbortDesc>
+  <!-- EN: Keep showing this submarine's hull and the thrusters' wash zones. -->
   <DepthRim.Submarine.Console.ShowFootprintDesc>常駐顯示這艘潛艇的船體範圍與推進器水流區。</DepthRim.Submarine.Console.ShowFootprintDesc>
+  <!-- EN: The submarine is already casting off. -->
   <DepthRim.Submarine.Console.AlreadyLaunching>潛艇已在出港程序中。</DepthRim.Submarine.Console.AlreadyLaunching>
+  <!-- EN: Not aboard a submarine. -->
   <DepthRim.Submarine.Console.NotOnShip>不在潛艇上。</DepthRim.Submarine.Console.NotOnShip>
+  <!-- EN: Main helm -->
   <DepthRim.Submarine.Console.Primary>主操舵台</DepthRim.Submarine.Console.Primary>
+  <!-- EN: Backup helm -->
   <DepthRim.Submarine.Console.Backup>備援操舵台</DepthRim.Submarine.Console.Backup>
+  <!-- EN: Submarine: {0} keel frames, {1} working thrusters, thrust/mass {2}, power {3} -->
   <DepthRim.Submarine.Console.ShipSummary>潛艇：{0} 座龍骨架、可用推進器 {1} 具、推重比 {2}、電力 {3}</DepthRim.Submarine.Console.ShipSummary>
+  <!-- EN: Voyage planned: to tile {0} ({1} tiles) -->
   <DepthRim.Submarine.Console.PlanSummary>已制定航行計畫：前往格子 {0}（{1} 格）</DepthRim.Submarine.Console.PlanSummary>
+  <!-- EN: Cast off -->
   <DepthRim.Submarine.Console.Launch>啟動出港程序</DepthRim.Submarine.Console.Launch>
+  <!-- EN: Begin casting off. Once a colonist mans this helm, the submarine counts down and leaves the shipyard. -->
   <DepthRim.Submarine.Console.LaunchDesc>開始出港程序。殖民者操作此操舵台後，潛艇會倒數並駛離船塢。</DepthRim.Submarine.Console.LaunchDesc>
+  <!-- EN: Casting off: waiting for a helmsman. -->
   <DepthRim.Submarine.Console.AwaitingOperatorMsg>已開始出港程序，等待舵手。</DepthRim.Submarine.Console.AwaitingOperatorMsg>
+  <!-- EN: Waiting for a helmsman. -->
   <DepthRim.Submarine.Console.StateAwaitingOperator>等待舵手。</DepthRim.Submarine.Console.StateAwaitingOperator>
+  <!-- EN: Casting off in {0}. -->
   <DepthRim.Submarine.Console.StateCountdown>{0}後出港。</DepthRim.Submarine.Console.StateCountdown>
+  <!-- EN: Name submarine -->
   <DepthRim.Submarine.Console.Rename>命名潛艇</DepthRim.Submarine.Console.Rename>
+  <!-- EN: Name this submarine. The name is kept on every helm aboard and used on every voyage. -->
   <DepthRim.Submarine.Console.RenameDesc>為這艘潛艇命名。名稱會保存在艇上所有操舵台，之後每次航行都沿用。</DepthRim.Submarine.Console.RenameDesc>
+  <!-- EN: Unnamed (named when it casts off) -->
   <DepthRim.Submarine.Console.Unnamed>未命名（出港時自動命名）</DepthRim.Submarine.Console.Unnamed>
+  <!-- EN: Casting off -->
   <DepthRim.Submarine.Separating>出港中</DepthRim.Submarine.Separating>
 
+  <!-- EN: No voyage plan. -->
   <DepthRim.Submarine.Abort.NoPlan>沒有航行計畫。</DepthRim.Submarine.Abort.NoPlan>
+  <!-- EN: No free water to put out into. -->
   <DepthRim.Submarine.Abort.NoFreeTile>附近沒有可駛入的空水域。</DepthRim.Submarine.Abort.NoFreeTile>
+  <!-- EN: The keel changed during the countdown. -->
   <DepthRim.Submarine.Abort.NetworkChanged>龍骨結構在倒數中改變了。</DepthRim.Submarine.Abort.NetworkChanged>
 
+  <!-- EN: Voyage aborted -->
   <DepthRim.Submarine.Letter.AbortedLabel>航行中止</DepthRim.Submarine.Letter.AbortedLabel>
+  <!-- EN: Casting off was aborted: {0}\n\nThe plan has been kept. -->
   <DepthRim.Submarine.Letter.AbortedText>出港已中止：{0}\n\n計畫已保留。</DepthRim.Submarine.Letter.AbortedText>
+  <!-- EN: Submarine cast off -->
   <DepthRim.Submarine.Letter.SeparatedLabel>潛艇已出港</DepthRim.Submarine.Letter.SeparatedLabel>
+  <!-- EN: {0} has cast off from the shipyard and is under way. -->
   <DepthRim.Submarine.Letter.SeparatedText>{0} 已駛離船塢，開始航行。</DepthRim.Submarine.Letter.SeparatedText>
+  <!-- EN: Destroyed at the hull's edge: -->
   <DepthRim.Submarine.Letter.Destroyed>在船體邊緣被摧毀：</DepthRim.Submarine.Letter.Destroyed>
+  <!-- EN: Left behind at the shipyard: -->
   <DepthRim.Submarine.Letter.LeftBehind>留在船塢的：</DepthRim.Submarine.Letter.LeftBehind>
+  <!-- EN: Keel beams broken: {0}. Construction orders cancelled: {1}. -->
   <DepthRim.Submarine.Letter.BrokenLinks>斷裂的龍骨樑：{0}。取消的施工單：{1}。</DepthRim.Submarine.Letter.BrokenLinks>
+  <!-- EN: The shipyard has been abandoned. -->
   <DepthRim.Submarine.Letter.OriginAbandoned>船塢已棄置。</DepthRim.Submarine.Letter.OriginAbandoned>
 
+  <!-- EN: Submarine {0} -->
   <DepthRim.Submarine.Ship.DefaultName>潛艇 {0}</DepthRim.Submarine.Ship.DefaultName>
+  <!-- EN: Keel frames: {0}, keel networks: {1} -->
   <DepthRim.Submarine.Ship.Inspect>龍骨架：{0}，龍骨網路：{1}</DepthRim.Submarine.Ship.Inspect>
+  <!-- EN: Scuttle submarine -->
   <DepthRim.Submarine.Ship.Abandon>棄艇</DepthRim.Submarine.Ship.Abandon>
+  <!-- EN: Abandon this submarine and everything aboard. -->
   <DepthRim.Submarine.Ship.AbandonDesc>放棄這艘潛艇與艇上的一切。</DepthRim.Submarine.Ship.AbandonDesc>
+  <!-- EN: There are still colonists aboard. -->
   <DepthRim.Submarine.Ship.AbandonHasColonists>艇上還有殖民者。</DepthRim.Submarine.Ship.AbandonHasColonists>
 
+  <!-- EN: People outside a departing submarine -->
   <DepthRim.Submarine.Alert.PawnsOutside>人員在出港潛艇外</DepthRim.Submarine.Alert.PawnsOutside>
+  <!-- EN: These people are outside a submarine that is about to cast off and will be left behind. -->
   <DepthRim.Submarine.Alert.PawnsOutsideDesc>這些人在即將出港的潛艇外，將被留下。</DepthRim.Submarine.Alert.PawnsOutsideDesc>
+  <!-- EN: A submarine is counting down to cast off. -->
   <DepthRim.Submarine.Alert.CountdownDesc>有潛艇正在倒數出港。</DepthRim.Submarine.Alert.CountdownDesc>
 
+  <!-- EN: Must be in the same ocean. -->
   <DepthRim.Submarine.Dest.OtherLayer>必須在同一片海洋。</DepthRim.Submarine.Dest.OtherLayer>
+  <!-- EN: Out of range ({0} tiles). -->
   <DepthRim.Submarine.Dest.OutOfRange>超出航程（{0} 格）。</DepthRim.Submarine.Dest.OutOfRange>
+  <!-- EN: That tile is taken, and there is no free water nearby. -->
   <DepthRim.Submarine.Dest.Occupied>該格已被占用，附近也沒有空水域。</DepthRim.Submarine.Dest.Occupied>
 
+  <!-- EN: Voyage plan -->
   <DepthRim.Submarine.Dialog.Title>航行計畫</DepthRim.Submarine.Dialog.Title>
+  <!-- EN: Voyage planned. -->
   <DepthRim.Submarine.Dialog.PlanSet>已制定航行計畫。</DepthRim.Submarine.Dialog.PlanSet>
 
-  <!-- 航行面板 -->
+  <!-- Voyage panel -->
+  <!-- EN: Keel -->
   <DepthRim.Submarine.UI.NetworkHeader>龍骨</DepthRim.Submarine.UI.NetworkHeader>
+  <!-- EN: Keel frames -->
   <DepthRim.Submarine.UI.Piles>龍骨架</DepthRim.Submarine.UI.Piles>
+  <!-- EN: Keel beams -->
   <DepthRim.Submarine.UI.Beams>龍骨樑</DepthRim.Submarine.UI.Beams>
+  <!-- EN: Structures across the hull's edge (destroyed when casting off) -->
   <DepthRim.Submarine.UI.TornApart>出港時將被摧毀的跨界建築</DepthRim.Submarine.UI.TornApart>
+  <!-- EN: Unlinked keel frames nearby -->
   <DepthRim.Submarine.UI.UnlinkedPiles>附近未連結的龍骨架</DepthRim.Submarine.UI.UnlinkedPiles>
+  <!-- EN: Keel frames with beam orders -->
   <DepthRim.Submarine.UI.PendingOrders>有龍骨樑施工單的龍骨架</DepthRim.Submarine.UI.PendingOrders>
+  <!-- EN: This submarine has no thrusters. -->
   <DepthRim.Submarine.UI.NoEngines>這艘潛艇上沒有推進器。</DepthRim.Submarine.UI.NoEngines>
+  <!-- EN: Power -->
   <DepthRim.Submarine.UI.FuelHeader>電力</DepthRim.Submarine.UI.FuelHeader>
+  <!-- EN: This submarine has no power storage. -->
   <DepthRim.Submarine.UI.NoFuelSources>這艘潛艇上沒有儲電設備。</DepthRim.Submarine.UI.NoFuelSources>
+  <!-- EN: Voyage capability -->
   <DepthRim.Submarine.UI.EstimateHeader>航行能力</DepthRim.Submarine.UI.EstimateHeader>
+  <!-- EN: The destination is taken; the submarine will stop alongside. -->
   <DepthRim.Submarine.UI.ParkedAtNeighbor>目標格已被占用，潛艇會停在旁邊。</DepthRim.Submarine.UI.ParkedAtNeighbor>
+  <!-- EN: {0} ({1} keel frames) -->
   <DepthRim.Submarine.UI.MassWeightValue>{0}（{1} 座龍骨架）</DepthRim.Submarine.UI.MassWeightValue>
+  <!-- EN: Thrust/mass (min {0}) -->
   <DepthRim.Submarine.UI.TWR>推重比（最低 {0}）</DepthRim.Submarine.UI.TWR>
+  <!-- EN: Power use multiplier -->
   <DepthRim.Submarine.UI.Eta>耗電倍率</DepthRim.Submarine.UI.Eta>
+  <!-- EN: Stored power -->
   <DepthRim.Submarine.UI.FuelAvailable>艇上儲電</DepthRim.Submarine.UI.FuelAvailable>
+  <!-- EN: Cannot cast off -->
   <DepthRim.Submarine.UI.CannotDepart>無法出港</DepthRim.Submarine.UI.CannotDepart>
+  <!-- EN: Acceleration -->
   <DepthRim.Submarine.UI.BurnTime>加速</DepthRim.Submarine.UI.BurnTime>
+  <!-- EN: Power needed -->
   <DepthRim.Submarine.UI.FuelRequired>所需電力</DepthRim.Submarine.UI.FuelRequired>
+  <!-- EN: Cruise -->
   <DepthRim.Submarine.UI.CoastTime>巡航</DepthRim.Submarine.UI.CoastTime>
+  <!-- EN: Total voyage time -->
   <DepthRim.Submarine.UI.TotalTime>總航行時間</DepthRim.Submarine.UI.TotalTime>
+  <!-- EN: Under way: {0} -->
   <DepthRim.Submarine.UI.FlightHeader>航行中：{0}</DepthRim.Submarine.UI.FlightHeader>
+  <!-- EN: Voyage progress -->
   <DepthRim.Submarine.UI.FlightProgress>航程進度</DepthRim.Submarine.UI.FlightProgress>
+  <!-- EN: Unnoticed after arrival -->
   <DepthRim.Submarine.UI.GracePeriod>抵達後未被察覺</DepthRim.Submarine.UI.GracePeriod>
 
+  <!-- EN: The submarine must be at sea. -->
   <DepthRim.Submarine.Issue.NotInSpace>潛艇必須位於海中。</DepthRim.Submarine.Issue.NotInSpace>
+  <!-- EN: The helm is not aboard the submarine. -->
   <DepthRim.Submarine.Issue.ConsoleNotOnShip>操舵台不在潛艇上。</DepthRim.Submarine.Issue.ConsoleNotOnShip>
+  <!-- EN: The helm is unpowered, switched off or broken. -->
   <DepthRim.Submarine.Issue.ConsoleUnavailable>操舵台斷電、關閉或損壞。</DepthRim.Submarine.Issue.ConsoleUnavailable>
+  <!-- EN: No working thrusters. -->
   <DepthRim.Submarine.Issue.NoEngines>沒有可用的推進器。</DepthRim.Submarine.Issue.NoEngines>
+  <!-- EN: Thrust/mass {0} is below {1}. -->
   <DepthRim.Submarine.Issue.LowTWR>推重比 {0} 低於 {1}。</DepthRim.Submarine.Issue.LowTWR>
+  <!-- EN: Not enough stored power ({0}/{1}). -->
   <DepthRim.Submarine.Issue.NotEnoughFuel>儲電不足（{0}/{1}）。</DepthRim.Submarine.Issue.NotEnoughFuel>
+  <!-- EN: Another submarine is already casting off here. -->
   <DepthRim.Submarine.Issue.OtherShipDeparting>此地圖已有其他潛艇正在出港。</DepthRim.Submarine.Issue.OtherShipDeparting>
+  <!-- EN: {0} outside the hull will be left behind. -->
   <DepthRim.Submarine.Issue.PawnsLeftBehind>{0} 人在船體外，將被留下。</DepthRim.Submarine.Issue.PawnsLeftBehind>
+  <!-- EN: {0} keel frames nearby are not linked to this submarine. -->
   <DepthRim.Submarine.Issue.NearbyUnlinkedPiles>附近有 {0} 座龍骨架未與這艘潛艇相連。</DepthRim.Submarine.Issue.NearbyUnlinkedPiles>
+  <!-- EN: Will take {0} cells from another submarine ({1} structures, {2} keel frames). -->
   <DepthRim.Submarine.Issue.Contested>將從其他潛艇帶走 {0} 格（{1} 座建築、{2} 座龍骨架）。</DepthRim.Submarine.Issue.Contested>
+  <!-- EN: {0} keel frames have unfinished beams. -->
   <DepthRim.Submarine.Issue.PendingBeamOrders>{0} 座龍骨架有未完工的龍骨樑。</DepthRim.Submarine.Issue.PendingBeamOrders>
+  <!-- EN: The submarine is under way. -->
   <DepthRim.Submarine.Issue.InFlight>潛艇正在航行中。</DepthRim.Submarine.Issue.InFlight>
 
-  <!-- 推進器 -->
+  <!-- Thrusters -->
+  <!-- EN: Thrust {0}, power use multiplier {1} -->
   <DepthRim.Submarine.Engine.Stats>推力 {0}，耗電倍率 {1}</DepthRim.Submarine.Engine.Stats>
+  <!-- EN: Not aboard a submarine -->
   <DepthRim.Submarine.Engine.Status.NotOnShip>不在潛艇上</DepthRim.Submarine.Engine.Status.NotOnShip>
+  <!-- EN: Wash blocked by {0} -->
   <DepthRim.Submarine.Engine.Status.ExhaustBlocked>水流受 {0} 阻擋</DepthRim.Submarine.Engine.Status.ExhaustBlocked>
+  <!-- EN: {0}: the wash zone is blocked by {1}. -->
   <DepthRim.Submarine.Engine.PlacedBlocked>{0}：水流區被 {1} 擋住。</DepthRim.Submarine.Engine.PlacedBlocked>
 
-  <!-- 航行 -->
+  <!-- Voyage -->
+  <!-- EN: Getting under way -->
   <DepthRim.Submarine.Phase.DepartureBurn>加速出港</DepthRim.Submarine.Phase.DepartureBurn>
+  <!-- EN: Cruising -->
   <DepthRim.Submarine.Phase.Coast>巡航</DepthRim.Submarine.Phase.Coast>
+  <!-- EN: Slowing to arrive -->
   <DepthRim.Submarine.Phase.ArrivalBurn>減速進港</DepthRim.Submarine.Phase.ArrivalBurn>
+  <!-- EN: Arrived -->
   <DepthRim.Submarine.Phase.Arrived>已抵達</DepthRim.Submarine.Phase.Arrived>
+  <!-- EN: Voyage: {0}, {1} left in this stage -->
   <DepthRim.Submarine.Flight.Status>航行：{0}，本階段剩餘 {1}</DepthRim.Submarine.Flight.Status>
+  <!-- EN: {0} is cruising. -->
   <DepthRim.Submarine.Flight.CoastBegin>{0} 進入巡航。</DepthRim.Submarine.Flight.CoastBegin>
+  <!-- EN: {0} is slowing to arrive. -->
   <DepthRim.Submarine.Flight.ArrivalBurnBegin>{0} 開始減速進港。</DepthRim.Submarine.Flight.ArrivalBurnBegin>
+  <!-- EN: {0}'s destination is taken; it will stop nearby. -->
   <DepthRim.Submarine.Flight.Rerouted>{0} 的目的地已被占用，將停在附近。</DepthRim.Submarine.Flight.Rerouted>
+  <!-- EN: No thrust to slow down -->
   <DepthRim.Submarine.Flight.NoThrustLabel>減速無推力</DepthRim.Submarine.Flight.NoThrustLabel>
+  <!-- EN: {0} has no working thrusters and will drift to a stop on its rudders and ballast ({1}). -->
   <DepthRim.Submarine.Flight.NoThrustText>{0} 沒有可用的推進器，將靠舵面與壓艙水慢慢停下（{1}）。</DepthRim.Submarine.Flight.NoThrustText>
+  <!-- EN: Voyage complete -->
   <DepthRim.Submarine.Flight.ArrivedLabel>航行完成</DepthRim.Submarine.Flight.ArrivedLabel>
+  <!-- EN: The submarine's thrusters are running. -->
   <DepthRim.Submarine.ShuttleBlockedBurn>潛艇的推進器正在運轉。</DepthRim.Submarine.ShuttleBlockedBurn>
 
-  <!-- 停泊 -->
+  <!-- Docking -->
+  <!-- EN: Will dock at {0}. -->
   <DepthRim.Submarine.UI.LandOnSite>將停泊在{0}。</DepthRim.Submarine.UI.LandOnSite>
+  <!-- EN: Docking -->
   <DepthRim.Submarine.Landing>停泊中</DepthRim.Submarine.Landing>
+  <!-- EN: Choose docking spot -->
   <DepthRim.Submarine.Land.Designator>選擇停泊位置</DepthRim.Submarine.Land.Designator>
+  <!-- EN: Choose where the submarine docks on this map. -->
   <DepthRim.Submarine.Land.DesignatorDesc>選擇潛艇在這張地圖上的停泊位置。</DepthRim.Submarine.Land.DesignatorDesc>
+  <!-- EN: The submarine will dock at the nearest free spot. -->
   <DepthRim.Submarine.Land.WillMove>潛艇會停泊在最近的空位。</DepthRim.Submarine.Land.WillMove>
+  <!-- EN: Dock at {0} -->
   <DepthRim.Submarine.Land.Gizmo>停泊到{0}</DepthRim.Submarine.Land.Gizmo>
+  <!-- EN: Choose a docking spot at {0}. -->
   <DepthRim.Submarine.Land.GizmoDesc>在{0}選擇停泊位置。</DepthRim.Submarine.Land.GizmoDesc>
+  <!-- EN: Dock automatically -->
   <DepthRim.Submarine.Land.Auto>自動停泊</DepthRim.Submarine.Land.Auto>
+  <!-- EN: Dock at the free spot closest to the map centre. -->
   <DepthRim.Submarine.Land.AutoDesc>停泊在最接近地圖中央的空位。</DepthRim.Submarine.Land.AutoDesc>
+  <!-- EN: Cancel docking -->
   <DepthRim.Submarine.Land.Cancel>取消停泊</DepthRim.Submarine.Land.Cancel>
+  <!-- EN: Hold position. -->
   <DepthRim.Submarine.Land.CancelDesc>停留在原處。</DepthRim.Submarine.Land.CancelDesc>
+  <!-- EN: There is not enough room to dock at {0}. -->
   <DepthRim.Submarine.Land.NoRoom>{0}沒有足夠空間停泊。</DepthRim.Submarine.Land.NoRoom>
+  <!-- EN: The docking site no longer exists. -->
   <DepthRim.Submarine.Land.SiteGone>停泊地點已不存在。</DepthRim.Submarine.Land.SiteGone>
+  <!-- EN: {0} is waiting to dock at {1}. -->
   <DepthRim.Submarine.Land.ArrivedText>{0} 正等待停泊到{1}。</DepthRim.Submarine.Land.ArrivedText>
+  <!-- EN: Submarine docked -->
   <DepthRim.Submarine.Land.LandedLabel>潛艇已停泊</DepthRim.Submarine.Land.LandedLabel>
+  <!-- EN: {0} has docked at {1}. -->
   <DepthRim.Submarine.Land.LandedText>{0} 已停泊在{1}。</DepthRim.Submarine.Land.LandedText>
+  <!-- EN: The chosen spot was blocked, so it docked at the nearest free spot. -->
   <DepthRim.Submarine.Land.Moved>選定位置受阻，已改停泊在最近的空位。</DepthRim.Submarine.Land.Moved>
 
 </LanguageData>

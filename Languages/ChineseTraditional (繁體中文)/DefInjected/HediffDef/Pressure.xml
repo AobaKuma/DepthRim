@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: pressure adaptation -->
+  <DepthRim_PressureAdaptation.label>壓力適應</DepthRim_PressureAdaptation.label>
+  <!-- EN: How far this body has adjusted to the pressure it lives under. It drifts towards the surrounding pressure level, about a day per level for a healthy body, faster with good blood filtration.\n\nNothing happens while the surroundings are within one level of what the body is used to. Beyond that, in either direction, the body suffers until it has caught up. A pressure chamber lets someone adjust in steps.\n\nA body adapted to depth also withstands that much water pressure when it leaves the hull, on top of what its diving gear gives. -->
+  <DepthRim_PressureAdaptation.description>這個身體對所在壓力的適應程度。它會慢慢往周圍的壓力等級靠近（一般人每級約一天），血液過濾能力越好越快。\n\n周圍的壓力和身體習慣的壓力相差不超過一級時沒有任何影響。超過一級（不論是下潛還是上浮）就會不舒服，直到身體跟上為止。加壓艙可以讓人分段適應。\n\n適應了深處壓力的身體，出艙時也撐得住同樣等級的水壓，和潛水裝備的抗性相加。</DepthRim_PressureAdaptation.description>
+  <!-- EN: mild discomfort -->
+  <DepthRim_PressureAdaptation.stages.mild_discomfort.label>輕微不適</DepthRim_PressureAdaptation.stages.mild_discomfort.label>
+  <!-- EN: pressure sickness -->
+  <DepthRim_PressureAdaptation.stages.pressure_sickness.label>壓力不適</DepthRim_PressureAdaptation.stages.pressure_sickness.label>
+  <!-- EN: severe pressure sickness -->
+  <DepthRim_PressureAdaptation.stages.severe_pressure_sickness.label>嚴重壓力不適</DepthRim_PressureAdaptation.stages.severe_pressure_sickness.label>
+  
+</LanguageData>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: underwater -->
+  <DepthRim_ResearchTab.label>水下</DepthRim_ResearchTab.label>
+  
+  <!-- EN: seabed research -->
+  <DepthRim_SeabedResearchTab.label>海底研究</DepthRim_SeabedResearchTab.label>
+  <!-- EN: What can only be learned on the sea floor itself. Seabed research cannot be done at a research bench: seafloor samplers set beside cold seeps, underwater volcanoes and hydrothermal vents gather it. -->
+  <DepthRim_SeabedResearchTab.generalDescription>只有在海底才學得到的知識。海底研究無法在研究台進行，要靠架在冷泉、海底火山與熱液泉旁的海底採樣器收集。</DepthRim_SeabedResearchTab.generalDescription>
+  <!-- EN: Seabed research -->
+  <DepthRim_SeabedResearchTab.generalTitle>海底研究</DepthRim_SeabedResearchTab.generalTitle>
+  
+</LanguageData>

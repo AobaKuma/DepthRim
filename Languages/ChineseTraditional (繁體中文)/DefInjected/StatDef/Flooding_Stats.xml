@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: water pressure resistance -->
+  <DepthRim_PressureResistance.label>水壓抗性</DepthRim_PressureResistance.label>
+  <!-- EN: How much water pressure this creature can withstand while submerged.\n\n0: shallows only\n1: down to the thermocline\n2: the deep sea\n3: the abyssal seabed\n\nA body's pressure adaptation level is added to this. -->
+  <DepthRim_PressureResistance.description>這種生物在水下能承受多大的水壓。\n\n0：只能待在淺海\n1：可到變溫層\n2：可到深海\n3：可到深海海床\n\n身體的壓力適應值會加在這上面。</DepthRim_PressureResistance.description>
+  
+</LanguageData>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: basalt boulder -->
+  <DR_Rock.label>玄武岩塊</DR_Rock.label>
+  <!-- EN: A lump of black basalt left where lava met the cold sea. Waist-high and wide, it gives some cover, and it can be mined for a chunk of stone. -->
+  <DR_Rock.description>熔岩碰上冰冷海水後留下的黑色玄武岩塊。大約到腰的高度，可以當掩體，也能開採出一塊石塊。</DR_Rock.description>
+  
+  <!-- EN: underwater volcano -->
+  <DR_UnderwaterVolcano.label>海底火山</DR_UnderwaterVolcano.label>
+  <!-- EN: A chimney of black volcanic rock, built up layer by layer by the hot, mineral-laden water pouring out of it. It never stops smoking. Enclosed in a room, it will heat the room fast. -->
+  <DR_UnderwaterVolcano.description>黑色火山岩堆成的煙囪，由噴湧而出、富含礦物的熱水一層層堆積而成，從不停止冒煙。如果被圍在房間裡，會讓房間迅速升溫。</DR_UnderwaterVolcano.description>
+  
+</LanguageData>

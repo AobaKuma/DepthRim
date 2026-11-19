@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: ocean site -->
+  <DepthRim_OceanSite.label>海洋地點</DepthRim_OceanSite.label>
+  <!-- EN: A location on the ocean floor. -->
+  <DepthRim_OceanSite.description>海床上的一個地點。</DepthRim_OceanSite.description>
+  
+</LanguageData>

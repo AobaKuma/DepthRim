@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: open water or seabed -->
+  <DepthRim_HullBase.label>開放水域或海床</DepthRim_HullBase.label>
+  
+  <!-- EN: hull platform -->
+  <DepthRim_HullPlatform.label>船體平台</DepthRim_HullPlatform.label>
+  
+  <!-- EN: open abyss -->
+  <DepthRim_OpenAbyss.label>開放深淵</DepthRim_OpenAbyss.label>
+  
+  <!-- EN: open water -->
+  <DepthRim_OpenWater.label>開放水域</DepthRim_OpenWater.label>
+  
+</LanguageData>

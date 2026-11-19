@@ -1,75 +1,137 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
 
-  <!-- 常規上浮 -->
+  <!-- Surfacing (open sea) -->
+  <!-- EN: Surface -->
   <DepthRim.Surface.Label>上浮</DepthRim.Surface.Label>
+  <!-- EN: Blow the ballast and rise to the open sea above. The hull floats on the sea surface map of this tile; dive again from the helm.\n\nThe submarine must be stopped at shallow depth, under open water without ice. -->
   <DepthRim.Surface.Desc>吹除壓載，浮到正上方的海面。船體會浮在這一格的海面地圖上；之後從艦橋下潛。\n\n潛艇要停在淺海，而且上面是沒有冰的海。</DepthRim.Surface.Desc>
+  <!-- EN: The submarine has no hull. -->
   <DepthRim.Surface.NoHull>潛艇沒有船體。</DepthRim.Surface.NoHull>
+  <!-- EN: The submarine is under way. Stop first. -->
   <DepthRim.Surface.InFlight>潛艇正在航行，先停下來。</DepthRim.Surface.InFlight>
+  <!-- EN: Rise to {0} depth first. -->
   <DepthRim.Surface.NotShallow>先上升到{0}。</DepthRim.Surface.NotShallow>
+  <!-- EN: There is land above, not sea. -->
   <DepthRim.Surface.Land>上面是陸地，不是海。</DepthRim.Surface.Land>
+  <!-- EN: There is an ice shelf above: hundreds of metres of ice that no submarine can break. -->
   <DepthRim.Surface.Shelf>上面是冰棚：幾百公尺厚的冰，任何潛艇都頂不開。</DepthRim.Surface.Shelf>
+  <!-- EN: The sea above is frozen ({0} m of ice). Use ice-breaking surfacing. -->
   <DepthRim.Surface.Iced>上面的海結冰了（冰厚 {0} m），要用破冰上浮。</DepthRim.Surface.Iced>
+  <!-- EN: {0} is already above. -->
   <DepthRim.Surface.Occupied>上面已經有{0}。</DepthRim.Surface.Occupied>
+  <!-- EN: There is no room for the hull at {0}. -->
   <DepthRim.Surface.NoRoom>{0}沒有地方放得下船體。</DepthRim.Surface.NoRoom>
+  <!-- EN: Surfacing -->
   <DepthRim.Surface.Surfacing>上浮中</DepthRim.Surface.Surfacing>
+  <!-- EN: Surfaced -->
   <DepthRim.Surface.LetterLabel>浮出海面</DepthRim.Surface.LetterLabel>
+  <!-- EN: {0} blew its ballast and broke the surface. The hull is riding the open sea.\n\nDive again from the helm when you are ready. -->
   <DepthRim.Surface.LetterText>{0}吹除壓載，衝出了海面，船體正浮在開放海面上。\n\n準備好之後從艦橋下潛。</DepthRim.Surface.LetterText>
 
-  <!-- 從水面下潛 -->
+  <!-- Diving from the surface -->
+  <!-- EN: Flood the ballast and sink back into the ocean below, then on down to the chosen depth. Everything on the hull goes with it; whatever is off the hull stays behind. -->
   <DepthRim.Surface.DiveDesc>注水入壓載艙，沉回下方海洋，再下潛到選擇的深度。船體上的一切都會跟著走；不在船體上的東西留在原地。</DepthRim.Surface.DiveDesc>
+  <!-- EN: The submarine is not on the surface. -->
   <DepthRim.Surface.NotSurfaced>潛艇不在水面上。</DepthRim.Surface.NotSurfaced>
+  <!-- EN: The helm is not on a hull held by keel frames. -->
   <DepthRim.Surface.NotOnHull>艦橋不在龍骨框架撐住的船體上。</DepthRim.Surface.NotOnHull>
+  <!-- EN: There is no free, navigable ocean below. -->
   <DepthRim.Surface.NoSeaBelow>下面沒有空著、可以航行的海。</DepthRim.Surface.NoSeaBelow>
+  <!-- EN: Diving -->
   <DepthRim.Surface.Diving>下潛中</DepthRim.Surface.Diving>
+  <!-- EN: {0} slipped beneath the surface and is resting in the shallows. -->
   <DepthRim.Surface.Dived>{0}沉入水面之下，停在淺海。</DepthRim.Surface.Dived>
 
-  <!-- 破冰上浮 -->
+  <!-- Ice-breaking surfacing -->
+  <!-- EN: Break through ice -->
   <DepthRim.IceBreach.Label>破冰上浮</DepthRim.IceBreach.Label>
+  <!-- EN: Hover up against the ice for an hour, then blow the main ballast and try to punch through.\n\nWhether it works depends on the ice thickness and temperature against the size of the hull (bigger hulls have more lift). If the ice only cracks, try again within a day: cracked ice gives way more easily. Every attempt damages the ice-breaker frames and needs six hours to reflood and recharge. -->
   <DepthRim.IceBreach.Desc>懸停上升、貼住冰底一小時，然後緊急吹除主壓載，試著把冰頂破。\n\n成不成功取決於冰厚與氣溫對上船體大小（船越大上浮力越大）。如果冰只是裂開，一天內再試一次：裂過的冰比較容易頂破。每次嘗試都會讓破冰結構受損，而且要六小時重新注水、充氣。</DepthRim.IceBreach.Desc>
+  <!-- EN: No ice-breaker frame aboard. -->
   <DepthRim.IceBreach.NoFrame>船上沒有破冰結構。</DepthRim.IceBreach.NoFrame>
+  <!-- EN: Reflooding and recharging the ballast: {0} left. -->
   <DepthRim.IceBreach.Cooldown>壓載艙重新注水、充氣中：還要{0}。</DepthRim.IceBreach.Cooldown>
+  <!-- EN: There is no ice above. Surface normally. -->
   <DepthRim.IceBreach.NoIce>上面沒有冰，直接上浮。</DepthRim.IceBreach.NoIce>
+  <!-- EN: The ice is {0} m thick, more than the ice-breaker frame can take ({1} m). -->
   <DepthRim.IceBreach.TooThick>冰厚 {0} m，超過破冰結構的上限（{1} m）。</DepthRim.IceBreach.TooThick>
+  <!-- EN: Hovering under the ice, about to break through. -->
   <DepthRim.IceBreach.Hovering>正在冰下懸停，準備頂冰。</DepthRim.IceBreach.Hovering>
+  <!-- EN: {0} is rising slowly against the ice. It will blow its ballast in an hour. -->
   <DepthRim.IceBreach.Begin>{0}正緩緩上升貼住冰底，一小時後吹除壓載。</DepthRim.IceBreach.Begin>
+  <!-- EN: {0} gave up breaking the ice: {1} -->
   <DepthRim.IceBreach.Cancelled>{0}放棄破冰：{1}</DepthRim.IceBreach.Cancelled>
+  <!-- EN: cancelled. -->
   <DepthRim.IceBreach.CancelledByPlayer>已取消。</DepthRim.IceBreach.CancelledByPlayer>
+  <!-- EN: the submarine moved or changed depth. -->
   <DepthRim.IceBreach.CancelledMoved>潛艇移動或改變了深度。</DepthRim.IceBreach.CancelledMoved>
+  <!-- EN: Stop hovering -->
   <DepthRim.IceBreach.CancelLabel>停止懸停</DepthRim.IceBreach.CancelLabel>
+  <!-- EN: Call off the ice breach. The ballast blows in {0}. -->
   <DepthRim.IceBreach.CancelDesc>取消破冰。壓載將在{0}後吹除。</DepthRim.IceBreach.CancelDesc>
+  <!-- EN: Hovering under the ice: breaking through in {0} -->
   <DepthRim.IceBreach.InspectHovering>冰下懸停：{0}後頂冰</DepthRim.IceBreach.InspectHovering>
+  <!-- EN: Ice held -->
   <DepthRim.IceBreach.StuckLabel>冰頂不動</DepthRim.IceBreach.StuckLabel>
+  <!-- EN: {0} slammed into the ice ({1} m thick) and could not move it (lift ratio {2}). The ice-breaker frames took the blow.\n\nFind thinner ice, a lead, or a bigger hull. -->
   <DepthRim.IceBreach.StuckText>{0}撞上冰層（厚 {1} m），卻完全頂不動（上浮比 {2}）。破冰結構承受了衝擊。\n\n找薄一點的冰、冰間水道，或換一艘更大的船。</DepthRim.IceBreach.StuckText>
+  <!-- EN: Ice cracked -->
   <DepthRim.IceBreach.PartialLabel>冰被頂裂</DepthRim.IceBreach.PartialLabel>
+  <!-- EN: {0} cracked the ice ({1} m thick) but did not break through (lift ratio {2}). The ice-breaker frames are damaged.\n\nTry again within a day, once the ballast is recharged in six hours: the cracked ice will give way more easily. -->
   <DepthRim.IceBreach.PartialText>{0}把冰層（厚 {1} m）頂裂了，但沒有穿透（上浮比 {2}）。破冰結構受損。\n\n六小時後壓載充好氣，在一天內再試一次：裂過的冰比較容易頂破。</DepthRim.IceBreach.PartialText>
+  <!-- EN: Broke through the ice -->
   <DepthRim.IceBreach.SurfacedLabel>破冰出水</DepthRim.IceBreach.SurfacedLabel>
+  <!-- EN: {0} punched up through {1} m of sea ice (lift ratio {2}) and is resting in the hole it broke.\n\nThe open water around the hull freezes over again. Dive before the ice around the hull grows thicker than 0.4 m, or use the ice-breaker frame to break free. -->
   <DepthRim.IceBreach.SurfacedText>{0}頂破了 {1} m 厚的海冰（上浮比 {2}），停在自己撞開的破口裡。\n\n船體四周的開放水會重新結冰。在船體四周的冰長到 0.4 m 之前下潛，或者用破冰結構把冰撞開。</DepthRim.IceBreach.SurfacedText>
+  <!-- EN: The hull burst through so hard that the ice shattered far around it. -->
   <DepthRim.IceBreach.Violent>船體衝出得太猛，四周的冰碎了一大片。</DepthRim.IceBreach.Violent>
+  <!-- EN: The hull is frozen in ({0} m of ice around it, more than {1} m). Break free with the ice-breaker frame. -->
   <DepthRim.IceBreach.FrozenIn>船體被凍住了（四周的冰厚 {0} m，超過 {1} m）。用破冰結構把冰撞開。</DepthRim.IceBreach.FrozenIn>
+  <!-- EN: The hull is not frozen in. -->
   <DepthRim.IceBreach.NotFrozen>船體沒有被凍住。</DepthRim.IceBreach.NotFrozen>
+  <!-- EN: Break free -->
   <DepthRim.IceBreach.BreakFreeLabel>撞開凍冰</DepthRim.IceBreach.BreakFreeLabel>
+  <!-- EN: Ram the ice around the hull with the ice-breaker frames until it is open water again. The frames share {0} damage. -->
   <DepthRim.IceBreach.BreakFreeDesc>用破冰結構撞開船體四周的冰，讓它變回開放水。破冰結構平分 {0} 點傷害。</DepthRim.IceBreach.BreakFreeDesc>
+  <!-- EN: The ice around the hull is broken open. -->
   <DepthRim.IceBreach.BrokeFree>船體四周的冰已經撞開。</DepthRim.IceBreach.BrokeFree>
+  <!-- EN: Breaks ice up to {0} m -->
   <DepthRim.IceBreach.FrameLimit>可破冰厚 {0} m</DepthRim.IceBreach.FrameLimit>
+  <!-- EN: Must be under a roof: the frame braces the cabin roof. -->
   <DepthRim.IceBreach.NeedsRoof>要蓋在屋頂下：破冰結構要頂住艙頂。</DepthRim.IceBreach.NeedsRoof>
+  <!-- EN: {0}, {1} m thick -->
   <DepthRim.IceBreach.SiteInspect>{0}，厚 {1} m</DepthRim.IceBreach.SiteInspect>
 
-  <!-- 量測冰層 -->
+  <!-- Measuring the ice -->
+  <!-- EN: Measure ice -->
   <DepthRim.IceBreach.MeasureLabel>量測冰層</DepthRim.IceBreach.MeasureLabel>
+  <!-- EN: Sound the ice above with the upward sonar and estimate whether the submarine can break through. -->
   <DepthRim.IceBreach.MeasureDesc>用上視聲納量測上方的冰，估計潛艇能不能頂破。</DepthRim.IceBreach.MeasureDesc>
+  <!-- EN: {0} above: you can surface normally. -->
   <DepthRim.IceBreach.MeasureOpen>上方是{0}：可以直接上浮。</DepthRim.IceBreach.MeasureOpen>
+  <!-- EN: Ice above: {0}, {1} m thick{2}.\nAir temperature: {3} °C (flexural strength {4} MPa).\nHull: {5} cells.\n\nEstimated lift ratio: {6} → {7} -->
   <DepthRim.IceBreach.MeasureText>上方的冰：{0}，厚 {1} m{2}。\n氣溫：{3} °C（抗彎強度 {4} MPa）。\n船體：{5} 格。\n\n預估上浮比：{6} → {7}</DepthRim.IceBreach.MeasureText>
+  <!-- EN:  (a lead has opened here) -->
   <DepthRim.IceBreach.MeasureLead>（這裡裂開了一道冰間水道）</DepthRim.IceBreach.MeasureLead>
+  <!-- EN: too thick for the ice-breaker frame -->
   <DepthRim.IceBreach.Result.TooThick>太厚，超過破冰結構的上限</DepthRim.IceBreach.Result.TooThick>
+  <!-- EN: the ice will not move -->
   <DepthRim.IceBreach.Result.Stuck>頂不動</DepthRim.IceBreach.Result.Stuck>
+  <!-- EN: the ice will crack but not break -->
   <DepthRim.IceBreach.Result.Partial>會頂裂但頂不穿</DepthRim.IceBreach.Result.Partial>
+  <!-- EN: breaks through -->
   <DepthRim.IceBreach.Result.Surfaced>頂得破</DepthRim.IceBreach.Result.Surfaced>
+  <!-- EN: bursts through violently -->
   <DepthRim.IceBreach.Result.Violent>猛烈衝出</DepthRim.IceBreach.Result.Violent>
 
+  <!-- EN: open sea -->
   <DepthRim.IceKind.None>開放海面</DepthRim.IceKind.None>
+  <!-- EN: first-year sea ice -->
   <DepthRim.IceKind.FirstYear>一年冰</DepthRim.IceKind.FirstYear>
+  <!-- EN: multi-year sea ice -->
   <DepthRim.IceKind.MultiYear>多年冰</DepthRim.IceKind.MultiYear>
+  <!-- EN: ice shelf -->
   <DepthRim.IceKind.Shelf>冰棚</DepthRim.IceKind.Shelf>
 
 </LanguageData>

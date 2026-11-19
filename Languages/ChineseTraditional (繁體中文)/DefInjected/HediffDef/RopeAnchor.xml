@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: tethered in the current -->
+  <DepthRim_TetheredInCurrent.label>掛在安全繩上</DepthRim_TetheredInCurrent.label>
+  <!-- EN: Hanging on a safety line against the current of a submarine under way. Moving and working with the hands is hard. -->
+  <DepthRim_TetheredInCurrent.description>潛艇航行時掛在安全繩上，被海流拖著。行動與手上的工作都很吃力。</DepthRim_TetheredInCurrent.description>
+  
+</LanguageData>

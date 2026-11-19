@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: dazzled -->
+  <DepthRim_Dazzled.label>眩光</DepthRim_Dazzled.label>
+  <!-- EN: Eyes made for the dark, overwhelmed by light. Sight returns as soon as the light is gone. -->
+  <DepthRim_Dazzled.description>為黑暗而生的眼睛承受不了光。光一消失，視力就會恢復。</DepthRim_Dazzled.description>
+  
+  <!-- EN: drying gills -->
+  <DepthRim_GillDrying.label>鰓乾燥</DepthRim_GillDrying.label>
+  <!-- EN: Gills that have been out of the water for too long. They dry out over a few days, faster in the heat. Soaking in water at least waist-deep, or standing in the rain, wets them again at once. -->
+  <DepthRim_GillDrying.description>離水太久的鰓。幾天內會乾掉，炎熱時更快，呼吸也跟著變差。泡在及腰以上的水裡或站在雨中，鰓會立刻濕回來。</DepthRim_GillDrying.description>
+  <!-- EN: dry -->
+  <DepthRim_GillDrying.stages.dry.label>乾燥</DepthRim_GillDrying.stages.dry.label>
+  <!-- EN: parched -->
+  <DepthRim_GillDrying.stages.parched.label>乾裂</DepthRim_GillDrying.stages.parched.label>
+  <!-- EN: cracked -->
+  <DepthRim_GillDrying.stages.cracked.label>龜裂</DepthRim_GillDrying.stages.cracked.label>
+  
+  <!-- EN: seasickness -->
+  <DepthRim_Seasick.label>暈船</DepthRim_Seasick.label>
+  <!-- EN: Nausea and dizziness from the motion of the sea. It builds up in rough water and while a submarine changes depth, and fades within hours on steady ground. People who spend a few days at sea slowly get used to it. -->
+  <DepthRim_Seasick.description>海的晃動造成的噁心與頭暈。在惡劣海況或潛艇換深度時累積，回到平穩的地方幾小時內就會消退。在海上待上幾天的人會慢慢習慣。</DepthRim_Seasick.description>
+  <!-- EN: queasy -->
+  <DepthRim_Seasick.stages.queasy.label>頭暈</DepthRim_Seasick.stages.queasy.label>
+  <!-- EN: seasick -->
+  <DepthRim_Seasick.stages.seasick.label>暈船</DepthRim_Seasick.stages.seasick.label>
+  <!-- EN: severe seasickness -->
+  <DepthRim_Seasick.stages.severe_seasickness.label>嚴重暈船</DepthRim_Seasick.stages.severe_seasickness.label>
+  
+</LanguageData>

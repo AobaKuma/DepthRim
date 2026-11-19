@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: fish school -->
+  <DepthRim_FishSchool.label>魚群</DepthRim_FishSchool.label>
+  <!-- EN: A large school of fish. On sonar it sounds much like a submarine until you are close enough to tell. -->
+  <DepthRim_FishSchool.description>一大群魚。在聲納上聽起來和潛艇很像，要靠近才分得出來。</DepthRim_FishSchool.description>
+  
+  <!-- EN: pirate submarine -->
+  <DepthRim_PirateSubmarine.label>海盜潛艇</DepthRim_PirateSubmarine.label>
+  <!-- EN: A pirate attack submarine prowling the sea lanes. It fires torpedoes at your ocean maps and shoots down incoming torpedoes with its own interceptors. Wear its hull down with torpedoes until it sinks, or send a boarding craft to take it. -->
+  <DepthRim_PirateSubmarine.description>在航道上巡弋的海盜攻擊潛艇。它會朝你的海洋地圖發射魚雷，也會用自己的攔截彈擊落來襲的魚雷。用魚雷把它的船殼打穿讓它沉沒，或派突擊艇強攻。</DepthRim_PirateSubmarine.description>
+  
+</LanguageData>

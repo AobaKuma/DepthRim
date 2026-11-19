@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: fish school -->
+  <DepthRim_FishSchool.label>魚群</DepthRim_FishSchool.label>
+  
+  <!-- EN: pirate submarine -->
+  <DepthRim_PirateSubmarine.label>海盜潛艇</DepthRim_PirateSubmarine.label>
+  <!-- EN: Pirate submarine -->
+  <DepthRim_PirateSubmarine.letterLabel>海盜潛艇</DepthRim_PirateSubmarine.letterLabel>
+  <!-- EN: Your sonar operators report a pirate submarine prowling the sea lanes near {0}. It will fire torpedoes at your ocean maps.\n\nIt carries anti-torpedo torpedoes of its own. Wear its hull down with a few torpedo hits until it sinks, or send a boarding craft from a moon pool to storm it. -->
+  <DepthRim_PirateSubmarine.letterText>聲納員回報：一艘海盜潛艇在{0}附近的航道上巡弋，會朝你的海洋地圖發射魚雷。\n\n它自己帶著反魚雷魚雷。用幾發魚雷把船殼打穿讓它沉沒，或從月池派突擊艇強攻。</DepthRim_PirateSubmarine.letterText>
+  
+</LanguageData>

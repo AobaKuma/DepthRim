@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: seasickness sensitivity -->
+  <DepthRim_SeasicknessSensitivity.label>暈船敏感度</DepthRim_SeasicknessSensitivity.label>
+  <!-- EN: How strongly this person reacts to the motion of the sea: rough water on the sea surface, and a submarine changing depth or running in the shallows.\n\n100% is normal. At 0% a person never gets seasick. -->
+  <DepthRim_SeasicknessSensitivity.description>這個人對海的晃動有多敏感：海面上的惡劣海況，以及潛艇換深度或在淺海航行時。\n\n100% 是一般人。0% 的人永遠不會暈船。</DepthRim_SeasicknessSensitivity.description>
+  
+</LanguageData>

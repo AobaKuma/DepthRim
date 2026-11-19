@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: enemy torpedo boat -->
+  <DepthRim_EnemyTorpedoBoat.label>敵方魚雷艇</DepthRim_EnemyTorpedoBoat.label>
+  <!-- EN: A hostile attack boat lurking within torpedo range. It fires torpedoes at your ocean maps until it moves on. -->
+  <DepthRim_EnemyTorpedoBoat.description>潛伏在魚雷射程內的敵方攻擊艇。在它離開之前，會不斷朝你的海洋地圖發射魚雷。</DepthRim_EnemyTorpedoBoat.description>
+  
+  <!-- EN: torpedo -->
+  <DepthRim_WorldObject_EnemyTorpedo.label>魚雷</DepthRim_WorldObject_EnemyTorpedo.label>
+  <!-- EN: A torpedo running through the water. -->
+  <DepthRim_WorldObject_EnemyTorpedo.description>在水中航行的魚雷。</DepthRim_WorldObject_EnemyTorpedo.description>
+  
+  <!-- EN: torpedo -->
+  <DepthRim_WorldObject_Torpedo.label>魚雷</DepthRim_WorldObject_Torpedo.label>
+  <!-- EN: A torpedo running through the water. -->
+  <DepthRim_WorldObject_Torpedo.description>在水中航行的魚雷。</DepthRim_WorldObject_Torpedo.description>
+  
+</LanguageData>

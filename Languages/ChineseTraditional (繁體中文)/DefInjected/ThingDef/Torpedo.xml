@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: anti-torpedo torpedo -->
+  <DepthRim_AntiTorpedo.label>反魚雷魚雷</DepthRim_AntiTorpedo.label>
+  <!-- EN: A short, fast interceptor torpedo. Loaded into a torpedo tube, it is fired automatically by a fire-control sonar at torpedoes heading for this map. It only engages torpedoes. -->
+  <DepthRim_AntiTorpedo.description>短而快的攔截魚雷。裝進魚雷發射管後，火控聲納會自動把它射向朝這張地圖來的魚雷。只打魚雷。</DepthRim_AntiTorpedo.description>
+  
+  <!-- EN: supercavitating point-defence gun -->
+  <DepthRim_SupercavitatingGun.label>超空泡近防砲</DepthRim_SupercavitatingGun.label>
+  <!-- EN: A rapid-fire gun whose darts ride in a bubble of vapour, so they keep their speed underwater. It fires on its own at torpedoes in the last moments before they arrive, as long as a sonar on this map can hear them. Each burst has a fair chance of destroying the torpedo.\n\nRequires power and steel darts. Does not need fire control. -->
+  <DepthRim_SupercavitatingGun.description>速射砲，彈鏢包在一層蒸氣泡裡，在水中也不減速。魚雷快抵達的最後一段，只要這張地圖上有聲納聽得到，它就會自己開火；每輪射擊都有不小的機會擊毀魚雷。\n\n需要電力與鋼製彈鏢。不需要火控。</DepthRim_SupercavitatingGun.description>
+  <!-- EN: darts -->
+  <DepthRim_SupercavitatingGun.comps.CompRefuelable.fuelGizmoLabel>TODO</DepthRim_SupercavitatingGun.comps.CompRefuelable.fuelGizmoLabel>
+  <!-- EN: darts -->
+  <DepthRim_SupercavitatingGun.comps.CompRefuelable.fuelLabel>TODO</DepthRim_SupercavitatingGun.comps.CompRefuelable.fuelLabel>
+  <!-- EN: Cannot fire: no darts. -->
+  <DepthRim_SupercavitatingGun.comps.CompRefuelable.outOfFuelMessage>TODO</DepthRim_SupercavitatingGun.comps.CompRefuelable.outOfFuelMessage>
+  
+  <!-- EN: torpedo -->
+  <DepthRim_Torpedo.label>魚雷</DepthRim_Torpedo.label>
+  <!-- EN: A heavyweight torpedo, loaded into a torpedo tube and fired at targets beyond the map. It only travels by sea. Its warhead, guidance and payload can be swapped in the assembly tab. -->
+  <DepthRim_Torpedo.description>重型魚雷，裝進魚雷發射管後射向地圖外的目標。只能走海路。戰鬥部、導引與酬載可以在裝配分頁更換。</DepthRim_Torpedo.description>
+  
+  <!-- EN: torpedo tube -->
+  <DepthRim_TorpedoTube.label>魚雷發射管</DepthRim_TorpedoTube.label>
+  <!-- EN: A pair of pressure-rated tubes that hold two torpedoes and fire them at targets beyond the map. Torpedoes only travel by sea, so the target must be reachable by water. Anti-torpedo torpedoes loaded here are fired by a fire-control sonar at incoming torpedoes.\n\nRequires power. -->
+  <DepthRim_TorpedoTube.description>一對耐壓發射管，可裝兩枚魚雷，射向地圖外的目標。魚雷只能走海路，所以目標要從海上到得了。裝在這裡的反魚雷魚雷，會由火控聲納射向來襲的魚雷。\n\n需要電力。</DepthRim_TorpedoTube.description>
+  
+</LanguageData>

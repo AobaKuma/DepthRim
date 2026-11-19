@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: bluefish -->
+  <DepthRim_FishVariant_Bluefish.label>扁鰺</DepthRim_FishVariant_Bluefish.label>
+  <!-- EN: A fully grown bluefish, hunting in temperate and warm water. -->
+  <DepthRim_FishVariant_Bluefish.description>在溫帶與溫暖水域獵食的成年扁鰺。</DepthRim_FishVariant_Bluefish.description>
+  
+  <!-- EN: cod -->
+  <DepthRim_FishVariant_Cod.label>鱈魚</DepthRim_FishVariant_Cod.label>
+  <!-- EN: A small olive-brown cod, schooling in cold water. -->
+  <DepthRim_FishVariant_Cod.description>在冷水中成群游動的橄欖褐色小鱈魚。</DepthRim_FishVariant_Cod.description>
+  
+  <!-- EN: dogfish -->
+  <DepthRim_FishVariant_Dogfish.label>角鯊</DepthRim_FishVariant_Dogfish.label>
+  <!-- EN: A slate-grey dogfish, a small shark that roams from the shelf to the deep. -->
+  <DepthRim_FishVariant_Dogfish.description>石板灰色的角鯊，一種從大陸棚游到深海的小型鯊魚。</DepthRim_FishVariant_Dogfish.description>
+  
+  <!-- EN: flounder -->
+  <DepthRim_FishVariant_Flounder.label>比目魚</DepthRim_FishVariant_Flounder.label>
+  <!-- EN: A broad, sandy-brown flounder lying flat on the seabed. -->
+  <DepthRim_FishVariant_Flounder.description>平貼在海床上、寬大的沙褐色比目魚。</DepthRim_FishVariant_Flounder.description>
+  
+  <!-- EN: frostfish -->
+  <DepthRim_FishVariant_Frostfish.label>霜魚</DepthRim_FishVariant_Frostfish.label>
+  <!-- EN: A pale, icy-white frostfish. Its bioengineered ancestors went feral in the cold seas long ago. -->
+  <DepthRim_FishVariant_Frostfish.description>蒼白如冰的霜魚。牠們經基因改造的祖先很久以前就在寒冷的海中野化了。</DepthRim_FishVariant_Frostfish.description>
+  
+  <!-- EN: grenadier -->
+  <DepthRim_FishVariant_Grenadier.label>鼠尾鱈</DepthRim_FishVariant_Grenadier.label>
+  <!-- EN: A dusky grey rattail of the deep, a distant relative of cod. -->
+  <DepthRim_FishVariant_Grenadier.description>深海中灰暗的鼠尾鱈，是鱈魚的遠親。</DepthRim_FishVariant_Grenadier.description>
+  
+  <!-- EN: hake -->
+  <DepthRim_FishVariant_Hake.label>無鬚鱈</DepthRim_FishVariant_Hake.label>
+  <!-- EN: A long, steel-grey hake prowling the cold deep water, a close relative of cod. -->
+  <DepthRim_FishVariant_Hake.description>在寒冷深水中巡游、鋼灰色的細長無鬚鱈，是鱈魚的近親。</DepthRim_FishVariant_Hake.description>
+  
+  <!-- EN: marlin -->
+  <DepthRim_FishVariant_Marlin.label>旗魚</DepthRim_FishVariant_Marlin.label>
+  <!-- EN: A cobalt marlin of tropical seas. -->
+  <DepthRim_FishVariant_Marlin.description>熱帶海域的鈷藍色旗魚。</DepthRim_FishVariant_Marlin.description>
+  
+  <!-- EN: cod -->
+  <DepthRim_FishVariant_MediumCod.label>鱈魚</DepthRim_FishVariant_MediumCod.label>
+  <!-- EN: A fully grown cod, heavy-bodied and slow, from cold water. -->
+  <DepthRim_FishVariant_MediumCod.description>冷水中身軀厚實、動作緩慢的成年鱈魚。</DepthRim_FishVariant_MediumCod.description>
+  
+  <!-- EN: salmon -->
+  <DepthRim_FishVariant_MediumSalmon.label>鮭魚</DepthRim_FishVariant_MediumSalmon.label>
+  <!-- EN: A large, deep-pink salmon fattened on the coastal shoals. -->
+  <DepthRim_FishVariant_MediumSalmon.description>在沿岸淺灘養得肥壯、肉色深粉的大鮭魚。</DepthRim_FishVariant_MediumSalmon.description>
+  
+  <!-- EN: salmon -->
+  <DepthRim_FishVariant_Salmon.label>鮭魚</DepthRim_FishVariant_Salmon.label>
+  <!-- EN: A silvery-pink salmon feeding along the coast. -->
+  <DepthRim_FishVariant_Salmon.description>沿著海岸覓食、銀中帶粉的鮭魚。</DepthRim_FishVariant_Salmon.description>
+  
+  <!-- EN: sleeper shark -->
+  <DepthRim_FishVariant_SleeperShark.label>睡鯊</DepthRim_FishVariant_SleeperShark.label>
+  <!-- EN: A sluggish, dark sleeper shark of the cold deep. -->
+  <DepthRim_FishVariant_SleeperShark.description>寒冷深海中行動遲緩的深色睡鯊。</DepthRim_FishVariant_SleeperShark.description>
+  
+  <!-- EN: bluefish -->
+  <DepthRim_FishVariant_SmallBluefish.label>扁鰺</DepthRim_FishVariant_SmallBluefish.label>
+  <!-- EN: A young blue-backed bluefish of warm water. -->
+  <DepthRim_FishVariant_SmallBluefish.description>暖水中背部藍色的年輕扁鰺。</DepthRim_FishVariant_SmallBluefish.description>
+  
+  <!-- EN: tuna -->
+  <DepthRim_FishVariant_Tuna.label>鮪魚</DepthRim_FishVariant_Tuna.label>
+  <!-- EN: A dark-blue tuna, cruising through temperate and warm open water. -->
+  <DepthRim_FishVariant_Tuna.description>在溫帶與溫暖開放水域巡游的深藍色鮪魚。</DepthRim_FishVariant_Tuna.description>
+  
+  <!-- EN: toxfish -->
+  <DepthRim_FishVariant_VentToxfish.label>毒魚</DepthRim_FishVariant_VentToxfish.label>
+  <!-- EN: A small, sickly green fish that thrives in the mineral plumes of hydrothermal vents. -->
+  <DepthRim_FishVariant_VentToxfish.description>在熱液噴口的礦物煙流中繁盛的病態綠色小魚。</DepthRim_FishVariant_VentToxfish.description>
+  
+</LanguageData>

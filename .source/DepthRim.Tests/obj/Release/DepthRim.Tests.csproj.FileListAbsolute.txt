@@ -275,3 +275,8 @@ C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\86288892-306e-4db6-819e
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Fortified.dll
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\Waylith.Windowing.dll
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim.Tests\bin\Release\0MultiplayerAPI.dll
+C:\Users\user\AppData\Local\Temp\claude\000f2c77b9ea9405\d58b4d16-b288-435f-aafb-41df9f8af500\scratchpad\ut\DepthRim.Tests.exe
+C:\Users\user\AppData\Local\Temp\claude\000f2c77b9ea9405\d58b4d16-b288-435f-aafb-41df9f8af500\scratchpad\ut\DepthRim.Tests.deps.json
+C:\Users\user\AppData\Local\Temp\claude\000f2c77b9ea9405\d58b4d16-b288-435f-aafb-41df9f8af500\scratchpad\ut\DepthRim.Tests.runtimeconfig.json
+C:\Users\user\AppData\Local\Temp\claude\000f2c77b9ea9405\d58b4d16-b288-435f-aafb-41df9f8af500\scratchpad\ut\DepthRim.Tests.dll
+C:\Users\user\AppData\Local\Temp\claude\000f2c77b9ea9405\d58b4d16-b288-435f-aafb-41df9f8af500\scratchpad\ut\DepthRim.Tests.pdb

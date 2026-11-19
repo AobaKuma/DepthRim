@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: acoustic proximity charge -->
+  <DepthRim_AntiTorpedo_Warhead_Proximity.label>聲學近炸裝藥</DepthRim_AntiTorpedo_Warhead_Proximity.label>
+  <!-- EN: A small charge with an acoustic proximity fuze that goes off when it hears the target torpedo pass close by. -->
+  <DepthRim_AntiTorpedo_Warhead_Proximity.description>小型裝藥，配聲學近炸引信：聽到目標魚雷從近處經過就引爆。</DepthRim_AntiTorpedo_Warhead_Proximity.description>
+  
+  <!-- EN: passive homing seeker -->
+  <DepthRim_Torpedo_Guidance_PassiveHoming.label>被動歸向導引頭</DepthRim_Torpedo_Guidance_PassiveHoming.label>
+  <!-- EN: A hydrophone seeker that listens for the loudest enemy active sonar and steers straight for it. Passive sonar emits nothing and is invisible to it; without an active sonar to home on, it hits the building drawing the most power, then falls back to running straight. -->
+  <DepthRim_Torpedo_Guidance_PassiveHoming.description>聆聽最響的敵方主動聲納並直衝過去的水聽器導引頭。被動聲納不發聲，它找不到；沒有主動聲納可以追時，改打耗電最大的建築，再不然就直航。</DepthRim_Torpedo_Guidance_PassiveHoming.description>
+  <!-- EN: Homing -->
+  <DepthRim_Torpedo_Guidance_PassiveHoming.designWord>TODO</DepthRim_Torpedo_Guidance_PassiveHoming.designWord>
+  
+  <!-- EN: straight-running gyro -->
+  <DepthRim_Torpedo_Guidance_Straight.label>直航陀螺儀</DepthRim_Torpedo_Guidance_Straight.label>
+  <!-- EN: A gyroscope that holds the torpedo on its course. No seeker: it arrives near the middle of the target area and hits whatever is there. -->
+  <DepthRim_Torpedo_Guidance_Straight.description>讓魚雷保持航向的陀螺儀。沒有導引頭：抵達目標區中央附近，打到什麼算什麼。</DepthRim_Torpedo_Guidance_Straight.description>
+  
+  <!-- EN: wire guidance -->
+  <DepthRim_Torpedo_Guidance_Wire.label>線導</DepthRim_Torpedo_Guidance_Wire.label>
+  <!-- EN: A spool of guidance wire back to the launching boat, so the crew can steer the torpedo after a moving submarine. It aims for the sturdiest enemy structure aboard, then the largest creature. -->
+  <DepthRim_Torpedo_Guidance_Wire.description>拉著導線連回發射艇，乘員能在發射後操縱魚雷追擊移動中的潛艇。瞄準船上最堅固的敵方結構，其次是最大的生物。</DepthRim_Torpedo_Guidance_Wire.description>
+  <!-- EN: Wire -->
+  <DepthRim_Torpedo_Guidance_Wire.designWord>TODO</DepthRim_Torpedo_Guidance_Wire.designWord>
+  
+  <!-- EN: acoustic decoy -->
+  <DepthRim_Torpedo_Payload_Noisemaker.label>聲學誘餌</DepthRim_Torpedo_Payload_Noisemaker.label>
+  <!-- EN: A noisemaker that the torpedo releases when an enemy locks on to it. The burst of sound can break one fire-control lock, then it is spent. -->
+  <DepthRim_Torpedo_Payload_Noisemaker.description>被敵方鎖定時放出的噪音彈。這陣聲響可以打斷一次火控鎖定，之後就用完了。</DepthRim_Torpedo_Payload_Noisemaker.description>
+  <!-- EN: Decoy -->
+  <DepthRim_Torpedo_Payload_Noisemaker.designWord>TODO</DepthRim_Torpedo_Payload_Noisemaker.designWord>
+  
+  <!-- EN: no payload -->
+  <DepthRim_Torpedo_Payload_None.label>無酬載</DepthRim_Torpedo_Payload_None.label>
+  <!-- EN: No secondary charge. -->
+  <DepthRim_Torpedo_Payload_None.description>沒有次級裝藥。</DepthRim_Torpedo_Payload_None.description>
+  
+  <!-- EN: torpedo HE warhead -->
+  <DepthRim_Torpedo_Warhead_HE.label>魚雷高爆戰鬥部</DepthRim_Torpedo_Warhead_HE.label>
+  <!-- EN: A heavy high-explosive charge. Underwater the blast tears open hull plating, and whatever it breaches starts to flood. -->
+  <DepthRim_Torpedo_Warhead_HE.description>重型高爆裝藥。在水下，爆炸會撕開船殼板，被打穿的地方就開始進水。</DepthRim_Torpedo_Warhead_HE.description>
+  <!-- EN: HE -->
+  <DepthRim_Torpedo_Warhead_HE.designWord>TODO</DepthRim_Torpedo_Warhead_HE.designWord>
+  
+</LanguageData>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: retractable gangway -->
+  <DepthRim_Gangway.label>可收放舷梯</DepthRim_Gangway.label>
+  <!-- EN: A folding steel walkway mounted on the edge of a floating deck. When extended it reaches across up to 6 cells of open sea to the next deck in front of it - another floating platform, a surfaced submarine or a bridge - so people can walk straight across.\n\nIt retracts on command, waiting for anyone still standing on it. If the far side moves away or is taken apart, the gangway drops at once and anyone on it falls into the sea. -->
+  <DepthRim_Gangway.description>裝在浮船甲板邊上的折疊鋼製步道。伸出時可以跨過前方最多 6 格的開放海面，接到對面的甲板（另一艘浮船、上浮的潛艇或橋），人可以直接走過去。\n\n可以隨時收回，收回時會等還站在上面的人離開。對岸移走或被拆掉時，舷梯會立刻掉下去，站在上面的人會落海。</DepthRim_Gangway.description>
+  
+</LanguageData>

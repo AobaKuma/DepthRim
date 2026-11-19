@@ -96,6 +96,9 @@ namespace DepthRim
         // ── 水密門與進水效果 ──
         public static ThingDef DepthRim_WatertightDoor;
 
+        /// <summary>耐壓到海床的門（深淵潛航）。</summary>
+        public static ThingDef DepthRim_PressureHatch;
+
         public static FleckDef DepthRim_LeakSpray;
 
         // ── 中層水域（地形下方經過的生物）──

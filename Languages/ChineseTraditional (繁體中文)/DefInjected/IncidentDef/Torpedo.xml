@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: enemy torpedo boat -->
+  <DepthRim_EnemyTorpedoBoat.label>敵方魚雷艇</DepthRim_EnemyTorpedoBoat.label>
+  <!-- EN: Enemy torpedo boat -->
+  <DepthRim_EnemyTorpedoBoat.letterLabel>敵方魚雷艇</DepthRim_EnemyTorpedoBoat.letterLabel>
+  <!-- EN: {0} has sent an attack boat to within torpedo range of {1}, {2} tiles away by sea. It will fire torpedoes at your ocean maps until it moves on.\n\nTorpedoes are slow and only travel by sea. Sonar hears them coming; a fire-control sonar guiding anti-torpedo torpedoes from a tube, or a supercavitating gun, can stop them. -->
+  <DepthRim_EnemyTorpedoBoat.letterText>{0}派出一艘攻擊艇，潛伏在{1}的魚雷射程內，海路 {2} 格外。在它離開之前，會不斷朝你的海洋地圖發射魚雷。\n\n魚雷很慢，而且只走海路。聲納聽得到它們過來；火控聲納引導發射管裡的反魚雷魚雷，或超空泡近防砲，都能攔下它們。</DepthRim_EnemyTorpedoBoat.letterText>
+  
+</LanguageData>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: cold seep -->
+  <DR_ColdSeep.label>冷泉</DR_ColdSeep.label>
+  <!-- EN: A crack in the sea floor where methane and hydrogen sulfide slowly leak out of the sediment. Pale mats of bacteria that live off the gas spread around it, and strange life gathers on the mats. A seafloor sampler set beside it can study it. -->
+  <DR_ColdSeep.description>海床上的裂縫，甲烷與硫化氫從沉積物裡慢慢滲出。以這些氣體維生的細菌在周圍長成灰白色的菌墊，奇特的生物聚集在菌墊上。在旁邊架設海底採樣器就能研究它。</DR_ColdSeep.description>
+  
+</LanguageData>
