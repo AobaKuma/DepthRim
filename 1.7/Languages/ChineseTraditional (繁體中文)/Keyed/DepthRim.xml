@@ -84,8 +84,8 @@
   <DepthRim.Sub.Block.AlreadyThere>已經是這個深度</DepthRim.Sub.Block.AlreadyThere>
   <!-- EN: below the seafloor here -->
   <DepthRim.Sub.Block.BelowSeafloor>比這裡的海床還深</DepthRim.Sub.Block.BelowSeafloor>
-  <!-- EN: the hull is not rated for it -->
-  <DepthRim.Sub.Block.HullTooWeak>船殼撐不住</DepthRim.Sub.Block.HullTooWeak>
+  <!-- EN: no ballast tanks aboard -->
+  <DepthRim.Sub.Block.NoBallast>船上沒有壓載水艙</DepthRim.Sub.Block.NoBallast>
   <!-- EN: {0} has reached the {1}. -->
   <DepthRim.Sub.DepthReached>{0}已抵達{1}。</DepthRim.Sub.DepthReached>
   <!-- EN: Depth: {0} -->
@@ -383,12 +383,24 @@ Hull rating: {1} -->
   <DepthRim.Pillar.NeedsLanding>支柱要蓋在浮船（船體平台）旁邊的開放海面上：9×9 的佔地至少有一邊緊貼浮船，那一格就是升降點。</DepthRim.Pillar.NeedsLanding>
   <!-- EN: Blocked on the platform level by {0}. -->
   <DepthRim.Pillar.BlockedAbove>平台層同一位置有{0}擋住。</DepthRim.Pillar.BlockedAbove>
+  <!-- EN: Not linked to the other end of the pillar. -->
+  <DepthRim.CrossPower.NotLinked>沒有接到支柱的另一端。</DepthRim.CrossPower.NotLinked>
+  <!-- EN: Sending up to the platform: {0} W (max {1} W, {2}% line loss) -->
+  <DepthRim.CrossPower.Sending>送上平台：{0} W（最多 {1} W，線損 {2}%）</DepthRim.CrossPower.Sending>
+  <!-- EN: Power from the water level: {0} W (max {1} W) -->
+  <DepthRim.CrossPower.Receiving>水面層送上來的電：{0} W（最多 {1} W）</DepthRim.CrossPower.Receiving>
+  <!-- EN: The pillar foot on the water level has no power. -->
+  <DepthRim.CrossPower.SourceUnpowered>水面層的支柱腳沒有電。</DepthRim.CrossPower.SourceUnpowered>
   <!-- EN: {0} fell with the collapsing platform down to the water, injured. -->
   <DepthRim.Platform.PawnFellToSea>{0}隨著崩塌的平台掉到下面的水面，受了傷。</DepthRim.Platform.PawnFellToSea>
   <!-- EN: Camera sways with the sea -->
   <DepthRim.Settings.SeaCameraSway>鏡頭隨海浪擺動</DepthRim.Settings.SeaCameraSway>
   <!-- EN: On the sea surface (water level), the camera bobs up and down very slightly with the waves, more in strong wind and storms. Aboard a submarine under way, the view rocks slowly and gently. Turn off if it bothers you. -->
   <DepthRim.Settings.SeaCameraSwayTip>在海面地圖（水面層）上，鏡頭會隨海浪非常微小地上下擺動，風大或暴風雨時擺得多一點；航行中的潛艇上，畫面會持續緩慢地輕微搖晃。不習慣可以關掉。</DepthRim.Settings.SeaCameraSwayTip>
+  <!-- EN: Simplified docking and launching -->
+  <DepthRim.Settings.SimplifiedHarbor>簡化進出港</DepthRim.Settings.SimplifiedHarbor>
+  <!-- EN: Ships dock and leave port at once, without the cutscene. -->
+  <DepthRim.Settings.SimplifiedHarborTip>靠岸與下水直接完成，不播演出。</DepthRim.Settings.SimplifiedHarborTip>
 
   <!-- Submarine start scenario -->
   <!-- EN: Start aboard the submarine {0}, docked in the nearest {1} sea below the chosen site. -->
@@ -556,5 +568,25 @@ Hull rating: {1} -->
   <DepthRim.SuitLamp.Mode.Dim>暗紅光</DepthRim.SuitLamp.Mode.Dim>
   <!-- EN: off -->
   <DepthRim.SuitLamp.Mode.Off>關閉</DepthRim.SuitLamp.Mode.Off>
+
+  <!-- 洋流發電機與水下風力發電限制（1.7/Defs/Buildings/OceanCurrentTurbine.xml、.source/DepthRim/Power） -->
+  <!-- EN: Cannot generate power: this is not an underwater map. -->
+  <DepthRim.CurrentTurbine.NotUnderwater>無法發電：這裡不是水下地圖。</DepthRim.CurrentTurbine.NotUnderwater>
+  <!-- EN: Cannot generate power: the turbine is not completely under water. -->
+  <DepthRim.CurrentTurbine.NotSubmerged>無法發電：整台發電機沒有完全浸在水裡。</DepthRim.CurrentTurbine.NotSubmerged>
+  <!-- EN: Ocean current: {0} -->
+  <DepthRim.CurrentTurbine.Current>洋流：{0}</DepthRim.CurrentTurbine.Current>
+  <!-- EN: Current obstructed in {0} cells: {1}% less output. -->
+  <DepthRim.CurrentTurbine.Blocked>水流被擋住 {0} 格：輸出減少 {1}%。</DepthRim.CurrentTurbine.Blocked>
+  <!-- EN: This placement blocks the current in {0} cells: {1}% less output. -->
+  <DepthRim.CurrentTurbine.GhostBlocked>這個位置會擋住 {0} 格水流：輸出減少 {1}%。</DepthRim.CurrentTurbine.GhostBlocked>
+  <!-- EN: Must be built on the sea floor, under water. -->
+  <DepthRim.CurrentTurbine.MustBeUnderwater>只能蓋在水下的海床上。</DepthRim.CurrentTurbine.MustBeUnderwater>
+  <!-- EN: The whole turbine has to be under water. -->
+  <DepthRim.CurrentTurbine.MustBeSubmerged>整台發電機都要在水面下。</DepthRim.CurrentTurbine.MustBeSubmerged>
+  <!-- EN: Cannot be built under water: there is no wind down here. -->
+  <DepthRim.WindTurbine.NoWindUnderwater>水下不能蓋：這裡沒有風。</DepthRim.WindTurbine.NoWindUnderwater>
+  <!-- EN: No wind under water: this turbine cannot generate power here. -->
+  <DepthRim.WindTurbine.NoWindUnderwaterInspect>水下沒有風：這台風力發電機在這裡無法發電。</DepthRim.WindTurbine.NoWindUnderwaterInspect>
 
 </LanguageData>

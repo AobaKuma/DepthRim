@@ -13,7 +13,7 @@
     <defName>DepthRim_Gangway</defName>
     <thingClass>DepthRim.Building_Gangway</thingClass>
     <researchPrerequisites>
-      <li>DepthRim_PressureEngineering</li>
+      <li>DepthRim_CoastalShipbuilding</li>
     </researchPrerequisites>
     <label>retractable gangway</label>
     <description>A folding steel walkway mounted on the edge of a floating deck. When extended it reaches across up to 6 cells of open sea to the next deck in front of it - another floating platform, a surfaced submarine or a bridge - so people can walk straight across.\n\nIt retracts on command, waiting for anyone still standing on it. If the far side moves away or is taken apart, the gangway drops at once and anyone on it falls into the sea.</description>

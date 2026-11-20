@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
   <!--
@@ -41,7 +41,7 @@
   <ResearchProjectDef>
     <defName>DepthRim_UnderwaterSurvival</defName>
     <label>underwater survival</label>
-    <description>Drilling rigs to bore through the ice sea, and the basic techniques and life support that let colonists work and survive underwater.\n\nUnlocks the ice shaft, diving suit, watertight door, bilge pump and seafloor sampler. Further underwater technology needs seabed research, which only seafloor samplers can gather.</description>
+    <description>Drilling rigs to bore through the ice sea, and the basic techniques and life support that let colonists work and survive underwater.\n\nUnlocks the ice shaft, diving suit, watertight door, bilge pump, ocean current turbine and seafloor sampler. Further underwater technology needs seabed research, which only seafloor samplers can gather.</description>
     <baseCost>500</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>DepthRim_ResearchTab</tab>
@@ -52,10 +52,26 @@
     <researchViewY>0.00</researchViewY>
   </ResearchProjectDef>
 
+  <!-- 海岸造船（Docs/海岸船舶與潛水鐘_機制設計.md §3.2–3.3）：一般研究，海岸開局在灣裡造第一艘船。
+       吊架與潛水鐘做出來後（M5）也掛在這裡。 -->
+  <ResearchProjectDef>
+    <defName>DepthRim_CoastalShipbuilding</defName>
+    <label>coastal shipbuilding</label>
+    <description>Laying steel decks out over the sea from the shore, tying them together with keel frames, and fitting them with a helm and propellers: a ship built in the bay that can be launched onto the open sea.\n\nUnlocks the hull platform (it can be laid on ocean water), the keel frames, the submarine helm, the surface thruster and the retractable gangway. A ship cannot dive until it has submarine construction.</description>
+    <baseCost>600</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>DepthRim_ResearchTab</tab>
+    <prerequisites>
+      <li>DepthRim_UnderwaterSurvival</li>
+    </prerequisites>
+    <researchViewX>1.00</researchViewX>
+    <researchViewY>0.00</researchViewY>
+  </ResearchProjectDef>
+
   <ResearchProjectDef>
     <defName>DepthRim_PressureEngineering</defName>
     <label>pressure engineering</label>
-    <description>Thick-walled structures that can hold back the water pressure below the thermocline, and pressure-rated decks laid over open water. Ordinary walls are slowly crushed at that depth; going further down means switching to a pressure-rated hull.\n\nUnlocks the pressure hull wall, the hull platform, the pressure deck, the pressuriser, and the platform pillar and ocean platform for building over the open sea.</description>
+    <description>Thick-walled structures that can hold back the water pressure below the thermocline. Ordinary walls are slowly crushed at that depth; going further down means switching to a pressure-rated hull.\n\nUnlocks the pressure hull wall, the pressure deck, the pressuriser, and the platform pillar and ocean platform for building over the open sea.</description>
     <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
     <knowledgeCost>800</knowledgeCost>
     <techLevel>Industrial</techLevel>
@@ -70,13 +86,14 @@
   <ResearchProjectDef>
     <defName>DepthRim_SubmarineConstruction</defName>
     <label>submarine construction</label>
-    <description>Assembling pressure compartments into a submarine that can sail on its own. Once built, it can leave the ice shaft behind and travel to other parts of the ocean.\n\nUnlocks the keel frames, the submarine helm, the underwater thruster and the safety rope anchor.</description>
+    <description>Assembling pressure compartments into a submarine that can sail on its own. Once built, it can leave the ice shaft behind and travel to other parts of the ocean.\n\nUnlocks the underwater thruster and the safety rope anchor, and lets a ship on the sea surface dive.</description>
     <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
     <knowledgeCost>1200</knowledgeCost>
     <techLevel>Industrial</techLevel>
     <tab>DepthRim_SeabedResearchTab</tab>
     <prerequisites>
       <li>DepthRim_PressureEngineering</li>
+      <li>DepthRim_CoastalShipbuilding</li>
     </prerequisites>
     <researchViewX>1.00</researchViewX>
     <researchViewY>0.00</researchViewY>

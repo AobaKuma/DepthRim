@@ -941,15 +941,17 @@ namespace DepthRim.Acceptance
             ctx.Check(Mathf.Abs(shallow.GetFloat("_RippleStrength") - shallowDef.rippleStrength) < 0.001f, "C.2: _RippleStrength comes from the Def");
             ctx.Check(Mathf.Abs(shallow.GetFloat("_LightMin") - WaterTierMaterials.LightMin) < 0.001f, "C.2: _LightMin is the shared constant");
 
-            // 除錯切換到深海：整張地圖標記重建，材質跟著換
+            // 除錯切換到深海。V20（換層淡入淡出）之後：正在看的地圖先淡 TierFadeTicks，期間網格留在舊層級的材質
+            // （材質本身被逐幀調成新層級的樣子），淡完才整張地圖標記重建、換成新層級的材質。
             flooding.debugTierOverride = DepthTier.Deep;
-            // 層級變化是 MapComponentUpdate 每幀偵測的；這裡直接叫一次，才不會和 mapDrawer
-            // （它一重建完就把 dirtyFlags 清掉）賽跑，否則「整張地圖被標記」永遠讀不到。
+            // 層級變化是 MapComponentUpdate 每幀偵測的；這裡直接叫一次，好立刻檢查淡入淡出開始了
             flooding.MapComponentUpdate();
-            Section far = map.mapDrawer.SectionAt(new IntVec3(map.Size.x / 2, 0, map.Size.z / 2));
-            ctx.Check((far.dirtyFlags & (ulong)DepthRimDefOf.DepthRim_Water) != 0, "C.6: switching the tier marks the whole map for rebuild");
             ctx.Check(flooding.RenderTier == DepthTier.Deep, "C.6: the debug override changes the render tier");
+            ctx.Check(flooding.FadingTier && flooding.FadeTo == DepthTier.Deep && flooding.MeshTier == DepthTier.Shallow,
+                "C.6: switching the tier starts a fade; the mesh keeps the old material meanwhile");
+            yield return new WaitTicks(MapComponent_Flooding.TierFadeTicks + 30);
             yield return new WaitFrames(5);
+            ctx.Check(!flooding.FadingTier && flooding.MeshTier == DepthTier.Deep, "C.6: after the fade the mesh switches to the deep tier");
             cameraFollow(cell, map);
             outer.Regenerate();
             ctx.Check(outer.subMeshes.FirstOrDefault(s => s.verts != null && s.verts.Count > 0)?.material == WaterTierMaterials.Outer(DepthTier.Deep), "C.6: after the override the section uses the deep material");
@@ -989,8 +991,9 @@ namespace DepthRim.Acceptance
             yield return new WaitFrames(20);
             ctx.Screenshot("tier_deep_override");
 
-            // 切回自動
+            // 切回自動（一樣要等淡完）
             flooding.debugTierOverride = null;
+            yield return new WaitTicks(MapComponent_Flooding.TierFadeTicks + 30);
             yield return new WaitFrames(5);
             outer.Regenerate();
             ctx.Check(outer.subMeshes.FirstOrDefault(s => s.verts != null && s.verts.Count > 0)?.material == WaterTierMaterials.Outer(DepthTier.Shallow), "auto puts the shallow material back");
@@ -1117,8 +1120,10 @@ namespace DepthRim.Acceptance
             foreach (DepthTier tier in Enum.GetValues(typeof(DepthTier)))
             {
                 flooding.debugTierOverride = tier;
-                map.mapDrawer.WholeMapChanged(DepthRimDefOf.DepthRim_Water);
+                // V20 換層淡入淡出：淡完才換材質、材質顏色才回到 Def 的值（淡的途中材質被逐幀調色）
+                yield return new WaitTicks(MapComponent_Flooding.TierFadeTicks + 30);
                 yield return new WaitFrames(8);
+                ctx.Check(!flooding.FadingTier && flooding.MeshTier == tier, $"{tier}: the tier fade has finished");
                 volume.Regenerate();
                 LayerSubMesh sm = volume.subMeshes.FirstOrDefault(s => s.verts != null && s.verts.Count > 0);
                 ctx.Require(sm != null, $"{tier}: the half-flooded compartment still has water");

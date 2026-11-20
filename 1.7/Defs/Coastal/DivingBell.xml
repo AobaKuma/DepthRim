@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    潛水鐘與吊架 M5（Docs/海岸船舶與潛水鐘_機制設計.md §7）。
+    - 吊架（DepthRim.Building_BellDavit）：1×1，蓋在船體平台（船甲板）或月池上（碼頭不行），接船上的電網。
+      狀態 Stowed／Deploying／Deployed／Retracting；收放依深度計時（淺海 20 秒、最深 60 秒，一倍速），**只在通電時前進**。
+      鐘不在 Stowed 時，船與潛艇都不能出航、下潛、上浮、離港、靠岸。
+    - 潛水鐘（DepthRim.Building_DivingBell）：2×2 載具建築，人與貨在原版 CompTransporter 容器裡（最多 2 人）。
+      放在吊架旁邊 2 格內；下潛時從這張地圖消失、在正下方的海床生成同一台鐘，裡面的人與貨自動放到旁邊。
+      鐘裡的人：吊架有電就有氧（潛水服回充、溺水消退）；沒電先用鐘裡的殘氣，用完再用自己的潛水服，最後窒息（同溺水）。
+    - 貼圖暫用安全繩錨點與突擊艇（待補內容清單）。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_BellDavit</defName>
+    <thingClass>DepthRim.Building_BellDavit</thingClass>
+    <researchPrerequisites>
+      <li>DepthRim_CoastalShipbuilding</li>
+    </researchPrerequisites>
+    <label>bell davit</label>
+    <description>A winch and boom that lowers a diving bell straight down to the seabed below the ship and hauls it back up. It feeds the bell air for as long as it has power; without power the bell cannot be raised and the people in it start using up its air.\n\nBuild it on a ship's deck or a moon pool, with the diving bell within 2 cells. It cannot lower the bell in port: there is no sea below a harbour.</description>
+    <graphicData>
+      <texPath>Thing/DR_RopeAnchor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.3,1.3)</drawSize>
+      <color>(200,170,90)</color>
+      <damageData>
+        <rect>(0.2,0.2,0.6,0.6)</rect>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <rotatable>false</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>40</pathCost>
+    <fillPercent>0.4</fillPercent>
+    <tickerType>Normal</tickerType>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <canOverlapZones>false</canOverlapZones>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <statBases>
+      <MaxHitPoints>220</MaxHitPoints>
+      <WorkToBuild>3000</WorkToBuild>
+      <Mass>40</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>90</Steel>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costList>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_BellDavit</li>
+    </placeWorkers>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>350</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+    </comps>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+    <uiOrder>2230</uiOrder>
+  </ThingDef>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_DivingBell</defName>
+    <thingClass>DepthRim.Building_DivingBell</thingClass>
+    <researchPrerequisites>
+      <li>DepthRim_CoastalShipbuilding</li>
+    </researchPrerequisites>
+    <label>diving bell</label>
+    <description>A small open-bottomed chamber lowered on a cable from a bell davit. Up to two people and some cargo ride down in it; at the bottom they step out onto the seabed, and climb back in to be hauled up.\n\nThe bell has no pressure rating of its own: whether the divers can work at that depth is up to their suits and adaptation. If it is destroyed, whoever and whatever is inside ends up on the seabed beside it.</description>
+    <graphicData>
+      <texPath>Thing/DR_Boarding/BoardingCraft</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2.6,2.2)</drawSize>
+      <color>(210,190,140)</color>
+      <shadowData>
+        <volume>(1.8, 0.8, 1.6)</volume>
+      </shadowData>
+    </graphicData>
+    <size>(2,2)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <fillPercent>0.8</fillPercent>
+    <rotatable>false</rotatable>
+    <tickerType>Normal</tickerType>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <canOverlapZones>true</canOverlapZones>
+    <preventSkyfallersLandingOn>true</preventSkyfallersLandingOn>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <statBases>
+      <MaxHitPoints>600</MaxHitPoints>
+      <WorkToBuild>6000</WorkToBuild>
+      <Mass>120</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>140</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <comps>
+      <!-- 鐘裡的人與貨：原版 CompTransporter 容器（存檔一律 deep-scribe，同突擊艇） -->
+      <li Class="DepthRim.CompProperties_UnderwaterTransporter">
+        <massCapacity>200</massCapacity>
+        <max1PerGroup>true</max1PerGroup>
+        <canChangeAssignedThingsAfterStarting>true</canChangeAssignedThingsAfterStarting>
+        <showMassInInspectString>true</showMassInInspectString>
+      </li>
+      <!-- 登鐘的右鍵選單與載入／卸下 gizmo 沿用原版 CompShuttle；只覆寫誰可以進來（玩家的人，最多 2 人） -->
+      <li Class="DepthRim.CompProperties_BellShuttle" />
+    </comps>
+    <uiOrder>2231</uiOrder>
+  </ThingDef>
+
+</Defs>

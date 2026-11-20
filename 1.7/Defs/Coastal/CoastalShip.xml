@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海岸造船 M1（Docs/海岸船舶與潛水鐘_機制設計.md §1、§2.1）：水面推進器。
+    - 浮航移動要水面推進器；潛艇的水下推進器浮在水面時不出力（M2 的 SurfaceVoyage 才會用到推力）。
+    - 沒有 DMSE 的 CompTransferEngine：不算進水下航行的推力與燃料，不讓海岸船偷偷變成潛艇。
+    - 推力記在 DepthRim.CompProperties_SurfaceThruster；M2 的浮航推力檢查讀它。
+    - 貼圖暫用水下推進器（待補內容清單）。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_SurfaceThruster</defName>
+    <researchPrerequisites>
+      <li>DepthRim_CoastalShipbuilding</li>
+    </researchPrerequisites>
+    <label>surface thruster</label>
+    <description>A diesel-electric propeller pod for a ship sailing on the surface. It runs on the batteries aboard while the ship is under way. It does nothing underwater: a submarine needs underwater thrusters to move once it has dived.</description>
+    <graphicData>
+      <texPath>Thing/DR_Thruster/Thruster</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(3,4)</drawSize>
+    </graphicData>
+    <size>(2,3)</size>
+    <rotatable>true</rotatable>
+    <passability>Impassable</passability>
+    <fillPercent>1</fillPercent>
+    <canOverlapZones>false</canOverlapZones>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.5</staticSunShadowHeight>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <tickerType>Rare</tickerType>
+    <statBases>
+      <MaxHitPoints>350</MaxHitPoints>
+      <WorkToBuild>4500</WorkToBuild>
+      <Mass>50</Mass>
+      <Flammability>0</Flammability>
+      <Beauty>-10</Beauty>
+    </statBases>
+    <costList>
+      <Steel>120</Steel>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costList>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Big</destroySound>
+    </building>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>150</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+      <li Class="DepthRim.CompProperties_SurfaceThruster">
+        <thrust>3</thrust>
+      </li>
+      <!-- 不在航行中就待機（M2 浮航時才全速耗電） -->
+      <li Class="DepthRim.CompProperties_ThrusterDraw" />
+    </comps>
+    <uiOrder>2200</uiOrder>
+  </ThingDef>
+
+</Defs>

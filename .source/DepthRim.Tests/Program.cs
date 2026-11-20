@@ -32,7 +32,15 @@ static partial class Test
         Run("VoyageViewMath", VoyageViewMath);
         Run("CenterVoyageHull", CenterVoyageHull);
         Run("SubmarineDive", SubmarineDive);
+        Run("BallastMath", BallastMathTests);
+        Run("ContentBallast", ContentBallast);
         Run("SubmarineRouting", SubmarineRouting);
+        Run("SurfaceVoyageMath", SurfaceVoyageMathTests);
+        Run("ContentSurfaceShip", ContentSurfaceShip);
+        Run("DockingMath", DockingMathTests);
+        Run("HarborShowMath", HarborShowMathTests);
+        Run("DivingBellMath", DivingBellMath);
+        Run("ContentDivingBell", ContentDivingBell);
         Run("SubmarinePockets", SubmarinePockets);
         Run("ContentSubmarine", ContentSubmarine);
         Run("ContentSubmarinePrefab", ContentSubmarinePrefab);
@@ -47,6 +55,9 @@ static partial class Test
         Run("SeaWeather", SeaWeather);
         Run("ContentResearch", ContentResearch);
         Run("SeafloorSampler", SeafloorSampler);
+        Run("OceanCurrentTurbine", OceanCurrentTurbinePower);
+        Run("CrossLayerPowerMath", CrossLayerPowerMath);
+        Run("ContentCrossLayerPower", ContentCrossLayerPower);
         Run("LandmarkMath", LandmarkMathTests);
         Run("ContentLandmark", ContentLandmark);
         Run("BoardingCraftFuel", BoardingCraftFuelTests);

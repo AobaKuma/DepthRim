@@ -4,8 +4,8 @@
   <!-- Surfacing (open sea) -->
   <!-- EN: Surface -->
   <DepthRim.Surface.Label>上浮</DepthRim.Surface.Label>
-  <!-- EN: Blow the ballast and rise to the open sea above. The hull floats on the sea surface map of this tile; dive again from the helm.\n\nThe submarine must be stopped at shallow depth, under open water without ice. -->
-  <DepthRim.Surface.Desc>吹除壓載，浮到正上方的海面。船體會浮在這一格的海面地圖上；之後從艦橋下潛。\n\n潛艇要停在淺海，而且上面是沒有冰的海。</DepthRim.Surface.Desc>
+  <!-- EN: Blow the ballast and rise to the open sea above. The hull floats on the sea surface map of this tile; dive again from the helm.\n\nThe submarine must be stopped, under open water without ice. From deeper down it first rises to the shallows (an hour per tier, longer with too little ballast) and surfaces when it gets there. -->
+  <DepthRim.Surface.Desc>吹除壓載，浮到正上方的海面。船體會浮在這一格的海面地圖上；之後從艦橋下潛。\n\n潛艇要停著，而且上面是沒有冰的海。在較深處會先往上爬到淺海（每層一小時，壓載不夠更久），到了就上浮。</DepthRim.Surface.Desc>
   <!-- EN: The submarine has no hull. -->
   <DepthRim.Surface.NoHull>潛艇沒有船體。</DepthRim.Surface.NoHull>
   <!-- EN: The submarine is under way. Stop first. -->
@@ -133,5 +133,241 @@
   <DepthRim.IceKind.MultiYear>多年冰</DepthRim.IceKind.MultiYear>
   <!-- EN: ice shelf -->
   <DepthRim.IceKind.Shelf>冰棚</DepthRim.IceKind.Shelf>
+
+  <!-- 海岸造船（M1）：灣裡造好的船下水 -->
+  <!-- EN: There are no ballast tanks on this hull: it cannot dive. -->
+  <DepthRim.Ballast.None>船體上沒有壓載水艙，不能下潛。</DepthRim.Ballast.None>
+  <!-- EN: Ballast: none (can only rise, slowly). -->
+  <DepthRim.Ballast.InspectNone>壓載：沒有（只能往上，而且最慢）。</DepthRim.Ballast.InspectNone>
+  <!-- EN: Ballast: {0} tanks, lifting {1} of {2} hull cells. -->
+  <DepthRim.Ballast.Inspect>壓載：{0} 座，撐得住 {1} 格（船體 {2} 格）。</DepthRim.Ballast.Inspect>
+  <!-- EN: Not enough: depth changes take {0}x as long. -->
+  <DepthRim.Ballast.InspectShort>不夠：換深度要 {0} 倍的時間。</DepthRim.Ballast.InspectShort>
+  <!-- EN: Get everyone off the open deck first: {0}. -->
+  <DepthRim.Dive.DeckOccupied>甲板上還有人，先讓他們進艙或下船：{0}。</DepthRim.Dive.DeckOccupied>
+  <!-- EN: Hull not rated for this depth -->
+  <DepthRim.HullWarn.Title>船殼撐不住這個深度</DepthRim.HullWarn.Title>
+  <!-- EN: Target depth: {0}
+Hull rating: {1} (weakest piece: {2})
+Over by {3} tier(s).
+
+The outward walls will be crushed bit by bit: the weakest loses about {4} HP a day. Once they break, the sea comes in.
+
+Dive anyway? -->
+  <DepthRim.HullWarn.Text>目標深度：{0}
+船殼能耐：{1}（最弱的一塊：{2}）
+超出 {3} 級。
+
+朝外的艙壁會陸續被壓壞：最弱的那面每天約損失 {4} HP。壞了之後海水就會灌進來。
+
+仍然下潛？</DepthRim.HullWarn.Text>
+  <!-- EN: Hull overloaded -->
+  <DepthRim.HullWarn.AlertLabel>船殼超載</DepthRim.HullWarn.AlertLabel>
+  <!-- EN: These submarines are deeper than their hull is rated for. Their outward walls are being crushed; rise or rebuild them with stronger walls. -->
+  <DepthRim.HullWarn.AlertDesc>這些潛艇在比船殼能耐更深的地方，朝外的艙壁正在被壓壞。往上，或換成更耐壓的牆。</DepthRim.HullWarn.AlertDesc>
+  <!-- EN: Hull overloaded: rated for {0}. -->
+  <DepthRim.HullWarn.Inspect>船殼超載：只撐得住{0}。</DepthRim.HullWarn.Inspect>
+  <!-- EN: Rising to surface. -->
+  <DepthRim.Surface.InspectPending>正在往上，到淺海就上浮。</DepthRim.Surface.InspectPending>
+  <!-- EN: {0} is rising from the {1} and will surface once it reaches the shallows. -->
+  <DepthRim.Surface.Ascending>{0}正從{1}往上，到了淺海就上浮。</DepthRim.Surface.Ascending>
+  <!-- EN: {0} reached the shallows but cannot surface: {1} -->
+  <DepthRim.Surface.AscendBlocked>{0}到了淺海，但不能上浮：{1}</DepthRim.Surface.AscendBlocked>
+  <!-- EN: Launch -->
+  <DepthRim.Launch.Label>下水</DepthRim.Launch.Label>
+  <!-- EN: Take the ship out of the bay onto the open sea next to the colony. ... -->
+  <DepthRim.Launch.Desc>把船開出海灣，到殖民地旁邊的開放海面。龍骨框架撐住的整具船體、連同上面的人和東西都會一起走，灣裡恢復成原本的水。\n\n要回來時，開到殖民地旁邊的海上，用艦橋的「靠岸」。</DepthRim.Launch.Desc>
+  <!-- EN: The ship is not in a coastal colony. -->
+  <DepthRim.Launch.NotInPort>船不在海岸殖民地。</DepthRim.Launch.NotInPort>
+  <!-- EN: The helm has no power. -->
+  <DepthRim.Launch.NoPower>艦橋沒有電。</DepthRim.Launch.NoPower>
+  <!-- EN: Retract the gangway first. -->
+  <DepthRim.Launch.GangwayOut>先把舷梯收起來。</DepthRim.Launch.GangwayOut>
+  <!-- EN: There is no open sea next to the colony to sail out to (land, or sea ice). -->
+  <DepthRim.Launch.NoSea>殖民地旁邊沒有可以開出去的開放海面（是陸地或海冰）。</DepthRim.Launch.NoSea>
+  <!-- EN: Launching -->
+  <DepthRim.Launch.Launching>下水中</DepthRim.Launch.Launching>
+  <!-- EN: Ship launched -->
+  <DepthRim.Launch.LetterLabel>船已下水</DepthRim.Launch.LetterLabel>
+  <!-- EN: The ship has left the bay and is now floating at {0}. -->
+  <DepthRim.Launch.LetterText>船已經開出海灣，現在浮在{0}。</DepthRim.Launch.LetterText>
+
+  <!-- 水面航行（M2） -->
+  <!-- EN: Sail to... -->
+  <DepthRim.Sail.Option>航行到……</DepthRim.Sail.Option>
+  <!-- EN: Ship {0} -->
+  <DepthRim.Sail.DefaultName>船 {0}</DepthRim.Sail.DefaultName>
+  <!-- EN: Stop here -->
+  <DepthRim.Sail.Stop>就地停船</DepthRim.Sail.Stop>
+  <!-- EN: Stop the ship where it is now. If there is already a sea site here, the ship moors at it. -->
+  <DepthRim.Sail.StopDesc>讓船停在現在的位置。這一格已經有海面地點的話，就停靠在那裡。</DepthRim.Sail.StopDesc>
+  <!-- EN: Stop the ship first. -->
+  <DepthRim.Sail.StopFirst>先把船停下來。</DepthRim.Sail.StopFirst>
+  <!-- EN: The ship is not floating on the open sea. -->
+  <DepthRim.Sail.NotAtSea>船不是浮在開放海面上。</DepthRim.Sail.NotAtSea>
+  <!-- EN: The ship is already under way. -->
+  <DepthRim.Sail.AlreadyUnderWay>船已經在航行中。</DepthRim.Sail.AlreadyUnderWay>
+  <!-- EN: Two ships' keels are joined: separate them before sailing. -->
+  <DepthRim.Sail.ShipsLinked>兩艘船的龍骨連在一起：先拆開才能出航。</DepthRim.Sail.ShipsLinked>
+  <!-- EN: No working surface thruster aboard. -->
+  <DepthRim.Sail.NoThruster>船上沒有能運作的水面推進器。</DepthRim.Sail.NoThruster>
+  <!-- EN: The batteries aboard cannot run the thrusters for a single tile. -->
+  <DepthRim.Sail.NoCharge>船上電池的電連一格都走不了。</DepthRim.Sail.NoCharge>
+  <!-- EN: Pick a tile on the surface. -->
+  <DepthRim.Sail.NotSurface>請選地表上的格子。</DepthRim.Sail.NotSurface>
+  <!-- EN: The ship is already here. -->
+  <DepthRim.Sail.Here>船已經在這裡了。</DepthRim.Sail.Here>
+  <!-- EN: Not open sea (land or sea ice). -->
+  <DepthRim.Sail.NotOpenSea>不是開放海面（陸地或海冰）。</DepthRim.Sail.NotOpenSea>
+  <!-- EN: Too far: {0} tiles, the batteries last {1}. -->
+  <DepthRim.Sail.OutOfRange>太遠：要走 {0} 格，電池只夠 {1} 格。</DepthRim.Sail.OutOfRange>
+  <!-- EN: {0} tiles, about {1} -->
+  <DepthRim.Sail.Eta>{0} 格，約 {1}</DepthRim.Sail.Eta>
+  <!-- EN: Retracting the gangway; the ship sails once it is in. -->
+  <DepthRim.Sail.RetractingGangway>正在收起舷梯，收好就出航。</DepthRim.Sail.RetractingGangway>
+  <!-- EN: The gangway could not be retracted: the ship stays. -->
+  <DepthRim.Sail.GangwayStuck>舷梯收不起來：船留在原地。</DepthRim.Sail.GangwayStuck>
+  <!-- EN: Casting off -->
+  <DepthRim.Sail.Departing>出航中</DepthRim.Sail.Departing>
+  <!-- EN: {0} is under way: {1} tiles to go. -->
+  <DepthRim.Sail.Departed>{0}出航了：還有 {1} 格。</DepthRim.Sail.Departed>
+  <!-- EN: {0}: the sea ahead has frozen over. The ship stops here. -->
+  <DepthRim.Sail.BlockedAhead>{0}：前方的海結冰了，船停在這裡。</DepthRim.Sail.BlockedAhead>
+  <!-- EN: {0} has stopped. -->
+  <DepthRim.Sail.Arrived>{0}已經停船。</DepthRim.Sail.Arrived>
+  <!-- EN: {0} stopped next to {1}: there is no room to moor there. -->
+  <DepthRim.Sail.ArrivedNoRoom>{0}停在{1}旁邊：那裡沒有地方停靠。</DepthRim.Sail.ArrivedNoRoom>
+  <!-- EN: {0} has moored at {1}. -->
+  <DepthRim.Sail.ArrivedAt>{0}停靠在{1}。</DepthRim.Sail.ArrivedAt>
+  <!-- EN: Mooring -->
+  <DepthRim.Sail.Mooring>停靠中</DepthRim.Sail.Mooring>
+  <!-- EN: Under way: {0} tiles to go, thrust {1} -->
+  <DepthRim.Sail.InspectUnderWay>航行中：還有 {0} 格，推力 {1}</DepthRim.Sail.InspectUnderWay>
+  <!-- EN: Drifting: no thrust ({0} tiles to go) -->
+  <DepthRim.Sail.InspectStalled>漂流中：沒有推力（還有 {0} 格）</DepthRim.Sail.InspectStalled>
+
+  <!-- 潛水鐘與吊架（M5） -->
+  <!-- EN: Lower bell -->
+  <DepthRim.Bell.LowerLabel>下鐘</DepthRim.Bell.LowerLabel>
+  <!-- EN: Lower the diving bell straight down to the seabed below. ... -->
+  <DepthRim.Bell.LowerDesc>把潛水鐘垂直放到正下方的海床。鐘裡的人和東西到了底就出來。絞盤只有吊架有電時才會轉。</DepthRim.Bell.LowerDesc>
+  <!-- EN: Raise bell -->
+  <DepthRim.Bell.RaiseLabel>收鐘</DepthRim.Bell.RaiseLabel>
+  <!-- EN: Haul the bell back up to the davit. ... -->
+  <DepthRim.Bell.RaiseDesc>把鐘吊回吊架。只有已經進鐘的人會上來；還在海床上的人留在那裡。</DepthRim.Bell.RaiseDesc>
+  <!-- EN: Abandon bell -->
+  <DepthRim.Bell.AbandonLabel>放棄潛水鐘</DepthRim.Bell.AbandonLabel>
+  <!-- EN: Cut the bell loose. ... -->
+  <DepthRim.Bell.AbandonDesc>把鐘放掉。還在往下放時只是停下來、讓人出來；已經在海床上的話，鐘和下面的人都會被留下，沒有氧氣供應。</DepthRim.Bell.AbandonDesc>
+  <!-- EN: Abandon the diving bell? ... -->
+  <DepthRim.Bell.AbandonConfirm>要放棄潛水鐘嗎？如果鐘在海床上，鐘和下面的人都會被留下，沒有氧氣供應，也上不來。</DepthRim.Bell.AbandonConfirm>
+  <!-- EN: Climb into {0} -->
+  <DepthRim.Bell.BoardOption>進入{0}</DepthRim.Bell.BoardOption>
+  <!-- EN: full: {0} people at most -->
+  <DepthRim.Bell.Full>滿了：最多 {0} 人</DepthRim.Bell.Full>
+  <!-- EN: Unload bell -->
+  <DepthRim.Bell.Unload>卸下鐘內</DepthRim.Bell.Unload>
+  <!-- EN: Let everyone and everything out of the bell here. -->
+  <DepthRim.Bell.UnloadDesc>讓鐘裡的人和東西在這裡出來。</DepthRim.Bell.UnloadDesc>
+  <!-- EN: Aboard: {0}/{1} -->
+  <DepthRim.Bell.Aboard>鐘內：{0}/{1}</DepthRim.Bell.Aboard>
+  <!-- EN: Air: supplied by the davit -->
+  <DepthRim.Bell.AirSupplied>氧氣：由吊架供應</DepthRim.Bell.AirSupplied>
+  <!-- EN: Air: no supply, reserve lasts about {0} -->
+  <DepthRim.Bell.AirReserve>氧氣：沒有供應，殘氣約撐 {0}</DepthRim.Bell.AirReserve>
+  <!-- EN: Cut loose: no davit is holding this bell. -->
+  <DepthRim.Bell.Lost>失聯：沒有吊架吊著這台鐘。</DepthRim.Bell.Lost>
+  <!-- EN: The ship is under way. -->
+  <DepthRim.Bell.UnderWay>船正在航行。</DepthRim.Bell.UnderWay>
+  <!-- EN: No sea below: a harbour sits on land. Take the ship out to sea to lower the bell. -->
+  <DepthRim.Bell.InPort>下面沒有海：港口在陸地上。把船開出海才能下鐘。</DepthRim.Bell.InPort>
+  <!-- EN: The davit is not on a ship at sea or a submarine. -->
+  <DepthRim.Bell.NotAtSea>吊架不在海上的船或潛艇上。</DepthRim.Bell.NotAtSea>
+  <!-- EN: There is no sea below here. -->
+  <DepthRim.Bell.NoSeaBelow>這裡下面沒有海。</DepthRim.Bell.NoSeaBelow>
+  <!-- EN: The sea below is {0}: there is no seabed for the bell to rest on. -->
+  <DepthRim.Bell.NoSeabed>下面是{0}：沒有讓鐘停放的海床。</DepthRim.Bell.NoSeabed>
+  <!-- EN: The bell is not stowed. -->
+  <DepthRim.Bell.Busy>鐘不在吊架上。</DepthRim.Bell.Busy>
+  <!-- EN: No diving bell within {0} cells of the davit. -->
+  <DepthRim.Bell.NoBell>吊架旁 {0} 格內沒有潛水鐘。</DepthRim.Bell.NoBell>
+  <!-- EN: The davit has no power. -->
+  <DepthRim.Bell.NoPower>吊架沒有電。</DepthRim.Bell.NoPower>
+  <!-- EN: The bell is not on the seabed. -->
+  <DepthRim.Bell.NotDeployed>鐘不在海床上。</DepthRim.Bell.NotDeployed>
+  <!-- EN: Lowering the bell: about {0} with power. -->
+  <DepthRim.Bell.Lowering>正在下鐘：有電的話約 {0}。</DepthRim.Bell.Lowering>
+  <!-- EN: Raising the bell: about {0} with power. -->
+  <DepthRim.Bell.Raising>正在收鐘：有電的話約 {0}。</DepthRim.Bell.Raising>
+  <!-- EN: {0} colonists are still out on the seabed and will stay there. -->
+  <DepthRim.Bell.PeopleLeftBelow>還有 {0} 名殖民者在海床上，他們會留在那裡。</DepthRim.Bell.PeopleLeftBelow>
+  <!-- EN: The diving bell has been destroyed. -->
+  <DepthRim.Bell.Destroyed>潛水鐘被毀了。</DepthRim.Bell.Destroyed>
+  <!-- EN: There is nowhere on the seabed below for the bell to settle. -->
+  <DepthRim.Bell.NoLandingSpot>下面的海床沒有可以放鐘的地方。</DepthRim.Bell.NoLandingSpot>
+  <!-- EN: The diving bell has reached the seabed. -->
+  <DepthRim.Bell.Landed>潛水鐘到達海床。</DepthRim.Bell.Landed>
+  <!-- EN: No room beside the davit to set the bell down: clear the deck. -->
+  <DepthRim.Bell.NoStowRoom>吊架旁沒有地方放鐘：先清出甲板。</DepthRim.Bell.NoStowRoom>
+  <!-- EN: The diving bell is back on deck. -->
+  <DepthRim.Bell.Stowed>潛水鐘回到甲板上了。</DepthRim.Bell.Stowed>
+  <!-- EN: Diving bell lost -->
+  <DepthRim.Bell.LostLabel>潛水鐘失聯</DepthRim.Bell.LostLabel>
+  <!-- EN: The diving bell has been cut loose on the seabed. ... -->
+  <DepthRim.Bell.LostText>潛水鐘被留在海床上了。上面已經沒有人供氧，也收不回來。另一艘船或潛艇開到同一個位置下鐘或下錨，才能把下面的人接上來。</DepthRim.Bell.LostText>
+  <!-- EN: Bell: stowed -->
+  <DepthRim.Bell.StateStowed>潛水鐘：在吊架上</DepthRim.Bell.StateStowed>
+  <!-- EN: Bell: none within reach -->
+  <DepthRim.Bell.StateNoBell>潛水鐘：旁邊沒有</DepthRim.Bell.StateNoBell>
+  <!-- EN: Bell: lowering ({0}) -->
+  <DepthRim.Bell.StateLowering>潛水鐘：下放中（{0}）</DepthRim.Bell.StateLowering>
+  <!-- EN: Bell: raising ({0}) -->
+  <DepthRim.Bell.StateRaising>潛水鐘：回收中（{0}）</DepthRim.Bell.StateRaising>
+  <!-- EN: Bell: on the seabed -->
+  <DepthRim.Bell.StateDeployed>潛水鐘：在海床上</DepthRim.Bell.StateDeployed>
+  <!-- EN: (paused: no power) -->
+  <DepthRim.Bell.Paused>（暫停：沒有電）</DepthRim.Bell.Paused>
+  <!-- EN: Must be built on a ship's deck or a moon pool. -->
+  <DepthRim.Bell.DavitPlacement>必須蓋在船甲板或月池上。</DepthRim.Bell.DavitPlacement>
+  <!-- EN: The diving bell is not back on deck. -->
+  <DepthRim.Bell.NotStowed>潛水鐘還沒收回。</DepthRim.Bell.NotStowed>
+
+  <!-- 靠岸（M3） -->
+  <!-- EN: Dock at {0}... -->
+  <DepthRim.Dock.Option>靠岸：{0}……</DepthRim.Dock.Option>
+  <!-- EN: Dock... -->
+  <DepthRim.Dock.OptionNoColony>靠岸……</DepthRim.Dock.OptionNoColony>
+  <!-- EN: None of your coastal colonies is next to this tile. -->
+  <DepthRim.Dock.NoColony>這一格旁邊沒有你的海岸殖民地。</DepthRim.Dock.NoColony>
+  <!-- EN: Choose berth -->
+  <DepthRim.Dock.Label>選泊位</DepthRim.Dock.Label>
+  <!-- EN: Choose where the ship berths in the colony's waters and which way it faces. The ship comes in from the open sea on its own. -->
+  <DepthRim.Dock.Desc>選船在殖民地水域停在哪裡、船頭朝哪邊。船會自己從外海開進來。</DepthRim.Dock.Desc>
+  <!-- EN: {0} / {1}: turn the ship -->
+  <DepthRim.Dock.RotateHint>{0}／{1}：轉船</DepthRim.Dock.RotateHint>
+  <!-- EN: Outside the map. -->
+  <DepthRim.Dock.OutOfBounds>超出地圖。</DepthRim.Dock.OutOfBounds>
+  <!-- EN: Not open water the hull can float on. -->
+  <DepthRim.Dock.NotWater>不是船體能浮的水面。</DepthRim.Dock.NotWater>
+  <!-- EN: {0} ({1}x{2}) cannot be turned a quarter turn. -->
+  <DepthRim.Dock.CannotTurn>{0}（{1}×{2}）不能轉 90°。</DepthRim.Dock.CannotTurn>
+  <!-- EN: No room near the berth to turn the ship. -->
+  <DepthRim.Dock.NoTurningRoom>泊位旁沒有讓船迴轉的空間。</DepthRim.Dock.NoTurningRoom>
+  <!-- EN: No water route wide enough for the ship from the open sea. -->
+  <DepthRim.Dock.NoRoute>從外海進來的水路不夠船寬。</DepthRim.Dock.NoRoute>
+  <!-- EN: No gangway will reach the shore from here: nobody can walk on or off. -->
+  <DepthRim.Dock.GangwayWontReach>這裡的舷梯搆不到岸：停好後不能上下船。</DepthRim.Dock.GangwayWontReach>
+  <!-- EN: The ship could not be turned to that heading. -->
+  <DepthRim.Dock.CannotRotate>船轉不到那個朝向。</DepthRim.Dock.CannotRotate>
+  <!-- EN: Docking -->
+  <DepthRim.Dock.Docking>靠岸中</DepthRim.Dock.Docking>
+  <!-- EN: Ship docked -->
+  <DepthRim.Dock.LetterLabel>船已靠岸</DepthRim.Dock.LetterLabel>
+  <!-- EN: {0} has berthed at {1}. -->
+  <DepthRim.Dock.LetterText>{0}已經停靠在{1}。</DepthRim.Dock.LetterText>
+  <!-- EN: No gangway reaches the shore: build one on the deck facing land to walk on and off. -->
+  <DepthRim.Dock.NoGangwayAshore>沒有舷梯接到岸上：在甲板上朝陸地蓋一座舷梯才能上下船。</DepthRim.Dock.NoGangwayAshore>
+  <!-- EN: {0} is off {1}. Use Dock on the helm to choose a berth. -->
+  <DepthRim.Dock.ArrivedOffColony>{0}到了{1}外海。用艦橋的「靠岸」選泊位。</DepthRim.Dock.ArrivedOffColony>
 
 </LanguageData>

@@ -59,10 +59,11 @@ static partial class Test
         foreach (XElement p in projects)
         {
             string name = (string)p.Element("defName");
-            if (name == "DepthRim_UnderwaterSurvival")
+            // 初始科技與海岸造船（海岸開局在灣裡造第一艘船，還碰不到海床）是一般研究
+            if (name == "DepthRim_UnderwaterSurvival" || name == "DepthRim_CoastalShipbuilding")
             {
                 Check((string)p.Element("tab") == "DepthRim_ResearchTab" && p.Element("baseCost") != null && p.Element("knowledgeCategory") == null,
-                    "the starting tech stays ordinary research on the underwater tab");
+                    $"{name} stays ordinary research on the underwater tab");
                 continue;
             }
             Check((string)p.Element("knowledgeCategory") == "DepthRim_Seabed" && (float?)p.Element("knowledgeCost") > 0f && p.Element("baseCost") == null,

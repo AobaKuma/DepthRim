@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!--
+    水下不能使用風力發電（2026-11-19）：
+    1. 放置：水下地圖（DepthRim.FloodingUtility.IsWaterMap，冰洋層與潛艇地圖）不能蓋原版風力發電機——
+       與其讓玩家白花 100 鋼 + 2 個零件蓋一台永遠不發電的機器，不如在建之前就擋下來。
+    2. 運轉：已經存在（舊存檔、除錯生成、其他模組）的風力發電機在水下地圖輸出歸零，
+       見 DepthRim.Patch_WindTurbineUnderwater_*；檢視面板會寫「水下沒有風」。
+    3. 海面地圖（浮在海上的平台）不是水下地圖，風力發電照常。
+  -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>Defs/ThingDef[defName="WindTurbine"]/placeWorkers</xpath>
+    <value>
+      <li>DepthRim.PlaceWorker_NoWindUnderwater</li>
+    </value>
+  </Operation>
+
+</Patch>

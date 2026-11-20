@@ -325,6 +325,40 @@ namespace DepthRim.Acceptance
             }
         }
 
+        /// <summary>
+        /// 暫時把研究設成完成（直接寫進度，不連帶完成前置，不跳信），回傳還原用的動作。
+        /// 比照 H2：不用 FinishProject，免得後面的測試（例如 D1 要「耐壓工程還沒完成」）看到被連帶完成的前置。
+        /// </summary>
+        public static Action GrantResearch(ResearchProjectDef project)
+        {
+            if (project == null || project.IsFinished)
+            {
+                return () => { };
+            }
+            // 知識類別研究（海底研究）沒有 Anomaly 時，FFF 把進度存在 Fortified.GameComponent_KnowledgeStore（接回 GetProgress）
+            if (project.baseCost <= 0f && !ModsConfig.AnomalyActive)
+            {
+                Type storeType = HarmonyLib.AccessTools.TypeByName("Fortified.GameComponent_KnowledgeStore");
+                object store = storeType == null ? null : HarmonyLib.AccessTools.Property(storeType, "CompSafe").GetValue(null);
+                if (store != null)
+                {
+                    HarmonyLib.Traverse t = HarmonyLib.Traverse.Create(store);
+                    float before = t.Method("GetStored", project).GetValue<float>();
+                    t.Method("SetStored", project, project.Cost).GetValue();
+                    return () => HarmonyLib.Traverse.Create(store).Method("SetStored", project, before).GetValue();
+                }
+            }
+            // 原版 GetProgress：一般研究（baseCost > 0）讀 progress，知識類別研究（有 Anomaly 時）讀 anomalyKnowledge
+            string field = project.baseCost > 0f ? "progress" : "anomalyKnowledge";
+            Dictionary<ResearchProjectDef, float> progress = HarmonyLib.Traverse.Create(Find.ResearchManager).Field(field).GetValue<Dictionary<ResearchProjectDef, float>>();
+            bool had = progress.TryGetValue(project, out float old);
+            progress[project] = project.Cost;
+            return () =>
+            {
+                if (had) { progress[project] = old; } else { progress.Remove(project); }
+            };
+        }
+
         public static void DeleteTestSave()
         {
             try

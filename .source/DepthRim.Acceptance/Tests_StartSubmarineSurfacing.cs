@@ -27,6 +27,9 @@ namespace DepthRim.Acceptance
             ctx.Note($"start submarine {part.Structure.defName}: {startHull.Count} hull cells, footprint {rect.Width}x{rect.Height}");
             Building helm = rect.Cells.SelectMany(c => c.GetThingList(home)).OfType<Building>().FirstOrDefault(b => b.TryGetComp<CompTransferConsole>() != null);
             ctx.Require(helm != null, "the start submarine has a helm");
+            // M6：開局的結構沒有壓載時，開局補到全速需要的座數（Ballast.FillHull）
+            int tanks = Ballast.TanksIn(home, new HashSet<IntVec3>(startHull));
+            ctx.Check(tanks >= Ballast.Needed(startHull.Count), $"the start submarine has enough ballast to dive at full speed ({tanks} for {startHull.Count} cells)");
             List<Pawn> crew = home.mapPawns.FreeColonistsSpawned.ToList();
             ctx.Check(crew.Count == 3 && crew.All(p => startHull.Contains(p.Position)), "the crew is aboard");
             foreach (Pawn p in crew)

@@ -17,11 +17,14 @@ namespace DepthRim
             None,
             AlreadyThere,
             BelowSeafloor,
-            HullTooWeak
+            NoBallast
         }
 
-        /// <summary>能不能把巡航深度設為 <paramref name="target"/>。上浮永遠可以；往下不能超過海床與船殼耐壓。</summary>
-        public static DiveBlock CanSet(DepthTier current, DepthTier target, DepthTier seafloor, DepthTier hullRating)
+        /// <summary>
+        /// 能不能把巡航深度設為 <paramref name="target"/>。往上永遠可以；往下不能超過海床，而且船上要有壓載（<paramref name="ballastTanks"/> 座）。
+        /// 船殼耐壓不是門檻（§2.2）：超出的話由 <see cref="HullWarning"/> 先確認。
+        /// </summary>
+        public static DiveBlock CanSet(DepthTier current, DepthTier target, DepthTier seafloor, int ballastTanks)
         {
             if (target == current)
             {
@@ -35,9 +38,9 @@ namespace DepthRim
             {
                 return DiveBlock.BelowSeafloor;
             }
-            if (target > hullRating)
+            if (ballastTanks <= 0)
             {
-                return DiveBlock.HullTooWeak;
+                return DiveBlock.NoBallast;
             }
             return DiveBlock.None;
         }

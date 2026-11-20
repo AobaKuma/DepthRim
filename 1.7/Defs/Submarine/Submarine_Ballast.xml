@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 壓載水艙（M6，Docs/海岸船舶與潛水鐘_機制設計.md §2.1、§2.4）：下潛與往下換深度的唯一硬門檻。
+       只有蓋在船殼範圍內（龍骨網路的格子；潛艇的船體地圖上是整個船體）才算；每座撐 200 格船體（DepthRim.BallastMath.CellsPerTank），
+       不夠時換深度變慢，最多 4 倍。建築本身沒有行為（DepthRim.Ballast 數座數）。貼圖暫用原版電池。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_BallastTank</defName>
+    <researchPrerequisites>
+      <li>DepthRim_SubmarineConstruction</li>
+    </researchPrerequisites>
+    <label>ballast tank</label>
+    <description>A pressure-proof tank that floods to sink the hull and blows to raise it. A ship needs at least one on its hull to dive or go deeper; without any it stays on the surface.\n\nEach tank can lift 200 cells of hull. A hull bigger than its tanks can lift still dives, but changes depth more slowly (up to four times slower). Rising never needs ballast, but without any it is as slow as it gets.\n\nOnly counts when it stands on the hull (inside the keel's reach).</description>
+    <graphicData>
+      <texPath>Things/Building/Power/Battery</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(2,3)</drawSize>
+      <color>(110,130,150)</color>
+    </graphicData>
+    <size>(1,2)</size>
+    <rotatable>true</rotatable>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <fillPercent>0.5</fillPercent>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.3</staticSunShadowHeight>
+    <canOverlapZones>false</canOverlapZones>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>2500</WorkToBuild>
+      <Mass>60</Mass>
+      <Flammability>0</Flammability>
+    </statBases>
+    <costList>
+      <Steel>80</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>2200</uiOrder>
+  </ThingDef>
+
+</Defs>

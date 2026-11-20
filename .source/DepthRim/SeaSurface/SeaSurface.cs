@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using LudeonTK;
 using RimWorld;
@@ -460,9 +461,84 @@ namespace DepthRim
                     material.SetTexture("_NoiseTex", TexGame.NoiseTex);
                     material.SetTexture("_WaterReflectionTex", ContentFinder<Texture2D>.Get("Other/WaterReflection", reportFailure: false) ?? BaseContent.GreyTex);
                     material.SetTexture("_RampTex", VanillaDeepRamp ?? BaseContent.GreyTex);
+                    // 航跡（水面航行）：@default 不會套上，一開始全部設好（沒在航行時強度 0、海水不流）
+                    ApplyWake(material);
                 }
                 return material;
             }
+        }
+
+        // ── 航跡（水面航行的船，SeaWake）──
+
+        private float wakeSpeed;
+        private Vector2 wakeHeading = Vector2.up;
+        private Vector2 wakeFlow;
+        private SeaWake.Hull wakeHull;
+        private bool wakeHullDirty = true;
+        private int wakeLastTick = -1;
+        private float nextWakeHullCheck;
+
+        /// <summary>給驗收測試：目前的航跡強度（0..1）、航向與累積的海水位移。</summary>
+        public float WakeSpeed => wakeSpeed;
+
+        public Vector2 WakeHeading => wakeHeading;
+
+        public Vector2 WakeFlow => wakeFlow;
+
+        public SeaWake.Hull WakeHull => wakeHull;
+
+        /// <summary>立刻把航跡強度設成目標值並重算船體外框（驗收測試；平常用真實時間平滑，測試以高倍速跑時跟不上）。</summary>
+        public void SnapWake()
+        {
+            wakeSpeed = (map.Parent as WorldObject_SurfaceShip)?.WakeSpeed ?? 0f;
+            wakeHullDirty = true;
+            nextWakeHullCheck = 0f;
+            UpdateWake(0f);
+        }
+
+        /// <summary>船體移動或航向改變：下一幀重算航跡的船體外框。</summary>
+        public void Notify_HullMoved()
+        {
+            wakeHullDirty = true;
+        }
+
+        /// <summary>
+        /// 每幀：航跡強度往船的推進程度靠（真實時間平滑）、海水依遊戲時間往船尾流、船體外框（每 2 真實秒或船體變動時）重算，設進材質。
+        /// 不是水面航行的船時強度歸零，海水停在原處。
+        /// </summary>
+        public void UpdateWake(float realDelta)
+        {
+            if (material == null)
+            {
+                return;
+            }
+            WorldObject_SurfaceShip ship = map.Parent as WorldObject_SurfaceShip;
+            float target = ship?.WakeSpeed ?? 0f;
+            Vector2? heading = ship?.MapHeading;
+            if (heading.HasValue && (heading.Value - wakeHeading).sqrMagnitude > 1e-6f)
+            {
+                wakeHeading = heading.Value;
+                wakeHullDirty = true;
+            }
+            wakeSpeed = Mathf.MoveTowards(wakeSpeed, target, SeaWake.SpeedChangePerSecond * realDelta);
+            int tick = Find.TickManager.TicksGame;
+            int ticks = wakeLastTick < 0 ? 0 : Mathf.Max(0, tick - wakeLastTick);
+            wakeLastTick = tick;
+            wakeFlow = SeaWake.Wrap(wakeFlow + SeaWake.FlowStep(wakeHeading, wakeSpeed, ticks / 60f));
+            if (wakeSpeed > 0f && (wakeHullDirty || Time.realtimeSinceStartup >= nextWakeHullCheck))
+            {
+                wakeHullDirty = false;
+                nextWakeHullCheck = Time.realtimeSinceStartup + 2f;
+                wakeHull = SeaWake.HullAlong(map.AllCells.Where(c => MapComponent_SeabedMemory.IsPlatform(map.terrainGrid.TerrainAt(c))), wakeHeading);
+            }
+            ApplyWake(material);
+        }
+
+        private void ApplyWake(Material mat)
+        {
+            mat.SetVector("_Voyage", new Vector4(wakeHeading.x, wakeHeading.y, wakeSpeed, 0f));
+            mat.SetVector("_Wake", wakeSpeed > 0f ? wakeHull.ToShader() : Vector4.zero);
+            mat.SetVector("_Flow", new Vector4(wakeFlow.x, wakeFlow.y, 0f, 0f));
         }
 
         public override void MapComponentUpdate()
@@ -472,6 +548,7 @@ namespace DepthRim
                 swayFactor = Mathf.MoveTowards(swayFactor, TargetSwayFactor(), SwayFactorChangePerSecond * Time.deltaTime);
                 roughness = Mathf.MoveTowards(roughness, TargetRoughness(), RoughnessChangePerSecond * Time.deltaTime);
                 ApplySway();
+                UpdateWake(Time.deltaTime);
             }
             if (SeaLevels.IsPlatformLevel(map) && Find.CurrentMap == map && Time.realtimeSinceStartup >= nextLowerCheck)
             {
@@ -755,20 +832,35 @@ namespace DepthRim
     }
 
     /// <summary>
-    /// 海面地圖上變成太空的格改回開放海面。DMSE 的「拆除平台」讀圖層的 <c>TransferEnvironmentExtension.voidTerrain</c>，
-    /// 地表圖層沒有，於是會鋪太空；海面地圖上要露出的是海。
+    /// 海面地圖與原版地表地圖上變成太空的格改回水。DMSE 的「拆除平台」與船體分離讀圖層的
+    /// <c>TransferEnvironmentExtension.voidTerrain</c>，地表圖層沒有，於是會鋪太空。
+    /// 有 <see cref="MapComponent_SeabedMemory"/> 記錄（平台蓋掉了什麼）就還原那個地形，否則用 <see cref="SeaLevels.VoidTerrain"/>：
+    /// 水面層→開放海面、平台層→高空、原版海岸地圖→原版深海水（海灣離港後不留太空）。
     /// </summary>
     [HarmonyPatch(typeof(TerrainGrid), nameof(TerrainGrid.SetTerrain))]
     public static class Patch_SeaSurfaceVoid
     {
-        [HarmonyPostfix]
-        public static void Postfix(IntVec3 c, TerrainDef newTerr, Map ___map)
+        [HarmonyPrefix]
+        public static void Prefix(IntVec3 c, Map ___map, out TerrainDef __state)
         {
-            if (newTerr != TerrainDefOf.Space || ___map == null || !SeaLevels.IsAnyLevel(___map))
+            __state = ___map != null && c.InBounds(___map) ? ___map.terrainGrid.TerrainAt(c) : null;
+        }
+
+        [HarmonyPostfix]
+        public static void Postfix(IntVec3 c, TerrainDef newTerr, Map ___map, TerrainDef __state)
+        {
+            if (newTerr != TerrainDefOf.Space || ___map == null || !SeaLevels.ReplacesSpace(___map))
             {
                 return;
             }
-            ___map.terrainGrid.SetTerrain(c, SeaLevels.VoidTerrain(___map));
+            // 原版地表地圖：只處理船體平台變成的太空（拆除、船體分離）；其他來源的太空（別的模組、地圖生成）不碰
+            if (!SeaLevels.IsAnyLevel(___map) && !MapComponent_SeabedMemory.IsPlatform(__state))
+            {
+                return;
+            }
+            MapComponent_SeabedMemory memory = ___map.GetComponent<MapComponent_SeabedMemory>();
+            TerrainDef restore = memory != null && memory.TryTake(c, out TerrainDef under) ? under : SeaLevels.VoidTerrain(___map);
+            ___map.terrainGrid.SetTerrain(c, restore);
         }
     }
 

@@ -66,10 +66,36 @@ namespace DepthRim
             return IsPlatformLevel(map) ? MapComponent_SeaSurface.SeaDropCells : 0f;
         }
 
-        /// <summary>這張地圖上的「空」地形：水面層是開放海面，平台層是高空。</summary>
+        /// <summary>原版地表地圖（例如海岸殖民地）：在地表圖層上、但不是海面的兩層。</summary>
+        public static bool IsVanillaSurface(Map map)
+        {
+            return map != null && !IsAnyLevel(map) && map.Tile.Valid && map.Tile.LayerDef == PlanetLayerDefOf.Surface;
+        }
+
+        /// <summary>
+        /// 這張地圖上船體離開或平台拆掉時，DMSE 鋪的太空要換成 <see cref="VoidTerrain"/>（或記下的原本地形）。
+        /// 海洋層不在這裡：DMSE 直接讀 <c>TransferEnvironmentExtension.voidTerrain</c>（深淵），不會鋪太空。
+        /// </summary>
+        public static bool ReplacesSpace(Map map)
+        {
+            return IsAnyLevel(map) || IsVanillaSurface(map);
+        }
+
+        /// <summary>
+        /// 這張地圖上的「空」地形：水面層是開放海面，平台層是高空，原版地表地圖是原版深海水
+        /// （有 <see cref="MapComponent_SeabedMemory"/> 記錄時優先還原記下的地形，這裡只是沒有記錄時的退路）。
+        /// </summary>
         public static TerrainDef VoidTerrain(Map map)
         {
-            return IsPlatformLevel(map) ? DepthRimDefOf.DepthRim_OpenAir : DepthRimDefOf.DepthRim_OpenSea;
+            if (IsPlatformLevel(map))
+            {
+                return DepthRimDefOf.DepthRim_OpenAir;
+            }
+            if (IsVanillaSurface(map))
+            {
+                return TerrainDefOf.WaterOceanDeep;
+            }
+            return DepthRimDefOf.DepthRim_OpenSea;
         }
 
         /// <summary>

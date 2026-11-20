@@ -42,10 +42,10 @@
   <TerrainDef>
     <defName>DepthRim_HullPlatform</defName>
     <researchPrerequisites>
-      <li>DepthRim_PressureEngineering</li>
+      <li>DepthRim_CoastalShipbuilding</li>
     </researchPrerequisites>
     <label>hull platform</label>
-    <description>A pressure-rated lattice deck laid over open water or the seabed: the abyss below the sea, the seabed itself, where it rests on the bottom, or the open sea surface, where it floats at the waterline. It is the base structure of a submarine: watertight walls, doors and machinery can all be built on it.\n\nIt can be taken apart with the 'remove platform' command, leaving open water below.</description>
+    <description>A steel lattice deck laid over open water or the seabed: ocean water off the shore, the open sea surface, where it floats at the waterline, the abyss below the sea, or the seabed itself, where it rests on the bottom. It is the base structure of every ship and submarine: keel frames, walls, doors and machinery can all be built on it. The deck itself does not need to resist pressure; the walls do.\n\nIt can be taken apart with the 'remove platform' command, leaving the water that was there before.</description>
     <texturePath>Thing/DR_LightPlatform/Platform</texturePath>
     <renderPrecedence>240</renderPrecedence>
     <preventCraters>true</preventCraters>

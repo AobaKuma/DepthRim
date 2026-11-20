@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
-  <!-- 進水效果：受損牆或打開的門往艙室內側噴的水花（借用原版泡沫貼圖，染成淺青白）。 -->
+  <!-- 進水效果：受損牆或打開的門往艙室內側噴的水花（借用原版泡沫貼圖，染成淺青白）。
+       用 Transparent（不是 TransparentPostLight）：MoteOverhead 在 LightingOverlay 下面，原版的光照遮罩才會蓋上去，
+       暗處的水花跟著變暗、燈下的照亮（2026-11-21，PostLight 讓它在黑暗裡發光）。 -->
   <FleckDef ParentName="FleckBase_RandomGraphic_Thrown">
     <defName>DepthRim_LeakSpray</defName>
     <randomGraphics>
       <li>
         <graphicClass>Graphic_Fleck</graphicClass>
         <texPath>Things/Mote/FoamSpray/Foam_A</texPath>
-        <shaderType>TransparentPostLight</shaderType>
+        <shaderType>Transparent</shaderType>
         <color>(0.70, 0.88, 1.0, 0.85)</color>
         <renderInstanced>true</renderInstanced>
       </li>
       <li>
         <graphicClass>Graphic_Fleck</graphicClass>
         <texPath>Things/Mote/FoamSpray/Foam_B</texPath>
-        <shaderType>TransparentPostLight</shaderType>
+        <shaderType>Transparent</shaderType>
         <color>(0.70, 0.88, 1.0, 0.85)</color>
         <renderInstanced>true</renderInstanced>
       </li>

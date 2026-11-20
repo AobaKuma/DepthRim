@@ -262,6 +262,17 @@ namespace DepthRim
             return t == null || t.dontRender;
         }
 
+        /// <summary>原版地圖上的水域地形（海水、淡水、沼澤水都算；不是另一塊平台）。</summary>
+        public static bool IsVanillaWater(IntVec3 c, Map map)
+        {
+            if (!c.InBounds(map) || PropsAt(c, map) != null)
+            {
+                return false;
+            }
+            TerrainDef t = map.terrainGrid.TerrainAt(c);
+            return t != null && t.IsWater;
+        }
+
         public override void Regenerate()
         {
             ClearSubMeshes(MeshParts.All);
@@ -344,8 +355,21 @@ namespace DepthRim
         private void DrawSide(HullPlatformPropsExtension props, IntVec3 c, Map map, float altitude)
         {
             IntVec3 below = c + IntVec3.South;
-            float cells = HullPlatformProps.SideHeight(IsOpen(below, map), IsOpen(below + IntVec3.South, map), SeaSurface.IsSeaSurfaceMap(map), props.seaSurfaceFreeboard,
-                RestsOnSeabed(c, below, map));
+            bool firstOpen = IsOpen(below, map);
+            bool onSea = SeaSurface.IsSeaSurfaceMap(map);
+            bool onSeabed;
+            if (SeaLevels.IsVanillaSurface(map))
+            {
+                // 原版海岸地圖：南邊是原版水域就和海面一樣浮著、只露出乾舷；貼著陸地（岸、碼頭）就不畫
+                firstOpen = IsVanillaWater(below, map);
+                onSea = true;
+                onSeabed = false;
+            }
+            else
+            {
+                onSeabed = RestsOnSeabed(c, below, map);
+            }
+            float cells = HullPlatformProps.SideHeight(firstOpen, IsOpen(below + IntVec3.South, map), onSea, props.seaSurfaceFreeboard, onSeabed);
             if (cells <= 0f)
             {
                 return;

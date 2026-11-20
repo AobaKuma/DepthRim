@@ -46,6 +46,11 @@
           <def>StartingResearch</def>
           <project>DepthRim_UnderwaterSurvival</project>
         </li>
+        <!-- 船體平台、龍骨、艦橋在海岸造船底下：不給就不能擴建自己的船體（設計稿 §3.2） -->
+        <li Class="ScenPart_StartingResearch">
+          <def>StartingResearch</def>
+          <project>DepthRim_CoastalShipbuilding</project>
+        </li>
         <li Class="ScenPart_StartingResearch">
           <def>StartingResearch</def>
           <project>DepthRim_PressureEngineering</project>

@@ -44,6 +44,9 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Vanilla;        // @default = vec4(1.0, 0.12, 1.0, 1.0)           x = 原版深海配色的比重，y = 浪峰線強度，z = 漣漪密度，w = 漣漪強度
     vec4 _FoamPhase;      // @default = vec4(12.0, 5.7, 0.01, 0.006)       浪花擺動的相位場：x = 雜訊圖一個像素幾格，y = 相位最多差幾秒，zw = 雜訊圖平移（像素／秒）
     vec4 _Rough;          // @default = vec4(0.0, 0.0, 0.0, 0.0)           海況（惡劣海況天氣，2026-11-17）：x = 開放海面的白浪，y = 海色變暗偏灰綠，z = 支柱與船身的浪花範圍加大
+    vec4 _Voyage;         // @default = vec4(0.0, 1.0, 0.0, 0.0)           水面航行（2026-11-20，DepthRim.SeaWake）：xy = 航向（地圖單位向量，x 東 z 北），z = 航跡強度 0..1
+    vec4 _Wake;           // @default = vec4(0.0, 0.0, 0.0, 0.0)           航跡的船體外框：xy = 船艏中點（格），z = 沿航向的長度，w = 半寬
+    vec4 _Flow;           // @default = vec4(0.0, 0.0, 0.0, 0.0)           xy = 海水往船尾流過的累積位移（格；取樣座標加上它）
     vec4 _WaterCastVectSun;               // 全域（SkyManager）：.xz 太陽投影方向，.w 日光強度
     vec4 _WaterCastVectMoon;              // 全域（SkyManager）：.xz 月亮投影方向，.w 月光強度
     float _DayPercent;                    // 全域（SkyManager）
@@ -258,14 +261,17 @@ void main()
     // 這個像素看到的海面座標（海面在平台下方，畫面上往南偏）
     vec2 world = vUv + vec2(0.0, u._Height.x);
     float t = u._GameSeconds * u._WaveSpeed;
+    // 水面航行：海水往船尾流過（_Flow 是累積位移）。跟著海水的東西（色塊、漣漪、浪、浪花雜訊）用 seaWorld；
+    // 固定在地圖上的東西（遮罩、船體、支柱）用 world
+    vec2 seaWorld = world + u._Flow.xy;
 
     // 底色：大尺度的深淺斑塊，慢慢漂移
-    float patches = fbm(world * 0.035 + vec2(t * 0.003, -t * 0.002));
+    float patches = fbm(seaWorld * 0.035 + vec2(t * 0.003, -t * 0.002));
     vec3 col = mix(u._DeepColor.rgb, u._Color.rgb, smoothstep(0.25, 0.75, patches));
 
     // 海水的擺動：花紋跟著位移來回擺（左右為主、上下為輔），另外加一點很慢的漂移，浪峰才不會在同一處來回
     vec2 sway = swayOffset(t);
-    vec2 waterUv = world - sway - vec2(t * 0.06, 0.0);
+    vec2 waterUv = seaWorld - sway - vec2(t * 0.06, 0.0);
 
     // 浪：浪峰是上下拉長的不規則線條（和左右的擺動方向垂直），再用低頻雜訊扭曲
     vec2 wind = normalize(vec2(1.0, 0.18));
@@ -316,7 +322,7 @@ void main()
     // 浪花用這個地方自己的擺動相位（foamPhase）：同一時間各處的浪花往不同方向擺，不會整片一起左右晃
     float foamT = t + foamPhase(world, t);
     vec2 flow = swayVelocity(foamT);
-    vec2 foamUv = world - swayOffset(foamT) - vec2(t * 0.06, 0.0);
+    vec2 foamUv = seaWorld - swayOffset(foamT) - vec2(t * 0.06, 0.0);
     float flowSpeed = length(flow);
     vec2 downstream = flowSpeed > 0.001 ? flow / flowSpeed : vec2(1.0, 0.0);
     float flowShare = clamp(flowSpeed / max(u._Sway.x * 0.9, 0.001), 0.0, 1.0);
@@ -336,14 +342,62 @@ void main()
     if (u._Rough.x > 0.0)
     {
         // 生滅用梯度雜訊、兩層各轉不同角度：值雜訊在這裡切門檻會切出約 9 格長的筆直邊（方形的白浪區）
-        float life = gradientNoise(OCTAVE_ROT * world * 0.11 + vec2(t * 0.17, -t * 0.11)) * 0.6
-                   + gradientNoise(transpose(OCTAVE_ROT) * world * 0.37 - vec2(t * 0.29, t * 0.21)) * 0.4;
+        float life = gradientNoise(OCTAVE_ROT * seaWorld * 0.11 + vec2(t * 0.17, -t * 0.11)) * 0.6
+                   + gradientNoise(transpose(OCTAVE_ROT) * seaWorld * 0.37 - vec2(t * 0.29, t * 0.21)) * 0.4;
         float caps = smoothstep(0.30, 0.65, crest + 0.25 * fbm(foamUv * 0.6)) * smoothstep(0.62 - 0.22 * u._Rough.x, 0.80 - 0.15 * u._Rough.x, life);
         caps *= smoothstep(0.42, 0.68, foamNoise);
         // 被風吹開的細碎水沫：沿風向拉長的淡淡條紋
         float streak = ridge(vec2(dot(foamUv, wind) * 0.35, dot(foamUv, side) * 3.2) + vec2(t * 0.08, 0.0));
         float spray = pow(streak, 8.0) * smoothstep(0.45, 0.75, life) * 0.35;
         col = mix(col, u._FoamColor.rgb * (1.0 - 0.45 * hullShade), clamp((caps * 0.9 + spray) * u._Rough.x, 0.0, 0.9));
+    }
+
+    // ── 航跡（水面航行，DepthRim.SeaWake）──────────────────────────────────────────
+    // 座標以船艏為原點：a = 在船艏後方幾格（>0 是後面），l = 側向偏移；船體外框長 L、半寬 W（都在水線上，所以用 hullWorld）。
+    // 白沫雜訊在跟著海水流的 foamUv 上取樣：白沫留在水裡往後流，形狀固定在船後。
+    float wakeSpeed = u._Voyage.z;
+    if (wakeSpeed > 0.001 && u._Wake.z > 0.0)
+    {
+        vec2 hd = u._Voyage.xy;
+        vec2 sd = vec2(hd.y, -hd.x);
+        vec2 rel = hullWorld - u._Wake.xy;
+        float a = -dot(rel, hd);
+        float l = dot(rel, sd);
+        float al = abs(l);
+        float L = u._Wake.z;
+        float W = u._Wake.w;
+        float stern = a - L;
+        float wakeNoise = fbm(foamUv * 2.2 + vec2(t * 0.11, -t * 0.07));
+
+        // 開爾文波：兩道從船艏張開約 19.5°（tan = 0.354）的 V 形浪；浪頂一條細白線，外側一點點暗的浪谷，
+        // 沿著浪有斜向的羽狀紋，越往後越淡、越寬
+        float behind = max(a, 0.0);
+        float armL = W * 0.85 + behind * 0.354;
+        float armW = 0.35 + behind * 0.025;
+        float armD = (al - armL) / armW;
+        float armFade = smoothstep(0.0, 1.5, a) * exp(-behind / (18.0 + 30.0 * wakeSpeed));
+        float feather = 0.55 + 0.45 * sin(a * 1.6 - al * 0.9 - t * 1.2);
+        float armCrest = exp(-armD * armD) * armFade * feather;
+        float armTrough = exp(-(armD - 1.6) * (armD - 1.6)) * armFade * 0.5;
+        col *= 1.0 - 0.18 * armTrough * wakeSpeed;
+        float armFoam = smoothstep(0.42, 0.72, wakeNoise + armCrest * 0.35) * armCrest;
+
+        // 船尾的翻攪水：船寬的一條帶子，往後慢慢變寬、變淡；水色翻得淺一點、偏青
+        // （2026-11-20 截圖：原本整條白得太滿、邊緣太硬、拖得太長——白沫門檻提高、邊緣用雜訊打散、衰減加快）
+        float behindStern = max(stern, 0.0);
+        float edgeNoise = fbm(foamUv * 0.7 + vec2(-t * 0.05, t * 0.04));
+        float washW = (W * 0.7 + behindStern * 0.06) * (0.8 + 0.4 * edgeNoise);
+        float washFade = smoothstep(-0.6, 0.8, stern) * exp(-behindStern / (7.0 + 12.0 * wakeSpeed));
+        float wash = smoothstep(washW, washW * 0.15, al) * washFade;
+        col = mix(col, col * 1.08 + vec3(0.02, 0.05, 0.05), clamp(wash * 0.45, 0.0, 1.0) * wakeSpeed);
+        float washFoam = smoothstep(0.55, 0.80, wakeNoise + wash * 0.12) * wash;
+
+        // 船艏浪：船艏前方約一格、兩側到船身前段的一圈白沫
+        float bowZone = smoothstep(-1.4, -0.2, a) * (1.0 - smoothstep(0.6, 3.0, a)) * (1.0 - smoothstep(W + 0.2, W + 1.4, al));
+        float bowFoam = smoothstep(0.40, 0.65, wakeNoise + 0.25 * bowZone) * bowZone;
+
+        float wakeFoam = clamp(washFoam * 0.7 + armFoam * 0.7 + bowFoam * 0.8, 0.0, 1.0) * wakeSpeed;
+        col = mix(col, u._FoamColor.rgb * (1.0 - 0.45 * hullShade), clamp(wakeFoam * u._FoamAmount, 0.0, 0.8));
     }
 
     // 船身四周的水線白沫：只在船身外緣一圈（船身底下被甲板蓋住，不用管）

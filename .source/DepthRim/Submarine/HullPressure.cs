@@ -8,8 +8,8 @@ namespace DepthRim
     /// 潛艇船殼的耐壓等級：所有「一面朝外海」的艙壁（牆、門、標了耐壓等級的建築）中最弱的那一個。
     /// 沒有 <see cref="LeakResistanceExtension"/> 的一般牆與門只算淺海。完全沒有朝外的艙壁（開放甲板）時不限制。
     ///
-    /// <para>這是下潛指令的門檻（<see cref="WorldObject_Submarine.CanDiveTo"/>）；
-    /// 艙壁被水壓慢慢壓壞的機制在設計稿 §5.1，還沒有實作。</para>
+    /// <para>不是門檻（M6，設計稿 §2.2）：比它深時航行選單先跳確認（<see cref="HullWarning"/>），在那裡時顯示超載；
+    /// 艙壁實際被壓壞由 <see cref="MapComponent_WallPressure"/> 處理。</para>
     /// </summary>
     public static class HullPressure
     {

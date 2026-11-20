@@ -5,7 +5,9 @@
     潛艇建築（DMSE 轉移飛行換皮）：龍骨樁界定船體、艦橋控制航行與下潛、電動推進器靠船上的電池供能。
     貼圖暫時從 DMSE 複製改名（Textures/Thing/DR_Keel、DR_Helm、DR_Thruster）。
     - 龍骨樁的 allowedTerrains 只有船體平台：船體 = 樁覆蓋範圍內的船體平台格（與上面的東西），海床不會被帶走；
-      樁本身也只能蓋在船體平台上，而船體平台只能鋪在深淵上，所以潛艇只能在深淵上建造。
+      樁本身也只能蓋在船體平台上；船體平台鋪在水上（深淵、開放海面、海床、原版海水），所以船與潛艇只能在水上建造。
+      spaceMapOnly = false：海岸造船（M1）在原版海岸地圖上也要能蓋龍骨，限制交給 allowedTerrains。
+    - 龍骨與艦橋在「海岸造船」（一般研究）底下；水下推進器仍在「潛航器建造」。
     - 推進器沒有尾焰區（exclusionAreaSize 0），不會燒人，只冒氣泡；燃料由 DepthRim.BatteryFuelSource 以船上電池的儲電充當。
   -->
 
@@ -39,7 +41,7 @@
   <ThingDef ParentName="DepthRim_KeelBase">
     <defName>DepthRim_Keel</defName>
     <researchPrerequisites>
-      <li>DepthRim_SubmarineConstruction</li>
+      <li>DepthRim_CoastalShipbuilding</li>
     </researchPrerequisites>
     <label>keel frame</label>
     <description>A massive pressure frame that ties a section of hull platform into one rigid body. Keel frames joined by steel girders form a submarine: everything on the hull platform within their reach leaves with it. Small keel frames can be built within its link range.\n\nCan only be built on a hull platform.</description>
@@ -62,7 +64,8 @@
         <coverageRadius>11</coverageRadius>
         <linkRange>23</linkRange>
         <circularRange>true</circularRange>
-        <spaceMapOnly>true</spaceMapOnly>
+        <!-- 不限轉移圖層：allowedTerrains 只有船體平台，船體平台只能鋪在水上（海岸造船 M1：原版海岸地圖也能造船） -->
+        <spaceMapOnly>false</spaceMapOnly>
         <allowedTerrains>
           <li>DepthRim_HullPlatform</li>
         </allowedTerrains>
@@ -82,7 +85,7 @@
   <ThingDef ParentName="DepthRim_KeelBase">
     <defName>DepthRim_KeelSmall</defName>
     <researchPrerequisites>
-      <li>DepthRim_SubmarineConstruction</li>
+      <li>DepthRim_CoastalShipbuilding</li>
     </researchPrerequisites>
     <label>small keel frame</label>
     <description>A lighter pressure frame for a smaller section of hull platform. It has no link range of its own: it must be built within the link range of a keel frame and can only be joined to one.\n\nCan only be built on a hull platform.</description>
@@ -104,7 +107,8 @@
       <li Class="DMSE.CompProperties_StructuralPile">
         <coverageRadius>7</coverageRadius>
         <linkRange>0</linkRange>
-        <spaceMapOnly>true</spaceMapOnly>
+        <!-- 不限轉移圖層：allowedTerrains 只有船體平台，船體平台只能鋪在水上（海岸造船 M1：原版海岸地圖也能造船） -->
+        <spaceMapOnly>false</spaceMapOnly>
         <allowedTerrains>
           <li>DepthRim_HullPlatform</li>
         </allowedTerrains>
@@ -125,7 +129,7 @@
   <ThingDef ParentName="BuildingBase">
     <defName>DepthRim_Helm</defName>
     <researchPrerequisites>
-      <li>DepthRim_SubmarineConstruction</li>
+      <li>DepthRim_CoastalShipbuilding</li>
     </researchPrerequisites>
     <label>submarine helm</label>
     <description>Navigation and dive controls for the submarine it stands on. Plan a voyage, check battery charge and readiness, set the cruising depth, and give the order to cast off.</description>

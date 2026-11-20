@@ -189,6 +189,20 @@
       <isEdifice>true</isEdifice>
       <ai_chillDestination>false</ai_chillDestination>
     </building>
+    <!-- 跨層電力（M5.5，CompCrossLayerPower）：支柱腳把水面層電網的剩餘電力送上平台層（單向，最多 2000 W、線損 5%）。
+         兩端都是原版 CompPowerTrader（耗電 0，輸出由橋接每 15 ticks 改）；腳接水面層的電線、頂接平台層的電線。 -->
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>0</basePowerConsumption>
+        <shortCircuitInRain>false</shortCircuitInRain>
+        <showPowerNeededIfOff>false</showPowerNeededIfOff>
+      </li>
+      <li Class="DepthRim.CompProperties_CrossLayerPower">
+        <capacity>2000</capacity>
+        <lineLoss>0.05</lineLoss>
+      </li>
+    </comps>
     <portal>
       <pocketMapGenerator>DepthRim_PlatformLevel</pocketMapGenerator>
       <exitDef>DepthRim_PlatformPillarTop</exitDef>
@@ -233,6 +247,20 @@
     <statBases>
       <Flammability>0</Flammability>
     </statBases>
+    <!-- 跨層電力（M5.5，CompCrossLayerPower）：支柱頂是收端，發電量 = 支柱腳送上來的電（單向，最多 2000 W、線損 5%）。
+         兩端都是原版 CompPowerTrader（耗電 0，輸出由橋接每 15 ticks 改）；腳接水面層的電線、頂接平台層的電線。 -->
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>0</basePowerConsumption>
+        <shortCircuitInRain>false</shortCircuitInRain>
+        <showPowerNeededIfOff>false</showPowerNeededIfOff>
+      </li>
+      <li Class="DepthRim.CompProperties_CrossLayerPower">
+        <capacity>2000</capacity>
+        <lineLoss>0.05</lineLoss>
+      </li>
+    </comps>
     <building>
       <isEdifice>true</isEdifice>
       <deconstructible>false</deconstructible>

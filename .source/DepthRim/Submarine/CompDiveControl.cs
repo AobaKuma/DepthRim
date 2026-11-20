@@ -49,6 +49,12 @@ namespace DepthRim
             {
                 yield break;
             }
+            if (CoastalLaunch.IsShipyardMap(parent.Map))
+            {
+                // 原版海岸地圖上的船：只有下水（航行要先到海上，M2）
+                yield return CoastalLaunch.LaunchGizmo(parent);
+                yield break;
+            }
             yield return SubmarineNavigation.NavigateGizmo(parent);
             WorldObject_Submarine sub = Submarine;
             if (sub != null)

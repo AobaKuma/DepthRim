@@ -38,6 +38,7 @@ namespace DepthRim
         /// <summary>這張地圖是不是航行中的潛艇（船體還在自己的地圖上，還沒下錨）。</summary>
         public static bool IsVoyageMap(Map map)
         {
+            // 水面航行的船（M2）不用這個：海面照畫，另外畫航跡（SeaWake）
             return map?.Parent is WorldObject_Submarine;
         }
 

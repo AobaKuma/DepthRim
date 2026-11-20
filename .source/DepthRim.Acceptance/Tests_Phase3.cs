@@ -232,6 +232,31 @@ namespace DepthRim.Acceptance
             ctx.Note($"compartment level after leaking {level:P1}; an ordinary wall at the same damage would add {wallLeak:0.00} cells per update");
             foreach (Wait w in ctx.ScreenshotOn(map, doorCell, 8f, "watertight_door_leak", 30)) { yield return w; }
             yield return new WaitFrames(20);
+
+            // 水花受地圖光照影響（2026-11-21，Transparent 而不是 TransparentPostLight）：同一處進水，旁邊沒燈與有燈各截一張
+            IntVec3 sprayCell = doorCell + IntVec3.North;
+            // 艙室灌滿就不再進水、不噴水花：每張截圖前先抽乾，讓水一直往裡灌
+            SetRoomLevel(map, room, 0f);
+            yield return Updates(1);
+            ctx.Note($"leak spray, no lamp: ground glow {map.glowGrid.GroundGlowAt(sprayCell, false, false):0.00}, sky {map.skyManager.CurSkyGlow:0.00}, inflow {flooding.InflowCells.Contains(doorCell)}");
+            yield return new WaitTicks(MapComponent_Flooding.LeakEffectInterval * 2);
+            foreach (Wait w in ctx.ScreenshotOn(map, doorCell, 6f, "leak_spray_dark", 10)) { yield return w; }
+            IntVec3 lampCell = sprayCell + new IntVec3(2, 0, 1);
+            Thing sprayLamp = DepthRimFixture.Spawn(ThingDefOf.StandingLamp, lampCell, map);
+            Thing sprayConduit = DepthRimFixture.Spawn(ThingDefOf.PowerConduit, lampCell + IntVec3.East, map);
+            yield return new WaitUntil(() => sprayLamp.TryGetComp<CompPowerTrader>()?.PowerOn == true, 300);
+            yield return new WaitFrames(10);
+            float litGlow = map.glowGrid.GroundGlowAt(sprayCell, false, false);
+            ctx.Note($"leak spray, lamp on: ground glow {litGlow:0.00}");
+            ctx.Check(sprayLamp.TryGetComp<CompPowerTrader>()?.PowerOn == true, "the lamp beside the leak is on");
+            SetRoomLevel(map, room, 0f);
+            yield return Updates(1);
+            ctx.Check(flooding.InflowCells.Contains(doorCell), "water is still coming in for the lit screenshot");
+            yield return new WaitTicks(MapComponent_Flooding.LeakEffectInterval * 2);
+            foreach (Wait w in ctx.ScreenshotOn(map, doorCell, 6f, "leak_spray_lamp", 10)) { yield return w; }
+            yield return new WaitFrames(20);
+            sprayLamp.Destroy();
+            sprayConduit.Destroy();
         }
     }
 }

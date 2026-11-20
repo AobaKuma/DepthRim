@@ -15,7 +15,7 @@
   <DR_RockFloor.description>海底裸露的年輕玄武岩，冷卻時裂成一塊一塊，上面幾乎還沒有沉積物。</DR_RockFloor.description>
 
   <DepthRim_HullPlatform.label>船體平台</DepthRim_HullPlatform.label>
-  <DepthRim_HullPlatform.description>鋪在開放水域或海床上、可承受水壓的格狀甲板：水下的深淵、海床本身（坐在海床上），或是海面上（在海面上會浮在水線）。它是潛艇的基礎結構：水密隔牆、艙門與各種機械都能蓋在上面。\n\n可以用「拆除平台」指令拆掉，露出底下的水。</DepthRim_HullPlatform.description>
+  <DepthRim_HullPlatform.description>鋪在開放水域或海床上的鋼製格狀甲板：岸邊的海水、開放海面（會浮在水線），水下的深淵，或海床本身（坐在海床上）。它是所有船與潛艇的基礎結構：龍骨框架、牆、艙門與各種機械都能蓋在上面。甲板本身不需要耐壓，耐壓的是牆。\n\n可以用「拆除平台」指令拆掉，露出原本的水。</DepthRim_HullPlatform.description>
 
 
   <DepthRim_OpenSea.label>開放海面</DepthRim_OpenSea.label>

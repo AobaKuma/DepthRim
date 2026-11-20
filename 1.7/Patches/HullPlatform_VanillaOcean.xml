@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!--
+    海岸造船 M0（Docs/海岸船舶與潛水鐘_機制設計.md §9.1）：船體平台可以鋪在原版海水上。
+    船體平台要的是 DepthRim_HullBase 承載力，不是白名單；只給原版深／淺海水加這一條。
+    河川與淡水（WaterDeep、WaterShallow、流動水）不開。
+    WaterOceanDeep 自己沒有 affordances 節點（繼承 WaterDeepBase，也沒有），所以沒有就補一個節點；
+    XML 繼承會把子節點的清單接在父節點後面，不會蓋掉淺水原本的 ShallowWater／Bridgeable／Walkable。
+  -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/TerrainDef[defName="WaterOceanDeep"]/affordances</xpath>
+    <match Class="PatchOperationAdd">
+      <xpath>Defs/TerrainDef[defName="WaterOceanDeep"]/affordances</xpath>
+      <value>
+        <li>DepthRim_HullBase</li>
+      </value>
+    </match>
+    <nomatch Class="PatchOperationAdd">
+      <xpath>Defs/TerrainDef[defName="WaterOceanDeep"]</xpath>
+      <value>
+        <affordances>
+          <li>DepthRim_HullBase</li>
+        </affordances>
+      </value>
+    </nomatch>
+  </Operation>
+
+  <!--
+    原版深水 changeable = false（WaterDeepBase），GenConstruct.CanBuildOnTerrain 會擋掉任何地形藍圖。
+    changeable 只被 CanBuildOnTerrain 與 GenStep_MechanoidRelay 讀；其他地板仍然需要深海水沒有的承載力
+    （Light／Heavy／Bridgeable），所以打開它只會讓船體平台鋪得上去。
+  -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/TerrainDef[defName="WaterOceanDeep"]/changeable</xpath>
+    <match Class="PatchOperationReplace">
+      <xpath>Defs/TerrainDef[defName="WaterOceanDeep"]/changeable</xpath>
+      <value>
+        <changeable>true</changeable>
+      </value>
+    </match>
+    <nomatch Class="PatchOperationAdd">
+      <xpath>Defs/TerrainDef[defName="WaterOceanDeep"]</xpath>
+      <value>
+        <changeable>true</changeable>
+      </value>
+    </nomatch>
+  </Operation>
+
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/TerrainDef[defName="WaterOceanShallow"]/affordances</xpath>
+    <match Class="PatchOperationAdd">
+      <xpath>Defs/TerrainDef[defName="WaterOceanShallow"]/affordances</xpath>
+      <value>
+        <li>DepthRim_HullBase</li>
+      </value>
+    </match>
+    <nomatch Class="PatchOperationAdd">
+      <xpath>Defs/TerrainDef[defName="WaterOceanShallow"]</xpath>
+      <value>
+        <affordances>
+          <li>DepthRim_HullBase</li>
+        </affordances>
+      </value>
+    </nomatch>
+  </Operation>
+
+</Patch>

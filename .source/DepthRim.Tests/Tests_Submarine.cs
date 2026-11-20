@@ -13,11 +13,12 @@ static partial class Test
         Check(DiveMath.Effective(DepthTier.Deep, DepthTier.Seabed) == DepthTier.Deep, "cruising above a deeper seafloor stays at the cruising depth");
         Check(DiveMath.Effective(DepthTier.Deep, DepthTier.Shallow) == DepthTier.Shallow, "over a shallow shelf the submarine is pushed up to the shallows");
 
-        Check(DiveMath.CanSet(DepthTier.Deep, DepthTier.Shallow, DepthTier.Deep, DepthTier.Shallow) == DiveMath.DiveBlock.None, "surfacing is always allowed, even with a weak hull");
-        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Shallow, DepthTier.Deep, DepthTier.Seabed) == DiveMath.DiveBlock.AlreadyThere, "the current target is not offered again");
-        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Deep, DepthTier.Thermocline, DepthTier.Seabed) == DiveMath.DiveBlock.BelowSeafloor, "cannot dive below the seafloor");
-        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Deep, DepthTier.Seabed, DepthTier.Thermocline) == DiveMath.DiveBlock.HullTooWeak, "cannot dive deeper than the hull rating");
-        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Seabed, DepthTier.Seabed, DepthTier.Seabed) == DiveMath.DiveBlock.None, "a seabed-rated hull reaches the seabed");
+        // M6：耐壓不再是門檻（§2.2 改成警告），壓載才是（§2.1）
+        Check(DiveMath.CanSet(DepthTier.Deep, DepthTier.Shallow, DepthTier.Deep, 0) == DiveMath.DiveBlock.None, "rising is always allowed, even with no ballast");
+        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Shallow, DepthTier.Deep, 1) == DiveMath.DiveBlock.AlreadyThere, "the current target is not offered again");
+        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Deep, DepthTier.Thermocline, 1) == DiveMath.DiveBlock.BelowSeafloor, "cannot dive below the seafloor");
+        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Thermocline, DepthTier.Seabed, 0) == DiveMath.DiveBlock.NoBallast, "cannot go deeper without ballast");
+        Check(DiveMath.CanSet(DepthTier.Shallow, DepthTier.Seabed, DepthTier.Seabed, 1) == DiveMath.DiveBlock.None, "with ballast any hull may go down to the seabed (the hull rating only warns)");
 
         Check(DiveMath.Step(DepthTier.Shallow, DepthTier.Deep) == DepthTier.Thermocline, "diving goes one tier at a time");
         Check(DiveMath.Step(DepthTier.Seabed, DepthTier.Shallow) == DepthTier.Deep, "surfacing goes one tier at a time");
@@ -119,7 +120,8 @@ static partial class Test
             XElement d = Def("ThingDef", keel);
             XElement comp = d.Element("comps").Elements("li").Single(e => (string)e.Attribute("Class") == "DMSE.CompProperties_StructuralPile");
             Check(comp.Element("allowedTerrains").Elements("li").Select(e => e.Value).SequenceEqual(new[] { "DepthRim_HullPlatform" }), $"{keel}: only hull platform counts as hull (the seabed stays behind)");
-            Check((string)comp.Element("spaceMapOnly") == "true", $"{keel}: only on maps that allow transfers");
+            // 海岸造船 M1：原版海岸地圖上也能蓋（限制交給 allowedTerrains = 船體平台）
+            Check((string)comp.Element("spaceMapOnly") != "true", $"{keel}: not limited to transfer layers (coastal shipbuilding)");
             Check(TextureExists((string)d.Element("graphicData").Element("texPath")), $"{keel} texture exists");
         }
         XElement keelBase = all.Single(e => (string)e.Attribute("Name") == "DepthRim_KeelBase");
@@ -154,11 +156,14 @@ static partial class Test
             { "DepthRim_WatertightDoor", "DepthRim_UnderwaterSurvival" },
             { "DepthRim_PressureHatch", "DepthRim_AbyssalNavigation" },
             { "DepthRim_PressureHullWall", "DepthRim_PressureEngineering" },
-            { "DepthRim_HullPlatform", "DepthRim_PressureEngineering" },
-            { "DepthRim_Keel", "DepthRim_SubmarineConstruction" },
-            { "DepthRim_KeelSmall", "DepthRim_SubmarineConstruction" },
-            { "DepthRim_Helm", "DepthRim_SubmarineConstruction" },
+            { "DepthRim_HullPlatform", "DepthRim_CoastalShipbuilding" },
+            { "DepthRim_Keel", "DepthRim_CoastalShipbuilding" },
+            { "DepthRim_KeelSmall", "DepthRim_CoastalShipbuilding" },
+            { "DepthRim_Helm", "DepthRim_CoastalShipbuilding" },
+            { "DepthRim_SurfaceThruster", "DepthRim_CoastalShipbuilding" },
+            { "DepthRim_Gangway", "DepthRim_CoastalShipbuilding" },
             { "DepthRim_Thruster", "DepthRim_SubmarineConstruction" },
+            { "DepthRim_BallastTank", "DepthRim_SubmarineConstruction" },
             { "DepthRim_AdvancedThruster", "DepthRim_AbyssalNavigation" },
         };
         foreach (var kv in gates)
@@ -166,6 +171,26 @@ static partial class Test
             XElement d = all.Single(e => (e.Name.LocalName == "ThingDef" || e.Name.LocalName == "TerrainDef") && (string)e.Element("defName") == kv.Key);
             Check(d.Element("researchPrerequisites")?.Elements("li").Any(e => e.Value == kv.Value) == true, $"{kv.Key} is unlocked by {kv.Value}");
         }
+
+        // 海岸造船（M1）：一般研究、跟在水下生存後面；潛航器建造也要它；潛艇開局有給
+        XElement coastal = Def("ResearchProjectDef", "DepthRim_CoastalShipbuilding");
+        Check((string)coastal.Element("tab") == "DepthRim_ResearchTab" && coastal.Element("knowledgeCategory") == null && (string)coastal.Element("baseCost") == "600",
+            "coastal shipbuilding is ordinary research (600) in the underwater tab");
+        Check(coastal.Element("prerequisites").Elements("li").Any(e => e.Value == "DepthRim_UnderwaterSurvival"), "coastal shipbuilding follows underwater survival");
+        Check(Def("ResearchProjectDef", "DepthRim_SubmarineConstruction").Element("prerequisites").Elements("li").Any(e => e.Value == "DepthRim_CoastalShipbuilding"),
+            "submarine construction needs coastal shipbuilding (keels and helm moved there)");
+        string scenario = File.ReadAllText(Path.Combine(ModRoot, "1.7", "Defs", "Submarine", "Submarine_Scenario.xml"));
+        Check(scenario.Contains("<project>DepthRim_CoastalShipbuilding</project>"), "the submarine start grants coastal shipbuilding");
+
+        // 水面推進器：有推力資料，沒有 DMSE 引擎（不算進水下航行）
+        XElement surfaceThruster = Def("ThingDef", "DepthRim_SurfaceThruster");
+        var stComps = surfaceThruster.Element("comps").Elements("li").Select(e => (string)e.Attribute("Class")).ToList();
+        Check(stComps.Contains("DepthRim.CompProperties_SurfaceThruster") && !stComps.Contains("DMSE.CompProperties_TransferEngine"),
+            "the surface thruster has surface thrust and no DMSE transfer engine");
+        Check(stComps.Contains("CompProperties_Power") && stComps.Contains("DepthRim.CompProperties_ThrusterDraw"), "the surface thruster needs power and idles at standby");
+        Check(TextureExists((string)surfaceThruster.Element("graphicData").Element("texPath")), "surface thruster texture exists");
+        Check(File.ReadAllText(Path.Combine(ModRoot, "1.7", "Languages", "ChineseTraditional (繁體中文)", "DefInjected", "ResearchProjectDef", "DepthRim_Research.xml")).Contains("<DepthRim_CoastalShipbuilding.label>"),
+            "coastal shipbuilding is translated");
         Check((string)Def("ThingDef", "DepthRim_DivingSuit").Element("recipeMaker").Element("researchPrerequisite") == "DepthRim_UnderwaterSurvival", "the diving suit recipe needs underwater survival");
         Check(Def("ResearchProjectDef", "DepthRim_UnderwaterSurvival").Element("prerequisites").Elements("li").Any(e => e.Value == "Electricity"), "underwater survival needs electricity");
 

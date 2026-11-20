@@ -13,7 +13,7 @@ namespace DepthRim
     ///
     /// <para><b>深度</b>：<see cref="cruiseTier"/> 是玩家選的巡航深度，每小時往 <see cref="targetTier"/> 走一層；
     /// 實際所在的層級（<see cref="CurrentDepthTier"/>，水壓、水體外觀、中層水域都看它）不會比腳下的海床更深
-    /// （<see cref="DiveMath.Effective"/>）。往下潛不能超過海床與船殼耐壓（<see cref="HullPressure"/>）。</para>
+    /// （<see cref="DiveMath.Effective"/>）。往下潛不能超過海床、要有壓載（<see cref="Ballast"/>）；船殼耐壓只警告（<see cref="HullWarning"/>）。</para>
     /// </summary>
     public class WorldObject_Submarine : WorldObject_TransferShip, IDepthTierProvider
     {
@@ -71,14 +71,38 @@ namespace DepthRim
 
         public DiveMath.DiveBlock CanDiveTo(DepthTier target)
         {
-            return DiveMath.CanSet(targetTier, target, Seafloor, HullRating(out _));
+            return DiveMath.CanSet(targetTier, target, Seafloor, BallastTanks(out _));
         }
 
-        /// <summary>設定巡航深度（已檢查過）；一小時後開始換第一層。</summary>
+        /// <summary>船上的壓載水艙座數與船體格數（§2.4）。</summary>
+        public int BallastTanks(out int hullCells)
+        {
+            hullCells = 0;
+            return HasMap ? Ballast.TanksFor(Map, out hullCells) : 0;
+        }
+
+        /// <summary>換一層要幾 tick：壓載不夠撐整艘船時變慢（§2.4）。</summary>
+        public int TicksPerTier
+        {
+            get
+            {
+                int tanks = BallastTanks(out int cells);
+                return BallastMath.TicksPerTier(cells, tanks);
+            }
+        }
+
+        /// <summary>所在層級比船殼能耐深（§2.2；艙壁由 <see cref="MapComponent_WallPressure"/> 慢慢壓壞）。</summary>
+        public bool HullOverloaded => HasMap && !InFlight && CurrentDepthTier > HullRating(out _);
+
+        /// <summary>「到了淺海就上浮」（§2.2b）：在較深處按上浮時記下，途中改深度或開始航行就取消。</summary>
+        public bool surfaceWhenShallow;
+
+        /// <summary>設定巡航深度（已檢查過）；一層的時間後開始換第一層。取消「到了就上浮」。</summary>
         public void SetTargetTier(DepthTier target)
         {
             targetTier = target;
-            nextDiveTick = target == cruiseTier ? -1 : Find.TickManager.TicksGame + DiveMath.TicksPerTier;
+            surfaceWhenShallow = false;
+            nextDiveTick = target == cruiseTier ? -1 : Find.TickManager.TicksGame + TicksPerTier;
         }
 
         // ── 航行推進（和 DMSE 不同：推進器要一直運作才會前進）────────────────
@@ -209,16 +233,25 @@ namespace DepthRim
             if (nextDiveTick >= 0 && Find.TickManager.TicksGame >= nextDiveTick)
             {
                 cruiseTier = DiveMath.Step(cruiseTier, targetTier);
-                nextDiveTick = cruiseTier == targetTier ? -1 : Find.TickManager.TicksGame + DiveMath.TicksPerTier;
+                nextDiveTick = cruiseTier == targetTier ? -1 : Find.TickManager.TicksGame + TicksPerTier;
                 if (cruiseTier == targetTier)
                 {
                     Messages.Message("DepthRim.Sub.DepthReached".Translate(Label, cruiseTier.Label()), this, MessageTypeDefOf.NeutralEvent, historical: false);
+                    if (surfaceWhenShallow && cruiseTier == DepthTier.Shallow && !InFlight)
+                    {
+                        surfaceWhenShallow = false;
+                        LongEventHandler.ExecuteWhenFinished(() => SubmarineSurfacing.SurfaceWhenArrived(this));
+                    }
                     if (!InFlight && landingTarget.Valid && HasMap)
                     {
                         // 停靠地點：到了那裡的深度才選停船位置（航行指令的停靠、或抵達時深度還沒到）
                         LongEventHandler.ExecuteWhenFinished(() => TransferLandingUtility.BeginLanding(this));
                     }
                 }
+            }
+            if (InFlight)
+            {
+                surfaceWhenShallow = false;
             }
             NotifyIfTierChanged();
             TickIceBreach();
@@ -255,7 +288,7 @@ namespace DepthRim
             if (dive != null && dive.TakeVoyageDepth(out DepthTier start, out DepthTier end))
             {
                 cruiseTier = targetTier = start;
-                if (end != start && DiveMath.CanSet(start, end, end, HullRating(out _)) == DiveMath.DiveBlock.None)
+                if (end != start && DiveMath.CanSet(start, end, end, BallastTanks(out _)) == DiveMath.DiveBlock.None)
                 {
                     SetTargetTier(end);
                 }
@@ -436,6 +469,19 @@ namespace DepthRim
             {
                 depth = thrust + "\n" + depth;
             }
+            if (surfaceWhenShallow)
+            {
+                depth += "\n" + "DepthRim.Surface.InspectPending".Translate();
+            }
+            if (HasMap)
+            {
+                int tanks = BallastTanks(out int cells);
+                depth += "\n" + Ballast.Describe(tanks, cells);
+                if (HullOverloaded)
+                {
+                    depth += "\n" + "DepthRim.HullWarn.Inspect".Translate(HullRating(out _).Label()).ToString();
+                }
+            }
             if (iceBreachAtTick >= 0)
             {
                 depth += "\n" + "DepthRim.IceBreach.InspectHovering".Translate((iceBreachAtTick - Find.TickManager.TicksGame).ToStringTicksToPeriod());
@@ -457,6 +503,7 @@ namespace DepthRim
             Scribe_Values.Look(ref iceBreachAtTick, "iceBreachAtTick", -1);
             Scribe_Values.Look(ref nextIceBreachTick, "nextIceBreachTick", -1);
             Scribe_Values.Look(ref crackedUntilTick, "crackedUntilTick", -1);
+            Scribe_Values.Look(ref surfaceWhenShallow, "surfaceWhenShallow");
         }
     }
 }

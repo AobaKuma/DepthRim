@@ -424,6 +424,36 @@ namespace DepthRim
         }
 
         /// <summary>從 <paramref name="from"/> 這張地圖搬來的格子帶著艙壓（潛艇出航、下錨）。</summary>
+        /// <summary>同一張地圖上把格子的艙壓搬到新位置（靠岸時船體原地旋轉，M3）：先全部讀出、來源歸零，再寫到對應的格子。</summary>
+        public void RemapCells(IDictionary<IntVec3, IntVec3> mapping)
+        {
+            if (air == null)
+            {
+                return;
+            }
+            Dictionary<IntVec3, byte> taken = new Dictionary<IntVec3, byte>();
+            foreach (KeyValuePair<IntVec3, IntVec3> kv in mapping)
+            {
+                if (!kv.Key.InBounds(map))
+                {
+                    continue;
+                }
+                int src = map.cellIndices.CellToIndex(kv.Key);
+                if (air[src] != 0)
+                {
+                    taken[kv.Value] = air[src];
+                    WriteCell(src, 0);
+                }
+            }
+            foreach (KeyValuePair<IntVec3, byte> kv in taken)
+            {
+                if (kv.Key.InBounds(map))
+                {
+                    WriteCell(map.cellIndices.CellToIndex(kv.Key), kv.Value);
+                }
+            }
+        }
+
         public void CopyFrom(MapComponent_PressureChambers from, IEnumerable<IntVec3> cells, IntVec3 offset)
         {
             if (from?.air == null)

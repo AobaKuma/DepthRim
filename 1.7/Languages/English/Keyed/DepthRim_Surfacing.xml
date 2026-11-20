@@ -3,7 +3,7 @@
 
   <!-- Surfacing (open sea) -->
   <DepthRim.Surface.Label>Surface</DepthRim.Surface.Label>
-  <DepthRim.Surface.Desc>Blow the ballast and rise to the open sea above. The hull floats on the sea surface map of this tile; dive again from the helm.\n\nThe submarine must be stopped at shallow depth, under open water without ice.</DepthRim.Surface.Desc>
+  <DepthRim.Surface.Desc>Blow the ballast and rise to the open sea above. The hull floats on the sea surface map of this tile; dive again from the helm.\n\nThe submarine must be stopped, under open water without ice. From deeper down it first rises to the shallows (an hour per tier, longer with too little ballast) and surfaces when it gets there.</DepthRim.Surface.Desc>
   <DepthRim.Surface.NoHull>The submarine has no hull.</DepthRim.Surface.NoHull>
   <DepthRim.Surface.InFlight>The submarine is under way. Stop first.</DepthRim.Surface.InFlight>
   <DepthRim.Surface.NotShallow>Rise to {0} depth first.</DepthRim.Surface.NotShallow>
@@ -71,5 +71,127 @@
   <DepthRim.IceKind.FirstYear>first-year sea ice</DepthRim.IceKind.FirstYear>
   <DepthRim.IceKind.MultiYear>multi-year sea ice</DepthRim.IceKind.MultiYear>
   <DepthRim.IceKind.Shelf>ice shelf</DepthRim.IceKind.Shelf>
+
+  <!-- Coastal shipbuilding (M1): launching a ship built in the bay -->
+  <DepthRim.Ballast.None>There are no ballast tanks on this hull: it cannot dive.</DepthRim.Ballast.None>
+  <DepthRim.Ballast.InspectNone>Ballast: none (can only rise, slowly).</DepthRim.Ballast.InspectNone>
+  <DepthRim.Ballast.Inspect>Ballast: {0} tanks, lifting {1} of {2} hull cells.</DepthRim.Ballast.Inspect>
+  <DepthRim.Ballast.InspectShort>Not enough: depth changes take {0}x as long.</DepthRim.Ballast.InspectShort>
+  <DepthRim.Dive.DeckOccupied>Get everyone off the open deck first: {0}.</DepthRim.Dive.DeckOccupied>
+  <DepthRim.HullWarn.Title>Hull not rated for this depth</DepthRim.HullWarn.Title>
+  <DepthRim.HullWarn.Text>Target depth: {0}
+Hull rating: {1} (weakest piece: {2})
+Over by {3} tier(s).
+
+The outward walls will be crushed bit by bit: the weakest loses about {4} HP a day. Once they break, the sea comes in.
+
+Dive anyway?</DepthRim.HullWarn.Text>
+  <DepthRim.HullWarn.AlertLabel>Hull overloaded</DepthRim.HullWarn.AlertLabel>
+  <DepthRim.HullWarn.AlertDesc>These submarines are deeper than their hull is rated for. Their outward walls are being crushed; rise or rebuild them with stronger walls.</DepthRim.HullWarn.AlertDesc>
+  <DepthRim.HullWarn.Inspect>Hull overloaded: rated for {0}.</DepthRim.HullWarn.Inspect>
+  <DepthRim.Surface.InspectPending>Rising to surface.</DepthRim.Surface.InspectPending>
+  <DepthRim.Surface.Ascending>{0} is rising from the {1} and will surface once it reaches the shallows.</DepthRim.Surface.Ascending>
+  <DepthRim.Surface.AscendBlocked>{0} reached the shallows but cannot surface: {1}</DepthRim.Surface.AscendBlocked>
+  <DepthRim.Launch.Label>Launch</DepthRim.Launch.Label>
+  <DepthRim.Launch.Desc>Take the ship out of the bay onto the open sea next to the colony. The whole hull held by the keel frames goes, with everyone and everything on it; the bay returns to open water.\n\nTo come back, sail to the sea next to the colony and use Dock on the helm.</DepthRim.Launch.Desc>
+  <DepthRim.Launch.NotInPort>The ship is not in a coastal colony.</DepthRim.Launch.NotInPort>
+  <DepthRim.Launch.NoPower>The helm has no power.</DepthRim.Launch.NoPower>
+  <DepthRim.Launch.GangwayOut>Retract the gangway first.</DepthRim.Launch.GangwayOut>
+  <DepthRim.Launch.NoSea>There is no open sea next to the colony to sail out to (land, or sea ice).</DepthRim.Launch.NoSea>
+  <DepthRim.Launch.Launching>Launching</DepthRim.Launch.Launching>
+  <DepthRim.Launch.LetterLabel>Ship launched</DepthRim.Launch.LetterLabel>
+  <DepthRim.Launch.LetterText>The ship has left the bay and is now floating at {0}.</DepthRim.Launch.LetterText>
+
+  <!-- Surface voyage (M2) -->
+  <DepthRim.Sail.Option>Sail to...</DepthRim.Sail.Option>
+  <DepthRim.Sail.DefaultName>Ship {0}</DepthRim.Sail.DefaultName>
+  <DepthRim.Sail.Stop>Stop here</DepthRim.Sail.Stop>
+  <DepthRim.Sail.StopDesc>Stop the ship where it is now. If there is already a sea site here, the ship moors at it.</DepthRim.Sail.StopDesc>
+  <DepthRim.Sail.StopFirst>Stop the ship first.</DepthRim.Sail.StopFirst>
+  <DepthRim.Sail.NotAtSea>The ship is not floating on the open sea.</DepthRim.Sail.NotAtSea>
+  <DepthRim.Sail.AlreadyUnderWay>The ship is already under way.</DepthRim.Sail.AlreadyUnderWay>
+  <DepthRim.Sail.ShipsLinked>Two ships' keels are joined: separate them before sailing.</DepthRim.Sail.ShipsLinked>
+  <DepthRim.Sail.NoThruster>No working surface thruster aboard.</DepthRim.Sail.NoThruster>
+  <DepthRim.Sail.NoCharge>The batteries aboard cannot run the thrusters for a single tile.</DepthRim.Sail.NoCharge>
+  <DepthRim.Sail.NotSurface>Pick a tile on the surface.</DepthRim.Sail.NotSurface>
+  <DepthRim.Sail.Here>The ship is already here.</DepthRim.Sail.Here>
+  <DepthRim.Sail.NotOpenSea>Not open sea (land or sea ice).</DepthRim.Sail.NotOpenSea>
+  <DepthRim.Sail.OutOfRange>Too far: {0} tiles, the batteries last {1}.</DepthRim.Sail.OutOfRange>
+  <DepthRim.Sail.Eta>{0} tiles, about {1}</DepthRim.Sail.Eta>
+  <DepthRim.Sail.RetractingGangway>Retracting the gangway; the ship sails once it is in.</DepthRim.Sail.RetractingGangway>
+  <DepthRim.Sail.GangwayStuck>The gangway could not be retracted: the ship stays.</DepthRim.Sail.GangwayStuck>
+  <DepthRim.Sail.Departing>Casting off</DepthRim.Sail.Departing>
+  <DepthRim.Sail.Departed>{0} is under way: {1} tiles to go.</DepthRim.Sail.Departed>
+  <DepthRim.Sail.BlockedAhead>{0}: the sea ahead has frozen over. The ship stops here.</DepthRim.Sail.BlockedAhead>
+  <DepthRim.Sail.Arrived>{0} has stopped.</DepthRim.Sail.Arrived>
+  <DepthRim.Sail.ArrivedNoRoom>{0} stopped next to {1}: there is no room to moor there.</DepthRim.Sail.ArrivedNoRoom>
+  <DepthRim.Sail.ArrivedAt>{0} has moored at {1}.</DepthRim.Sail.ArrivedAt>
+  <DepthRim.Sail.Mooring>Mooring</DepthRim.Sail.Mooring>
+  <DepthRim.Sail.InspectUnderWay>Under way: {0} tiles to go, thrust {1}</DepthRim.Sail.InspectUnderWay>
+  <DepthRim.Sail.InspectStalled>Drifting: no thrust ({0} tiles to go)</DepthRim.Sail.InspectStalled>
+
+  <!-- Diving bell and davit (M5) -->
+  <DepthRim.Bell.LowerLabel>Lower bell</DepthRim.Bell.LowerLabel>
+  <DepthRim.Bell.LowerDesc>Lower the diving bell straight down to the seabed below. Whoever and whatever is in the bell steps out at the bottom. The winch only turns while the davit has power.</DepthRim.Bell.LowerDesc>
+  <DepthRim.Bell.RaiseLabel>Raise bell</DepthRim.Bell.RaiseLabel>
+  <DepthRim.Bell.RaiseDesc>Haul the bell back up to the davit. Only those who have climbed into the bell come up; anyone still out on the seabed stays there.</DepthRim.Bell.RaiseDesc>
+  <DepthRim.Bell.AbandonLabel>Abandon bell</DepthRim.Bell.AbandonLabel>
+  <DepthRim.Bell.AbandonDesc>Cut the bell loose. While it is still being lowered, this just stops and lets everyone out. Once it is on the seabed, the bell and anyone down there are left behind with no air supply.</DepthRim.Bell.AbandonDesc>
+  <DepthRim.Bell.AbandonConfirm>Abandon the diving bell? If it is on the seabed, the bell and anyone down there are left behind with no air supply and no way back up.</DepthRim.Bell.AbandonConfirm>
+  <DepthRim.Bell.BoardOption>Climb into {0}</DepthRim.Bell.BoardOption>
+  <DepthRim.Bell.Full>full: {0} people at most</DepthRim.Bell.Full>
+  <DepthRim.Bell.Unload>Unload bell</DepthRim.Bell.Unload>
+  <DepthRim.Bell.UnloadDesc>Let everyone and everything out of the bell here.</DepthRim.Bell.UnloadDesc>
+  <DepthRim.Bell.Aboard>Aboard: {0}/{1}</DepthRim.Bell.Aboard>
+  <DepthRim.Bell.AirSupplied>Air: supplied by the davit</DepthRim.Bell.AirSupplied>
+  <DepthRim.Bell.AirReserve>Air: no supply, reserve lasts about {0}</DepthRim.Bell.AirReserve>
+  <DepthRim.Bell.Lost>Cut loose: no davit is holding this bell.</DepthRim.Bell.Lost>
+  <DepthRim.Bell.UnderWay>The ship is under way.</DepthRim.Bell.UnderWay>
+  <DepthRim.Bell.InPort>No sea below: a harbour sits on land. Take the ship out to sea to lower the bell.</DepthRim.Bell.InPort>
+  <DepthRim.Bell.NotAtSea>The davit is not on a ship at sea or a submarine.</DepthRim.Bell.NotAtSea>
+  <DepthRim.Bell.NoSeaBelow>There is no sea below here.</DepthRim.Bell.NoSeaBelow>
+  <DepthRim.Bell.NoSeabed>The sea below is {0}: there is no seabed for the bell to rest on.</DepthRim.Bell.NoSeabed>
+  <DepthRim.Bell.Busy>The bell is not stowed.</DepthRim.Bell.Busy>
+  <DepthRim.Bell.NoBell>No diving bell within {0} cells of the davit.</DepthRim.Bell.NoBell>
+  <DepthRim.Bell.NoPower>The davit has no power.</DepthRim.Bell.NoPower>
+  <DepthRim.Bell.NotDeployed>The bell is not on the seabed.</DepthRim.Bell.NotDeployed>
+  <DepthRim.Bell.Lowering>Lowering the bell: about {0} with power.</DepthRim.Bell.Lowering>
+  <DepthRim.Bell.Raising>Raising the bell: about {0} with power.</DepthRim.Bell.Raising>
+  <DepthRim.Bell.PeopleLeftBelow>{0} colonists are still out on the seabed and will stay there.</DepthRim.Bell.PeopleLeftBelow>
+  <DepthRim.Bell.Destroyed>The diving bell has been destroyed.</DepthRim.Bell.Destroyed>
+  <DepthRim.Bell.NoLandingSpot>There is nowhere on the seabed below for the bell to settle.</DepthRim.Bell.NoLandingSpot>
+  <DepthRim.Bell.Landed>The diving bell has reached the seabed.</DepthRim.Bell.Landed>
+  <DepthRim.Bell.NoStowRoom>No room beside the davit to set the bell down: clear the deck.</DepthRim.Bell.NoStowRoom>
+  <DepthRim.Bell.Stowed>The diving bell is back on deck.</DepthRim.Bell.Stowed>
+  <DepthRim.Bell.LostLabel>Diving bell lost</DepthRim.Bell.LostLabel>
+  <DepthRim.Bell.LostText>The diving bell has been cut loose on the seabed. Nobody above is feeding it air any more, and it cannot be raised. Another ship or submarine above the same spot can lower its own bell or anchor to reach anyone down there.</DepthRim.Bell.LostText>
+  <DepthRim.Bell.StateStowed>Bell: stowed</DepthRim.Bell.StateStowed>
+  <DepthRim.Bell.StateNoBell>Bell: none within reach</DepthRim.Bell.StateNoBell>
+  <DepthRim.Bell.StateLowering>Bell: lowering ({0})</DepthRim.Bell.StateLowering>
+  <DepthRim.Bell.StateRaising>Bell: raising ({0})</DepthRim.Bell.StateRaising>
+  <DepthRim.Bell.StateDeployed>Bell: on the seabed</DepthRim.Bell.StateDeployed>
+  <DepthRim.Bell.Paused>(paused: no power)</DepthRim.Bell.Paused>
+  <DepthRim.Bell.DavitPlacement>Must be built on a ship's deck or a moon pool.</DepthRim.Bell.DavitPlacement>
+  <DepthRim.Bell.NotStowed>The diving bell is not back on deck.</DepthRim.Bell.NotStowed>
+
+  <!-- Docking (M3) -->
+  <DepthRim.Dock.Option>Dock at {0}...</DepthRim.Dock.Option>
+  <DepthRim.Dock.OptionNoColony>Dock...</DepthRim.Dock.OptionNoColony>
+  <DepthRim.Dock.NoColony>None of your coastal colonies is next to this tile.</DepthRim.Dock.NoColony>
+  <DepthRim.Dock.Label>Choose berth</DepthRim.Dock.Label>
+  <DepthRim.Dock.Desc>Choose where the ship berths in the colony's waters and which way it faces. The ship comes in from the open sea on its own.</DepthRim.Dock.Desc>
+  <DepthRim.Dock.RotateHint>{0} / {1}: turn the ship</DepthRim.Dock.RotateHint>
+  <DepthRim.Dock.OutOfBounds>Outside the map.</DepthRim.Dock.OutOfBounds>
+  <DepthRim.Dock.NotWater>Not open water the hull can float on.</DepthRim.Dock.NotWater>
+  <DepthRim.Dock.CannotTurn>{0} ({1}x{2}) cannot be turned a quarter turn.</DepthRim.Dock.CannotTurn>
+  <DepthRim.Dock.NoTurningRoom>No room near the berth to turn the ship.</DepthRim.Dock.NoTurningRoom>
+  <DepthRim.Dock.NoRoute>No water route wide enough for the ship from the open sea.</DepthRim.Dock.NoRoute>
+  <DepthRim.Dock.GangwayWontReach>No gangway will reach the shore from here: nobody can walk on or off.</DepthRim.Dock.GangwayWontReach>
+  <DepthRim.Dock.CannotRotate>The ship could not be turned to that heading.</DepthRim.Dock.CannotRotate>
+  <DepthRim.Dock.Docking>Docking</DepthRim.Dock.Docking>
+  <DepthRim.Dock.LetterLabel>Ship docked</DepthRim.Dock.LetterLabel>
+  <DepthRim.Dock.LetterText>{0} has berthed at {1}.</DepthRim.Dock.LetterText>
+  <DepthRim.Dock.NoGangwayAshore>No gangway reaches the shore: build one on the deck facing land to walk on and off.</DepthRim.Dock.NoGangwayAshore>
+  <DepthRim.Dock.ArrivedOffColony>{0} is off {1}. Use Dock on the helm to choose a berth.</DepthRim.Dock.ArrivedOffColony>
 
 </LanguageData>

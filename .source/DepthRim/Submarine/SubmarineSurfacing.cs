@@ -50,12 +50,21 @@ namespace DepthRim
         //  條件
         // ==================================================================
 
-        /// <summary>上浮共同的深度條件：停著、巡航深度與目標都是淺海、沒有在懸停破冰。</summary>
-        public static string DepthBlock(WorldObject_Submarine sub)
+        /// <summary>
+        /// 上浮共同的深度條件：停著、沒有在懸停破冰、潛水鐘收好；<paramref name="requireShallow"/> 時巡航深度與目標還要都是淺海
+        /// （破冰上浮與量測冰層要；一般上浮不要，會先爬到淺海再上浮，§2.2b）。
+        /// </summary>
+        public static string DepthBlock(WorldObject_Submarine sub, bool requireShallow = true)
         {
             if (!sub.HasMap)
             {
                 return "DepthRim.Surface.NoHull".Translate();
+            }
+            // 潛水鐘沒收回不能上浮（§7.7）
+            string bellLock = DiveBellLock.Reason(sub.Map);
+            if (bellLock != null)
+            {
+                return bellLock;
             }
             if (sub.InFlight)
             {
@@ -65,7 +74,7 @@ namespace DepthRim
             {
                 return "DepthRim.IceBreach.Hovering".Translate();
             }
-            if (sub.cruiseTier != DepthTier.Shallow || sub.targetTier != DepthTier.Shallow)
+            if (requireShallow && (sub.cruiseTier != DepthTier.Shallow || sub.targetTier != DepthTier.Shallow))
             {
                 return "DepthRim.Surface.NotShallow".Translate(DepthTier.Shallow.Label());
             }
@@ -86,11 +95,14 @@ namespace DepthRim
             return null;
         }
 
-        /// <summary>常規上浮不能做的原因（可以時 null）。</summary>
-        public static string SurfaceBlockReason(WorldObject_Submarine sub, out IceConditions.Info ice)
+        /// <summary>
+        /// 常規上浮不能做的原因（可以時 null）。<paramref name="fromDepth"/>：從較深處按上浮（先爬到淺海），
+        /// 深度不檢查，上方的條件照查（§2.2b）。
+        /// </summary>
+        public static string SurfaceBlockReason(WorldObject_Submarine sub, out IceConditions.Info ice, bool fromDepth = false)
         {
             ice = default;
-            string block = DepthBlock(sub);
+            string block = DepthBlock(sub, requireShallow: !fromDepth);
             if (block != null)
             {
                 return block;
@@ -107,7 +119,7 @@ namespace DepthRim
                 return "DepthRim.Surface.Iced".Translate(ice.thickness.ToString("0.0"));
             }
             MapParent parent = Find.WorldObjects.MapParentAt(above);
-            if (parent != null && !(parent is WorldObject_SeaSurfaceSite))
+            if (parent != null && (!(parent is WorldObject_SeaSurfaceSite) || parent is WorldObject_SurfaceShip { underWay: true }))
             {
                 return "DepthRim.Surface.Occupied".Translate(parent.LabelCap);
             }
@@ -167,6 +179,47 @@ namespace DepthRim
         // ==================================================================
         //  常規上浮
         // ==================================================================
+
+        /// <summary>
+        /// 航行選單的「上浮」（§2.2b）：已經停在淺海就直接上浮；在較深處就把巡航深度設成淺海、記下到了就上浮。
+        /// </summary>
+        public static void SurfaceOrAscend(WorldObject_Submarine sub)
+        {
+            string reason = SurfaceBlockReason(sub, out _, fromDepth: true);
+            if (reason != null)
+            {
+                Messages.Message(reason, sub, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+            if (sub.cruiseTier == DepthTier.Shallow && sub.targetTier == DepthTier.Shallow)
+            {
+                Surface(sub);
+                return;
+            }
+            sub.landingTarget = PlanetTile.Invalid;
+            if (sub.targetTier != DepthTier.Shallow || sub.nextDiveTick < 0)
+            {
+                sub.SetTargetTier(DepthTier.Shallow);
+            }
+            sub.surfaceWhenShallow = true;
+            Messages.Message("DepthRim.Surface.Ascending".Translate(sub.Label, sub.CurrentDepthTier.Label()), sub, MessageTypeDefOf.NeutralEvent, historical: false);
+        }
+
+        /// <summary>爬到淺海之後（<see cref="WorldObject_Submarine.surfaceWhenShallow"/>）：再檢查一次上方，可以就上浮，不行就停在淺海並說明。</summary>
+        public static void SurfaceWhenArrived(WorldObject_Submarine sub)
+        {
+            if (sub.Destroyed || !sub.HasMap)
+            {
+                return;
+            }
+            string reason = SurfaceBlockReason(sub, out _);
+            if (reason != null)
+            {
+                Messages.Message("DepthRim.Surface.AscendBlocked".Translate(sub.Label, reason), sub, MessageTypeDefOf.NegativeEvent);
+                return;
+            }
+            Surface(sub);
+        }
 
         public static void Surface(WorldObject_Submarine sub)
         {
@@ -549,12 +602,33 @@ namespace DepthRim
             {
                 return "DepthRim.Surface.NotSurfaced".Translate();
             }
+            if (map.Parent is WorldObject_SurfaceShip ship && ship.underWay)
+            {
+                return "DepthRim.Sail.StopFirst".Translate();
+            }
             net = MapComponent_PileNetwork.For(map)?.NetworkContaining(helm);
             if (net == null)
             {
                 return "DepthRim.Surface.NotOnHull".Translate();
             }
             net.RecalculateFootprint();
+            HashSet<IntVec3> footprint = new HashSet<IntVec3>(net.Footprint);
+            // 壓載水艙是下潛唯一的硬門檻（§2.1）；沒有的船永遠停在浮航
+            if (Ballast.TanksIn(map, footprint) <= 0)
+            {
+                return "DepthRim.Ballast.None".Translate();
+            }
+            // 甲板上不能有人（§2.2c）
+            string deck = DeckClearing.Block(map, footprint);
+            if (deck != null)
+            {
+                return deck;
+            }
+            string bellLock = DiveBellLock.Reason(map, net.Footprint);
+            if (bellLock != null)
+            {
+                return bellLock;
+            }
             below = FindDiveTile(map.Tile);
             if (!below.Valid)
             {

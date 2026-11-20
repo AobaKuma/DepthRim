@@ -109,6 +109,7 @@ namespace DepthRim.Acceptance
             ctx.Check(Find.CurrentMap == sea, "the view follows the hull");
             Building helm = sea.listerBuildings.allBuildingsColonist.FirstOrDefault(b => b.def.defName == "DepthRim_Helm");
             ctx.Require(helm != null, "the helm is on the surface map");
+            // 壓載（M6）取代了潛航器建造的暫時門檻：預製潛艇有兩座壓載水艙，不必研究也能下潛
             ctx.Check(helm.GetGizmos().OfType<Command_Action>().Any(g => g.icon == SubmarineNavigation.NavigateIcon && !g.Disabled), "the helm shows an enabled Navigate command");
             ctx.Check(SubmarineNavigation.SurfacedOptions(helm).Any(o => o.Label == "DepthRim.Nav.DiveTo".Translate(DepthTier.Shallow.Label()) && !o.Disabled), "navigating from the surface offers diving to the shallows");
             foreach (Wait w in ctx.ScreenshotOn(sea, CellRect.FromCellList(hull).CenterCell, 26f, "surfaced_open_sea")) { yield return w; }
@@ -459,6 +460,8 @@ namespace DepthRim.Acceptance
 
             // ── 重新結冰與被凍住 ──
             Building helm = iceMap.listerBuildings.allBuildingsColonist.First(b => b.def.defName == "DepthRim_Helm");
+            // 壓載（M6）之前，下潛暫時要潛航器建造
+            System.Action restoreResearch = DepthRimFixture.GrantResearch(DepthRimDefOf.DepthRim_SubmarineConstruction);
             ctx.Check(SubmarineSurfacing.DiveBlockReason(helm, out _, out _) == null, "right after surfacing the submarine can dive");
             sheet.Advance(IceBreachMath.FreezingDegreeDays(-20f, 0.5f));
             ctx.Check(ring.All(c => c.GetTerrain(iceMap) == DepthRimDefOf.DepthRim_NewIce), "half a day of frost: new ice around the hull");
@@ -479,6 +482,7 @@ namespace DepthRim.Acceptance
             SubmarineSurfacing.Dive(helm);
             WorldObject_Submarine dived = null;
             yield return new WaitUntil(() => (dived = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_Submarine>().FirstOrDefault(s => !subsBefore.Contains(s) && s.HasMap)) != null, 600);
+            restoreResearch();
             ctx.Require(dived != null, "dived back under the ice");
             ctx.Check(dived.cruiseTier == DepthTier.Shallow && TransferLandingUtility.HullCells(dived.Map).Count == hullCount, "a whole submarine resting in the shallows");
             if (!site.Destroyed && site.HasMap)

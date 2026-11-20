@@ -46,6 +46,9 @@ namespace DepthRim
         /// <summary>海面地圖（水面層）的鏡頭隨海浪微微上下擺動。</summary>
         public bool seaCameraSway = true;
 
+        /// <summary>簡化進出港：靠岸與下水不播演出，直接搬（海岸船舶 M4，設計稿 §6.4）。</summary>
+        public bool simplifiedHarbor = false;
+
         private static DepthRimModSettings current;
 
         /// <summary>目前載入的設定；沒有載入（單元測試、極早期）時回傳一份預設值。</summary>
@@ -85,6 +88,7 @@ namespace DepthRim
             Scribe_Values.Look(ref diverBreathing, "diverBreathing", true);
             Scribe_Values.Look(ref hullCreakFrequency, "hullCreakFrequency", 1f);
             Scribe_Values.Look(ref seaCameraSway, "seaCameraSway", true);
+            Scribe_Values.Look(ref simplifiedHarbor, "simplifiedHarbor", false);
         }
 
         public void DoWindowContents(Rect inRect)
@@ -120,6 +124,8 @@ namespace DepthRim
             list.Gap(6f);
             list.CheckboxLabeled("DepthRim.Settings.SeaCameraSway".Translate(), ref seaCameraSway,
                 "DepthRim.Settings.SeaCameraSwayTip".Translate());
+            list.CheckboxLabeled("DepthRim.Settings.SimplifiedHarbor".Translate(), ref simplifiedHarbor,
+                "DepthRim.Settings.SimplifiedHarborTip".Translate());
             list.GapLine();
             list.Label("DepthRim.Settings.AudioHeader".Translate());
             list.Label("DepthRim.Settings.Muffle".Translate(muffleStrength.ToStringPercent()));

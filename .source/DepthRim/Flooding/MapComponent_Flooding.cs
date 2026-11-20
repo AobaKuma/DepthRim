@@ -114,6 +114,31 @@ namespace DepthRim
             }
         }
 
+        /// <summary>
+        /// 同一張地圖上把格子的水位搬到新位置（靠岸時船體原地旋轉，M3）：先全部讀出、來源歸零，再寫到對應的格子。
+        /// 沒有在保存水位的地圖（乾的海面地圖）什麼都不做。
+        /// </summary>
+        public void RemapLevels(IDictionary<IntVec3, IntVec3> mapping)
+        {
+            if (levels == null)
+            {
+                return;
+            }
+            Dictionary<IntVec3, byte> taken = new Dictionary<IntVec3, byte>();
+            foreach (KeyValuePair<IntVec3, IntVec3> kv in mapping)
+            {
+                if (kv.Key.InBounds(map))
+                {
+                    taken[kv.Value] = levels[map.cellIndices.CellToIndex(kv.Key)];
+                    levels[map.cellIndices.CellToIndex(kv.Key)] = 0;
+                }
+            }
+            foreach (KeyValuePair<IntVec3, byte> kv in taken)
+            {
+                SetLevelByte(kv.Key, kv.Value);
+            }
+        }
+
         /// <summary>非水下地圖開始保存積水：整張先是乾的。</summary>
         public void StartHoldingWater()
         {

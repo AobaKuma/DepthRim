@@ -10,14 +10,14 @@
 
       z10  W W W W W W W W W W W W W W W W W
       z 9  W T T T L W h . . . P W H H H L W    T 推進器（朝西，3×2）  H 艦橋（3×2，互動格在下方）
-      z 8  W T T T . W . . . . . W H H H . W     B 電池（1×2）          K 龍骨框架（3×3）
-      z 7  W B . B . W . K K K . W . . . . W    P 排水泵               R 加壓機
+      z 8  W T T T . W . . . . A W H H H . W     B 電池（1×2）          K 龍骨框架（3×3）
+      z 7  W B . B . W . K K K A W . . . . W    P 排水泵               R 加壓機
       z 6  W B . B . W . K K K . W . . . b W     S 被動聲納（2×2）      b 床（1×2）
       z 5  W B c c c D c K K K c D c c c b W     D 水密門               c 電線（x 2..14，z 5）
       z 4  W B . . . W . . . . . W . . . . W     L 落地燈               h 暖氣
       z 3  W . . . P W . W D W . W b . S S W     W 抗壓水密牆
-      z 2  W T T T . W . W P W . W b . S S W
-      z 1  W T T T . W L W . W R W . P . . W     中艙下方 (8,1)～(8,2) 是氣閘：內門 (8,3)、外門 (8,0)
+      z 2  W T T T A W . W P W . W b . S S W     A 壓載水艙（1×2）
+      z 1  W T T T A W L W . W R W . P . . W     中艙下方 (8,1)～(8,2) 是氣閘：內門 (8,3)、外門 (8,0)
       z 0  W W W W W W W W D W W W W W W W W
            0 1 2 3 4 5 6 7 8 9 ...       16
 
@@ -131,6 +131,14 @@
         <def>DepthRim_Thruster</def>
         <pos>(2, 0, 8)</pos>
         <rot>West</rot>
+      </li>
+      <!-- 壓載水艙（M6）：兩座撐 400 格；整艘 17×11 = 187 格，一座就夠，第二座是備份 -->
+      <li Class="Fortified.Structures.FFF_Element_ThingScatter">
+        <def>DepthRim_BallastTank</def>
+        <posList>
+          <li>(4, 0, 1)</li>
+          <li>(10, 0, 7)</li>
+        </posList>
       </li>
       <li Class="Fortified.Structures.FFF_Element_ThingScatter">
         <def>Battery</def>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    海岸造船 M2（Docs/海岸船舶與潛水鐘_機制設計.md §4）：浮在水面上的船（DepthRim.WorldObject_SurfaceShip）。
+    - 是海面地點的子類別：地圖就是一張海面地圖（同一個地圖生成器），海面、天氣、乾舷、下潛、M1 的檢查都照用。
+    - 航行時沿地表海路（DepthRim.SurfaceRouting，避開陸地與有冰的格子）逐格移動；停下來就是一個普通的海面地點。
+    - 世界地圖圖示會跟著航向轉（ExpandingIconRotation）。圖示暫用潛艇的白色剪影、改成暖色（待補內容清單）。
+  -->
+  <WorldObjectDef>
+    <defName>DepthRim_SurfaceShip</defName>
+    <label>ship</label>
+    <description>A ship floating on the sea. It sails along open water, keeping clear of land and sea ice.</description>
+    <worldObjectClass>DepthRim.WorldObject_SurfaceShip</worldObjectClass>
+    <mapGenerator>DepthRim_SeaSurface</mapGenerator>
+    <canBePlayerHome>true</canBePlayerHome>
+    <useDynamicDrawer>true</useDynamicDrawer>
+    <texture>World/WorldObjects/Expanding/DepthRim_Submarine</texture>
+    <expandingIcon>true</expandingIcon>
+    <expandingIconTexture>World/WorldObjects/Expanding/DepthRim_Submarine</expandingIconTexture>
+    <expandingIconPriority>70</expandingIconPriority>
+    <expandingIconColor>(235,200,130,255)</expandingIconColor>
+    <neverMultiSelect>true</neverMultiSelect>
+    <inspectorTabs>
+      <li>WITab_Terrain</li>
+      <li>WITab_Planet</li>
+    </inspectorTabs>
+  </WorldObjectDef>
+
+</Defs>

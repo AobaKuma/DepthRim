@@ -308,5 +308,121 @@ namespace DepthRim.Acceptance
             }
             yield return Updates(1);
         }
+
+        /// <summary>
+        /// H6（海岸造船 M0）：原版地表殖民地上挖一塊原版海水（深海水，中間夾一格淺海水），鋪船體平台；
+        /// 檢查：原版深／淺海水帶 DepthRim_HullBase、河川深水不帶；平台記下原本的水；南邊是水就只畫乾舷、貼著陸地不畫；
+        /// DMSE 的拆除平台與船體分離（鋪太空）都還原成原本的水，不留太空；沒有記錄的格退回原版深海水。最後還原地形。
+        /// </summary>
+        public static IEnumerable<Wait> H6_HullOnVanillaOcean(TestContext ctx)
+        {
+            Map map = DepthRimFixture.Home;
+            yield return new WaitFrames(2);
+            TerrainDef platform = DefDatabase<TerrainDef>.GetNamed("DepthRim_HullPlatform");
+            TerrainDef deep = TerrainDefOf.WaterOceanDeep;
+            TerrainDef shallow = TerrainDefOf.WaterOceanShallow;
+            TerrainAffordanceDef hullBase = platform.terrainAffordanceNeeded;
+            float freeboard = platform.GetModExtension<HullPlatformPropsExtension>().seaSurfaceFreeboard;
+
+            ctx.Check(deep.affordances.Contains(hullBase) && shallow.affordances.Contains(hullBase), "vanilla deep and shallow ocean water carry the hull-base affordance");
+            ctx.Check(!TerrainDefOf.WaterDeep.affordances.Contains(hullBase) && !TerrainDefOf.WaterShallow.affordances.Contains(hullBase), "river and fresh water do not");
+            ctx.Check(shallow.affordances.Contains(TerrainAffordanceDefOf.Bridgeable), "shallow ocean water keeps its vanilla affordances");
+            ctx.Check(SeaLevels.IsVanillaSurface(map) && SeaLevels.ReplacesSpace(map), "the home map counts as a vanilla surface map");
+            ctx.Check(SeaLevels.VoidTerrain(map) == deep, $"its void terrain is vanilla deep ocean water ({SeaLevels.VoidTerrain(map)?.defName})");
+            if (DepthRimFixture.Ocean != null)
+            {
+                ctx.Check(!SeaLevels.IsVanillaSurface(DepthRimFixture.Ocean), "an ocean-layer map is not a vanilla surface map");
+            }
+
+            bool Free(IntVec3 c) => c.InBounds(map) && !c.Fogged(map) && c.GetThingList(map).Count == 0 && map.terrainGrid.UnderTerrainAt(c) == null
+                && map.terrainGrid.TerrainAt(c) is TerrainDef t && !t.IsWater && !MapComponent_SeabedMemory.IsPlatform(t);
+            CellRect area = CellRect.Empty;
+            foreach (IntVec3 c in map.AllCells)
+            {
+                CellRect r = new CellRect(c.x, c.z, 5, 3);
+                if (r.minZ >= 12 && r.minX >= 12 && r.maxX < map.Size.x - 12 && r.maxZ < map.Size.z - 12 && r.ExpandedBy(2).Cells.All(Free))
+                {
+                    area = r;
+                    break;
+                }
+            }
+            ctx.Require(area.Area > 0, "found a clear patch of land on the home map");
+            CellRect water = area.ExpandedBy(2);
+            Dictionary<IntVec3, TerrainDef> original = water.Cells.ToDictionary(c => c, c => map.terrainGrid.TerrainAt(c));
+            IntVec3 shoreBelow = new IntVec3(area.minX, 0, area.minZ - 1); // 西南角下面留一格陸地（貼岸）
+            IntVec3 shallowCell = new IntVec3(area.maxX, 0, area.maxZ);
+            foreach (IntVec3 c in water)
+            {
+                if (c != shoreBelow)
+                {
+                    map.terrainGrid.SetTerrain(c, c == shallowCell ? shallow : deep);
+                }
+            }
+            Dictionary<IntVec3, TerrainDef> wet = area.Cells.ToDictionary(c => c, c => map.terrainGrid.TerrainAt(c));
+            ctx.Note($"vanilla ocean platform area {area}");
+
+            // 河川深水的放置只看承載力（上面已檢查）：不在這裡把水格換成別種水，原版 WaterBodyTracker 處理不了水→水的切換
+            ctx.Check(deep.changeable, "vanilla deep ocean water is changeable, so terrain blueprints are not refused outright");
+            AcceptanceReport onDeep = GenConstruct.CanPlaceBlueprintAt(platform, area.CenterCell, Rot4.North, map);
+            ctx.Check(onDeep.Accepted, $"the platform can be laid on vanilla deep ocean water ({onDeep.Reason})");
+            ctx.Check(GenConstruct.CanPlaceBlueprintAt(platform, shallowCell, Rot4.North, map).Accepted, "and on vanilla shallow ocean water");
+
+            foreach (IntVec3 c in area)
+            {
+                map.terrainGrid.SetTerrain(c, platform);
+            }
+            yield return new WaitFrames(5);
+            MapComponent_SeabedMemory memory = map.GetComponent<MapComponent_SeabedMemory>();
+            ctx.Check(area.Cells.All(c => memory.TryGetUnder(c, out TerrainDef u) && u == wet[c]), "the covered water is remembered under every platform cell (deep and shallow)");
+            ctx.Check(area.Cells.All(c => c.Standable(map)), "every platform cell is walkable");
+
+            IntVec3 centerEdge = new IntVec3(area.CenterCell.x, 0, area.minZ);
+            IntVec3 shoreEdge = new IntVec3(area.minX, 0, area.minZ);
+            SectionLayer_HullPlatformProps layer = (SectionLayer_HullPlatformProps)map.mapDrawer.SectionAt(centerEdge).GetLayer(typeof(SectionLayer_HullPlatformProps));
+            layer.Regenerate();
+            if (map.mapDrawer.SectionAt(shoreEdge) != map.mapDrawer.SectionAt(centerEdge))
+            {
+                ((SectionLayer_HullPlatformProps)map.mapDrawer.SectionAt(shoreEdge).GetLayer(typeof(SectionLayer_HullPlatformProps))).Regenerate();
+            }
+            ctx.Check(layer.lastSides.Any(t => t.cell == centerEdge + IntVec3.South && Mathf.Abs(t.height - freeboard) < 0.01f),
+                $"over vanilla water only the freeboard ({freeboard} cell) of the side shows ({string.Join(", ", layer.lastSides.Select(t => $"{t.cell}:{t.height}"))})");
+            ctx.Check(!layer.lastSides.Any(t => t.cell == shoreBelow), "no side face is drawn onto the land the platform touches");
+            ctx.Check(!layer.lastSides.Any(t => t.height >= 1f), "no full-height side face hangs over vanilla water");
+            foreach (Wait w in ctx.ScreenshotOn(map, area.CenterCell, 6f, "hull_platform_on_vanilla_ocean", 40)) { yield return w; }
+            yield return new WaitFrames(30);
+
+            IntVec3 rim = new IntVec3(area.minX, 0, area.minZ + 1);
+            ctx.Check(PlatformRemovalUtility.CanRemoveAt(rim, map, out string reason), $"DMSE's remove-platform command accepts it ({reason})");
+            PlatformRemovalUtility.Remove(rim, map, doLeavings: true);
+            ctx.Check(map.terrainGrid.TerrainAt(rim) == wet[rim], $"removal brings the vanilla water back, not space ({map.terrainGrid.TerrainAt(rim)?.defName})");
+            ctx.Check(!memory.TryGetUnder(rim, out _), "the record is cleared once the water is back");
+
+            // DMSE 的船體分離在地表圖層上把船體範圍鋪成太空：每一格都要還原成原本的水
+            foreach (IntVec3 c in area.Cells.Where(c => MapComponent_SeabedMemory.IsPlatform(map.terrainGrid.TerrainAt(c))).ToList())
+            {
+                map.terrainGrid.SetTerrain(c, TerrainDefOf.Space);
+            }
+            ctx.Check(area.Cells.All(c => map.terrainGrid.TerrainAt(c) == wet[c]),
+                $"hull separation (space) restores the original water under every cell ({string.Join(", ", area.Cells.Where(c => map.terrainGrid.TerrainAt(c) != wet[c]).Select(c => $"{c}:{map.terrainGrid.TerrainAt(c)?.defName}"))})");
+            ctx.Check(map.terrainGrid.TerrainAt(shallowCell) == shallow, "the shallow cell comes back shallow");
+            ctx.Check(area.Cells.All(c => !memory.TryGetUnder(c, out _)), "all records are used up");
+
+            IntVec3 bare = area.CenterCell;
+            map.terrainGrid.SetTerrain(bare, platform);
+            memory.Forget(bare);
+            map.terrainGrid.SetTerrain(bare, TerrainDefOf.Space);
+            ctx.Check(map.terrainGrid.TerrainAt(bare) == deep, $"a platform cell without a record falls back to vanilla deep ocean water ({map.terrainGrid.TerrainAt(bare)?.defName})");
+            IntVec3 land = water.Cells.First(c => original[c] == map.terrainGrid.TerrainAt(c)); // 留著的那格陸地
+            map.terrainGrid.SetTerrain(land, TerrainDefOf.Space);
+            ctx.Check(map.terrainGrid.TerrainAt(land) == TerrainDefOf.Space, "space that did not come from a hull platform is left alone on a vanilla map");
+
+            foreach (Thing t in map.listerThings.ThingsOfDef(ThingDefOf.Steel).Where(t => t.Position.InHorDistOf(rim, 8f)).ToList()) { t.Destroy(); }
+            foreach (KeyValuePair<IntVec3, TerrainDef> kv in original)
+            {
+                map.terrainGrid.SetTerrain(kv.Key, kv.Value);
+            }
+            yield return new WaitFrames(2);
+            ctx.Check(water.Cells.All(c => map.terrainGrid.TerrainAt(c) == original[c]) && water.Cells.All(c => !memory.TryGetUnder(c, out _)), "terrain restored after the test");
+        }
     }
 }

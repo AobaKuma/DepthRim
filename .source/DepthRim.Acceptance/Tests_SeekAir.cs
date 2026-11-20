@@ -32,14 +32,15 @@ namespace DepthRim.Acceptance
         /// 一間 9×9 的乾燥艙室（內部 7×7），南牆中間一扇門；回傳門外一格（灌滿水的地方）。
         /// <paramref name="interior"/> 是艙室內部。
         /// </summary>
-        private static IntVec3 BuildDryRoomWithDoor(out CellRect interior)
+        private static IntVec3 BuildDryRoomWithDoor(out CellRect interior, ThingDef doorDef = null)
         {
             Map map = DepthRimFixture.Ocean;
             CellRect ring = DepthRimFixture.ClearOceanArea(9);
             List<Thing> walls = DepthRimFixture.BuildWallRing(ring);
             IntVec3 doorCell = new IntVec3(ring.CenterCell.x, 0, ring.minZ);
             walls.First(w => w.Position == doorCell).Destroy(DestroyMode.Vanish);
-            DepthRimFixture.Spawn(ThingDefOf.Door, doorCell, map, ThingDefOf.Steel);
+            doorDef ??= ThingDefOf.Door;
+            DepthRimFixture.Spawn(doorDef, doorCell, map, doorDef.MadeFromStuff ? ThingDefOf.Steel : null);
             interior = ring.ContractedBy(1);
             SetLevel(interior.Cells, 0f);
             IntVec3 outside = doorCell + IntVec3.South;
@@ -62,7 +63,10 @@ namespace DepthRim.Acceptance
         public static IEnumerable<Wait> P7_SeekAirWithoutGear(TestContext ctx)
         {
             DepthRimFixture.EnsureOcean();
-            IntVec3 outside = BuildDryRoomWithDoor(out CellRect interior);
+            // 水密門：泡在水裡的人進得來，乾了之後不會為了工作（清潔、搬運）自己再開門出去。
+            // 一般的門擋不住：殖民者乾了就會出去工作，門一開整間灌水，「嗆水不再加重」就看當時外面有沒有工作，結果隨機。
+            ThingDef watertight = ThingDef.Named("DepthRim_WatertightDoor");
+            IntVec3 outside = BuildDryRoomWithDoor(out CellRect interior, watertight);
             yield return Updates(1);
             ctx.Require(Level(outside) >= FloodingMath.SubmergedLevelStanding, $"water outside the door ({Level(outside):P0})");
             ctx.Require(Level(interior.CenterCell) < FloodingMath.SleepSafeLevel, $"room is dry ({Level(interior.CenterCell):P0})");

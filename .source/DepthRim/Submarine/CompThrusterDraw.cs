@@ -25,7 +25,13 @@ namespace DepthRim
 
         public CompProperties_ThrusterDraw Props => (CompProperties_ThrusterDraw)props;
 
-        public bool UnderWay => parent.MapHeld?.Parent is WorldObject_TransferShip ship && ship.InFlight;
+        /// <summary>
+        /// 這座推進器現在在出力：水下推進器看潛艇（DMSE 轉移飛行）在不在航行，水面推進器看水面船（M2）在不在航行。
+        /// 浮在水面上的船，水下推進器不出力；潛航中的潛艇，水面推進器也不出力。
+        /// </summary>
+        public bool UnderWay => parent.TryGetComp<CompSurfaceThruster>() != null
+            ? parent.MapHeld?.Parent is WorldObject_SurfaceShip surface && surface.underWay
+            : parent.MapHeld?.Parent is WorldObject_TransferShip ship && ship.InFlight;
 
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {

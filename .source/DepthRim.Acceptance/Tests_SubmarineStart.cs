@@ -171,7 +171,7 @@ namespace DepthRim.Acceptance
             ctx.Check(Count("MealSurvivalPack") >= 40, $"survival meals aboard ({Count("MealSurvivalPack")})");
             List<Thing> strays = map.listerThings.AllThings.Where(t => t.def.category == ThingCategory.Item && t.Faction == Faction.OfPlayer && !hull.Contains(t.PositionHeld)).ToList();
             ctx.Check(strays.Count == 0, $"no starting item fell outside the hull ({string.Join(", ", strays.Select(t => t.LabelShort))})");
-            foreach (string r in new[] { "DepthRim_UnderwaterSurvival", "DepthRim_PressureEngineering", "DepthRim_SubmarineConstruction" })
+            foreach (string r in new[] { "DepthRim_UnderwaterSurvival", "DepthRim_CoastalShipbuilding", "DepthRim_PressureEngineering", "DepthRim_SubmarineConstruction" })
             {
                 ctx.Check(DefDatabase<ResearchProjectDef>.GetNamed(r).IsFinished, $"{r} is researched");
             }

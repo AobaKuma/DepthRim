@@ -139,13 +139,30 @@ namespace DepthRim
         /// <summary>這一格能當空隙（要鋪臨時甲板的開放海面）：沒有建築（例如支柱腳）。</summary>
         public static bool IsGap(IntVec3 c, Map map)
         {
-            return c.InBounds(map) && SeaSurface.IsOpenSea(c, map) && c.GetEdifice(map) == null;
+            return c.InBounds(map) && IsWaterForGangway(c, map) && c.GetEdifice(map) == null;
         }
 
-        /// <summary>這一格能當對岸：不是開放海面、能走（浮船、潛艇甲板、橋、另一座舷梯的臨時甲板）。</summary>
+        /// <summary>
+        /// 舷梯要跨過的水：海面地圖上是開放海面；原版海岸地圖上（靠岸，M3）是沒有船體平台、沒有臨時甲板的原版水域。
+        /// </summary>
+        public static bool IsWaterForGangway(IntVec3 c, Map map)
+        {
+            if (SeaSurface.IsOpenSea(c, map))
+            {
+                return true;
+            }
+            if (!SeaLevels.IsVanillaSurface(map) || map.terrainGrid.FoundationAt(c) != null)
+            {
+                return false;
+            }
+            TerrainDef t = map.terrainGrid.TerrainAt(c);
+            return t != null && t.IsWater && !MapComponent_SeabedMemory.IsPlatform(t);
+        }
+
+        /// <summary>這一格能當對岸：不是要跨過的水、能走（浮船、潛艇甲板、橋、另一座舷梯的臨時甲板；原版地圖上的岸）。</summary>
         public static bool IsLanding(IntVec3 c, Map map)
         {
-            return c.InBounds(map) && !SeaSurface.IsOpenSea(c, map) && c.Walkable(map);
+            return c.InBounds(map) && !IsWaterForGangway(c, map) && c.Walkable(map);
         }
 
         /// <summary>從 <paramref name="pos"/> 朝 <paramref name="rot"/> 看，現在能不能接到對岸。</summary>
@@ -320,7 +337,7 @@ namespace DepthRim
                     continue;
                 }
                 t.DeSpawn();
-                if (!GenPlace.TryPlaceThing(t, Position, Map, ThingPlaceMode.Near, null, x => !onSpan.Contains(x) && !SeaSurface.IsOpenSea(x, Map)))
+                if (!GenPlace.TryPlaceThing(t, Position, Map, ThingPlaceMode.Near, null, x => !onSpan.Contains(x) && !IsWaterForGangway(x, Map)))
                 {
                     t.Destroy();
                 }
@@ -453,11 +470,13 @@ namespace DepthRim
 
         public override AcceptanceReport AllowsPlacing(BuildableDef checkingDef, IntVec3 loc, Rot4 rot, Map map, Thing thingToIgnore = null, Thing thing = null)
         {
-            if (!SeaLevels.IsSeaLevel(map))
+            // 海面地圖，或原版海岸地圖上的船（靠岸時接岸，M3）
+            bool vanilla = SeaLevels.IsVanillaSurface(map);
+            if (!SeaLevels.IsSeaLevel(map) && !vanilla)
             {
                 return "DepthRim.Gangway.SeaLevelOnly".Translate();
             }
-            if (SeaSurface.IsOpenSea(loc, map))
+            if (SeaSurface.IsOpenSea(loc, map) || (vanilla && !MapComponent_SeabedMemory.IsPlatform(map.terrainGrid.TerrainAt(loc))))
             {
                 return "DepthRim.Gangway.MustBeOnDeck".Translate();
             }

@@ -116,6 +116,21 @@ namespace DepthRim
 
         public static WorldObjectDef DepthRim_SeaSurfaceSite;
 
+        // ── 研究（海岸造船 M1）──
+        /// <summary>海岸造船（一般研究）：船體平台、龍骨、艦橋、水面推進器、舷梯。</summary>
+        public static ResearchProjectDef DepthRim_CoastalShipbuilding;
+
+        /// <summary>潛航器建造：解鎖壓載水艙與水下推進器。</summary>
+        public static ResearchProjectDef DepthRim_SubmarineConstruction;
+
+        /// <summary>壓載水艙（M6）：下潛與往下換深度的唯一門檻。</summary>
+        public static ThingDef DepthRim_BallastTank;
+
+        public static ThingDef DepthRim_SurfaceThruster;
+
+        /// <summary>浮在水面上的船（水面航行 M2）。</summary>
+        public static WorldObjectDef DepthRim_SurfaceShip;
+
         // ── 海面的兩層（水面層／平台層）──
         /// <summary>平台層的高空：看下去是海。</summary>
         public static TerrainDef DepthRim_OpenAir;

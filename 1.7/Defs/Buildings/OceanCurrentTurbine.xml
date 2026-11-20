@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    洋流發電機（2026-11-19）：3×3，水下基地的基礎電力。實作比照原版風力發電機（CompPowerPlantWind）：
+    每 250 ticks 重算一次、通道被擋住按格折減、輸出上限 1.4 倍；差別是「風速」換成洋流（深度層級 × 天氣 × 潮汐漲落），
+    而且整台機器必須浸在水裡（DepthRim.CompOceanCurrentTurbine）。
+    - 只能蓋在水下地圖、3×3 全部在水面下（DepthRim.PlaceWorker_OceanCurrentTurbine）：抽乾的艙室、地面殖民地都不發電。
+    - 水流通道是建築前後各 2 格、和建築同寬（OceanCurrentMath.FlowCells）；牆、石頭、其他發電機都會擋住水流。
+      所以同一塊海床上擠一排發電機會互相干擾（和原版水車「太近會互相干擾」同一個概念）。
+    - 電力靠原版的電力網傳輸，拉電線穿過艙壁即可（水密門、船殼牆都照原版電力規則）。
+    - 水下不能使用風力發電：原版風力發電機在水下地圖輸出歸零並擋住放置，見 1.7/Patches/Power_WindTurbineUnderwater.xml。
+    - 貼圖：Textures/Thing/DR_CurrentTurbine/（四向，暫為程式產生的管狀水輪機）。
+  -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DR_OceanCurrentTurbine</defName>
+    <label>ocean current turbine</label>
+    <description>A ducted turbine anchored to the sea floor, driven by the current rather than the wind. It only runs while the whole machine is under water, and the water has to be able to flow through it: walls, rocks and other turbines in the current path cut its output.\n\nCurrents are strongest in the shallows and fade with depth, so a turbine on the abyssal seabed produces noticeably less than one near the surface. Storms push more water through the shallows; the deep stays calm.</description>
+    <drawerType>MapMeshAndRealTime</drawerType>
+    <graphicData>
+      <texPath>Thing/DR_CurrentTurbine/CurrentTurbine</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(3,3)</drawSize>
+      <shadowData>
+        <volume>(1.2, 1.0, 1.0)</volume>
+        <offset>(0,0,0)</offset>
+      </shadowData>
+      <damageData>
+        <rect>(0.1,0.1,2.8,2.8)</rect>
+      </damageData>
+    </graphicData>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <fillPercent>0.35</fillPercent>
+    <blockWind>true</blockWind>
+    <canOverlapZones>false</canOverlapZones>
+    <tickerType>Normal</tickerType>
+    <size>(3,3)</size>
+    <selectable>true</selectable>
+    <rotatable>true</rotatable>
+    <castEdgeShadows>false</castEdgeShadows>
+    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>2410</uiOrder>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>5200</WorkToBuild>
+      <Mass>150</Mass>
+      <Flammability>0</Flammability>
+      <Beauty>-10</Beauty>
+    </statBases>
+    <costList>
+      <Steel>175</Steel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <building>
+      <ai_chillDestination>false</ai_chillDestination>
+      <destroySound>BuildingDestroyed_Metal_Medium</destroySound>
+      <allowAutoroof>false</allowAutoroof>
+    </building>
+    <constructEffect>ConstructMetal</constructEffect>
+    <researchPrerequisites>
+      <li>DepthRim_UnderwaterSurvival</li>
+    </researchPrerequisites>
+    <constructionSkillPrerequisite>5</constructionSkillPrerequisite>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_OceanCurrentTurbine</li>
+    </placeWorkers>
+    <comps>
+      <li Class="DepthRim.CompProperties_OceanCurrentTurbine">
+        <!-- 額定 2500 W；洋流上限 1.4 倍，所以淺海滿流最高約 3500 W -->
+        <basePowerConsumption>-2500</basePowerConsumption>
+        <transmitsPower>true</transmitsPower>
+        <soundAmbientProducingPower>WaterMill_Ambience</soundAmbientProducingPower>
+      </li>
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+  </ThingDef>
+
+</Defs>

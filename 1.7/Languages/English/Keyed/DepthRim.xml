@@ -45,7 +45,7 @@
   <DepthRim.Sub.NotAboard>Only works aboard a submarine that has cast off from the shipyard.</DepthRim.Sub.NotAboard>
   <DepthRim.Sub.Block.AlreadyThere>already set</DepthRim.Sub.Block.AlreadyThere>
   <DepthRim.Sub.Block.BelowSeafloor>below the seafloor here</DepthRim.Sub.Block.BelowSeafloor>
-  <DepthRim.Sub.Block.HullTooWeak>the hull is not rated for it</DepthRim.Sub.Block.HullTooWeak>
+  <DepthRim.Sub.Block.NoBallast>no ballast tanks aboard</DepthRim.Sub.Block.NoBallast>
   <DepthRim.Sub.DepthReached>{0} has reached the {1}.</DepthRim.Sub.DepthReached>
   <DepthRim.Sub.InspectDepth>Depth: {0}</DepthRim.Sub.InspectDepth>
   <DepthRim.Sub.InspectDiving>Depth: {0} (heading to {1})</DepthRim.Sub.InspectDiving>
@@ -205,9 +205,15 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.Pillar.CancelGoDown>Cancel riding down</DepthRim.Pillar.CancelGoDown>
   <DepthRim.Pillar.NeedsLanding>The pillar must stand on open sea right next to a floating platform: at least one side of its 9x9 footprint has to touch it (that cell becomes the elevator spot).</DepthRim.Pillar.NeedsLanding>
   <DepthRim.Pillar.BlockedAbove>Blocked on the platform level by {0}.</DepthRim.Pillar.BlockedAbove>
+  <DepthRim.CrossPower.NotLinked>Not linked to the other end of the pillar.</DepthRim.CrossPower.NotLinked>
+  <DepthRim.CrossPower.Sending>Sending up to the platform: {0} W (max {1} W, {2}% line loss)</DepthRim.CrossPower.Sending>
+  <DepthRim.CrossPower.Receiving>Power from the water level: {0} W (max {1} W)</DepthRim.CrossPower.Receiving>
+  <DepthRim.CrossPower.SourceUnpowered>The pillar foot on the water level has no power.</DepthRim.CrossPower.SourceUnpowered>
   <DepthRim.Platform.PawnFellToSea>{0} fell with the collapsing platform down to the water, injured.</DepthRim.Platform.PawnFellToSea>
   <DepthRim.Settings.SeaCameraSway>Camera sways with the sea</DepthRim.Settings.SeaCameraSway>
   <DepthRim.Settings.SeaCameraSwayTip>On the sea surface (water level), the camera bobs up and down very slightly with the waves, more in strong wind and storms. Aboard a submarine under way, the view rocks slowly and gently. Turn off if it bothers you.</DepthRim.Settings.SeaCameraSwayTip>
+  <DepthRim.Settings.SimplifiedHarbor>Simplified docking and launching</DepthRim.Settings.SimplifiedHarbor>
+  <DepthRim.Settings.SimplifiedHarborTip>Ships dock and leave port at once, without the cutscene.</DepthRim.Settings.SimplifiedHarborTip>
 
   <!-- Submarine start scenario -->
   <DepthRim.SubmarineStart.Summary>Start aboard the submarine {0}, docked in the nearest {1} sea below the chosen site.</DepthRim.SubmarineStart.Summary>
@@ -297,5 +303,16 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.SuitLamp.Mode.White>white</DepthRim.SuitLamp.Mode.White>
   <DepthRim.SuitLamp.Mode.Dim>dim red</DepthRim.SuitLamp.Mode.Dim>
   <DepthRim.SuitLamp.Mode.Off>off</DepthRim.SuitLamp.Mode.Off>
+
+  <!-- 洋流發電機與水下風力發電限制（1.7/Defs/Buildings/OceanCurrentTurbine.xml、.source/DepthRim/Power） -->
+  <DepthRim.CurrentTurbine.NotUnderwater>Cannot generate power: this is not an underwater map.</DepthRim.CurrentTurbine.NotUnderwater>
+  <DepthRim.CurrentTurbine.NotSubmerged>Cannot generate power: the turbine is not completely under water.</DepthRim.CurrentTurbine.NotSubmerged>
+  <DepthRim.CurrentTurbine.Current>Ocean current: {0}</DepthRim.CurrentTurbine.Current>
+  <DepthRim.CurrentTurbine.Blocked>Current obstructed in {0} cells: {1}% less output.</DepthRim.CurrentTurbine.Blocked>
+  <DepthRim.CurrentTurbine.GhostBlocked>This placement blocks the current in {0} cells: {1}% less output.</DepthRim.CurrentTurbine.GhostBlocked>
+  <DepthRim.CurrentTurbine.MustBeUnderwater>Must be built on the sea floor, under water.</DepthRim.CurrentTurbine.MustBeUnderwater>
+  <DepthRim.CurrentTurbine.MustBeSubmerged>The whole turbine has to be under water.</DepthRim.CurrentTurbine.MustBeSubmerged>
+  <DepthRim.WindTurbine.NoWindUnderwater>Cannot be built under water: there is no wind down here.</DepthRim.WindTurbine.NoWindUnderwater>
+  <DepthRim.WindTurbine.NoWindUnderwaterInspect>No wind under water: this turbine cannot generate power here.</DepthRim.WindTurbine.NoWindUnderwaterInspect>
 
 </LanguageData>

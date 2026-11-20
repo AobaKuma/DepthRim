@@ -140,20 +140,19 @@ namespace DepthRim.Acceptance
             // 2026-11-17：海上平台與平台支柱需要耐壓工程研究。沒研究時哪裡都不顯示；暫時完成研究再看平台層，之後還原進度
             ResearchProjectDef pressureEng = DefDatabase<ResearchProjectDef>.GetNamed("DepthRim_PressureEngineering");
             ctx.Check(deck.researchPrerequisites.Contains(pressureEng) && pillarDef.researchPrerequisites.Contains(pressureEng), "the ocean platform and pillar need pressure engineering");
-            Dictionary<ResearchProjectDef, float> progress = HarmonyLib.Traverse.Create(Find.ResearchManager).Field("progress").GetValue<Dictionary<ResearchProjectDef, float>>();
-            bool hadProgress = progress.TryGetValue(pressureEng, out float oldProgress);
             bool wasFinished = pressureEng.IsFinished;
             if (!wasFinished)
             {
                 ctx.Check(!deckDesignator.Visible, "without the research the ocean platform is not in the build tab");
             }
-            progress[pressureEng] = pressureEng.baseCost;
+            // 耐壓工程是海底研究（知識類別）：進度在 anomalyKnowledge，不在 progress（DepthRimFixture.GrantResearch 會選對）
+            System.Action restoreResearch = DepthRimFixture.GrantResearch(pressureEng);
             bool onPlatform = deckDesignator.Visible;
             Current.Game.CurrentMap = sea;
             bool onSea = deckDesignator.Visible;
             Current.Game.CurrentMap = DepthRimFixture.Home;
             bool atHome = deckDesignator.Visible;
-            if (hadProgress) { progress[pressureEng] = oldProgress; } else { progress.Remove(pressureEng); }
+            restoreResearch();
             Current.Game.CurrentMap = viewing;
             DebugSettings.godMode = wasGod;
             ctx.Check(onPlatform && !onSea && !atHome, $"the ocean platform shows in the build tab only on the platform level (platform {onPlatform}, sea {onSea}, home {atHome})");

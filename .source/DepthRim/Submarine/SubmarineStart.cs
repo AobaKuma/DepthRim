@@ -248,6 +248,8 @@ namespace DepthRim
             {
                 map.areaManager.Home[c] = true;
             }
+            // 下潛要有壓載（M6）：開局選的結構沒有或不夠時補上，免得開局的潛艇潛不下去或換深度變慢
+            Ballast.FillHull(map, new HashSet<IntVec3>(hull), Faction.OfPlayer);
             foreach (Thing t in rect.Cells.SelectMany(c => c.GetThingList(map)).Distinct().ToList())
             {
                 CompRefuelable fuel = t.TryGetComp<CompRefuelable>();

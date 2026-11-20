@@ -23,4 +23,7 @@
   <DepthRim_SeaSurfaceSite.label>海上平台</DepthRim_SeaSurfaceSite.label>
   <DepthRim_SeaSurfaceSite.description>開放海面上的平台。</DepthRim_SeaSurfaceSite.description>
 
+  <DepthRim_SurfaceShip.label>船</DepthRim_SurfaceShip.label>
+  <DepthRim_SurfaceShip.description>浮在海面上的船。沿著開放海面航行，避開陸地與海冰。</DepthRim_SurfaceShip.description>
+
 </LanguageData>

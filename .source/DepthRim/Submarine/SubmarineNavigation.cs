@@ -54,6 +54,12 @@ namespace DepthRim
             return map != null ? HullPressure.RatingFor(map, out _) : HullPressure.Unlimited;
         }
 
+        /// <summary>艦橋所在船體的壓載座數（§2.4）。</summary>
+        private static int BallastOf(Thing helm)
+        {
+            return helm?.Map != null ? Ballast.TanksFor(helm, out _) : 0;
+        }
+
         /// <summary>航行指令整個不能用的原因（可以時 null）。</summary>
         public static string NavigateBlockReason(Thing helm)
         {
@@ -63,7 +69,14 @@ namespace DepthRim
             }
             if (SubmarineSurfacing.IsSurfacedMap(helm.Map))
             {
-                return SubmarineSurfacing.DiveBlockReason(helm, out _, out _);
+                // 浮在海面上：選單裡有航行（水面）、停船與下潛，各自寫出不能做的原因；兩者都不行時整個指令變灰
+                string dive = SubmarineSurfacing.DiveBlockReason(helm, out _, out _);
+                if (dive == null || SurfaceVoyage.ShipOf(helm)?.underWay == true)
+                {
+                    return null;
+                }
+                string sail = SurfaceVoyage.BlockReason(helm, out _);
+                return sail == null ? null : dive;
             }
             WorldObject_Submarine sub = SubOf(helm);
             if (sub != null && sub.InFlight)
@@ -77,6 +90,12 @@ namespace DepthRim
             if (!OceanRouting.IsOcean(helm.Map.Tile))
             {
                 return "DepthRim.Sub.NotAboard".Translate();
+            }
+            // 潛水鐘沒收回：不能換深度、航行、上浮（§7.7）
+            string bellLock = DiveBellLock.Reason(helm.Map);
+            if (bellLock != null)
+            {
+                return bellLock;
             }
             CompTransferConsole console = helm.TryGetComp<CompTransferConsole>();
             if (console == null)
@@ -251,16 +270,16 @@ namespace DepthRim
             }
             DepthTier current = CurrentTier(helm);
             DepthTier floor = WorldObject_Submarine.SeafloorAt(tile);
-            DepthTier rating = HullRating(helm.Map);
+            int tanks = BallastOf(helm);
             foreach (DepthTier t in System.Enum.GetValues(typeof(DepthTier)))
             {
                 DepthTier tier = t;
-                DiveMath.DiveBlock block = DiveMath.CanSet(current, tier, floor, rating);
+                DiveMath.DiveBlock block = DiveMath.CanSet(current, tier, floor, tanks);
                 if (block == DiveMath.DiveBlock.AlreadyThere)
                 {
                     block = DiveMath.DiveBlock.None;
                 }
-                options.Add(Option("DepthRim.Nav.SailTo".Translate(tier.Label()), DiveBlockText(block), () => PlanVoyage(helm, tile, tier, landOnSite: false), SubmarineIcons.ForDepthChange(current, tier)));
+                options.Add(Option("DepthRim.Nav.SailTo".Translate(tier.Label()), DiveBlockText(block), () => HullWarning.ConfirmThen(helm.Map, current, tier, () => PlanVoyage(helm, tile, tier, landOnSite: false)), SubmarineIcons.ForDepthChange(current, tier)));
             }
             return options;
         }
@@ -272,13 +291,14 @@ namespace DepthRim
             foreach (DepthTier t in System.Enum.GetValues(typeof(DepthTier)))
             {
                 DepthTier tier = t;
-                options.Add(Option("DepthRim.Sub.Cruise".Translate(tier.Label()), DiveBlockText(sub.CanDiveTo(tier)), () =>
+                options.Add(Option("DepthRim.Sub.Cruise".Translate(tier.Label()), DiveBlockText(sub.CanDiveTo(tier)), () => HullWarning.ConfirmThen(sub.Map, sub.targetTier, tier, () =>
                 {
                     sub.landingTarget = PlanetTile.Invalid;
                     sub.SetTargetTier(tier);
-                }, SubmarineIcons.ForDepthChange(sub.cruiseTier, tier)));
+                }), SubmarineIcons.ForDepthChange(sub.cruiseTier, tier)));
             }
-            options.Add(Option("DepthRim.Surface.Label".Translate(), SubmarineSurfacing.SurfaceBlockReason(sub, out _), () => SubmarineSurfacing.Surface(sub), SubmarineIcons.Ascent, "DepthRim.Surface.Desc".Translate()));
+            // 任何深度都能按上浮：先爬到淺海、到了自動上浮（§2.2b）
+            options.Add(Option("DepthRim.Surface.Label".Translate(), SubmarineSurfacing.SurfaceBlockReason(sub, out _, fromDepth: true), () => SubmarineSurfacing.SurfaceOrAscend(sub), SubmarineIcons.Ascent, "DepthRim.Surface.Desc".Translate()));
             options.Add(Option("DepthRim.IceBreach.Label".Translate(), SubmarineSurfacing.IceBreachBlockReason(sub, out _, out _), () => SubmarineSurfacing.BeginIceBreach(sub), SubmarineIcons.Ascent, "DepthRim.IceBreach.Desc".Translate()));
             return options;
         }
@@ -300,17 +320,18 @@ namespace DepthRim
             else
             {
                 // 就在旁邊：在這一格換深度，受這裡的海床限制；遠的在目的地換
-                DiveMath.DiveBlock dive = DiveMath.CanSet(CurrentTier(helm), floor, adjacent ? sub.Seafloor : floor, HullRating(helm.Map));
+                DiveMath.DiveBlock dive = DiveMath.CanSet(CurrentTier(helm), floor, adjacent ? sub.Seafloor : floor, BallastOf(helm));
                 if (dive != DiveMath.DiveBlock.AlreadyThere)
                 {
                     block = DiveBlockText(dive);
                 }
             }
+            DepthTier from = CurrentTier(helm);
             if (adjacent)
             {
-                return Option(label, block, () => DockAdjacent(sub, site, floor), SubmarineIcons.Anchoring);
+                return Option(label, block, () => HullWarning.ConfirmThen(helm.Map, from, floor, () => DockAdjacent(sub, site, floor)), SubmarineIcons.Anchoring);
             }
-            return Option(label, block, () => PlanVoyage(helm, site.Tile, floor, landOnSite: true), SubmarineIcons.Anchoring);
+            return Option(label, block, () => HullWarning.ConfirmThen(helm.Map, from, floor, () => PlanVoyage(helm, site.Tile, floor, landOnSite: true)), SubmarineIcons.Anchoring);
         }
 
         private static void DockAdjacent(WorldObject_Submarine sub, MapParent site, DepthTier floor)
@@ -330,11 +351,11 @@ namespace DepthRim
         {
             List<FloatMenuOption> options = new List<FloatMenuOption>();
             DepthTier floor = WorldObject_Submarine.SeafloorAt(sub.destination);
-            DepthTier rating = sub.HullRating(out _);
+            int tanks = sub.BallastTanks(out _);
             foreach (DepthTier t in System.Enum.GetValues(typeof(DepthTier)))
             {
                 DepthTier tier = t;
-                options.Add(Option("DepthRim.Nav.EndAt".Translate(tier.Label()), DiveBlockText(DiveMath.CanSet(sub.targetTier, tier, floor, rating)), () => sub.SetTargetTier(tier), SubmarineIcons.ForDepthChange(sub.cruiseTier, tier)));
+                options.Add(Option("DepthRim.Nav.EndAt".Translate(tier.Label()), DiveBlockText(DiveMath.CanSet(sub.targetTier, tier, floor, tanks)), () => HullWarning.ConfirmThen(sub.Map, sub.targetTier, tier, () => sub.SetTargetTier(tier)), SubmarineIcons.ForDepthChange(sub.cruiseTier, tier)));
             }
             return options;
         }
@@ -343,15 +364,31 @@ namespace DepthRim
         public static List<FloatMenuOption> SurfacedOptions(Thing helm)
         {
             List<FloatMenuOption> options = new List<FloatMenuOption>();
+            // 水面航行（M2）：航行中只能停船；停著時可以選目的地
+            WorldObject_SurfaceShip ship = SurfaceVoyage.ShipOf(helm);
+            if (ship != null && ship.underWay)
+            {
+                options.Add(SurfaceVoyage.StopOption(ship));
+            }
+            else if (SeaLevels.IsSeaLevel(helm.Map))
+            {
+                options.Add(SurfaceVoyage.SailOption(helm));
+                // 靠岸（M3）：旁邊一格是自己的海岸殖民地時
+                if (Docking.AdjacentColony(helm.Map.Tile) != null)
+                {
+                    options.Add(Docking.DockOption(helm));
+                }
+            }
             string block = SubmarineSurfacing.DiveBlockReason(helm, out _, out PlanetTile below);
             DepthTier floor = below.Valid ? WorldObject_Submarine.SeafloorAt(below) : DepthTier.Shallow;
-            DepthTier rating = HullRating(helm.Map);
+            int tanks = BallastOf(helm);
             foreach (DepthTier t in System.Enum.GetValues(typeof(DepthTier)))
             {
                 DepthTier tier = t;
-                DiveMath.DiveBlock dive = DiveMath.CanSet(DepthTier.Shallow, tier, floor, rating);
+                DiveMath.DiveBlock dive = DiveMath.CanSet(DepthTier.Shallow, tier, floor, tanks);
                 string reason = block ?? (dive == DiveMath.DiveBlock.AlreadyThere ? null : DiveBlockText(dive));
-                options.Add(Option("DepthRim.Nav.DiveTo".Translate(tier.Label()), reason, () => SubmarineSurfacing.Dive(helm, tier), SubmarineIcons.Descent, "DepthRim.Surface.DiveDesc".Translate()));
+                // 從海面下潛到淺海不算「往下換深度」，但船殼一樣要撐得住淺海以外的層級才不跳警告
+                options.Add(Option("DepthRim.Nav.DiveTo".Translate(tier.Label()), reason, () => HullWarning.ConfirmThen(helm.Map, DepthTier.Shallow, tier, () => SubmarineSurfacing.Dive(helm, tier)), SubmarineIcons.Descent, "DepthRim.Surface.DiveDesc".Translate()));
             }
             return options;
         }

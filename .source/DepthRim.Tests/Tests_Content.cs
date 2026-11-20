@@ -82,6 +82,14 @@ static partial class Test
     /// </summary>
     static void ContentShaders()
     {
+        // 進水水花要被地圖光照影響（2026-11-21）：PostLight 會畫在光照遮罩之後，在暗處發光
+        XElement leak = DefFiles.SelectMany(f => XDocument.Load(f).Root.Elements("FleckDef")).FirstOrDefault(d => (string)d.Element("defName") == "DepthRim_LeakSpray");
+        if (Check(leak != null, "DepthRim_LeakSpray exists"))
+        {
+            List<string> shaders = leak.Descendants("shaderType").Select(e => e.Value.Trim()).ToList();
+            Check(shaders.Count > 0 && shaders.All(x => x == "Transparent"), $"the leak spray uses the lit Transparent shader ({string.Join(", ", shaders)})");
+            Check((string)leak.Element("altitudeLayer") == "MoteOverhead", "and stays on MoteOverhead, below the lighting overlay");
+        }
         string modShaders = Path.Combine(ModRoot, "1.7", "Shaders");
         string gameShaders = Path.Combine(ModRoot, "..", "..", "Data", "Core", "Shaders");
         int refs = 0;

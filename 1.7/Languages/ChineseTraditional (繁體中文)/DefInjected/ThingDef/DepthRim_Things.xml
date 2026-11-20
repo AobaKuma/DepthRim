@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
 
   <DepthRim_IceShaft.label>升降井</DepthRim_IceShaft.label>
@@ -43,12 +43,24 @@
   <DepthRim_Keel.description>把一段船體平台綁成一個整體的巨型耐壓框架。以鋼樑相連的龍骨框架構成一艘潛艇：覆蓋範圍內船體平台上的一切都會跟著離開。小型龍骨框架可以蓋在它的連結範圍內。\n\n只能蓋在船體平台上。</DepthRim_Keel.description>
   <DepthRim_KeelSmall.label>小型龍骨框架</DepthRim_KeelSmall.label>
   <DepthRim_KeelSmall.description>用於較小一段船體平台的輕型耐壓框架。本身沒有連結範圍：必須蓋在龍骨框架的連結範圍內，也只能連到龍骨框架。\n\n只能蓋在船體平台上。</DepthRim_KeelSmall.description>
+  <DepthRim_BallastTank.label>壓載水艙</DepthRim_BallastTank.label>
+  <DepthRim_BallastTank.description>耐壓的水艙：灌水讓船體下沉、吹氣讓它上浮。船體上至少要有一座才能下潛或往下換深度；沒有的船只能浮在水面。
+
+每座撐得住 200 格船體。船體比壓載撐得住的大時還是能潛，但換深度變慢（最多 4 倍）。往上不需要壓載，但沒有的話最慢。
+
+要蓋在船體上（龍骨範圍內）才算。</DepthRim_BallastTank.description>
   <DepthRim_Helm.label>潛艇艦橋</DepthRim_Helm.label>
   <DepthRim_Helm.description>所在潛艇的航行與下潛控制台。在這裡規劃航程、確認電池存量與整備狀態、設定巡航深度，並下令離港。</DepthRim_Helm.description>
   <DepthRim_Thruster.label>水下推進器</DepthRim_Thruster.label>
   <DepthRim_Thruster.description>裝在潛艇船體上的電動螺旋槳推進器。推力不大，但構造簡單、容易維修。只有潛艇航行時才從船上的電池全速取電，運轉時的噪音會被被動聲納聽見。</DepthRim_Thruster.description>
   <DepthRim_AdvancedThruster.label>先進水下推進器</DepthRim_AdvancedThruster.label>
   <DepthRim_AdvancedThruster.description>以磁流體推進的推進器，沒有任何轉動部件，直接以電磁力推動海水。推力與效率都遠勝螺旋槳，運轉時幾乎不發出聲音。</DepthRim_AdvancedThruster.description>
+  <DepthRim_BellDavit.label>潛水鐘吊架</DepthRim_BellDavit.label>
+  <DepthRim_BellDavit.description>把潛水鐘垂直放到船正下方的海床、再吊回來的絞盤與吊臂。只要有電就供氧給鐘；沒電時鐘收不回來，裡面的人開始用掉鐘裡的殘氣。\n\n蓋在船甲板或月池上，潛水鐘要放在 2 格內。在港口不能下鐘：港口下面沒有海。</DepthRim_BellDavit.description>
+  <DepthRim_DivingBell.label>潛水鐘</DepthRim_DivingBell.label>
+  <DepthRim_DivingBell.description>用纜繩從吊架吊下去的小型開底艙。最多坐兩個人加一點貨；到了底就走出來到海床上，回來時再進鐘被吊上去。\n\n鐘本身沒有耐壓等級：潛水員能不能在那個深度作業，看他們的潛水服和適應。鐘被毀的話，裡面的人和東西會掉在旁邊的海床上。</DepthRim_DivingBell.description>
+  <DepthRim_SurfaceThruster.label>水面推進器</DepthRim_SurfaceThruster.label>
+  <DepthRim_SurfaceThruster.description>讓船在水面上航行的柴電螺旋槳推進器。只有船在航行時才從船上的電池取電。在水下沒有作用：潛艇下潛之後要靠水下推進器移動。</DepthRim_SurfaceThruster.description>
 
   <DepthRim_ActiveSonar.label>主動聲納</DepthRim_ActiveSonar.label>
   <DepthRim_ActiveSonar.description>裝在船體上的換能器陣列，發出強力聲脈衝再聆聽回波。看得很遠，但每一次發聲都在告訴別人你在哪裡：被動歸向魚雷會朝聽得到的最響的主動聲納衝過去。\n\n溫躍層會折射聲波：溫躍層另一側的目標只能在一半距離內聽見，躲在溫躍層裡的則是四分之三。</DepthRim_ActiveSonar.description>
@@ -100,5 +112,10 @@
   <DepthRim_Gangway.description>裝在浮船甲板邊上的折疊鋼製步道。伸出時可以跨過前方最多 6 格的開放海面，接到對面的甲板（另一艘浮船、上浮的潛艇或橋），人可以直接走過去。
 
 可以隨時收回，收回時會等還站在上面的人離開。對岸移走或被拆掉時，舷梯會立刻掉下去，站在上面的人會落海。</DepthRim_Gangway.description>
+
+  <DR_OceanCurrentTurbine.label>洋流發電機</DR_OceanCurrentTurbine.label>
+  <DR_OceanCurrentTurbine.description>固定在海床上的管狀水輪機，靠洋流而不是風發電。整台機器都要在水面下才會運轉，而且水必須流得過去：擋在水流通道上的牆、石塊與其他發電機都會降低輸出。
+
+洋流在淺海最強、越深越弱，海床上的發電機明顯比靠表層的少。暴風會把更多水推過淺海，深海則不受影響。</DR_OceanCurrentTurbine.description>
 
 </LanguageData>

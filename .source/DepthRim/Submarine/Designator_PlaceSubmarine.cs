@@ -153,18 +153,28 @@ namespace DepthRim
     /// </summary>
     public class GameComponent_SubmarinePlacement : GameComponent
     {
-        private static Designator_PlaceSubmarine pending;
+        private static Designator pending;
+
+        private static Map pendingMap;
 
         private static int stableFrames;
 
         public GameComponent_SubmarinePlacement(Game game)
         {
             pending = null;
+            pendingMap = null;
         }
 
         public static void Request(Designator_PlaceSubmarine designator)
         {
+            Request(designator, designator.TargetMap);
+        }
+
+        /// <summary>任何要在別張地圖上選位的設計器（例如靠岸的 <see cref="Designator_DockShip"/>）。</summary>
+        public static void Request(Designator designator, Map map)
+        {
             pending = designator;
+            pendingMap = map;
             stableFrames = 0;
         }
 
@@ -174,7 +184,7 @@ namespace DepthRim
             {
                 return;
             }
-            Map map = pending.TargetMap;
+            Map map = pendingMap;
             if (map == null || !Find.Maps.Contains(map))
             {
                 pending = null;
