@@ -36,8 +36,11 @@ namespace DepthRim
             return Find.Maps.FirstOrDefault(m => m.IsPlayerHome && SeaLevels.IsVanillaSurface(m) && neighbors.Contains(m.Tile));
         }
 
-        /// <summary>從這座艦橋靠岸不能做的原因（可以時 null）。</summary>
-        public static string BlockReason(Thing helm, out SurfaceVoyage.Plan plan, out Map colony)
+        /// <summary>
+        /// 從這座艦橋靠岸不能做的原因（可以時 null）。<paramref name="target"/> 給了的話停進那張地圖（同一格的海面地點，例如有平台的那張；
+        /// 2026-11-21 航行抵達有地圖的海面地點時也要選泊位），否則停進旁邊的玩家海岸殖民地。
+        /// </summary>
+        public static string BlockReason(Thing helm, out SurfaceVoyage.Plan plan, out Map colony, Map target = null)
         {
             plan = null;
             colony = null;
@@ -50,8 +53,8 @@ namespace DepthRim
             {
                 return "DepthRim.Sail.StopFirst".Translate();
             }
-            colony = AdjacentColony(map.Tile);
-            if (colony == null)
+            colony = target ?? AdjacentColony(map.Tile);
+            if (colony == null || colony == map || !Find.Maps.Contains(colony))
             {
                 return "DepthRim.Dock.NoColony".Translate();
             }
@@ -66,10 +69,7 @@ namespace DepthRim
                 return "DepthRim.Launch.NoPower".Translate();
             }
             HashSet<IntVec3> footprint = plan.footprint;
-            if (map.listerBuildings.allBuildingsColonist.Count(b => footprint.Contains(b.Position) && b.TryGetComp<CompDiveControl>() != null) > 1)
-            {
-                return "DepthRim.Sail.ShipsLinked".Translate();
-            }
+            // 同一個龍骨網路上可以有多座艦橋（母船載子船），不再擋
             // 潛水鐘沒收回不能走（§7.7）
             string bellLock = DiveBellLock.Reason(map, plan.footprint);
             if (bellLock != null)
@@ -101,9 +101,9 @@ namespace DepthRim
         }
 
         /// <summary>開始選泊位：切到殖民地地圖、選上 <see cref="Designator_DockShip"/>。</summary>
-        public static void Begin(Thing helm)
+        public static void Begin(Thing helm, Map target = null)
         {
-            string block = BlockReason(helm, out SurfaceVoyage.Plan plan, out Map colony);
+            string block = BlockReason(helm, out SurfaceVoyage.Plan plan, out Map colony, target);
             if (block != null)
             {
                 Messages.Message(block, helm, MessageTypeDefOf.RejectInput, historical: false);
@@ -115,9 +115,9 @@ namespace DepthRim
         /// <summary>
         /// 靠岸：船體轉 <paramref name="turns"/> 次、外框中心放到 <paramref name="berthCenter"/>。在長時間事件裡做，回傳是否開始。
         /// </summary>
-        public static bool Dock(Thing helm, int turns, IntVec3 berthCenter)
+        public static bool Dock(Thing helm, int turns, IntVec3 berthCenter, Map target = null)
         {
-            string block = BlockReason(helm, out SurfaceVoyage.Plan plan, out Map colony);
+            string block = BlockReason(helm, out SurfaceVoyage.Plan plan, out Map colony, target);
             if (block != null)
             {
                 Messages.Message(block, helm, MessageTypeDefOf.RejectInput, historical: false);
@@ -284,7 +284,7 @@ namespace DepthRim
                     CameraJumper.TryJump(center, colony);
                 }
                 string text = "DepthRim.Dock.LetterText".Translate(shipName, colony.Parent.LabelCap).ToString();
-                if (extended == 0)
+                if (extended == 0 && SeaLevels.IsVanillaSurface(colony))
                 {
                     text += "\n\n" + "DepthRim.Dock.NoGangwayAshore".Translate().ToString();
                 }
@@ -379,6 +379,8 @@ namespace DepthRim
         private AcceptanceReport report = true;
         private DockingMath.Approach approach;
         private bool gangwayReaches;
+
+        private bool docked;
 
         public Designator_DockShip(Thing helm, Map colony, List<IntVec3> cells)
         {
@@ -549,8 +551,35 @@ namespace DepthRim
         public override void DesignateSingleCell(IntVec3 c)
         {
             int t = turns;
+            docked = true;
             Find.DesignatorManager.Deselect();
-            Docking.Dock(helm, t, c);
+            Docking.Dock(helm, t, c, colony);
+        }
+
+        /// <summary>
+        /// 取消靠岸（2026-11-21 使用者決定）：船留在鄰近的海洋格（自己的地圖上，船體在中央），鏡頭回到船上。
+        /// 玩家自己切到別張地圖造成的取消不搶鏡頭。
+        /// </summary>
+        public override void Deselected()
+        {
+            base.Deselected();
+            if (docked || helm == null || helm.Destroyed || !helm.Spawned)
+            {
+                return;
+            }
+            Map seaMap = helm.Map;
+            string label = SurfaceVoyage.ShipNameFor(helm);
+            LongEventHandler.ExecuteWhenFinished(delegate
+            {
+                if (helm.Destroyed || !helm.Spawned || Find.CurrentMap != colony)
+                {
+                    return;
+                }
+                Current.Game.CurrentMap = seaMap;
+                IntVec3 center = cells.Count > 0 ? CellRect.FromCellList(cells).CenterCell : seaMap.Center;
+                CameraJumper.TryJump(center, seaMap);
+                Messages.Message("DepthRim.Dock.Cancelled".Translate(label, colony.Parent.LabelCap), new TargetInfo(center, seaMap), MessageTypeDefOf.NeutralEvent, historical: false);
+            });
         }
 
         public override void SelectedProcessInput(Event ev)

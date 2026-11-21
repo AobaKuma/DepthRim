@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_AlgalBloomIncident.label>藻華</DepthRim_AlgalBloomIncident.label>
+  <DepthRim_AlgalBloomIncident.letterLabel>藻華</DepthRim_AlgalBloomIncident.letterLabel>
+  <DepthRim_AlgalBloomIncident.letterText>藻華：箱網周圍的水變綠、溶氧正在下降。停止餵食，打開曝氣機。</DepthRim_AlgalBloomIncident.letterText>
+  <DepthRim_WarmCurrentIncident.label>暖流</DepthRim_WarmCurrentIncident.label>
+  <DepthRim_WarmCurrentIncident.letterLabel>暖流</DepthRim_WarmCurrentIncident.letterLabel>
+  <DepthRim_WarmCurrentIncident.letterText>暖流穿過箱網：水變暖、溶氧變低。</DepthRim_WarmCurrentIncident.letterText>
+  <DepthRim_ColdCurrentIncident.label>寒流</DepthRim_ColdCurrentIncident.label>
+  <DepthRim_ColdCurrentIncident.letterLabel>寒流</DepthRim_ColdCurrentIncident.letterLabel>
+  <DepthRim_ColdCurrentIncident.letterText>寒流穿過箱網：水變冷、溶氧變高。</DepthRim_ColdCurrentIncident.letterText>
+  <DepthRim_CagePredator.label>箱網掠食者</DepthRim_CagePredator.label>
+  <DepthRim_CagePredator.letterLabel>掠食者來到箱網</DepthRim_CagePredator.letterLabel>
+  <DepthRim_CagePredator.letterText>一隻{PREDATOR}發現了箱網裡的魚，正在撕咬網子。在網子撐不住之前把牠趕走。</DepthRim_CagePredator.letterText>
+</LanguageData>

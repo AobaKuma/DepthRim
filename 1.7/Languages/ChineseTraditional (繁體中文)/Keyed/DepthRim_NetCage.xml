@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- 箱網養殖（Docs/箱網養殖_內容設計.md §14） -->
+  <DepthRim.Alert.CageHypoxia>箱網溶氧偏低</DepthRim.Alert.CageHypoxia>
+  <DepthRim.Alert.CageHypoxiaDesc>這些箱網的溶氧低於 50%。魚長得慢；低於 35% 會開始死亡。\n\n降低餵食率、蓋曝氣機（並保持供電）、把箱網拉開，或者收成。</DepthRim.Alert.CageHypoxiaDesc>
+  <DepthRim.Alert.CageNetBreach>箱網破損</DepthRim.Alert.CageNetBreach>
+  <DepthRim.Alert.CageNetBreachDesc>這些箱網的網況低於 50%，隨時可能破網、魚逃走。\n\n有建造工作的殖民者會自動修網（45 布、30 鋼），也可以下令換網（75 布）。</DepthRim.Alert.CageNetBreachDesc>
+  <DepthRim.Alert.CageNoFeed>箱網斷餌</DepthRim.Alert.CageNoFeed>
+  <DepthRim.Alert.CageNoFeedDesc>這些有魚的箱網沒有 Kibble 了，魚停止成長。\n\n做 Kibble（或在屠宰台做魚肉飼料），讓馴獸的殖民者搬去箱網。</DepthRim.Alert.CageNoFeedDesc>
+  <DepthRim.Alert.CageDisease>箱網病害</DepthRim.Alert.CageDisease>
+  <DepthRim.Alert.CageDiseaseDesc>這些箱網的魚生病了。病害本身不會直接致死，但會傳到 12 格內的其他箱網，越密集傳得越快。\n\n治療（10 個藥品，醫生）或收成撲殺。</DepthRim.Alert.CageDiseaseDesc>
+  <DepthRim.Alert.CageReady>箱網可收成</DepthRim.Alert.CageReady>
+  <DepthRim.Alert.CageReadyDesc>這些箱網已經達到上市體重好幾天了。過熟的魚會開始死亡、每天少收一些。\n\n選取箱網並下令收成。</DepthRim.Alert.CageReadyDesc>
+  <DepthRim.NetCage.BiomassLine>生物量 {0}/{1} kg · {2}</DepthRim.NetCage.BiomassLine>
+  <DepthRim.NetCage.Breach>網破了！{0} 條魚逃逸。</DepthRim.NetCage.Breach>
+  <DepthRim.NetCage.CancelStock>取消放養</DepthRim.NetCage.CancelStock>
+  <DepthRim.NetCage.Disabled>模組設定關閉了箱網養殖。</DepthRim.NetCage.Disabled>
+  <DepthRim.NetCage.DiseaseLine>病害 {0}（12 格內 {1} 座）</DepthRim.NetCage.DiseaseLine>
+  <DepthRim.NetCage.DiseaseSpread>病害擴散到另外 {0} 座箱網。</DepthRim.NetCage.DiseaseSpread>
+  <DepthRim.NetCage.EmergencyHarvest>緊急收成</DepthRim.NetCage.EmergencyHarvest>
+  <DepthRim.NetCage.EmergencyHarvestDesc>在達到上市體重前先收成。每條魚的魚獲按體重比例打折。在風暴前或水質變差時止損。</DepthRim.NetCage.EmergencyHarvestDesc>
+  <DepthRim.NetCage.Empty>空箱</DepthRim.NetCage.Empty>
+  <DepthRim.NetCage.Failed>箱網裡的{0}養殖失敗：剩下太少，箱網已清空。</DepthRim.NetCage.Failed>
+  <DepthRim.NetCage.FeedLine>飼料 {0}/{1} Kibble（可撐 {2} 天）· 餵食率 {3}</DepthRim.NetCage.FeedLine>
+  <DepthRim.NetCage.FeedRate>餵食率：{0}</DepthRim.NetCage.FeedRate>
+  <DepthRim.NetCage.FeedRateDesc>切換餵食率（100%、70%、50%、0%）。少餵省飼料、降低耗氧，但魚長得慢。藻華或缺氧時先減餵。</DepthRim.NetCage.FeedRateDesc>
+  <DepthRim.NetCage.FishLine>{0} {1} 尾 · 平均 {2} kg（{3}）</DepthRim.NetCage.FishLine>
+  <DepthRim.NetCage.Harvest>收成</DepthRim.NetCage.Harvest>
+  <DepthRim.NetCage.HarvestDesc>魚達到上市體重後收成。馴獸的殖民者會從旁邊的岸邊、甲板或橋上作業。</DepthRim.NetCage.HarvestDesc>
+  <DepthRim.NetCage.HypoxiaLetter>箱網缺氧</DepthRim.NetCage.HypoxiaLetter>
+  <DepthRim.NetCage.HypoxiaLetterDesc>箱網的溶氧已經嚴重不足好幾個小時。{1} 尾{0}窒息死亡，剩 {2} 尾。\n\n降低餵食率、讓曝氣機運轉，或者收成。</DepthRim.NetCage.HypoxiaLetterDesc>
+  <DepthRim.NetCage.LayerLine>{0} {1} m · 水溫 {2} °C · 網況 {3}</DepthRim.NetCage.LayerLine>
+  <DepthRim.NetCage.NeedWater>箱網必須整個浮在海水上。</DepthRim.NetCage.NeedWater>
+  <DepthRim.NetCage.NetFine>網況還好（50% 以上）。</DepthRim.NetCage.NetFine>
+  <DepthRim.NetCage.NoAccess>箱網旁邊要有岸邊、橋或甲板。</DepthRim.NetCage.NoAccess>
+  <DepthRim.NetCage.NoSpecies>這個水溫（{0} °C）與網層沒有可養的魚種。</DepthRim.NetCage.NoSpecies>
+  <DepthRim.NetCage.NoWater>這裡的水深不夠掛這種網（{0} m，需要 {1} m）。</DepthRim.NetCage.NoWater>
+  <DepthRim.NetCage.NotGrowing>沒有成長</DepthRim.NetCage.NotGrowing>
+  <DepthRim.NetCage.NotPlatformLevel>箱網浮在水面層，不能放在平台層。</DepthRim.NetCage.NotPlatformLevel>
+  <DepthRim.NetCage.OpenSeaOnly>這種網掛得太深，灣內放不下：只能放外海。</DepthRim.NetCage.OpenSeaOnly>
+  <DepthRim.NetCage.OxygenLine>溶氧 {0}</DepthRim.NetCage.OxygenLine>
+  <DepthRim.NetCage.PendingStock>等待放養：{0} {1} 尾</DepthRim.NetCage.PendingStock>
+  <DepthRim.NetCage.PreviewBay>灣內 {0} m · 水溫 {1} °C</DepthRim.NetCage.PreviewBay>
+  <DepthRim.NetCage.PreviewSea>外海（水深 {0} m）· 網袋 {1} m · 水溫 {2} °C</DepthRim.NetCage.PreviewSea>
+  <DepthRim.NetCage.PreviewSpecies>可養：{0}</DepthRim.NetCage.PreviewSpecies>
+  <DepthRim.NetCage.ReadyIn>再 {0} 天可收成</DepthRim.NetCage.ReadyIn>
+  <DepthRim.NetCage.ReadyNow>可收成</DepthRim.NetCage.ReadyNow>
+  <DepthRim.NetCage.Reason.OpenSeaOnly>只能養在外海</DepthRim.NetCage.Reason.OpenSeaOnly>
+  <DepthRim.NetCage.Reason.Research>需要{0}</DepthRim.NetCage.Reason.Research>
+  <DepthRim.NetCage.Reason.Temperature>水溫 {0} °C，需要 {1}～{2}</DepthRim.NetCage.Reason.Temperature>
+  <DepthRim.NetCage.Reason.WrongLayer>這種網層不能養</DepthRim.NetCage.Reason.WrongLayer>
+  <DepthRim.NetCage.ReplaceNet>換網</DepthRim.NetCage.ReplaceNet>
+  <DepthRim.NetCage.ReplaceNetDesc>整個網袋換新（{0} 布），網況恢復到 100%，舊網回收一半的布。網況低於 50% 才能換。</DepthRim.NetCage.ReplaceNetDesc>
+  <DepthRim.NetCage.ReplaceOrdered>已下令換網：布 {0}/{1}</DepthRim.NetCage.ReplaceOrdered>
+  <DepthRim.NetCage.Stock>放養…</DepthRim.NetCage.Stock>
+  <DepthRim.NetCage.StockOption>{0} {1} 尾（{2}～{3} °C，{4} 天）</DepthRim.NetCage.StockOption>
+  <DepthRim.NetCage.StockDesc>選擇要放養的品種；尾數依品種固定。只有適合這個場地、網層與目前水溫（±2 °C）的品種可選。由馴獸的殖民者放養。\n\n魚會一直長大；長到超過箱網容量時，過密會讓牠們長得慢、開始出現損耗。</DepthRim.NetCage.StockDesc>
+  <DepthRim.NetCage.TooSmall>魚還不到上市體重的 {0}。</DepthRim.NetCage.TooSmall>
+  <DepthRim.NetLayer.Shallow>表層網</DepthRim.NetLayer.Shallow>
+  <DepthRim.NetLayer.Midwater>斜溫層網</DepthRim.NetLayer.Midwater>
+  <DepthRim.NetLayer.Deep>深層網</DepthRim.NetLayer.Deep>
+  <DepthRim.Settings.NetCages>箱網養殖</DepthRim.Settings.NetCages>
+  <DepthRim.Settings.NetCagesTip>關閉後隱藏箱網與相關事件。已存在的箱網留在原地，但停止運作。</DepthRim.Settings.NetCagesTip>
+
+</LanguageData>

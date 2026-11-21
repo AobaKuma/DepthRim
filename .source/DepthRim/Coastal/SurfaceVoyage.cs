@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
@@ -108,6 +109,33 @@ namespace DepthRim
 
         public static WorldObject_SurfaceShip ShipOf(Thing helm) => helm?.Map?.Parent as WorldObject_SurfaceShip;
 
+        /// <summary>地圖上的艦橋（有下潛控制與轉移控制台的建築；船地圖上只有一座）。沒有時 null。</summary>
+        /// <summary>
+        /// 船地圖上的艦橋。母船載子船時會有好幾座：<paramref name="shipName"/> 給了就優先挑名字對得上的（出航時用的那座），
+        /// 否則第一座。
+        /// </summary>
+        public static Building HelmOn(Map map, string shipName = null)
+        {
+            if (map == null)
+            {
+                return null;
+            }
+            Building first = null;
+            foreach (Building b in map.listerBuildings.allBuildingsColonist)
+            {
+                if (b.TryGetComp<CompDiveControl>() == null || !(b.TryGetComp<CompTransferConsole>() is CompTransferConsole console))
+                {
+                    continue;
+                }
+                if (shipName.NullOrEmpty() || console.ShipName == shipName)
+                {
+                    return b;
+                }
+                first ??= b;
+            }
+            return first;
+        }
+
         /// <summary>
         /// 船名：玩家在艦橋取的名字優先；沒有就給一個水面船的預設名並存回艦橋（DMSE 的預設名在地表圖層會叫「轉移艦」）。
         /// 航行、靠岸、泊位紀錄都用這個名字。
@@ -193,12 +221,7 @@ namespace DepthRim
             {
                 return "DepthRim.Launch.NoPower".Translate();
             }
-            HashSet<IntVec3> footprint = plan.footprint;
-            int helms = map.listerBuildings.allBuildingsColonist.Count(b => footprint.Contains(b.Position) && b.TryGetComp<CompDiveControl>() != null);
-            if (helms > 1)
-            {
-                return "DepthRim.Sail.ShipsLinked".Translate();
-            }
+            // 2026-11-21：同一個龍骨網路上可以有多座艦橋（母船載子船），整個網路一起走，不再擋
             // 潛水鐘沒收回不能走（§7.7）
             string bellLock = DiveBellLock.Reason(map, plan.footprint);
             if (bellLock != null)
@@ -352,7 +375,7 @@ namespace DepthRim
                         g.Retract();
                     }
                 }
-                GameComponent_SurfaceSail.Instance?.Queue(helm, destination);
+                GameComponent_SurfaceSail.Instance?.Queue(helm, destination, plan.footprint);
                 Messages.Message("DepthRim.Sail.RetractingGangway".Translate(), helm, MessageTypeDefOf.NeutralEvent, historical: false);
                 return false;
             }
@@ -393,12 +416,23 @@ namespace DepthRim
                 MapComponent_PileNetwork.For(origin)?.MarkDirty();
                 MapComponent_PileNetwork.For(shipMap)?.MarkDirty();
                 ship.BeginVoyage(path, thrust, ticksPerTile);
-                if (viewing)
-                {
-                    Current.Game.CurrentMap = shipMap;
-                    CameraJumper.TryJump(CellRect.FromCellList(cells).CenterCell, shipMap);
-                }
                 Messages.Message("DepthRim.Sail.Departed".Translate(ship.Label, path.Count - 1), ship, MessageTypeDefOf.PositiveEvent);
+                Action follow = () =>
+                {
+                    if (viewing && Find.Maps.Contains(shipMap))
+                    {
+                        Current.Game.CurrentMap = shipMap;
+                        CameraJumper.TryJump(CellRect.FromCellList(cells).CenterCell, shipMap);
+                    }
+                };
+                // 2026-11-21：出航的離港演出（同出港 M4）：船體已經搬到船地圖，原本的地圖上只剩影像——開出地圖邊。
+                // 只在玩家正在看這張地圖時播
+                if (!viewing || Docking.SkipShow())
+                {
+                    follow();
+                    return;
+                }
+                LongEventHandler.ExecuteWhenFinished(() => Find.WindowStack.Add(Docking.MakeShow(origin, cells, follow, shipMap, cells, departing: true, shortVersion: false)));
             }, "DepthRim.Sail.Departing", doAsynchronously: false, null);
         }
 
@@ -423,12 +457,26 @@ namespace DepthRim
             PlanetTile tile = ship.Tile;
             WorldObject_SeaSurfaceSite other = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_SeaSurfaceSite>()
                 .FirstOrDefault(s => s != ship && s.Tile == tile && s.HasMap && !(s is WorldObject_SurfaceShip os && os.underWay));
+            Thing helm = ship.HasMap ? HelmOn(ship.Map, ship.shipName) : null;
+            // 2026-11-21：抵達時讓玩家選停靠位置（同靠岸的設計器：位置＋朝向、進場路線），選好才播進場演出；
+            // 取消就停在這一格（船自己的地圖，船體在中央）。測試用 SubmarineSurfacing.autoPlace 照舊直接停進去。
+            bool choose = helm != null && !SubmarineSurfacing.autoPlace;
+            if (other != null && choose && Docking.BlockReason(helm, out _, out _, other.Map) == null)
+            {
+                Messages.Message("DepthRim.Sail.ArrivedChooseBerth".Translate(ship.Label, other.LabelCap), ship, MessageTypeDefOf.PositiveEvent);
+                Docking.Begin(helm, other.Map);
+                return;
+            }
             if (other == null || !ship.HasMap)
             {
                 Map colony = Docking.AdjacentColony(tile);
                 if (colony != null)
                 {
                     Messages.Message("DepthRim.Dock.ArrivedOffColony".Translate(ship.Label, colony.Parent.LabelCap), ship, MessageTypeDefOf.PositiveEvent);
+                    if (choose && Docking.BlockReason(helm, out _, out _) == null)
+                    {
+                        Docking.Begin(helm);
+                    }
                 }
                 else
                 {
@@ -514,14 +562,16 @@ namespace DepthRim
 
         public bool Pending(Thing helm) => helms.Contains(helm);
 
-        public void Queue(Thing helm, PlanetTile destination)
+        /// <summary>排進出航；同一艘船（<paramref name="footprint"/> 上的其他艦橋，母船載子船時會有好幾座）先前排的取消，只留最新的這一筆。</summary>
+        public void Queue(Thing helm, PlanetTile destination, ICollection<IntVec3> footprint = null)
         {
-            int i = helms.IndexOf(helm);
-            if (i >= 0)
+            for (int i = helms.Count - 1; i >= 0; i--)
             {
-                helms.RemoveAt(i);
-                destinations.RemoveAt(i);
-                queuedTicks.RemoveAt(i);
+                Thing other = helms[i];
+                if (other == helm || (footprint != null && other != null && other.Map == helm.Map && footprint.Contains(other.Position)))
+                {
+                    Remove(i);
+                }
             }
             helms.Add(helm);
             destinations.Add(destination.tileId);

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_MakeFishKibble.label>製作魚肉飼料</DepthRim_MakeFishKibble.label>
+  <DepthRim_MakeFishKibble.description>把雜魚和快壞的魚獲絞成動物飼料。只收魚；產量比一般 Kibble 略少。</DepthRim_MakeFishKibble.description>
+  <DepthRim_MakeFishKibble.jobString>製作魚肉飼料。</DepthRim_MakeFishKibble.jobString>
+</LanguageData>

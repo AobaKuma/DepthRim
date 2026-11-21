@@ -46,6 +46,21 @@ namespace DepthRim
 
         private static readonly List<Pawn> tmpFish = new List<Pawn>();
 
+        /// <summary>
+        /// 沒有水位的地圖上，海面的水（開放海面、原版深／淺海水）也算水（箱網養殖 §6.6、§10 #13）：
+        /// 逃逸的養殖魚、外海的睡鯊在海面上不會窒息。有水位的水下地圖照舊看水位。
+        /// </summary>
+        public static bool IsSurfaceWater(TerrainDef t)
+        {
+            return t != null && (t == DepthRimDefOf.DepthRim_OpenSea || t == TerrainDefOf.WaterOceanShallow || t == TerrainDefOf.WaterOceanDeep);
+        }
+
+        public static bool OnSurfaceWater(Pawn fish)
+        {
+            Map map = fish.MapHeld;
+            return map != null && fish.Spawned && IsSurfaceWater(map.terrainGrid.TerrainAt(fish.Position));
+        }
+
         /// <summary>沒有水位的地圖：地圖上每條魚都離水（每次水位結算的間隔呼叫一次）。</summary>
         public static void ApplyNoWater(Map map)
         {
@@ -62,7 +77,7 @@ namespace DepthRim
             {
                 if (tmpFish[i].Spawned && !tmpFish[i].Dead)
                 {
-                    ApplyWater(tmpFish[i], 0f);
+                    ApplyWater(tmpFish[i], OnSurfaceWater(tmpFish[i]) ? 1f : 0f);
                 }
             }
             tmpFish.Clear();

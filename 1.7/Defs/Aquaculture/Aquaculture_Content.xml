@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- ═══ 研究（Docs/箱網養殖_內容設計.md §9）═══
+       箱網養殖與水質管理用一般研究點數（水面上的事，掛在「水下」分頁）；深水箱網要下海，用海底研究點數。 -->
+  <ResearchProjectDef>
+    <defName>DepthRim_Aquaculture</defName>
+    <label>net cage aquaculture</label>
+    <description>Hanging a net bag from a floating frame in a bay or on the open sea and raising fish in it: stocking, feeding with kibble, and harvesting before the weather or the water turns.\n\nUnlocks the surface net cage and a fish-only kibble recipe at the butcher table.</description>
+    <baseCost>800</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>DepthRim_ResearchTab</tab>
+    <prerequisites>
+      <li>Fishing</li>
+      <li>Electricity</li>
+    </prerequisites>
+    <researchViewX>1.00</researchViewX>
+    <researchViewY>1.00</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>DepthRim_WaterQuality</defName>
+    <label>water quality management</label>
+    <description>Watching the dissolved oxygen in the cages and keeping it up when the water is warm, crowded or blooming.\n\nUnlocks the aerator.</description>
+    <baseCost>1000</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>DepthRim_ResearchTab</tab>
+    <prerequisites>
+      <li>DepthRim_Aquaculture</li>
+      <li>Electricity</li>
+    </prerequisites>
+    <researchViewX>2.00</researchViewX>
+    <researchViewY>1.00</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>DepthRim_DeepNetCages</defName>
+    <label>deep net cages</label>
+    <description>Pressure-rated frames and moorings that hold a net bag far below the surface, where the water is cold and steady.\n\nUnlocks the thermocline and deep net cages, and lets hake and frostfish be stocked.</description>
+    <knowledgeCategory>DepthRim_Seabed</knowledgeCategory>
+    <knowledgeCost>1500</knowledgeCost>
+    <techLevel>Industrial</techLevel>
+    <tab>DepthRim_SeabedResearchTab</tab>
+    <prerequisites>
+      <li>DepthRim_Aquaculture</li>
+      <li>DepthRim_PressureEngineering</li>
+    </prerequisites>
+    <researchViewX>1.00</researchViewX>
+    <researchViewY>1.00</researchViewY>
+  </ResearchProjectDef>
+
+  <!-- ═══ 魚肉飼料（§3.3）：只收魚，2 營養 → 40 個 Kibble（原版 50，刻意略差）═══ -->
+  <RecipeDef>
+    <defName>DepthRim_MakeFishKibble</defName>
+    <label>make fish kibble</label>
+    <description>Grind trash fish and spoiling catch into animal kibble. Fish only; yields a little less than ordinary kibble.</description>
+    <jobString>Making fish kibble.</jobString>
+    <workAmount>450</workAmount>
+    <workSpeedStat>CookSpeed</workSpeedStat>
+    <effectWorking>Cook</effectWorking>
+    <soundWorking>Recipe_CookMeal</soundWorking>
+    <allowMixingIngredients>true</allowMixingIngredients>
+    <ingredientValueGetterClass>IngredientValueGetter_Nutrition</ingredientValueGetterClass>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>Fish</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <products>
+      <Kibble>40</Kibble>
+    </products>
+    <fixedIngredientFilter>
+      <categories>
+        <li>Fish</li>
+      </categories>
+    </fixedIngredientFilter>
+    <recipeUsers>
+      <li>ButcherSpot</li>
+      <li>TableButcher</li>
+    </recipeUsers>
+    <researchPrerequisite>DepthRim_Aquaculture</researchPrerequisite>
+    <workSkill>Cooking</workSkill>
+  </RecipeDef>
+
+  <!-- ═══ 工作（§8.1）：不新增工作類型；放養／收成／補飼料掛馴獸，修網掛建造，治療掛醫療 ═══ -->
+  <JobDef>
+    <defName>DepthRim_StockCage</defName>
+    <driverClass>DepthRim.JobDriver_StockCage</driverClass>
+    <reportString>stocking TargetA.</reportString>
+  </JobDef>
+
+  <JobDef>
+    <defName>DepthRim_HarvestCage</defName>
+    <driverClass>DepthRim.JobDriver_HarvestCage</driverClass>
+    <reportString>harvesting TargetA.</reportString>
+  </JobDef>
+
+  <JobDef>
+    <defName>DepthRim_RefillCageFeed</defName>
+    <driverClass>DepthRim.JobDriver_DeliverToCage</driverClass>
+    <reportString>feeding TargetA.</reportString>
+  </JobDef>
+
+  <JobDef>
+    <defName>DepthRim_DeliverToCage</defName>
+    <driverClass>DepthRim.JobDriver_DeliverToCage</driverClass>
+    <reportString>bringing TargetB to TargetA.</reportString>
+  </JobDef>
+
+  <JobDef>
+    <defName>DepthRim_RepairCageNet</defName>
+    <driverClass>DepthRim.JobDriver_RepairCageNet</driverClass>
+    <reportString>mending the net of TargetA.</reportString>
+  </JobDef>
+
+  <JobDef>
+    <defName>DepthRim_TreatCage</defName>
+    <driverClass>DepthRim.JobDriver_TreatCage</driverClass>
+    <reportString>treating the fish in TargetA.</reportString>
+  </JobDef>
+
+  <WorkGiverDef>
+    <defName>DepthRim_StockCage</defName>
+    <label>stock net cages</label>
+    <giverClass>DepthRim.WorkGiver_StockCage</giverClass>
+    <workType>Handling</workType>
+    <verb>stock</verb>
+    <gerund>stocking</gerund>
+    <priorityInType>45</priorityInType>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+    <defName>DepthRim_HarvestCage</defName>
+    <label>harvest net cages</label>
+    <giverClass>DepthRim.WorkGiver_HarvestCage</giverClass>
+    <workType>Handling</workType>
+    <verb>harvest</verb>
+    <gerund>harvesting</gerund>
+    <priorityInType>50</priorityInType>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+    <defName>DepthRim_RefillCageFeed</defName>
+    <label>feed net cages</label>
+    <giverClass>DepthRim.WorkGiver_RefillCageFeed</giverClass>
+    <workType>Handling</workType>
+    <verb>feed</verb>
+    <gerund>feeding</gerund>
+    <priorityInType>48</priorityInType>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+    <defName>DepthRim_RepairCageNet</defName>
+    <label>mend net cages</label>
+    <giverClass>DepthRim.WorkGiver_RepairCageNet</giverClass>
+    <workType>Construction</workType>
+    <verb>mend</verb>
+    <gerund>mending</gerund>
+    <priorityInType>65</priorityInType>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+    <defName>DepthRim_TreatCage</defName>
+    <label>treat caged fish</label>
+    <giverClass>DepthRim.WorkGiver_TreatCage</giverClass>
+    <workType>Doctor</workType>
+    <verb>treat</verb>
+    <gerund>treating</gerund>
+    <priorityInType>20</priorityInType>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+  </WorkGiverDef>
+
+  <!-- ═══ 藻華與冷暖洋流（§5.5、§6.3）═══
+       由 MapComponent_Aquaculture 依條件與平均間隔觸發（baseChance 0：說故事者不會自己挑）。 -->
+  <GameConditionDef>
+    <defName>DepthRim_AlgalBloom</defName>
+    <conditionClass>DepthRim.GameCondition_AlgalBloom</conditionClass>
+    <label>algal bloom</label>
+    <description>The water around the net cages has turned green. Dissolved oxygen in every cage is lower until the bloom dies off.</description>
+    <endMessage>The algal bloom has died off.</endMessage>
+    <letterText>Algal bloom: the water is turning green. Stop feeding and aerate the cages.</letterText>
+    <letterDef>NegativeEvent</letterDef>
+    <canBePermanent>false</canBePermanent>
+  </GameConditionDef>
+
+  <GameConditionDef>
+    <defName>DepthRim_WarmCurrent</defName>
+    <conditionClass>DepthRim.GameCondition_OceanCurrent</conditionClass>
+    <label>warm current</label>
+    <description>A warm current is pushing through this stretch of sea. Near-surface water is warmer and holds less oxygen; the deep water below the thermocline is unaffected.</description>
+    <endMessage>The warm current has moved on.</endMessage>
+    <letterDef>NeutralEvent</letterDef>
+    <canBePermanent>false</canBePermanent>
+  </GameConditionDef>
+
+  <GameConditionDef>
+    <defName>DepthRim_ColdCurrent</defName>
+    <conditionClass>DepthRim.GameCondition_OceanCurrent</conditionClass>
+    <label>cold current</label>
+    <description>A cold current is pushing through this stretch of sea. Near-surface water is colder and holds more oxygen; the deep water below the thermocline is unaffected.</description>
+    <endMessage>The cold current has moved on.</endMessage>
+    <letterDef>NeutralEvent</letterDef>
+    <canBePermanent>false</canBePermanent>
+  </GameConditionDef>
+
+  <IncidentDef>
+    <defName>DepthRim_AlgalBloomIncident</defName>
+    <label>algal bloom</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+      <li>Map_Misc</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_CageCondition</workerClass>
+    <gameCondition>DepthRim_AlgalBloom</gameCondition>
+    <baseChance>0</baseChance>
+    <letterLabel>Algal bloom</letterLabel>
+    <letterText>Algal bloom: the water around the net cages is turning green and its oxygen is falling. Stop feeding and aerate the cages.</letterText>
+    <letterDef>NegativeEvent</letterDef>
+  </IncidentDef>
+
+  <IncidentDef>
+    <defName>DepthRim_WarmCurrentIncident</defName>
+    <label>warm current</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_Misc</li>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_CageCondition</workerClass>
+    <gameCondition>DepthRim_WarmCurrent</gameCondition>
+    <baseChance>0</baseChance>
+    <letterLabel>Warm current</letterLabel>
+    <letterText>A warm current is pushing through the cages. The water is warmer and holds less oxygen.</letterText>
+    <letterDef>NeutralEvent</letterDef>
+  </IncidentDef>
+
+  <IncidentDef>
+    <defName>DepthRim_ColdCurrentIncident</defName>
+    <label>cold current</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_Misc</li>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_CageCondition</workerClass>
+    <gameCondition>DepthRim_ColdCurrent</gameCondition>
+    <baseChance>0</baseChance>
+    <letterLabel>Cold current</letterLabel>
+    <letterText>A cold current is pushing through the cages. The water is colder and holds more oxygen.</letterText>
+    <letterDef>NeutralEvent</letterDef>
+  </IncidentDef>
+
+  <!-- ═══ 掠食者（§6.2）：灣內 Odyssey 水獺 1～2 隻，外海睡鯊 1 隻；咬網 30～60 傷害就離開 ═══ -->
+  <IncidentDef>
+    <defName>DepthRim_CagePredator</defName>
+    <label>cage predator</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+      <li>Map_Misc</li>
+    </targetTags>
+    <workerClass>DepthRim.IncidentWorker_CagePredator</workerClass>
+    <baseChance>0</baseChance>
+    <letterLabel>Predator at the cages</letterLabel>
+    <letterText>A {PREDATOR} has found the fish in the net cages and is tearing at the net. Drive it off before the net gives way.</letterText>
+    <letterDef>ThreatSmall</letterDef>
+  </IncidentDef>
+
+  <!-- 睡鯊：大型魚＋咬網行為，外觀固定用睡鯊品種。只由掠食者事件生成（不在任何生態區的野生動物表裡）。 -->
+  <ThingDef ParentName="DepthRim_FishBase">
+    <defName>DepthRim_SleeperShark</defName>
+    <label>sleeper shark</label>
+    <description>A sluggish, dark sleeper shark drawn up from the deep by the smell of farmed fish. It tears at nets until it gets bored. Killed, it becomes a large catch of fish.</description>
+    <statBases>
+      <MoveSpeed>3.6</MoveSpeed>
+    </statBases>
+    <tools>
+      <li>
+        <label>jaws</label>
+        <capacities>
+          <li>Bite</li>
+        </capacities>
+        <power>14</power>
+        <cooldownTime>2.2</cooldownTime>
+        <linkedBodyPartsGroup>Mouth</linkedBodyPartsGroup>
+      </li>
+    </tools>
+    <comps>
+      <li Class="DepthRim.CompProperties_FishCatch">
+        <size>Large</size>
+      </li>
+      <li Class="DepthRim.CompProperties_NetRaider" />
+    </comps>
+    <race>
+      <baseBodySize>2.0</baseBodySize>
+      <baseHealthScale>2.0</baseHealthScale>
+      <useMeatFrom>DepthRim_Fish_Medium</useMeatFrom>
+    </race>
+  </ThingDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>DepthRim_SleeperShark</defName>
+    <label>sleeper shark</label>
+    <race>DepthRim_SleeperShark</race>
+    <canArriveManhunter>false</canArriveManhunter>
+    <combatPower>70</combatPower>
+    <ecoSystemWeight>0</ecoSystemWeight>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Thing/Fish/fish_l</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>3.0</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+</Defs>

@@ -60,7 +60,10 @@ namespace DepthRim.Acceptance
             string block = SubmarineSurfacing.SurfaceBlockReason(sub, out _);
             ctx.Require(block == null, $"the start submarine can surface ({block})");
             AcceptanceDriver.KeepWindowOpen = typeof(SubmarineSurfacingCutscene);
+            // 這個測試看演出：不問停船位置（選位與演出的先後由 U5 測）
+            SubmarineSurfacing.autoPlace = true;
             SubmarineSurfacing.Surface(sub);
+            SubmarineSurfacing.autoPlace = false;
             float blackShare = -1f;
             bool soft = false;
             List<float> order = null;

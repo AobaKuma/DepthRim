@@ -192,6 +192,23 @@ namespace DepthRim.Acceptance
             int hullCells = dock.Area + dock2.Area;
             ctx.Check(seaComp.lastPlatformCells == 50 && seaComp.lastFloatingCells == hullCells && seaComp.lastPillarCells == 36, $"the water level's mask shows the platforms above, the hulls and both pillars ({seaComp.lastPlatformCells}, {seaComp.lastFloatingCells}, {seaComp.lastPillarCells})");
             ctx.Check(platComp.lastPlatformCells == 50 && platComp.lastFloatingCells == hullCells && platComp.lastPillarCells == 36, $"the platform level's mask matches ({platComp.lastPlatformCells}, {platComp.lastFloatingCells}, {platComp.lastPillarCells})");
+
+            // 原版橋貼著水面：不是高出海面的甲板，不畫平台的影子與輪廓（2026-11-21 使用者回報）
+            List<IntVec3> bridge = Enumerable.Range(0, 4).Select(i => new IntVec3(p1.x + 17 + i, 0, p1.z - 8)).Where(c => SeaSurface.IsOpenSea(c, sea)).ToList();
+            ctx.Require(bridge.Count == 4, $"open sea for a bridge ({bridge.Count})");
+            foreach (IntVec3 c in bridge)
+            {
+                sea.terrainGrid.SetTerrain(c, TerrainDefOf.Bridge);
+            }
+            seaComp.RebuildMask();
+            int bridgePlatform = seaComp.lastPlatformCells;
+            int bridgeFloating = seaComp.lastFloatingCells;
+            foreach (IntVec3 c in bridge)
+            {
+                sea.terrainGrid.RemoveFoundation(c, doLeavings: false);
+            }
+            seaComp.RebuildMask();
+            ctx.Check(bridgePlatform == 50 && bridgeFloating == hullCells, $"a vanilla bridge is neither a raised platform nor a hull in the mask ({bridgePlatform}, {bridgeFloating})");
             ctx.Check(seaMat.GetVector("_Height").x == 0f && Mathf.Abs(platMat.GetVector("_Height").x - MapComponent_SeaSurface.SeaDropCells) < 0.001f, "the water level sees the sea in place, the platform level sees it far below");
             SectionLayer_SeaSurface platSea = (SectionLayer_SeaSurface)platform.mapDrawer.SectionAt(new IntVec3(p1.x, 0, p1.z + 10)).GetLayer(typeof(SectionLayer_SeaSurface));
             platSea.Regenerate();
@@ -221,6 +238,24 @@ namespace DepthRim.Acceptance
             ctx.Check(!platComp.RefreshLowerLevelIfChanged(), "no change, no refresh");
             lower.Regenerate();
             ctx.Check(lower.lastThings > 0, $"buildings at the water level are drawn below ({lower.lastThings})");
+
+            // 龍骨（甲板下的結構）不畫進這份快照（2026-11-22 使用者要求）：用龍骨自己那個 section 比較前後，
+            // 免得跨 section 時檢查到沒關係的那一片。Def 也把 DMSE 的底板／鋼樑尺寸設成 0。
+            ThingDef keelDef = ThingDef.Named("DepthRim_Keel");
+            var keelProps = keelDef.GetCompProperties<CompProperties_StructuralPile>();
+            ctx.Check(keelProps != null && keelProps.beamWidth == 0f && keelProps.beamCenterDrawSize == 0f,
+                $"the keel draws no under-keel plate or girder ({keelProps?.beamWidth}, {keelProps?.beamCenterDrawSize})");
+            IntVec3 keelAt = new IntVec3(dock.minX + 4, 0, dock.minZ);
+            SectionLayer_LowerLevel keelLower = (SectionLayer_LowerLevel)platform.mapDrawer
+                .SectionAt(SectionLayer_LowerLevel.ScreenCell(keelAt, drop)).GetLayer(typeof(SectionLayer_LowerLevel));
+            ctx.Require(keelLower != null, "the platform level has the lower-level layer under the keel");
+            keelLower.Regenerate();
+            int printedBeforeKeel = keelLower.lastThings;
+            Thing keel = DepthRimFixture.Spawn(keelDef, keelAt, sea);
+            ctx.Check(keel.TryGetComp<CompStructuralPile>() != null, "the keel is a DMSE structural pile (the patch reads its network)");
+            keelLower.Regenerate();
+            ctx.Check(keelLower.lastThings == printedBeforeKeel, $"the keel is not drawn below the platform level ({keelLower.lastThings} buildings, {printedBeforeKeel} before it)");
+            keel.Destroy(DestroyMode.Vanish);
 
             // 平台底下的明暗（2026-11-15）：暗化層與柱身的材質兩層都有、共用水面層的一份遮罩；遊戲邏輯的光照在甲板下變暗、遠處不變
             ctx.Check(seaComp.ShadowMaterial != null && platComp.ShadowMaterial != null, "both levels have the platform-shadow overlay material");

@@ -6,7 +6,7 @@ namespace DepthRim
     /// <summary>
     /// 進出港演出（M4，設計稿 §6）的船體姿態：位置（地圖座標，格）與旋轉角（度，順時針；0 = 擷取到的影像原本的朝向，也就是停進泊位後的朝向）。
     /// 純函式，可單元測試。離港用同一條時間軸倒著播（<see cref="Pose"/> 的 progress 換成 1 − progress）。
-    /// <para>時間軸（比例；完整版 10 秒、短版 3 秒）：
+    /// <para>時間軸（比例；實際秒數見 <see cref="TimelineFor"/>：開的那段照路線長度、其他段固定）：
     /// <list type="bullet">
     /// <item>0–0.5：從進場口沿路線開到迴轉點，船頭朝前進方向（短版只走路線最後一段）。</item>
     /// <item>0.5–0.65：在迴轉點原地轉到最後的朝向（最短的那個方向）。</item>
@@ -134,6 +134,69 @@ namespace DepthRim
                 return new Pose { pos = Vector2.LerpUnclamped(turn, berth, s), angle = 0f };
             }
             return new Pose { pos = berth, angle = 0f };
+        }
+
+        // ── 實際秒數（2026-11-21：原本整段固定 10 秒，路線長短不同時開船速度差很多——出港開到地圖邊、進港從進場口進來都要一樣快）──
+
+        /// <summary>沿路線開的平均速度（格／秒）。</summary>
+        public const float TravelSpeed = 14f;
+
+        /// <summary>路線再短也至少開這麼久（秒）。</summary>
+        public const float MinTravelSeconds = 1.2f;
+
+        /// <summary>路線再長也最多開這麼久（秒；很長的路線會開得比較快）。</summary>
+        public const float MaxTravelSeconds = 14f;
+
+        /// <summary>完整版轉向、平移、停好各段的秒數；短版乘 <see cref="ShortPhaseScale"/>。</summary>
+        public const float TurnSeconds = 1.5f, SlideSeconds = 2f, SettleSeconds = 1.5f;
+
+        public const float ShortPhaseScale = 0.3f;
+
+        /// <summary>演出各段的實際秒數（開、轉、平移、停好）。</summary>
+        public struct Timeline
+        {
+            public float travel, turn, slide, settle;
+
+            public float Total => travel + turn + slide + settle;
+        }
+
+        /// <summary>折線長度（格）。</summary>
+        public static float PathLength(List<Vector2> path)
+        {
+            float total = 0f;
+            for (int i = 0; i + 1 < path.Count; i++)
+            {
+                total += (path[i + 1] - path[i]).magnitude;
+            }
+            return total;
+        }
+
+        /// <summary>依路線長度算各段秒數：開的那段照 <see cref="TravelSpeed"/>，其他段固定（短版較短、只開路線最後一段）。</summary>
+        public static Timeline TimelineFor(float pathLength, bool shortVersion)
+        {
+            float scale = shortVersion ? ShortPhaseScale : 1f;
+            float distance = pathLength * (shortVersion ? ShortTravelShare : 1f);
+            return new Timeline
+            {
+                travel = Mathf.Clamp(distance / TravelSpeed, MinTravelSeconds * scale, MaxTravelSeconds),
+                turn = TurnSeconds * scale,
+                slide = SlideSeconds * scale,
+                settle = SettleSeconds * scale,
+            };
+        }
+
+        /// <summary>靠岸開始後 <paramref name="seconds"/> 秒對應的時間軸位置（給 <see cref="At"/>、<see cref="Bob"/>）。離港用 Total − 經過秒數。</summary>
+        public static float ProgressAt(float seconds, Timeline tl)
+        {
+            if (seconds <= 0f) { return 0f; }
+            if (seconds < tl.travel) { return TravelEnd * seconds / tl.travel; }
+            seconds -= tl.travel;
+            if (seconds < tl.turn) { return TravelEnd + (TurnEnd - TravelEnd) * seconds / tl.turn; }
+            seconds -= tl.turn;
+            if (seconds < tl.slide) { return TurnEnd + (SlideEnd - TurnEnd) * seconds / tl.slide; }
+            seconds -= tl.slide;
+            if (seconds < tl.settle) { return SlideEnd + (1f - SlideEnd) * seconds / tl.settle; }
+            return 1f;
         }
 
         /// <summary>停好後的輕微起伏（格）：越來越小，最後一刻歸零。</summary>

@@ -77,6 +77,12 @@
         <beamWorkPerCell>120</beamWorkPerCell>
         <beamDismantleWorkFactor>0.5</beamDismantleWorkFactor>
         <beamDismantleRefund>0.5</beamDismantleRefund>
+        <!-- 2026-11-22 使用者要求：不畫龍骨下面的底板與龍骨之間的鋼樑。
+             DMSE 的 MapDrawLayer_StructuralBeams 會在 AltitudeLayer.BelowTerrain 畫每座樁的 6×6 底板
+             （beamCenterDrawSize × 2）與連結的鋼樑段（寬 beamWidth × 2）；這兩個欄位只影響繪製，
+             連結、船體範圍與出港判定都不變。DepthRim 的龍骨用 0 = 不畫，DMSE 自己的結構樁不受影響。 -->
+        <beamWidth>0</beamWidth>
+        <beamCenterDrawSize>0</beamCenterDrawSize>
       </li>
     </comps>
     <uiOrder>2205</uiOrder>
@@ -120,6 +126,9 @@
         <beamWorkPerCell>120</beamWorkPerCell>
         <beamDismantleWorkFactor>0.5</beamDismantleWorkFactor>
         <beamDismantleRefund>0.5</beamDismantleRefund>
+        <!-- 同上：小龍骨也不畫底板與鋼樑 -->
+        <beamWidth>0</beamWidth>
+        <beamCenterDrawSize>0</beamCenterDrawSize>
       </li>
     </comps>
     <uiOrder>2206</uiOrder>
@@ -160,7 +169,7 @@
     </costList>
     <designationCategory>DepthRim_Underwater</designationCategory>
     <inspectorTabs>
-      <li>DMSE.ITab_TransferShip</li>
+      <li>DepthRim.ITab_Vessel</li>
     </inspectorTabs>
     <comps>
       <li Class="CompProperties_Power">

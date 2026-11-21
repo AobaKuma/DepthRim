@@ -116,7 +116,9 @@ namespace DepthRim.Acceptance
                     && kind.race.tradeTags.NullOrEmpty() && kind.race.GetStatValueAbstract(StatDefOf.Wildness) >= 0.35f,
                     $"{kind.defName}: excluded from manhunter packs, herd migration, shamblers, quests, traders and farm animal wander-ins");
                 List<BiomeDef> biomes = DefDatabase<BiomeDef>.AllDefs.Where(b => b.AllWildAnimals.Contains(kind)).ToList();
-                ctx.Check(biomes.Count > 0 && biomes.All(b => b.HasModExtension<WaterMapExtension>()), $"{kind.defName}: only underwater ocean biomes list it as wildlife ({string.Join(", ", biomes.Select(b => b.defName))})");
+                // 箱網的睡鯊只由掠食者事件生成（ecoSystemWeight 0），不在任何生態區
+                bool eventOnly = kind.ecoSystemWeight <= 0f;
+                ctx.Check(eventOnly ? biomes.Count == 0 : biomes.Count > 0 && biomes.All(b => b.HasModExtension<WaterMapExtension>()), $"{kind.defName}: only underwater ocean biomes list it as wildlife ({string.Join(", ", biomes.Select(b => b.defName))})");
             }
 
             // 地表（沒有水）：魚不會消失，而是離水倒地、很快死成漁獲

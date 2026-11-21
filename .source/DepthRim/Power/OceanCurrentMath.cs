@@ -87,10 +87,11 @@ namespace DepthRim
         /// <summary>
         /// 當下的洋流強度：深度基準 × （天氣只有表層那部分有影響）× 潮汐漲落，上限 <paramref name="maxStrength"/>。
         /// </summary>
-        public static float Strength(DepthTier tier, float windSpeed, long ticks, float phase, float maxStrength = MaxStrength)
+        /// <param name="eventFactor">冷暖洋流事件（箱網養殖 §5.5）時 1.15，平常 1（<see cref="ClimateMath.EventFactor"/>）。</param>
+        public static float Strength(DepthTier tier, float windSpeed, long ticks, float phase, float maxStrength = MaxStrength, float eventFactor = 1f)
         {
             float weather = Mathf.Lerp(1f, WeatherFactor(windSpeed), WeatherShare(tier));
-            return Mathf.Min(maxStrength, TierBase(tier) * weather * Surge(ticks, phase));
+            return Mathf.Min(maxStrength, TierBase(tier) * weather * Surge(ticks, phase) * eventFactor);
         }
 
         /// <summary>通道阻塞的輸出倍率：每格 −20%，最低保留 <see cref="MinFlowFactor"/>。</summary>

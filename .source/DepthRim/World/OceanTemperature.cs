@@ -199,6 +199,15 @@ namespace DepthRim
         public override void FinalizeInit(bool fromLoad)
         {
             base.FinalizeInit(fromLoad);
+            PlanetLayer pending = Patch_PlanetLayer_ExposeOceanTiles.PendingRestore;
+            Patch_PlanetLayer_ExposeOceanTiles.PendingRestore = null;
+            if (fromLoad && pending != null && pending == Find.WorldGrid?.FirstLayerOfDef(DepthRimDefOf.DepthRim_Ocean))
+            {
+                // 舊存檔沒存海洋格的深度、溫度、地勢（讀檔後深度都是 0 m）：依世界種子重算
+                int restored = WorldGenStep_OceanTiles.RestoreTileData(world.info.seedString, pending);
+                Find.World.tileTemperatures?.ClearCaches();
+                Log.Message($"[DepthRim] Restored seafloor depth and water temperature for {restored} ocean tiles (save without ocean tile data).");
+            }
             if (version >= CurrentVersion)
             {
                 return;

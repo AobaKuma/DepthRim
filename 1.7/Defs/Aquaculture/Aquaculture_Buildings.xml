@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!--
+    箱網養殖（Docs/箱網養殖_內容設計.md §3）：7×7 浮框，浮在灣內（原版海岸地圖的海水）或外海（海面地圖的開放海面）。
+    - 表層網灣內／外海通用（同一個 Def，Building_NetCage 依場地染色：灣內偏綠、外海偏藍）；斜溫層／深層網只能放外海。
+    - 承載力用 DepthRim_HullBase（開放海面、原版深／淺海水都有），PlaceWorker_NetCage 再排除陸地、橋、平台層，檢查水深與連通。
+    - 原版的「修理」會免費補滿 HP，所以 repairable = false：只能修網（45 布＋30 鋼）或換網（75 布）。
+    - 不可通行但看得過去、打得過去（浮框很矮）：disableImpassableShotOverConfigError。
+    - 貼圖：Textures/Thing/DR_NetCase＋遮罩 DR_NetCase_m（使用者提供）；浮球依場地與網層染色。
+    - 外海：浮框那一圈加進海面遮罩的 g（貼著水面的水線白沫，不像船體平台有甲板偏移與短影子；PlatformShadowField.CageFoamMax）。
+  -->
+  <ThingDef Name="DepthRim_NetCageBase" ParentName="BuildingBase" Abstract="True">
+    <thingClass>DepthRim.Building_NetCage</thingClass>
+    <!-- 每幀畫：浮框跟著海面漂移、起伏（Building_NetCage.DrawAt）。平台層往下看的快照另外用 Print 印，不受影響 -->
+    <drawerType>RealtimeOnly</drawerType>
+    <graphicData>
+      <texPath>Thing/DR_NetCase</texPath>
+      <!-- 遮罩（DR_NetCase_m）紅色的部分是浮球：只有浮球吃 Building_NetCage.DrawColor（灣內綠、外海藍，網層越深越暗），鋼架保留原色 -->
+      <maskPath>Thing/DR_NetCase_m</maskPath>
+      <shaderType>CutoutComplex</shaderType>
+      <graphicClass>Graphic_Single</graphicClass>
+      <!-- 貼圖 1024 px，浮框只畫在中間 58～966 px（908 px）：放大到 7 × 1024 / 908 ≈ 7.89，浮框外緣正好貼齊 7×7 佔地 -->
+      <drawSize>(7.894,7.894)</drawSize>
+      <damageData>
+        <rect>(0.45,0.45,7,7)</rect>
+      </damageData>
+    </graphicData>
+    <altitudeLayer>Building</altitudeLayer>
+    <size>(7,7)</size>
+    <rotatable>false</rotatable>
+    <passability>Impassable</passability>
+    <disableImpassableShotOverConfigError>true</disableImpassableShotOverConfigError>
+    <fillPercent>0.15</fillPercent>
+    <castEdgeShadows>false</castEdgeShadows>
+    <staticSunShadowHeight>0</staticSunShadowHeight>
+    <blockWind>false</blockWind>
+    <canOverlapZones>false</canOverlapZones>
+    <tickerType>Rare</tickerType>
+    <selectable>true</selectable>
+    <terrainAffordanceNeeded>DepthRim_HullBase</terrainAffordanceNeeded>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <constructEffect>ConstructMetal</constructEffect>
+    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_NetCage</li>
+    </placeWorkers>
+    <building>
+      <repairable>false</repairable>
+      <ai_chillDestination>false</ai_chillDestination>
+      <allowAutoroof>false</allowAutoroof>
+      <destroySound>BuildingDestroyed_Metal_Medium</destroySound>
+      <isEdifice>true</isEdifice>
+    </building>
+    <statBases>
+      <Flammability>0</Flammability>
+      <Beauty>0</Beauty>
+      <Mass>200</Mass>
+    </statBases>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_NetCageBase">
+    <defName>DepthRim_NetCage_Shallow</defName>
+    <label>surface net cage</label>
+    <description>A floating frame with a net bag hanging ten metres into the sea. Stock it, feed it, and harvest the fish before a storm tears the net open. A sheltered bay is forgiving; the open sea is not.\n\nThe water follows the seasons closely, so what can be farmed changes through the year. It must float on sea water at least 10 m deep, with a shore, deck or bridge alongside to work from.</description>
+    <uiOrder>2500</uiOrder>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>5400</WorkToBuild>
+    </statBases>
+    <costList>
+      <Steel>180</Steel>
+      <Cloth>120</Cloth>
+    </costList>
+    <researchPrerequisites>
+      <li>DepthRim_Aquaculture</li>
+    </researchPrerequisites>
+    <comps>
+      <li Class="DepthRim.CompProperties_NetCage">
+        <layer>Shallow</layer>
+        <netDepth>10</netDepth>
+        <minWaterDepth>10</minWaterDepth>
+        <stormGrowthFactor>0.5</stormGrowthFactor>
+        <stormDamageFactor>1.5</stormDamageFactor>
+        <capacityKg>300</capacityKg>
+        <feedCapacity>240</feedCapacity>
+        <tint>(1, 1, 1)</tint>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_NetCageBase">
+    <defName>DepthRim_NetCage_Midwater</defName>
+    <label>thermocline net cage</label>
+    <description>A heavy floating frame whose net bag hangs 150 m down, into water that barely changes with the seasons. Storms hurt its fish far less than in a surface net.\n\nOpen sea only, at least 180 m deep, with a deck or bridge alongside.</description>
+    <uiOrder>2501</uiOrder>
+    <statBases>
+      <MaxHitPoints>360</MaxHitPoints>
+      <WorkToBuild>6600</WorkToBuild>
+    </statBases>
+    <costList>
+      <Steel>240</Steel>
+      <Cloth>150</Cloth>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <researchPrerequisites>
+      <li>DepthRim_DeepNetCages</li>
+    </researchPrerequisites>
+    <comps>
+      <li Class="DepthRim.CompProperties_NetCage">
+        <layer>Midwater</layer>
+        <netDepth>150</netDepth>
+        <minWaterDepth>180</minWaterDepth>
+        <stormGrowthFactor>0.8</stormGrowthFactor>
+        <stormDamageFactor>1.5</stormDamageFactor>
+        <capacityKg>300</capacityKg>
+        <feedCapacity>240</feedCapacity>
+        <openSeaOnly>true</openSeaOnly>
+        <tint>(0.85, 0.85, 1.0)</tint>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="DepthRim_NetCageBase">
+    <defName>DepthRim_NetCage_Deep</defName>
+    <label>deep net cage</label>
+    <description>A pressure-rated frame and a 500 m net bag anchored in the cold, still deep water. Slow and costly, but the water is steady and the fish fetch the best prices.\n\nOpen sea only, at least 550 m deep, with a deck or bridge alongside.</description>
+    <uiOrder>2502</uiOrder>
+    <statBases>
+      <MaxHitPoints>420</MaxHitPoints>
+      <WorkToBuild>8400</WorkToBuild>
+    </statBases>
+    <costList>
+      <Steel>300</Steel>
+      <Plasteel>120</Plasteel>
+      <ComponentIndustrial>12</ComponentIndustrial>
+    </costList>
+    <researchPrerequisites>
+      <li>DepthRim_DeepNetCages</li>
+    </researchPrerequisites>
+    <comps>
+      <li Class="DepthRim.CompProperties_NetCage">
+        <layer>Deep</layer>
+        <netDepth>500</netDepth>
+        <minWaterDepth>550</minWaterDepth>
+        <stormGrowthFactor>1.0</stormGrowthFactor>
+        <stormDamageFactor>1.5</stormDamageFactor>
+        <capacityKg>300</capacityKg>
+        <feedCapacity>240</feedCapacity>
+        <openSeaOnly>true</openSeaOnly>
+        <tint>(0.7, 0.7, 0.9)</tint>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- 曝氣機（§5.2）：半徑 4.9 格內的箱網溶氧 +0.15，每座箱網最多計 2 台；停電就沒有曝氣。蓋在岸邊、橋或船體平台上。 -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>DepthRim_Aerator</defName>
+    <label>aerator</label>
+    <description>A compressor that bubbles air into the nearby net cages. Each aerator raises the dissolved oxygen of cages within 4.9 cells; a cage benefits from at most two. No power, no air.</description>
+    <thingClass>DepthRim.Building_Aerator</thingClass>
+    <graphicData>
+      <texPath>Thing/DR_PumpSmall</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1,1)</drawSize>
+      <color>(0.75, 0.9, 0.95)</color>
+    </graphicData>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <fillPercent>0.3</fillPercent>
+    <rotatable>false</rotatable>
+    <tickerType>Normal</tickerType>
+    <specialDisplayRadius>4.9</specialDisplayRadius>
+    <designationCategory>DepthRim_Underwater</designationCategory>
+    <uiOrder>2510</uiOrder>
+    <constructEffect>ConstructMetal</constructEffect>
+    <statBases>
+      <MaxHitPoints>150</MaxHitPoints>
+      <WorkToBuild>500</WorkToBuild>
+      <Mass>25</Mass>
+      <Flammability>0.2</Flammability>
+    </statBases>
+    <costList>
+      <Steel>60</Steel>
+      <ComponentIndustrial>2</ComponentIndustrial>
+    </costList>
+    <researchPrerequisites>
+      <li>DepthRim_WaterQuality</li>
+    </researchPrerequisites>
+    <placeWorkers>
+      <li>DepthRim.PlaceWorker_NetCage</li>
+    </placeWorkers>
+    <comps>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>300</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_Flickable" />
+      <li Class="CompProperties_Breakdownable" />
+    </comps>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+  </ThingDef>
+
+</Defs>

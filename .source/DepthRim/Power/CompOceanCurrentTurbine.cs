@@ -128,7 +128,8 @@ namespace DepthRim
                 return;
             }
             strength = OceanCurrentMath.Strength(FloodingUtility.DepthTierOf(map), map.windManager.WindSpeed,
-                Find.TickManager.TicksGame, OceanCurrentMath.Phase(parent.thingIDNumber));
+                Find.TickManager.TicksGame, OceanCurrentMath.Phase(parent.thingIDNumber),
+                eventFactor: ClimateMath.EventFactor(MapComponent_Aquaculture.For(map)?.Current ?? OceanCurrentKind.None));
             foreach (IntVec3 c in OceanCurrentMath.FlowCells(parent.Position, parent.Rotation, parent.def.size, CurrentProps.flowReach))
             {
                 if (!c.InBounds(map))

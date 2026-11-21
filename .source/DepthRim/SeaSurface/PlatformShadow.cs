@@ -63,6 +63,9 @@ namespace DepthRim
 
         public const float PillarSigma = 0.8f;
 
+        /// <summary>g 從這個值開始投柱影（著色器 platformShade 的 smoothstep 起點要一樣）。箱網白沫壓在這以下（<see cref="PlatformShadowField.CageFoamMax"/>）。</summary>
+        public const float PillarShadowStart = 0.35f;
+
         /// <summary>人造光到這個亮度（原版燈具的地面亮度上限是 0.5）時影子完全被照亮。</summary>
         public const float FullyLitGlow = 0.5f;
 
@@ -160,7 +163,17 @@ namespace DepthRim
         public readonly float[] pillar;
         public readonly float[] hull;
 
-        public PlatformShadowField(int width, int height, bool[] raised, bool[] pillarCells, bool[] hullCells)
+        /// <summary>
+        /// 箱網浮框（Docs/箱網養殖_內容設計.md）：貼著水面，水線白沫要正好在浮框上、沒有甲板的偏移與短影子，所以不放 b，
+        /// 而是加進 g（支柱入水處的白沫）。值壓在 <see cref="CageFoamMax"/> 以下：支柱柱影從 g ≥ <see cref="PlatformShadow.PillarShadowStart"/> 才開始，箱網不會投出柱影。
+        /// </summary>
+        public const float CageFoamSigma = 0.5f;
+
+        public const float CageFoamScale = 0.47f;
+
+        public const float CageFoamMax = 0.32f;
+
+        public PlatformShadowField(int width, int height, bool[] raised, bool[] pillarCells, bool[] hullCells, bool[] cageCells = null)
         {
             this.width = width;
             this.height = height;
@@ -169,6 +182,14 @@ namespace DepthRim
             sky = Blur(raw, width, height, PlatformShadow.SkySigma);
             pillar = Blur(ToFloats(pillarCells), width, height, PlatformShadow.PillarSigma);
             hull = ToFloats(hullCells);
+            if (cageCells != null)
+            {
+                float[] cage = Blur(ToFloats(cageCells), width, height, CageFoamSigma);
+                for (int i = 0; i < pillar.Length; i++)
+                {
+                    pillar[i] = Mathf.Max(pillar[i], Mathf.Min(CageFoamMax, cage[i] * CageFoamScale));
+                }
+            }
         }
 
         private static float[] ToFloats(bool[] cells)

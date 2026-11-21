@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_StockCage.label>放養箱網</DepthRim_StockCage.label>
+  <DepthRim_StockCage.verb>放養</DepthRim_StockCage.verb>
+  <DepthRim_StockCage.gerund>放養</DepthRim_StockCage.gerund>
+  <DepthRim_HarvestCage.label>收成箱網</DepthRim_HarvestCage.label>
+  <DepthRim_HarvestCage.verb>收成</DepthRim_HarvestCage.verb>
+  <DepthRim_HarvestCage.gerund>收成</DepthRim_HarvestCage.gerund>
+  <DepthRim_RefillCageFeed.label>箱網補飼料</DepthRim_RefillCageFeed.label>
+  <DepthRim_RefillCageFeed.verb>補飼料</DepthRim_RefillCageFeed.verb>
+  <DepthRim_RefillCageFeed.gerund>補飼料</DepthRim_RefillCageFeed.gerund>
+  <DepthRim_RepairCageNet.label>修補箱網</DepthRim_RepairCageNet.label>
+  <DepthRim_RepairCageNet.verb>修補</DepthRim_RepairCageNet.verb>
+  <DepthRim_RepairCageNet.gerund>修補</DepthRim_RepairCageNet.gerund>
+  <DepthRim_TreatCage.label>治療箱網的魚</DepthRim_TreatCage.label>
+  <DepthRim_TreatCage.verb>治療</DepthRim_TreatCage.verb>
+  <DepthRim_TreatCage.gerund>治療</DepthRim_TreatCage.gerund>
+</LanguageData>

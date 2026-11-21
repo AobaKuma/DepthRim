@@ -171,5 +171,51 @@ namespace DepthRim
         {
             DefOfHelper.EnsureInitializedInCtor(typeof(DepthRimDefOf));
         }
+    
+        // ── 箱網養殖（Docs/箱網養殖_內容設計.md）──
+        public static ResearchProjectDef DepthRim_Aquaculture;
+
+        public static ResearchProjectDef DepthRim_WaterQuality;
+
+        public static ResearchProjectDef DepthRim_DeepNetCages;
+
+        public static ThingDef DepthRim_NetCage_Shallow;
+
+        public static ThingDef DepthRim_NetCage_Midwater;
+
+        public static ThingDef DepthRim_NetCage_Deep;
+
+        public static ThingDef DepthRim_Aerator;
+
+        public static RecipeDef DepthRim_MakeFishKibble;
+
+        public static JobDef DepthRim_StockCage;
+
+        public static JobDef DepthRim_HarvestCage;
+
+        public static JobDef DepthRim_DeliverToCage;
+
+        public static JobDef DepthRim_RefillCageFeed;
+
+        public static JobDef DepthRim_RepairCageNet;
+
+        public static JobDef DepthRim_TreatCage;
+
+        public static GameConditionDef DepthRim_AlgalBloom;
+
+        public static GameConditionDef DepthRim_WarmCurrent;
+
+        public static GameConditionDef DepthRim_ColdCurrent;
+
+        public static IncidentDef DepthRim_AlgalBloomIncident;
+
+        public static IncidentDef DepthRim_WarmCurrentIncident;
+
+        public static IncidentDef DepthRim_ColdCurrentIncident;
+
+        public static IncidentDef DepthRim_CagePredator;
+
+        public static PawnKindDef DepthRim_SleeperShark;
+
     }
 }

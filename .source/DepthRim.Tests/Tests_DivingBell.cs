@@ -8,6 +8,15 @@ static partial class Test
 {
     static void DivingBellMath()
     {
+        // 離場動畫（2026-11-22）：水面往下沉、海床往上拉，結束時完全看不見
+        BellFx.Pose(true, 0f, out float dz0, out float sc0, out float al0, out float br0);
+        BellFx.Pose(true, 1f, out float dz1, out float sc1, out float al1, out float br1);
+        Check(System.Math.Abs(al0 - 1f) < 1e-4f && al1 < 1e-4f, "sinking starts fully visible and ends invisible");
+        Check(sc1 == sc0 && sc0 == 1f && br1 == br0 && dz1 < 0f, "sinking only moves and fades: no scaling, no darkening");
+        BellFx.Pose(false, 0f, out float rz0, out float rs0, out float ra0, out _);
+        BellFx.Pose(false, 1f, out float rz1, out float rs1, out float ra1, out _);
+        Check(System.Math.Abs(ra0 - 1f) < 1e-4f && ra1 < 1e-4f, "pulling up starts visible and ends invisible");
+        Check(rz1 > 2f && rs1 == rs0 && rs0 == 1f && System.Math.Abs(rz0) < 1e-4f, "pulling up only moves the bell upward and fades: no scaling");
         Check(BellMath.TransitTicks(DepthTier.Shallow) == 20 * 60, $"the shallows take 20 seconds ({BellMath.TransitTicks(DepthTier.Shallow)} ticks)");
         Check(BellMath.TransitTicks(DepthTier.Seabed) == 60 * 60, "the deepest tier takes 60 seconds, the maximum");
         Check(BellMath.TransitTicks(DepthTier.Thermocline) > BellMath.TransitTicks(DepthTier.Shallow)

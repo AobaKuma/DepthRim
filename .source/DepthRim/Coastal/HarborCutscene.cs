@@ -16,7 +16,7 @@ namespace DepthRim
     /// 擷取的是已經轉好朝向的船體（在船自己的地圖上），最後一幀才真的搬進殖民地，影像同幀消失。</item>
     /// <item>離港：同一條時間軸倒著播。船體先搬走（殖民地上不會同時有真的船），影像從泊位退出、轉向、沿路線開出地圖邊淡出。</item>
     /// </list>
-    /// 遊戲暫停（奧德賽式，§6.5）；鏡頭從船慢慢移到泊位（離港反過來），船尾撒浪花，推進器的運轉聲。短版 3 秒（同一個泊位再次靠岸）。
+    /// 遊戲暫停（奧德賽式，§6.5）；鏡頭從船慢慢移到泊位（離港反過來），船尾撒浪花，推進器的運轉聲。開船速度固定（演出長度跟著路線長度走）；短版（同一個泊位再次靠岸）只開路線最後一段、其他段也較短。
     /// </summary>
     public class HarborCutscene : TransferTakeoffCutscene
     {
@@ -46,8 +46,11 @@ namespace DepthRim
             this.shortVersion = shortVersion;
             this.departing = departing;
             this.fenderSide = fenderSide;
+            timeline = HarborShowMath.TimelineFor(HarborShowMath.PathLength(path), shortVersion);
             Last = this;
         }
+
+        private readonly HarborShowMath.Timeline timeline;
 
         public bool Departing => departing;
 
@@ -61,9 +64,15 @@ namespace DepthRim
         /// <summary>目前畫出來的姿態（驗收測試看位置與角度）。</summary>
         public HarborShowMath.Pose CurrentPose => PoseAt(Progress);
 
-        protected override float Duration => shortVersion ? 3f : 10f;
+        /// <summary>長度跟著路線長度走（開船的速度固定，見 <see cref="HarborShowMath.TimelineFor"/>）。</summary>
+        protected override float Duration => timeline.Total;
 
-        private float ShowTime(float progress) => departing ? 1f - progress : progress;
+        /// <summary>演出經過比例 → 姿態時間軸位置。離港是靠岸倒著播：同一個實際秒數倒過來取，兩邊的開船速度一樣。</summary>
+        private float ShowTime(float progress)
+        {
+            float seconds = Mathf.Clamp01(progress) * timeline.Total;
+            return HarborShowMath.ProgressAt(departing ? timeline.Total - seconds : seconds, timeline);
+        }
 
         private HarborShowMath.Pose PoseAt(float progress)
         {
@@ -141,8 +150,9 @@ namespace DepthRim
         protected override float ZoomAt(float progress)
         {
             // 進場時拉遠一點看得到路線，停好時回到原本的大小
+            // 不能超過鏡頭允許的最大縮放：鏡頭高度隨縮放上升，超過會超出遠裁切面，海面與地形被裁掉只剩船體（長船時 InitialZoom 本身就到頂了）
             float t = ShowTime(progress);
-            return Mathf.Lerp(InitialZoom * 1.35f, InitialZoom, Mathf.SmoothStep(0f, 1f, t / HarborShowMath.SlideEnd));
+            return Mathf.Min(Mathf.Lerp(InitialZoom * 1.35f, InitialZoom, Mathf.SmoothStep(0f, 1f, t / HarborShowMath.SlideEnd)), MaxZoom);
         }
 
         // DMSE 畫的船體不會旋轉：設成全透明、不位移，由 DrawExtras 畫

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_StockCage.reportString>放養TargetA。</DepthRim_StockCage.reportString>
+  <DepthRim_HarvestCage.reportString>收成TargetA。</DepthRim_HarvestCage.reportString>
+  <DepthRim_RefillCageFeed.reportString>為TargetA補飼料。</DepthRim_RefillCageFeed.reportString>
+  <DepthRim_DeliverToCage.reportString>把TargetB搬去TargetA。</DepthRim_DeliverToCage.reportString>
+  <DepthRim_RepairCageNet.reportString>修補TargetA的網。</DepthRim_RepairCageNet.reportString>
+  <DepthRim_TreatCage.reportString>治療TargetA裡的魚。</DepthRim_TreatCage.reportString>
+</LanguageData>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_Aquaculture.label>箱網養殖</DepthRim_Aquaculture.label>
+  <DepthRim_Aquaculture.description>在灣內或外海掛一圈浮框，網袋垂進海裡養魚：放養、用 Kibble 投餌，在天氣或水質變壞之前收成。\n\n解鎖表層箱網，以及屠宰台的純魚肉飼料配方。</DepthRim_Aquaculture.description>
+  <DepthRim_WaterQuality.label>水質管理</DepthRim_WaterQuality.label>
+  <DepthRim_WaterQuality.description>監看箱網的溶氧，在水溫高、密度高或藻華時把它撐住。\n\n解鎖曝氣機。</DepthRim_WaterQuality.description>
+  <DepthRim_DeepNetCages.label>深水箱網</DepthRim_DeepNetCages.label>
+  <DepthRim_DeepNetCages.description>耐壓的網框與錨泊，把網袋掛到遠離海面、冰冷而穩定的深處。\n\n解鎖斜溫層箱網與深層箱網，並可放養無鬚鱈與霜魚。</DepthRim_DeepNetCages.description>
+</LanguageData>

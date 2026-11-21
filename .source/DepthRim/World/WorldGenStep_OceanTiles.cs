@@ -38,6 +38,18 @@ namespace DepthRim
         public override void GenerateFresh(string seed, PlanetLayer layer)
         {
             System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+            Setup(seed);
+            double geometrySeconds = watch.Elapsed.TotalSeconds;
+            counts.Clear();
+            base.GenerateFresh(seed, layer);
+            Log.Message("[DepthRim] ocean biomes: " + string.Join(", ", System.Linq.Enumerable.Select(counts, kv => kv.Key + " " + kv.Value))
+                        + (geometry != null ? $"; ridge axis {geometry.RidgeAxisTiles} tiles, active-margin coast {geometry.ActiveCoastTiles} tiles" : "")
+                        + $"; {layer.TilesCount} tiles in {watch.Elapsed.TotalSeconds:0.00} s (seafloor geometry {geometrySeconds:0.00} s)");
+            Cleanup();
+        }
+
+        private void Setup(string seed)
+        {
             int s = GenText.StableStringHash(seed) ^ SeedPart;
             // 取樣點是半徑 100 的球面座標，頻率比照原版世界雜訊的量級（0.01–0.1）
             ventNoise = new Perlin(0.03, 2.0, 0.5, 3, s, QualityMode.Medium);
@@ -48,12 +60,10 @@ namespace DepthRim
             surface = Find.WorldGrid?.Surface;
             lookup = SurfaceTileLookup.Build(surface);
             geometry = lookup != null ? new SeafloorGeometry(surface, s) : null;
-            double geometrySeconds = watch.Elapsed.TotalSeconds;
-            counts.Clear();
-            base.GenerateFresh(seed, layer);
-            Log.Message("[DepthRim] ocean biomes: " + string.Join(", ", System.Linq.Enumerable.Select(counts, kv => kv.Key + " " + kv.Value))
-                        + (geometry != null ? $"; ridge axis {geometry.RidgeAxisTiles} tiles, active-margin coast {geometry.ActiveCoastTiles} tiles" : "")
-                        + $"; {layer.TilesCount} tiles in {watch.Elapsed.TotalSeconds:0.00} s (seafloor geometry {geometrySeconds:0.00} s)");
+        }
+
+        private void Cleanup()
+        {
             lookup = null;
             geometry = null;
             surface = null;
@@ -108,6 +118,84 @@ namespace DepthRim
             // 年均水溫：依深度與正上方的年均氣溫（季節、日夜變化由 OceanTemperature 的補丁依深度衰減）
             result.temperature = OceanTemperature.AnnualMean(depth, input.surfaceTemperature, OceanTemperature.KindOf(biome) ?? OceanTemperature.Kind.OpenWater);
             return result;
+        }
+
+        /// <summary>
+        /// 舊存檔補資料：原版的 <see cref="PlanetLayer"/> 只存生態區，海洋層格子的高度（海床深度）、溫度、地勢讀檔後全部遺失
+        /// （高度變成圖層半徑、深度算成 0 m）。這裡依世界種子與已存的生態區重算：深度與世界生成時相同（同一組雜訊與海底地形骨架），
+        /// 地勢依格子 ID 決定性地重抽。回傳補了幾格。
+        /// </summary>
+        public static int RestoreTileData(string seed, PlanetLayer layer)
+        {
+            return new WorldGenStep_OceanTiles().Restore(seed, layer);
+        }
+
+        private int Restore(string seed, PlanetLayer layer)
+        {
+            if (layer == null || layer.Tiles == null || layer.Tiles.Count != layer.TilesCount)
+            {
+                return 0;
+            }
+            Setup(seed);
+            int seedInt = GenText.StableStringHash(seed) ^ SeedPart;
+            int restored = 0;
+            try
+            {
+                for (int i = 0; i < layer.TilesCount; i++)
+                {
+                    Tile result = layer.Tiles[i];
+                    BiomeDef biome = result?.PrimaryBiome;
+                    if (biome == null)
+                    {
+                        continue;
+                    }
+                    PlanetTile tile = new PlanetTile(i, layer);
+                    Vector3 dir = layer.GetTileCenter(tile).normalized;
+                    int above = SurfaceTileAbove(tile, layer, dir);
+                    if (OceanWorldView.IsLandmass(biome))
+                    {
+                        if (above >= 0)
+                        {
+                            Tile land = surface[above];
+                            result.hilliness = land.hilliness == Hilliness.Undefined ? Hilliness.Flat : land.hilliness;
+                            result.temperature = land.temperature;
+                            result.elevation = Mathf.Max(land.elevation, 1f);
+                            restored++;
+                        }
+                        continue;
+                    }
+                    WaterMapExtension ext = biome.GetModExtension<WaterMapExtension>();
+                    if (ext == null)
+                    {
+                        continue;
+                    }
+                    OceanBiomeInput input = InputFor(dir, above);
+                    float depth = OceanBiomeSelector.SeafloorDepth(input, Sample(depthNoise, dir));
+                    if (above >= 0 && input.surfaceWater)
+                    {
+                        depth = OceanBiomeSelector.BlendWithSurface(depth, -surface[above].elevation, input.coastDistance);
+                    }
+                    depth = Mathf.Clamp(depth, ext.seafloorDepth.min, ext.seafloorDepth.max);
+                    List<Hilliness> hills = ext.hilliness;
+                    Rand.PushState(Gen.HashCombineInt(seedInt, i));
+                    try
+                    {
+                        result.hilliness = hills != null && hills.Count > 0 ? hills.RandomElement() : Hilliness.LargeHills;
+                    }
+                    finally
+                    {
+                        Rand.PopState();
+                    }
+                    result.elevation = -depth;
+                    result.temperature = OceanTemperature.AnnualMean(depth, input.surfaceTemperature, OceanTemperature.KindOf(biome) ?? OceanTemperature.Kind.OpenWater);
+                    restored++;
+                }
+            }
+            finally
+            {
+                Cleanup();
+            }
+            return restored;
         }
 
         /// <summary>正上方的地表格：細分相同時格子 ID 一一對應，否則用分桶搜尋。</summary>

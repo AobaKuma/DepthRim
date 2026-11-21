@@ -54,7 +54,10 @@ namespace DepthRim
         /// <summary>航跡用的推進程度（0..1）：航行中且有推力時是推力比例，漂流或停船時 0。</summary>
         public float WakeSpeed => underWay && !stalled ? Mathf.Clamp01(thrustFraction) : 0f;
 
-        /// <summary>地圖上的航向（單位向量，x = 東，z = 北）：這一格往下一格的方位。沒在航行時 null。</summary>
+        /// <summary>
+        /// 地圖上的航向（單位向量，x = 東，z = 北）：船上水面推進器的推力方向（<see cref="SeaWake.ThrustHeading(Map)"/>）；
+        /// 推進器互相抵消時才用世界地圖上這一格往下一格的方位。沒在航行時 null。
+        /// </summary>
         public Vector2? MapHeading
         {
             get
@@ -64,7 +67,7 @@ namespace DepthRim
                 {
                     return null;
                 }
-                return SeaWake.HeadingVector(Find.WorldGrid.GetHeadingFromTo(Tile, next));
+                return (HasMap ? SeaWake.ThrustHeading(Map) : null) ?? SeaWake.HeadingVector(Find.WorldGrid.GetHeadingFromTo(Tile, next));
             }
         }
 
@@ -203,7 +206,17 @@ namespace DepthRim
             {
                 yield return g;
             }
-            if (underWay && Faction == Faction.OfPlayer)
+            if (Faction != Faction.OfPlayer)
+            {
+                yield break;
+            }
+            // 世界地圖上選著船也能下航行指令（2026-11-21：停船後原本只剩一般的按鈕）
+            Thing helm = HasMap ? SurfaceVoyage.HelmOn(Map, shipName) : null;
+            if (helm != null)
+            {
+                yield return SubmarineNavigation.NavigateGizmo(helm);
+            }
+            if (underWay)
             {
                 yield return SurfaceVoyage.StopGizmo(this);
             }

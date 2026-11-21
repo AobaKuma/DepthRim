@@ -136,7 +136,8 @@ namespace DepthRim
     /// <item>收端（<see cref="PocketMapExit"/>，例如平台層的支柱頂）：發電 = 送到對面的量，只在送端通電時才有。</item>
     /// </list>
     /// 送多少由送端地圖的 <see cref="MapComponent_CrossLayerPower"/> 每 <see cref="MapComponent_CrossLayerPower.Interval"/> ticks 算一次：
-    /// 收端電網缺多少（含想開的用電與沒充滿的電池），送端電網剩多少（有電池存電就不受限），容量上限。單向：收端的電不會送下去。
+    /// 收端電網缺多少（含想開的用電與沒充滿的電池），送端電網剩多少（有電池存電就不受限），容量上限。單向：收端的電不會送回去。
+    /// 方向可以用 gizmo 切換（<see cref="reversed"/>：上端送、下端收）；兩端都登記在各自地圖的分配器，只有現在的送端會算。
     /// 任一端被拆就斷（另一端歸零）。
     /// </summary>
     public class CompCrossLayerPower : ThingComp
@@ -150,8 +151,66 @@ namespace DepthRim
 
         public CompPowerTrader Trader => trader ?? (trader = parent.GetComp<CompPowerTrader>());
 
-        /// <summary>送端：上下兩端的下端（升降梯的入口）。<see cref="PocketMapExit"/> 本身也是 <see cref="MapPortal"/>，所以要先排除。</summary>
-        public bool IsSource => parent is MapPortal && !(parent is PocketMapExit);
+        /// <summary>反向（往下送）：兩端各存一份、切換時一起改。預設 false = 下端送、上端收。</summary>
+        public bool reversed;
+
+        /// <summary>下端（升降梯的入口）。<see cref="PocketMapExit"/> 本身也是 <see cref="MapPortal"/>，所以要先排除。</summary>
+        public bool IsLowerEnd => parent is MapPortal && !(parent is PocketMapExit);
+
+        /// <summary>送端：預設是下端；<see cref="reversed"/> 時換成上端。</summary>
+        public bool IsSource => IsLowerEnd != reversed;
+
+        /// <summary>切換送收方向（兩端一起改），兩端的輸出先歸零，下一次計算再照新方向送。</summary>
+        public void ToggleDirection()
+        {
+            bool now = !reversed;
+            reversed = now;
+            ResetOutput();
+            CompCrossLayerPower other = Partner;
+            if (other != null)
+            {
+                other.reversed = now;
+                other.ResetOutput();
+            }
+        }
+
+        /// <summary>這一端的電網元件歸零（不送也不收）。</summary>
+        internal void ResetOutput()
+        {
+            delivered = 0f;
+            if (Trader != null)
+            {
+                Trader.PowerOutput = 0f;
+            }
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref reversed, "reversed", false);
+        }
+
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
+        {
+            foreach (Gizmo g in base.CompGetGizmosExtra())
+            {
+                yield return g;
+            }
+            if (parent.Faction != Faction.OfPlayer && !(parent is PocketMapExit))
+            {
+                yield break;
+            }
+            bool up = !reversed;
+            string from = (up ? "DepthRim.CrossPower.Lower" : "DepthRim.CrossPower.Upper").Translate();
+            string to = (up ? "DepthRim.CrossPower.Upper" : "DepthRim.CrossPower.Lower").Translate();
+            yield return new Command_Action
+            {
+                defaultLabel = (up ? "DepthRim.CrossPower.DirUp" : "DepthRim.CrossPower.DirDown").Translate(),
+                defaultDesc = "DepthRim.CrossPower.DirDesc".Translate(from, to),
+                icon = ContentFinder<UnityEngine.Texture2D>.Get(up ? "UI/Commands/TempRaise" : "UI/Commands/TempLower", false) ?? BaseContent.BadTex,
+                action = ToggleDirection,
+            };
+        }
 
         /// <summary>另一端（還在地圖上的才算）。</summary>
         public CompCrossLayerPower Partner
@@ -167,9 +226,12 @@ namespace DepthRim
         {
             base.PostSpawnSetup(respawningAfterLoad);
             trader = parent.GetComp<CompPowerTrader>();
-            if (IsSource)
+            // 兩端都登記（方向可以切換）；分配只算現在是送端的那一端
+            parent.Map.GetComponent<MapComponent_CrossLayerPower>()?.Register(this);
+            // 上端剛生成時跟著下端的方向
+            if (!IsLowerEnd && Partner != null)
             {
-                parent.Map.GetComponent<MapComponent_CrossLayerPower>()?.Register(this);
+                reversed = Partner.reversed;
             }
         }
 
@@ -182,7 +244,7 @@ namespace DepthRim
             CompCrossLayerPower other = Partner;
             if (other != null)
             {
-                other.Apply(0f, false);
+                other.ResetOutput();
             }
         }
 
@@ -219,13 +281,13 @@ namespace DepthRim
             string loss = (Props.lineLoss * 100f).ToString("0");
             if (IsSource)
             {
-                return "DepthRim.CrossPower.Sending".Translate(delivered.ToString("0"), cap, loss);
+                return (reversed ? "DepthRim.CrossPower.SendingDown" : "DepthRim.CrossPower.Sending").Translate(delivered.ToString("0"), cap, loss);
             }
             if (other.Trader != null && !other.Trader.PowerOn)
             {
-                return "DepthRim.CrossPower.SourceUnpowered".Translate();
+                return (reversed ? "DepthRim.CrossPower.SourceUnpoweredTop" : "DepthRim.CrossPower.SourceUnpowered").Translate();
             }
-            return "DepthRim.CrossPower.Receiving".Translate(delivered.ToString("0"), cap);
+            return (reversed ? "DepthRim.CrossPower.ReceivingDown" : "DepthRim.CrossPower.Receiving").Translate(delivered.ToString("0"), cap);
         }
     }
 
@@ -273,6 +335,10 @@ namespace DepthRim
             List<(CompCrossLayerPower src, CompCrossLayerPower dst)> links = new List<(CompCrossLayerPower, CompCrossLayerPower)>();
             foreach (CompCrossLayerPower s in sources)
             {
+                if (!s.IsSource)
+                {
+                    continue;
+                }
                 CompCrossLayerPower d = s.Partner;
                 if (s.Trader != null) { bridges.Add(s.Trader); }
                 if (d?.Trader != null) { bridges.Add(d.Trader); }
@@ -333,7 +399,8 @@ namespace DepthRim
         {
             foreach (CompPowerTrader c in net.powerComps)
             {
-                if (exclude.Contains(c))
+                // 所有跨層橋接（包括別的地圖登記、方向相反的支柱）都不算用電或發電，免得兩根反向的支柱互相灌電
+                if (exclude.Contains(c) || c.parent.TryGetComp<CompCrossLayerPower>() != null)
                 {
                     continue;
                 }

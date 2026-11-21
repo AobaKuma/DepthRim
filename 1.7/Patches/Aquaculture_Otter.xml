@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+  <!--
+    箱網養殖 §6.2：灣內的掠食者直接用 Odyssey 的水獺（會游泳），不新增 Pawn。
+    給水獺加咬網行為（DepthRim.CompNetRaider）；預設關閉，只有掠食者事件生成的個體會開，野生／馴服的水獺不受影響。
+  -->
+  <Operation Class="PatchOperationConditional">
+    <xpath>Defs/ThingDef[defName="Otter"]/comps</xpath>
+    <match Class="PatchOperationAdd">
+      <xpath>Defs/ThingDef[defName="Otter"]/comps</xpath>
+      <value>
+        <li Class="DepthRim.CompProperties_NetRaider" />
+      </value>
+    </match>
+    <nomatch Class="PatchOperationConditional">
+      <xpath>Defs/ThingDef[defName="Otter"]</xpath>
+      <match Class="PatchOperationAdd">
+        <xpath>Defs/ThingDef[defName="Otter"]</xpath>
+        <value>
+          <comps>
+            <li Class="DepthRim.CompProperties_NetRaider" />
+          </comps>
+        </value>
+      </match>
+    </nomatch>
+  </Operation>
+
+</Patch>

@@ -61,6 +61,9 @@ namespace DepthRim.Acceptance
             SurfaceRouting.ClearCache();
 
             Map viewing = Find.CurrentMap;
+            // 這個測試不看演出（離港與進場演出由 C7 測）；抵達時的選泊位照常要選
+            bool skipBefore = SubmarineSurfacing.skipCutscenes;
+            SubmarineSurfacing.skipCutscenes = true;
             // 海面天氣是隨機的：大浪會把沒扣繩的人捲下甲板（A2），這裡只測航行，固定成平靜的海
             OverboardHazard.debugSeaFactor = 1f;
             List<MapParent> sites = new List<MapParent>();
@@ -116,7 +119,8 @@ namespace DepthRim.Acceptance
 
                 Thing helm2 = Build(ThingDef.Named("DepthRim_Helm"), center + new IntVec3(2, 0, 3));
                 MapComponent_PileNetwork.For(sea).MarkDirty();
-                ctx.Check(SurfaceVoyage.BlockReason(helm, out _) == "DepthRim.Sail.ShipsLinked".Translate().ToString(), "two helms on one keel network: two ships joined, cannot sail");
+                string twoHelms = SurfaceVoyage.BlockReason(helm, out _);
+                ctx.Check(twoHelms == null, $"two helms on one keel network (mother ship carrying a sub) can still sail ({twoHelms})");
                 helm2.Destroy();
                 MapComponent_PileNetwork.For(sea).MarkDirty();
 
@@ -129,6 +133,8 @@ namespace DepthRim.Acceptance
                 ctx.Check(SurfaceVoyage.DestinationBlockReason(t0, n2, 1) != null, "out of range is refused");
                 ctx.Check(SubmarineNavigation.SurfacedOptions(helm).Any(o => o.Label == "DepthRim.Sail.Option".Translate().ToString() && !o.Disabled), "the helm's navigate menu offers Sail to");
                 ctx.Check(SubmarineNavigation.NavigateBlockReason(helm) == null, "and the navigate command is enabled");
+
+                foreach (Wait w in ctx.ScreenshotHelmTab(helm, "helm_tab_surfaced")) { yield return w; }
 
                 // ── 出航 ──
                 ctx.Require(SurfaceVoyage.Depart(helm, n2), "departure started");
@@ -144,6 +150,7 @@ namespace DepthRim.Acceptance
                 ctx.Check(ship.underWay && ship.Tile == t0 && ship.Destination == n2 && ship.route.Count == 3, $"under way from the start toward {n2} ({ship.route.Count} route tiles)");
                 ctx.Check(new[] { keel, thruster, battery }.All(t => t.Spawned && t.Map == shipMap), "keel, thruster and battery came aboard");
                 ctx.Check(sailor.Spawned && sailor.Map == shipMap, "the colonist on deck came along");
+                foreach (Wait w in ctx.ScreenshotHelmTab(helm, "helm_tab_sailing")) { yield return w; }
                 ctx.Check(shipMap.AllCells.Count(c => MapComponent_SeabedMemory.IsPlatform(shipMap.terrainGrid.TerrainAt(c))) == deck.Area, "the whole deck is on the ship map");
                 ctx.Check(!VoyageView.IsVoyageMap(shipMap), "under way the sea stays visible (no submarine-style fade)");
                 ctx.Check(SubmarineSurfacing.DiveBlockReason(helm, out _, out _) == "DepthRim.Sail.StopFirst".Translate().ToString(), "cannot dive while under way");
@@ -167,8 +174,10 @@ namespace DepthRim.Acceptance
                 ctx.Check(seaComp.WakeSpeed > 0.1f, $"the wake starts building up under way ({seaComp.WakeSpeed:0.00})");
                 seaComp.SnapWake();
                 ctx.Check(seaComp.WakeSpeed >= 0.99f, $"at full thrust the wake's target is full strength ({seaComp.WakeSpeed:0.00})");
+                // 2026-11-21：地圖上照推進器的推力方向前進（推進器朝北 → 往北），不看世界地圖的航線方位
                 UnityEngine.Vector2 heading = ship.MapHeading ?? UnityEngine.Vector2.zero;
-                ctx.Check((seaComp.WakeHeading - heading).sqrMagnitude < 1e-4f, $"the wake follows the world heading ({seaComp.WakeHeading} vs {heading})");
+                ctx.Check((heading - new UnityEngine.Vector2(0f, 1f)).sqrMagnitude < 1e-4f, $"the ship heads where its north-facing thruster pushes ({heading})");
+                ctx.Check((seaComp.WakeHeading - heading).sqrMagnitude < 1e-4f, $"the wake follows that heading ({seaComp.WakeHeading} vs {heading})");
                 SeaWake.Hull hullBox = seaComp.WakeHull;
                 ctx.Check(hullBox.valid && hullBox.length >= deck.Width - 0.01f && hullBox.length <= deck.Width * 1.45f && hullBox.halfWidth >= deck.Width * 0.5f - 0.01f,
                     $"the wake's hull outline matches the deck (length {hullBox.length:0.0}, half width {hullBox.halfWidth:0.0})");
@@ -203,6 +212,15 @@ namespace DepthRim.Acceptance
                 yield return new WaitTicks(60);
                 ctx.Check((seaComp.WakeFlow - flowStopped).sqrMagnitude < 1e-6f, "stopped: the water no longer flows past");
                 ctx.Check(!thruster.TryGetComp<CompThrusterDraw>().UnderWay, "stopped: the thruster idles at standby");
+                // 2026-11-21：停船後世界地圖上選著船也有航行指令
+                ctx.Check(ship.GetGizmos().OfType<Command>().Any(g => g.icon == SubmarineNavigation.NavigateIcon && !g.Disabled), "stopped: the ship on the world map still offers an enabled Navigate command");
+                // 航行與下潛都不行時，先寫航行的原因（這艘船沒有壓載，下潛本來就不行）
+                flick.SwitchIsOn = false;
+                yield return new WaitUntil(() => !thrusterPower.PowerOn, 300);
+                string both = SubmarineNavigation.NavigateBlockReason(helm);
+                ctx.Check(both != null && both.StartsWith(SurfaceVoyage.BlockReason(helm, out _)), $"with sailing blocked too, the sailing reason comes first ({both?.Replace("\n", " / ")})");
+                flick.SwitchIsOn = true;
+                yield return new WaitUntil(() => thrusterPower.PowerOn, 600);
 
                 // ── 開到另一個海面地點：停靠進去 ──
                 Map dock = DebugActions_SeaSurface.CreateAt(n1);
@@ -216,14 +234,28 @@ namespace DepthRim.Acceptance
                 WorldObject_SurfaceShip ship2 = helm.Map?.Parent as WorldObject_SurfaceShip;
                 ctx.Require(ship2 != null, "under way again");
                 ship2.AdvanceTicks(ship2.ticksPerTile);
+                // 2026-11-21：抵達有地圖的海面地點時先選停靠位置（靠岸的設計器），選好才停進去
+                yield return new WaitRealtime(() => Find.DesignatorManager.SelectedDesignator is Designator_DockShip, 15f);
+                Designator_DockShip berth = Find.DesignatorManager.SelectedDesignator as Designator_DockShip;
+                ctx.Require(berth != null, "arriving at a site with a map asks where to moor");
+                ctx.Check(helm.Map != dock && !ship2.Destroyed, "nothing moves before the choice");
+                ctx.Check(ship2.Tile == n1 && !ship2.underWay, "the ship waits on the site's tile");
+                yield return new WaitRealtime(() => false, 0.5f);
+                IntVec3 spot = GenRadial.RadialCellsAround(dock.Center + new IntVec3(15, 0, 10), 20f, true).FirstOrDefault(c => c.InBounds(dock) && berth.CanDesignateCell(c).Accepted);
+                ctx.Require(spot.IsValid, "found a free berth on the open sea");
+                berth.DesignateSingleCell(spot);
                 yield return new WaitUntil(() => helm.Map == dock, 600);
-                ctx.Check(helm.Map == dock && keel.Map == dock && sailor.Map == dock, "arriving at a site moors the ship into its map, with the crew");
+                ctx.Check(helm.Map == dock && keel.Map == dock && sailor.Map == dock, "the ship moors into the site's map, with the crew");
+                IntVec3 deckAt = CellRect.FromCellList(dock.AllCells.Where(c => MapComponent_SeabedMemory.IsPlatform(dock.terrainGrid.TerrainAt(c)))).CenterCell;
+                ctx.Check(deckAt.DistanceTo(spot) <= 1.5f, $"where the player chose ({deckAt} vs {spot})");
                 ctx.Check(ship2.Destroyed, "the ship object is gone once moored");
                 ctx.Check(dock.AllCells.Count(c => MapComponent_SeabedMemory.IsPlatform(dock.terrainGrid.TerrainAt(c))) == deck.Area, "the whole deck is at the site");
                 ship = null;
             }
             finally
             {
+                SubmarineSurfacing.skipCutscenes = skipBefore;
+                Find.DesignatorManager.Deselect();
                 OverboardHazard.debugSeaFactor = null;
                 Current.Game.CurrentMap = viewing;
                 if (sailor != null && !sailor.Destroyed) { if (sailor.Spawned) { sailor.DeSpawn(); } sailor.Destroy(); }

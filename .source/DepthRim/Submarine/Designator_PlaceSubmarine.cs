@@ -29,6 +29,9 @@ namespace DepthRim
 
         private readonly Action<IntVec3> onPlace;
 
+        /// <summary>沒選位就取消時（可以是 null）。</summary>
+        private readonly Action onCancel;
+
         private readonly IntVec3 center;
 
         private readonly List<IntVec3> tmpValid = new List<IntVec3>();
@@ -41,8 +44,11 @@ namespace DepthRim
 
         private bool placed;
 
-        public Designator_PlaceSubmarine(WorldObject_Submarine sub, Map map, List<IntVec3> cells, Predicate<IntVec3> terrainOk, Action<IntVec3> onPlace)
+        private bool cancelled;
+
+        public Designator_PlaceSubmarine(WorldObject_Submarine sub, Map map, List<IntVec3> cells, Predicate<IntVec3> terrainOk, Action<IntVec3> onPlace, Action onCancel = null)
         {
+            this.onCancel = onCancel;
             this.sub = sub;
             this.map = map;
             this.cells = cells;
@@ -56,6 +62,12 @@ namespace DepthRim
 
         public Map TargetMap => map;
 
+        /// <summary>
+        /// 這個選位已經沒有意義：潛艇沒了、離開了船體地圖，或已經在上浮（演出中）。
+        /// 這種設計器不再選上，選上的也自己取消（2026-11-21：沒人回應的選位曾在之後的下潛演出中跳出來）。
+        /// </summary>
+        public bool Stale => sub.Destroyed || !sub.HasMap || SubmarineSurfacing.IsSurfacing(sub);
+
         public override bool AlwaysDoGuiControls => true;
 
         public override void Selected()
@@ -67,9 +79,11 @@ namespace DepthRim
         public override void Deselected()
         {
             base.Deselected();
-            if (!placed && !sub.Destroyed)
+            if (!placed && !cancelled && !sub.Destroyed)
             {
+                cancelled = true;
                 sub.landingTarget = PlanetTile.Invalid;
+                onCancel?.Invoke();
             }
         }
 
@@ -113,6 +127,11 @@ namespace DepthRim
 
         public override void DesignateSingleCell(IntVec3 c)
         {
+            // 一個設計器只收一次選位（之後的點擊不再開第二段演出）
+            if (placed || sub.Destroyed || !sub.HasMap)
+            {
+                return;
+            }
             placed = true;
             Find.DesignatorManager.Deselect();
             onPlace(OffsetFor(c));
@@ -120,8 +139,9 @@ namespace DepthRim
 
         public override void SelectedUpdate()
         {
-            if (sub.Destroyed || !sub.HasMap)
+            if (Stale)
             {
+                placed = true;
                 Find.DesignatorManager.Deselect();
                 return;
             }
@@ -185,7 +205,7 @@ namespace DepthRim
                 return;
             }
             Map map = pendingMap;
-            if (map == null || !Find.Maps.Contains(map))
+            if (map == null || !Find.Maps.Contains(map) || pending is Designator_PlaceSubmarine { Stale: true })
             {
                 pending = null;
                 return;

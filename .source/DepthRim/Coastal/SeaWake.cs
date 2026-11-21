@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Verse;
@@ -37,6 +38,33 @@ namespace DepthRim
             return new Vector2(Mathf.Sin(r), Mathf.Cos(r));
         }
 
+        /// <summary>
+        /// 推進器推的方向（2026-11-21：船在地圖上照推進器的推力方向前進，不看世界地圖上的航線方位）：
+        /// 每座推進器往它的朝向推（和 DMSE 引擎一樣，噴口在背面），全部加起來取單位向量（x = 東，z = 北）。
+        /// 沒有推進器或互相抵消時 null。
+        /// </summary>
+        public static Vector2? ThrustHeading(IEnumerable<Rot4> thrusters)
+        {
+            Vector2 sum = Vector2.zero;
+            foreach (Rot4 r in thrusters)
+            {
+                IntVec3 v = r.FacingCell;
+                sum += new Vector2(v.x, v.z);
+            }
+            return sum.sqrMagnitude > 0.01f ? sum.normalized : (Vector2?)null;
+        }
+
+        /// <summary>地圖上的水面推進器（蓋好的）的推力方向，見 <see cref="ThrustHeading(IEnumerable{Rot4})"/>。</summary>
+        public static Vector2? ThrustHeading(Map map)
+        {
+            ThingDef def = DepthRimDefOf.DepthRim_SurfaceThruster;
+            if (map == null || def == null)
+            {
+                return null;
+            }
+            return ThrustHeading(map.listerThings.ThingsOfDef(def).Where(t => t.Spawned).Select(t => t.Rotation));
+        }
+
         /// <summary>航向的右手邊（地圖上順時針轉 90°）。</summary>
         public static Vector2 Side(Vector2 heading) => new Vector2(heading.y, -heading.x);
 
@@ -48,8 +76,23 @@ namespace DepthRim
             public float halfWidth;
             public bool valid;
 
+            /// <summary>
+            /// 船艏的輪廓（2026-11-21：船艏浪要貼著船艏的形狀，不是整個外框的寬度）：從船艏往後第 k 列（每列一格，<see cref="BowRows"/> 列）
+            /// 船體離中線最遠到哪裡（半寬，格）。比外框窄的尖船艏在這裡看得出來。
+            /// </summary>
+            public float[] bowProfile;
+
             public Vector4 ToShader() => valid ? new Vector4(bow.x, bow.y, length, halfWidth) : Vector4.zero;
+
+            /// <summary>船艏輪廓前四列（著色器的 _BowA）。</summary>
+            public Vector4 BowA => valid && bowProfile != null ? new Vector4(bowProfile[0], bowProfile[1], bowProfile[2], bowProfile[3]) : new Vector4(halfWidth, halfWidth, halfWidth, halfWidth);
+
+            /// <summary>船艏輪廓後四列（著色器的 _BowB）。</summary>
+            public Vector4 BowB => valid && bowProfile != null ? new Vector4(bowProfile[4], bowProfile[5], bowProfile[6], bowProfile[7]) : new Vector4(halfWidth, halfWidth, halfWidth, halfWidth);
         }
+
+        /// <summary>船艏輪廓取幾列。</summary>
+        public const int BowRows = 8;
 
         /// <summary>
         /// 把船體格（格子中心）投影到航向與側向，取外框：船艏在最前面、側向置中；長度與寬度各加一格（格子本身的大小）。
@@ -75,11 +118,36 @@ namespace DepthRim
                 return default;
             }
             float midL = (minL + maxL) * 0.5f;
+            float half = (maxL - minL + 1f) * 0.5f;
+            // 船艏輪廓：每列（離最前面那排格子中心 0、1、2… 格）最寬到哪；往後只會變寬（中間缺格時沿用前一列）
+            float[] profile = new float[BowRows];
+            foreach (IntVec3 c in cells)
+            {
+                Vector2 p = new Vector2(c.x + 0.5f, c.z + 0.5f);
+                int row = Mathf.FloorToInt(maxA - Vector2.Dot(p, heading) + 0.5f);
+                if (row >= 0 && row < BowRows)
+                {
+                    profile[row] = Mathf.Max(profile[row], Mathf.Abs(Vector2.Dot(p, side) - midL) + 0.5f);
+                }
+            }
+            for (int k = 0; k < BowRows; k++)
+            {
+                if (k > 0)
+                {
+                    profile[k] = Mathf.Max(profile[k], profile[k - 1]);
+                }
+                if (maxA - minA + 1f <= k)
+                {
+                    profile[k] = Mathf.Max(profile[k], k > 0 ? profile[k - 1] : half);
+                }
+                profile[k] = Mathf.Min(profile[k] <= 0f ? half : profile[k], half);
+            }
             return new Hull
             {
                 bow = heading * (maxA + 0.5f) + side * midL,
                 length = maxA - minA + 1f,
-                halfWidth = (maxL - minL + 1f) * 0.5f,
+                halfWidth = half,
+                bowProfile = profile,
                 valid = true,
             };
         }

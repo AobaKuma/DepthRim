@@ -64,7 +64,8 @@ vec2 platformShade(vec2 sea, float heightAbove)
             for (int j = 0; j < PILLAR_DEPTH_TAPS; j++)
                 column = max(column, maskAt(along - vec2(0.0, PILLAR_DEPTH * float(j) / float(PILLAR_DEPTH_TAPS - 1))).g);
         }
-        sun = max(sun, smoothstep(0.15, 0.6, column));
+        // 柱影從 g ≥ 0.35 才開始（PlatformShadow.PillarShadowStart）：箱網浮框的水線白沫在 g 但壓在這以下，不投柱影
+        sun = max(sun, smoothstep(0.35, 0.6, column));
     }
     return vec2(sun, smoothstep(0.1, 0.9, maskAt(sea).a));
 }

@@ -76,7 +76,8 @@ namespace DepthRim
                     return null;
                 }
                 string sail = SurfaceVoyage.BlockReason(helm, out _);
-                return sail == null ? null : dive;
+                // 兩者都不行時先寫航行的原因（水面船最常用的是航行；2026-11-21 只寫「沒有壓載」讓人以為航行也要壓載）
+                return sail == null ? null : sail + "\n" + dive;
             }
             WorldObject_Submarine sub = SubOf(helm);
             if (sub != null && sub.InFlight)

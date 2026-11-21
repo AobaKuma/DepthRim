@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_AlgalBloom.label>藻華</DepthRim_AlgalBloom.label>
+  <DepthRim_AlgalBloom.description>箱網周圍的水變綠了。藻華消退之前，每座箱網的溶氧都比較低。</DepthRim_AlgalBloom.description>
+  <DepthRim_AlgalBloom.endMessage>藻華消退了。</DepthRim_AlgalBloom.endMessage>
+  <DepthRim_AlgalBloom.letterText>藻華：水變綠了。停止餵食，打開曝氣機。</DepthRim_AlgalBloom.letterText>
+  <DepthRim_WarmCurrent.label>暖流</DepthRim_WarmCurrent.label>
+  <DepthRim_WarmCurrent.description>一道暖流正流過這片海。近海面的水變暖、溶氧變低；斜溫層以下的深層水不受影響。</DepthRim_WarmCurrent.description>
+  <DepthRim_WarmCurrent.endMessage>暖流離開了。</DepthRim_WarmCurrent.endMessage>
+  <DepthRim_ColdCurrent.label>寒流</DepthRim_ColdCurrent.label>
+  <DepthRim_ColdCurrent.description>一道寒流正流過這片海。近海面的水變冷、溶氧變高；斜溫層以下的深層水不受影響。</DepthRim_ColdCurrent.description>
+  <DepthRim_ColdCurrent.endMessage>寒流離開了。</DepthRim_ColdCurrent.endMessage>
+</LanguageData>

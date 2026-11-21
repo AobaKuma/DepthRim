@@ -209,6 +209,14 @@ Hull rating: {1}</DepthRim.Nav.Desc>
   <DepthRim.CrossPower.Sending>Sending up to the platform: {0} W (max {1} W, {2}% line loss)</DepthRim.CrossPower.Sending>
   <DepthRim.CrossPower.Receiving>Power from the water level: {0} W (max {1} W)</DepthRim.CrossPower.Receiving>
   <DepthRim.CrossPower.SourceUnpowered>The pillar foot on the water level has no power.</DepthRim.CrossPower.SourceUnpowered>
+  <DepthRim.CrossPower.SendingDown>Sending down to the water level: {0} W (max {1} W, {2}% line loss)</DepthRim.CrossPower.SendingDown>
+  <DepthRim.CrossPower.ReceivingDown>Power from the platform: {0} W (max {1} W)</DepthRim.CrossPower.ReceivingDown>
+  <DepthRim.CrossPower.SourceUnpoweredTop>The pillar top on the platform has no power.</DepthRim.CrossPower.SourceUnpoweredTop>
+  <DepthRim.CrossPower.DirUp>Power: send up</DepthRim.CrossPower.DirUp>
+  <DepthRim.CrossPower.DirDown>Power: send down</DepthRim.CrossPower.DirDown>
+  <DepthRim.CrossPower.DirDesc>Switch which end of the pillar is the input and which is the output. Right now the {0} sends its spare power to the {1}.</DepthRim.CrossPower.DirDesc>
+  <DepthRim.CrossPower.Lower>water level</DepthRim.CrossPower.Lower>
+  <DepthRim.CrossPower.Upper>platform</DepthRim.CrossPower.Upper>
   <DepthRim.Platform.PawnFellToSea>{0} fell with the collapsing platform down to the water, injured.</DepthRim.Platform.PawnFellToSea>
   <DepthRim.Settings.SeaCameraSway>Camera sways with the sea</DepthRim.Settings.SeaCameraSway>
   <DepthRim.Settings.SeaCameraSwayTip>On the sea surface (water level), the camera bobs up and down very slightly with the waves, more in strong wind and storms. Aboard a submarine under way, the view rocks slowly and gently. Turn off if it bothers you.</DepthRim.Settings.SeaCameraSwayTip>

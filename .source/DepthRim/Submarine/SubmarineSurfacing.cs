@@ -40,6 +40,12 @@ namespace DepthRim
         /// <summary>測試用：不播出水與下潛演出。</summary>
         public static bool skipCutscenes;
 
+        /// <summary>測試用：上浮不問停船位置，直接放預設位置（演出照播；看演出的測試用）。</summary>
+        public static bool autoPlace;
+
+        /// <summary>這艘潛艇正在播出水演出、還沒搬上去。</summary>
+        public static bool IsSurfacing(WorldObject_Submarine sub) => sub != null && surfacing.Contains(sub);
+
         public static Texture2D IceIcon => DefDatabase<ThingDef>.GetNamedSilentFail("DepthRim_IceBreakerFrame")?.uiIcon ?? WorldObject_Submarine.DiveIcon;
 
         public static PlanetTile SurfaceAbove(WorldObject_Submarine sub) => OceanWorldView.TileAbove(sub.Tile);
@@ -238,7 +244,6 @@ namespace DepthRim
                 site.SetFaction(Faction.OfPlayer);
                 Find.WorldObjects.Add(site);
             }
-            bool existing = site.HasMap;
             Map map = SiteMap(sub, site);
             List<IntVec3> cells = TransferLandingUtility.LandingCells(sub.Map);
             if (!TryFindSpot(map, cells, c => SeaSurface.IsOpenSea(c, map), out IntVec3 offset))
@@ -247,9 +252,11 @@ namespace DepthRim
                 Messages.Message("DepthRim.Surface.NoRoom".Translate(site.LabelCap), sub, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
-            if (existing && !skipCutscenes)
+            if (!skipCutscenes && !autoPlace)
             {
-                // 已經有的海面地圖：讓玩家選停船位置（只能浮在開放海面上）
+                // 先讓玩家選停船位置（只能浮在開放海面上），選好才播出水演出（2026-11-21：新建的海面地圖也一樣，
+                // 以前新地圖直接放中央、演出馬上開始）。取消選位時照預設位置（地圖中央附近）上浮。
+                Action cancel = () => SurfaceAtDefault(sub, map);
                 GameComponent_SubmarinePlacement.Request(new Designator_PlaceSubmarine(sub, map, cells, c => SeaSurface.IsOpenSea(c, map), chosen =>
                 {
                     // 選位期間情況可能變了（例如又開始換深度）
@@ -261,10 +268,41 @@ namespace DepthRim
                         return;
                     }
                     SurfaceAt(sub, map, chosen);
-                }));
+                }, cancel));
                 return;
             }
             SurfaceAt(sub, map, offset);
+        }
+
+        /// <summary>
+        /// 取消上浮選位時（2026-11-21 使用者決定）：照預設位置上浮（從地圖中央往外找第一個放得下的地方），一樣播演出。
+        /// 下一個畫面做，不在設計器的回呼裡搬船；這段期間情況變了（例如又開始換深度）就不浮。
+        /// </summary>
+        private static void SurfaceAtDefault(WorldObject_Submarine sub, Map map)
+        {
+            LongEventHandler.ExecuteWhenFinished(delegate
+            {
+                if (sub == null || sub.Destroyed || !sub.HasMap || !Find.Maps.Contains(map))
+                {
+                    return;
+                }
+                string late = SurfaceBlockReason(sub, out _);
+                if (late != null)
+                {
+                    sub.landingTarget = PlanetTile.Invalid;
+                    Messages.Message(late, sub, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+                List<IntVec3> cells = TransferLandingUtility.LandingCells(sub.Map);
+                if (!TryFindSpot(map, cells, c => SeaSurface.IsOpenSea(c, map), out IntVec3 offset))
+                {
+                    sub.landingTarget = PlanetTile.Invalid;
+                    Messages.Message("DepthRim.Surface.NoRoom".Translate(map.Parent.LabelCap), sub, MessageTypeDefOf.RejectInput, historical: false);
+                    return;
+                }
+                sub.landingTarget = map.Tile;
+                SurfaceAt(sub, map, offset);
+            });
         }
 
         /// <summary>常規上浮的出水演出與搬移（位置已選好）。</summary>
@@ -292,11 +330,25 @@ namespace DepthRim
         /// 播出水演出（<see cref="SubmarineSurfacingCutscene"/>），結束時才把船體搬上來；冰面的地形在演出中照出現時間套上，結束時補齊。
         /// 演出被略過（<see cref="skipCutscenes"/>、原版設定關掉過場、沒有 Odyssey）時直接搬，並補上水花與震動。
         /// </summary>
+        /// <summary>正在播出水演出、還沒搬上去的潛艇（同一艘不會開第二段演出）。不存檔。</summary>
+        private static readonly HashSet<WorldObject_Submarine> surfacing = new HashSet<WorldObject_Submarine>();
+
         private static void PlayThenMove(WorldObject_Submarine sub, Map map, IntVec3 offset, SurfacingShow show, Action<HashSet<IntVec3>> after)
         {
+            surfacing.RemoveWhere(s => s.Destroyed);
+            if (!surfacing.Add(sub))
+            {
+                return;
+            }
             bool played = false;
             Action move = delegate
             {
+                surfacing.Remove(sub);
+                // 演出結束前潛艇已經搬走（例如重複的選位）就什麼都不做
+                if (sub.Destroyed || !sub.HasMap)
+                {
+                    return;
+                }
                 show.ApplyAll();
                 MoveInto(sub, map, offset, hull =>
                 {

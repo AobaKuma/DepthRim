@@ -391,6 +391,22 @@ Hull rating: {1} -->
   <DepthRim.CrossPower.Receiving>水面層送上來的電：{0} W（最多 {1} W）</DepthRim.CrossPower.Receiving>
   <!-- EN: The pillar foot on the water level has no power. -->
   <DepthRim.CrossPower.SourceUnpowered>水面層的支柱腳沒有電。</DepthRim.CrossPower.SourceUnpowered>
+  <!-- EN: Sending down to the water level: {0} W (max {1} W, {2}% line loss) -->
+  <DepthRim.CrossPower.SendingDown>送下水面層：{0} W（最多 {1} W，線損 {2}%）</DepthRim.CrossPower.SendingDown>
+  <!-- EN: Power from the platform: {0} W (max {1} W) -->
+  <DepthRim.CrossPower.ReceivingDown>平台層送下來的電：{0} W（最多 {1} W）</DepthRim.CrossPower.ReceivingDown>
+  <!-- EN: The pillar top on the platform has no power. -->
+  <DepthRim.CrossPower.SourceUnpoweredTop>平台層的支柱頂沒有電。</DepthRim.CrossPower.SourceUnpoweredTop>
+  <!-- EN: Power: send up -->
+  <DepthRim.CrossPower.DirUp>電力：往上送</DepthRim.CrossPower.DirUp>
+  <!-- EN: Power: send down -->
+  <DepthRim.CrossPower.DirDown>電力：往下送</DepthRim.CrossPower.DirDown>
+  <!-- EN: Switch which end of the pillar is the input and which is the output. Right now the {0} sends its spare power to the {1}. -->
+  <DepthRim.CrossPower.DirDesc>切換支柱哪一端是輸入、哪一端是輸出。現在是{0}把剩餘電力送到{1}。</DepthRim.CrossPower.DirDesc>
+  <!-- EN: water level -->
+  <DepthRim.CrossPower.Lower>水面層</DepthRim.CrossPower.Lower>
+  <!-- EN: platform -->
+  <DepthRim.CrossPower.Upper>平台層</DepthRim.CrossPower.Upper>
   <!-- EN: {0} fell with the collapsing platform down to the water, injured. -->
   <DepthRim.Platform.PawnFellToSea>{0}隨著崩塌的平台掉到下面的水面，受了傷。</DepthRim.Platform.PawnFellToSea>
   <!-- EN: Camera sways with the sea -->

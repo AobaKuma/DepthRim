@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- 艦橋檢視分頁（ITab_Vessel） -->
+  <DepthRim.VesselTab.InPort>停泊在港 · {0}</DepthRim.VesselTab.InPort>
+  <DepthRim.VesselTab.Surfaced>浮在海面</DepthRim.VesselTab.Surfaced>
+  <DepthRim.VesselTab.SailingSurface>水面航行中</DepthRim.VesselTab.SailingSurface>
+  <DepthRim.VesselTab.Submerged>海中 · {0}</DepthRim.VesselTab.Submerged>
+  <DepthRim.VesselTab.Diving>換深度中 · {0} → {1}</DepthRim.VesselTab.Diving>
+  <DepthRim.VesselTab.SailingSubmerged>水下航行中 · {0}</DepthRim.VesselTab.SailingSubmerged>
+
+  <DepthRim.VesselTab.Actions>現在能做的事</DepthRim.VesselTab.Actions>
+  <DepthRim.VesselTab.Ready>可以</DepthRim.VesselTab.Ready>
+  <DepthRim.VesselTab.Blocked>不行</DepthRim.VesselTab.Blocked>
+  <DepthRim.VesselTab.Dive>下潛</DepthRim.VesselTab.Dive>
+  <DepthRim.VesselTab.Surface>上浮</DepthRim.VesselTab.Surface>
+  <DepthRim.VesselTab.RangeTiles>{0} 格</DepthRim.VesselTab.RangeTiles>
+
+  <DepthRim.VesselTab.Voyage>航程</DepthRim.VesselTab.Voyage>
+  <DepthRim.VesselTab.TilesLeft>還有</DepthRim.VesselTab.TilesLeft>
+  <DepthRim.VesselTab.Eta>預計抵達</DepthRim.VesselTab.Eta>
+  <DepthRim.VesselTab.Stalled>停在水中：沒有能運作的推進器</DepthRim.VesselTab.Stalled>
+
+  <DepthRim.VesselTab.Hull>船體</DepthRim.VesselTab.Hull>
+  <DepthRim.VesselTab.HullSize>大小</DepthRim.VesselTab.HullSize>
+  <DepthRim.VesselTab.HullSizeValue>{0} 格 · {1} 根龍骨</DepthRim.VesselTab.HullSizeValue>
+  <DepthRim.VesselTab.Rating>耐壓深度</DepthRim.VesselTab.Rating>
+  <DepthRim.VesselTab.RatingEstimate>耐壓深度（預估）</DepthRim.VesselTab.RatingEstimate>
+  <DepthRim.VesselTab.NoHullPieces>還沒有外殼</DepthRim.VesselTab.NoHullPieces>
+  <DepthRim.VesselTab.Weakest>最弱的一塊：{0}</DepthRim.VesselTab.Weakest>
+  <DepthRim.VesselTab.Ballast>壓載水艙</DepthRim.VesselTab.Ballast>
+  <DepthRim.VesselTab.NoBallast>沒有壓載水艙只能在水面航行。</DepthRim.VesselTab.NoBallast>
+  <DepthRim.VesselTab.NoBallastSubmerged>沒有壓載水艙：不能換深度。</DepthRim.VesselTab.NoBallastSubmerged>
+  <DepthRim.VesselTab.BallastShort>水艙不夠這麼大的船體：換深度會比較慢。</DepthRim.VesselTab.BallastShort>
+
+  <DepthRim.VesselTab.Power>動力</DepthRim.VesselTab.Power>
+  <DepthRim.VesselTab.Battery>電池</DepthRim.VesselTab.Battery>
+  <DepthRim.VesselTab.Thrusters>水下推進器</DepthRim.VesselTab.Thrusters>
+  <DepthRim.VesselTab.SurfaceThrusters>水面推進器</DepthRim.VesselTab.SurfaceThrusters>
+  <DepthRim.VesselTab.PerTile>每格時間</DepthRim.VesselTab.PerTile>
+  <DepthRim.VesselTab.SurfaceRange>水面航程</DepthRim.VesselTab.SurfaceRange>
+  <DepthRim.VesselTab.SubRange>水下航程</DepthRim.VesselTab.SubRange>
+  <DepthRim.VesselTab.CannotGo>無法出航</DepthRim.VesselTab.CannotGo>
+
+  <DepthRim.VesselTab.ShowDetails>▸ 展開設備明細</DepthRim.VesselTab.ShowDetails>
+  <DepthRim.VesselTab.HideDetails>▾ 收起設備明細</DepthRim.VesselTab.HideDetails>
+  <DepthRim.VesselTab.None>船上沒有</DepthRim.VesselTab.None>
+  <DepthRim.VesselTab.Working>運作中</DepthRim.VesselTab.Working>
+  <DepthRim.VesselTab.Idle>沒電或故障</DepthRim.VesselTab.Idle>
+</LanguageData>

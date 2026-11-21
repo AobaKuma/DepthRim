@@ -131,6 +131,29 @@ namespace DepthRim.Acceptance
         /// 等待不是裝飾：`TryJump` 與 `SetRootSize` 都要幾幀才會反映到渲染，
         /// 而截圖本身是排隊寫檔的（見 README）。用 iterator 是為了讓呼叫端 `yield return` 它。
         /// </summary>
+        /// <summary>選取艦橋、打開艦橋分頁（<see cref="ITab_Vessel"/>）後截圖，再關掉分頁、取消選取。</summary>
+        public IEnumerable<Wait> ScreenshotHelmTab(Thing helm, string name)
+        {
+            if (helm == null || !helm.Spawned)
+            {
+                Note($"helm tab screenshot {name} skipped: helm not spawned");
+                yield break;
+            }
+            Current.Game.CurrentMap = helm.Map;
+            CameraJumper.TryJump(helm.Position, helm.Map);
+            Find.CameraDriver.SetRootSize(16f);
+            Find.Selector.ClearSelection();
+            Find.Selector.Select(helm, playSound: false, forceDesignatorDeselect: false);
+            yield return new WaitFrames(5);
+            InspectPaneUtility.OpenTab(typeof(ITab_Vessel));
+            // 分頁高度跟著內容：第一幀量高度，之後才是正確的大小
+            yield return new WaitFrames(30);
+            Check(Find.MainTabsRoot.OpenTab == MainButtonDefOf.Inspect, $"the inspect pane is open for {name}");
+            Screenshot(name);
+            yield return new WaitFrames(5);
+            Find.Selector.ClearSelection();
+        }
+
         public IEnumerable<Wait> ScreenshotOn(Map map, IntVec3 cell, float rootSize, string name, int settleFrames = 30)
         {
             CameraJumper.TryJump(cell, map);

@@ -110,7 +110,6 @@ Dive anyway?</DepthRim.HullWarn.Text>
   <DepthRim.Sail.StopFirst>Stop the ship first.</DepthRim.Sail.StopFirst>
   <DepthRim.Sail.NotAtSea>The ship is not floating on the open sea.</DepthRim.Sail.NotAtSea>
   <DepthRim.Sail.AlreadyUnderWay>The ship is already under way.</DepthRim.Sail.AlreadyUnderWay>
-  <DepthRim.Sail.ShipsLinked>Two ships' keels are joined: separate them before sailing.</DepthRim.Sail.ShipsLinked>
   <DepthRim.Sail.NoThruster>No working surface thruster aboard.</DepthRim.Sail.NoThruster>
   <DepthRim.Sail.NoCharge>The batteries aboard cannot run the thrusters for a single tile.</DepthRim.Sail.NoCharge>
   <DepthRim.Sail.NotSurface>Pick a tile on the surface.</DepthRim.Sail.NotSurface>
@@ -126,6 +125,7 @@ Dive anyway?</DepthRim.HullWarn.Text>
   <DepthRim.Sail.Arrived>{0} has stopped.</DepthRim.Sail.Arrived>
   <DepthRim.Sail.ArrivedNoRoom>{0} stopped next to {1}: there is no room to moor there.</DepthRim.Sail.ArrivedNoRoom>
   <DepthRim.Sail.ArrivedAt>{0} has moored at {1}.</DepthRim.Sail.ArrivedAt>
+  <DepthRim.Sail.ArrivedChooseBerth>{0} has arrived at {1}. Choose where to moor.</DepthRim.Sail.ArrivedChooseBerth>
   <DepthRim.Sail.Mooring>Mooring</DepthRim.Sail.Mooring>
   <DepthRim.Sail.InspectUnderWay>Under way: {0} tiles to go, thrust {1}</DepthRim.Sail.InspectUnderWay>
   <DepthRim.Sail.InspectStalled>Drifting: no thrust ({0} tiles to go)</DepthRim.Sail.InspectStalled>
@@ -150,7 +150,6 @@ Dive anyway?</DepthRim.HullWarn.Text>
   <DepthRim.Bell.InPort>No sea below: a harbour sits on land. Take the ship out to sea to lower the bell.</DepthRim.Bell.InPort>
   <DepthRim.Bell.NotAtSea>The davit is not on a ship at sea or a submarine.</DepthRim.Bell.NotAtSea>
   <DepthRim.Bell.NoSeaBelow>There is no sea below here.</DepthRim.Bell.NoSeaBelow>
-  <DepthRim.Bell.NoSeabed>The sea below is {0}: there is no seabed for the bell to rest on.</DepthRim.Bell.NoSeabed>
   <DepthRim.Bell.Busy>The bell is not stowed.</DepthRim.Bell.Busy>
   <DepthRim.Bell.NoBell>No diving bell within {0} cells of the davit.</DepthRim.Bell.NoBell>
   <DepthRim.Bell.NoPower>The davit has no power.</DepthRim.Bell.NoPower>
@@ -193,5 +192,6 @@ Dive anyway?</DepthRim.HullWarn.Text>
   <DepthRim.Dock.LetterText>{0} has berthed at {1}.</DepthRim.Dock.LetterText>
   <DepthRim.Dock.NoGangwayAshore>No gangway reaches the shore: build one on the deck facing land to walk on and off.</DepthRim.Dock.NoGangwayAshore>
   <DepthRim.Dock.ArrivedOffColony>{0} is off {1}. Use Dock on the helm to choose a berth.</DepthRim.Dock.ArrivedOffColony>
+  <DepthRim.Dock.Cancelled>Docking cancelled: {0} waits in the sea off {1}.</DepthRim.Dock.Cancelled>
 
 </LanguageData>

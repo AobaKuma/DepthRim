@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DMSE;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -10,7 +11,8 @@ namespace DepthRim
     /// 平台層往下看：把水面層的地形（浮在水上的船體平台）與建築畫在 <see cref="MapComponent_SeaSurface.SeaDropCells"/> 格下方。
     ///
     /// <para>不是即時的：只有水面層的地形或建築變了（<see cref="Patch_SeaLevelChanged"/>），平台層才在下一次檢查（每兩秒）時
-    /// 用自訂旗標 <c>DepthRim_LowerLevel</c> 把整張地圖的這一層標記重建。Pawn 與物品不畫。</para>
+    /// 用自訂旗標 <c>DepthRim_LowerLevel</c> 把整張地圖的這一層標記重建。Pawn 與物品不畫；龍骨框架（DMSE 結構樁，甲板下的結構）
+    /// 也不畫——從平台層往下看只看得到甲板與甲板上的東西（2026-11-22 使用者要求）。</para>
     ///
     /// <para>做法：先照水面層的座標把地形四邊形與建築（原版 <see cref="Thing.Print"/>）印進這一層，最後把每個子網格往南移、
     /// 材質換成背景著色器版本（<see cref="BackgroundMaterial"/>，queue 1940，略暗）：畫在海面（1900）之上、支柱柱身（1950）之下、
@@ -72,6 +74,12 @@ namespace DepthRim
             return mat;
         }
 
+        /// <summary>甲板下的結構（龍骨框架＝DMSE 結構樁）不進這份快照：從平台層往下看，只看得到甲板與甲板上的東西。</summary>
+        public static bool IsBelowDeckStructure(ThingDef def)
+        {
+            return def?.comps != null && def.HasComp(typeof(CompStructuralPile));
+        }
+
         /// <summary>水面層的格子 <paramref name="seaCell"/> 畫在平台層的哪一格（往南移 drop 格，取四邊形中心所在的格）。</summary>
         public static IntVec3 ScreenCell(IntVec3 seaCell, float drop)
         {
@@ -117,7 +125,8 @@ namespace DepthRim
             }
             foreach (Thing thing in sea.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
             {
-                if (!thing.Spawned || thing is Building_PillarFoot || thing.def.drawerType == DrawerType.None || !cr.Contains(ScreenCell(thing.Position, drop)))
+                if (!thing.Spawned || thing is Building_PillarFoot || thing.def.drawerType == DrawerType.None
+                    || IsBelowDeckStructure(thing.def) || !cr.Contains(ScreenCell(thing.Position, drop)))
                 {
                     continue;
                 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_NetCage_Shallow.label>表層箱網</DepthRim_NetCage_Shallow.label>
+  <DepthRim_NetCage_Shallow.description>浮在水面的網框，網袋垂到 10 公尺深。放養、投餌，在風暴撕破網子之前收成。灣內有遮蔽，外海沒有。\n\n水溫跟著季節變，能養的魚種一年中會換。必須浮在至少 10 m 深的海水上，旁邊要有岸邊、甲板或橋可以作業。</DepthRim_NetCage_Shallow.description>
+  <DepthRim_NetCage_Midwater.label>斜溫層箱網</DepthRim_NetCage_Midwater.label>
+  <DepthRim_NetCage_Midwater.description>沉重的浮框，網袋垂到 150 公尺，水溫幾乎不隨季節變化。風暴對魚的影響比表層網小得多。\n\n只能放外海，水深至少 180 m，旁邊要有甲板或橋。</DepthRim_NetCage_Midwater.description>
+  <DepthRim_NetCage_Deep.label>深層箱網</DepthRim_NetCage_Deep.label>
+  <DepthRim_NetCage_Deep.description>耐壓網框與 500 公尺的網袋，固定在冰冷、平靜的深層水裡。慢、貴，但水溫穩定，魚的價錢最好。\n\n只能放外海，水深至少 550 m，旁邊要有甲板或橋。</DepthRim_NetCage_Deep.description>
+  <DepthRim_Aerator.label>曝氣機</DepthRim_Aerator.label>
+  <DepthRim_Aerator.description>把空氣打進附近箱網的壓縮機。每台讓 4.9 格內箱網的溶氧上升；每座箱網最多計 2 台。停電就沒有曝氣。</DepthRim_Aerator.description>
+  <DepthRim_SleeperShark.label>睡鯊</DepthRim_SleeperShark.label>
+  <DepthRim_SleeperShark.description>遲緩、暗色的睡鯊，被養殖魚的氣味從深海引上來。牠會撕咬網子直到膩了為止。殺死後變成大型魚獲。</DepthRim_SleeperShark.description>
+  <DepthRim_SleeperShark.tools.jaws.label>顎</DepthRim_SleeperShark.tools.jaws.label>
+</LanguageData>

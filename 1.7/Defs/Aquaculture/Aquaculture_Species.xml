@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- 可養殖的品種（Docs/箱網養殖_內容設計.md §4.1、§7）：全部沿用既有的魚品種（顏色、名稱、魚獲、適溫）。
+       stockCount × harvestWeight ≤ 300 kg（箱網容量）；yieldPerFish 是每尾魚獲數；coastal = 灣內可養。 -->
+
+  <DepthRim.AquacultureSpeciesDef>
+    <defName>DepthRim_Aquaculture_Cod</defName>
+    <label>cod</label>
+    <description>The beginner's fish: hardy, cold-water, forgiving.</description>
+    <variant>DepthRim_FishVariant_MediumCod</variant>
+    <netLayers>
+      <li>Shallow</li>
+    </netLayers>
+    <coastal>true</coastal>
+    <stockCount>120</stockCount>
+    <harvestWeight>2.5</harvestWeight>
+    <growDays>18</growDays>
+    <feedRate>0.09</feedRate>
+    <o2Demand>1.0</o2Demand>
+    <escapeRisk>1.0</escapeRisk>
+    <diseaseResistance>1.0</diseaseResistance>
+    <yieldPerFish>2~4</yieldPerFish>
+  </DepthRim.AquacultureSpeciesDef>
+
+  <DepthRim.AquacultureSpeciesDef>
+    <defName>DepthRim_Aquaculture_Salmon</defName>
+    <label>salmon</label>
+    <description>Valuable, but it jumps the net when it gets the chance.</description>
+    <variant>DepthRim_FishVariant_MediumSalmon</variant>
+    <netLayers>
+      <li>Shallow</li>
+      <li>Midwater</li>
+    </netLayers>
+    <coastal>true</coastal>
+    <stockCount>75</stockCount>
+    <harvestWeight>4.0</harvestWeight>
+    <growDays>20</growDays>
+    <feedRate>0.1</feedRate>
+    <o2Demand>1.2</o2Demand>
+    <escapeRisk>1.5</escapeRisk>
+    <diseaseResistance>0.8</diseaseResistance>
+    <yieldPerFish>3~5</yieldPerFish>
+  </DepthRim.AquacultureSpeciesDef>
+
+  <DepthRim.AquacultureSpeciesDef>
+    <defName>DepthRim_Aquaculture_Bluefish</defName>
+    <label>bluefish</label>
+    <description>A fast warm-water turnover fish; it turns on its own kind when underfed.</description>
+    <variant>DepthRim_FishVariant_Bluefish</variant>
+    <netLayers>
+      <li>Shallow</li>
+    </netLayers>
+    <coastal>true</coastal>
+    <stockCount>180</stockCount>
+    <harvestWeight>1.5</harvestWeight>
+    <growDays>12</growDays>
+    <feedRate>0.12</feedRate>
+    <o2Demand>1.1</o2Demand>
+    <escapeRisk>1.2</escapeRisk>
+    <diseaseResistance>1.0</diseaseResistance>
+    <yieldPerFish>2~3</yieldPerFish>
+  </DepthRim.AquacultureSpeciesDef>
+
+  <DepthRim.AquacultureSpeciesDef>
+    <defName>DepthRim_Aquaculture_Flounder</defName>
+    <label>flounder</label>
+    <description>Slow growing, tolerant of low oxygen, and pricey.</description>
+    <variant>DepthRim_FishVariant_Flounder</variant>
+    <netLayers>
+      <li>Shallow</li>
+    </netLayers>
+    <coastal>true</coastal>
+    <stockCount>75</stockCount>
+    <harvestWeight>4.0</harvestWeight>
+    <growDays>26</growDays>
+    <feedRate>0.07</feedRate>
+    <o2Demand>0.8</o2Demand>
+    <escapeRisk>0.7</escapeRisk>
+    <diseaseResistance>1.2</diseaseResistance>
+    <yieldPerFish>2~3</yieldPerFish>
+  </DepthRim.AquacultureSpeciesDef>
+
+  <DepthRim.AquacultureSpeciesDef>
+    <defName>DepthRim_Aquaculture_Tuna</defName>
+    <label>tuna</label>
+    <description>Huge, hungry for oxygen, and very valuable. Open sea only.</description>
+    <variant>DepthRim_FishVariant_Tuna</variant>
+    <netLayers>
+      <li>Shallow</li>
+      <li>Midwater</li>
+    </netLayers>
+    <coastal>false</coastal>
+    <stockCount>24</stockCount>
+    <harvestWeight>12.0</harvestWeight>
+    <growDays>30</growDays>
+    <feedRate>0.08</feedRate>
+    <o2Demand>1.6</o2Demand>
+    <escapeRisk>1.5</escapeRisk>
+    <diseaseResistance>1.0</diseaseResistance>
+    <yieldPerFish>4~6</yieldPerFish>
+  </DepthRim.AquacultureSpeciesDef>
+
+  <DepthRim.AquacultureSpeciesDef>
+    <defName>DepthRim_Aquaculture_Hake</defName>
+    <label>hake</label>
+    <description>The first deep-water fish: steady in the cold below the thermocline.</description>
+    <variant>DepthRim_FishVariant_Hake</variant>
+    <netLayers>
+      <li>Midwater</li>
+      <li>Deep</li>
+    </netLayers>
+    <coastal>false</coastal>
+    <stockCount>120</stockCount>
+    <harvestWeight>2.5</harvestWeight>
+    <growDays>24</growDays>
+    <feedRate>0.08</feedRate>
+    <o2Demand>0.9</o2Demand>
+    <escapeRisk>0.8</escapeRisk>
+    <diseaseResistance>1.1</diseaseResistance>
+    <yieldPerFish>2~3</yieldPerFish>
+    <researchPrerequisite>DepthRim_DeepNetCages</researchPrerequisite>
+  </DepthRim.AquacultureSpeciesDef>
+
+  <DepthRim.AquacultureSpeciesDef>
+    <defName>DepthRim_Aquaculture_Frostfish</defName>
+    <label>frostfish</label>
+    <description>The most valuable catch, and the fussiest about water temperature. Deep nets only.</description>
+    <variant>DepthRim_FishVariant_Frostfish</variant>
+    <netLayers>
+      <li>Deep</li>
+    </netLayers>
+    <coastal>false</coastal>
+    <stockCount>60</stockCount>
+    <harvestWeight>5.0</harvestWeight>
+    <growDays>28</growDays>
+    <feedRate>0.07</feedRate>
+    <o2Demand>0.9</o2Demand>
+    <escapeRisk>1.0</escapeRisk>
+    <diseaseResistance>0.9</diseaseResistance>
+    <yieldPerFish>2~4</yieldPerFish>
+    <researchPrerequisite>DepthRim_DeepNetCages</researchPrerequisite>
+  </DepthRim.AquacultureSpeciesDef>
+
+</Defs>

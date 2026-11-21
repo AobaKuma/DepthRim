@@ -47,6 +47,8 @@ layout(set = 2, binding = 0) uniform MaterialUniforms
     vec4 _Voyage;         // @default = vec4(0.0, 1.0, 0.0, 0.0)           水面航行（2026-11-20，DepthRim.SeaWake）：xy = 航向（地圖單位向量，x 東 z 北），z = 航跡強度 0..1
     vec4 _Wake;           // @default = vec4(0.0, 0.0, 0.0, 0.0)           航跡的船體外框：xy = 船艏中點（格），z = 沿航向的長度，w = 半寬
     vec4 _Flow;           // @default = vec4(0.0, 0.0, 0.0, 0.0)           xy = 海水往船尾流過的累積位移（格；取樣座標加上它）
+    vec4 _BowA;           // @default = vec4(0.0, 0.0, 0.0, 0.0)           船艏輪廓（2026-11-21）：從船艏往後第 0～3 列的半寬（格）
+    vec4 _BowB;           // @default = vec4(0.0, 0.0, 0.0, 0.0)           船艏輪廓：第 4～7 列的半寬（格）；再往後用外框半寬
     vec4 _WaterCastVectSun;               // 全域（SkyManager）：.xz 太陽投影方向，.w 日光強度
     vec4 _WaterCastVectMoon;              // 全域（SkyManager）：.xz 月亮投影方向，.w 月光強度
     float _DayPercent;                    // 全域（SkyManager）
@@ -256,6 +258,20 @@ float foamPhase(vec2 world, float t)
     return (n1 * 0.65 + n2 * 0.35) * u._FoamPhase.y;
 }
 
+// 船艏輪廓：離船艏 a 格處的船體半寬（a 是列中心之間線性內插；超過 8 列用外框半寬 W）
+float bowHalfWidth(float a, float W)
+{
+    if (a >= 7.5 || u._BowA.x <= 0.0)
+    {
+        return W;
+    }
+    float rows[8] = float[8](u._BowA.x, u._BowA.y, u._BowA.z, u._BowA.w, u._BowB.x, u._BowB.y, u._BowB.z, u._BowB.w);
+    float f = clamp(a, 0.0, 7.0);
+    int i = int(floor(f));
+    int j = min(i + 1, 7);
+    return mix(rows[i], rows[j], f - float(i));
+}
+
 void main()
 {
     // 這個像素看到的海面座標（海面在平台下方，畫面上往南偏）
@@ -372,7 +388,8 @@ void main()
         // 開爾文波：兩道從船艏張開約 19.5°（tan = 0.354）的 V 形浪；浪頂一條細白線，外側一點點暗的浪谷，
         // 沿著浪有斜向的羽狀紋，越往後越淡、越寬
         float behind = max(a, 0.0);
-        float armL = W * 0.85 + behind * 0.354;
+        // 從船艏尖端（船艏第一列的半寬）張開；尖船艏的浪從尖端出來，被船身蓋住的那段看不到
+        float armL = bowHalfWidth(0.0, W) * 0.85 + behind * 0.354;
         float armW = 0.35 + behind * 0.025;
         float armD = (al - armL) / armW;
         float armFade = smoothstep(0.0, 1.5, a) * exp(-behind / (18.0 + 30.0 * wakeSpeed));
@@ -382,18 +399,59 @@ void main()
         col *= 1.0 - 0.18 * armTrough * wakeSpeed;
         float armFoam = smoothstep(0.42, 0.72, wakeNoise + armCrest * 0.35) * armCrest;
 
-        // 船尾的翻攪水：船寬的一條帶子，往後慢慢變寬、變淡；水色翻得淺一點、偏青
-        // （2026-11-20 截圖：原本整條白得太滿、邊緣太硬、拖得太長——白沫門檻提高、邊緣用雜訊打散、衰減加快）
-        float behindStern = max(stern, 0.0);
+        // 船尾的翻攪水與船艏浪（2026-11-21 起照實際的船體格，不用外框：雙體船之類的結構，兩個船身之間的空檔不會被當成船）。
+        // 從這一點沿航向往前找船體遮罩（_MaskTex.b，一格一個值、已模糊）：前方幾格內有船體＝在那段船體的正後方（翻攪水），
+        // 沿航向往後一點點就碰到船體＝在船體迎水面的正前方（船艏浪）。只在船體外框附近算，地圖其他地方不取樣。
+        float onHull = maskAt(hullWorld).b;
         float edgeNoise = fbm(foamUv * 0.7 + vec2(-t * 0.05, t * 0.04));
-        float washW = (W * 0.7 + behindStern * 0.06) * (0.8 + 0.4 * edgeNoise);
-        float washFade = smoothstep(-0.6, 0.8, stern) * exp(-behindStern / (7.0 + 12.0 * wakeSpeed));
-        float wash = smoothstep(washW, washW * 0.15, al) * washFade;
+        float wash = 0.0;
+        float bowZone = 0.0;
+        if (onHull < 0.5 && a > -2.0 && a < L + 16.0 && al < W + 3.0)
+        {
+            // 翻攪水：往前（+航向）每 0.9 格看一次，最多 14 次；越往後找得越寬（帶子慢慢變寬）
+            for (int k = 1; k <= 14; k++)
+            {
+                float s = float(k) * 0.9;
+                vec2 q = hullWorld + hd * s;
+                float spread = s * 0.06 * (0.8 + 0.4 * edgeNoise);
+                float m = max(maskAt(q).b, max(maskAt(q + sd * spread).b, maskAt(q - sd * spread).b));
+                if (m > 0.45)
+                {
+                    // 碰到的那一步和前一步之間二分幾次，距離才是連續的（只用整步會在船後拉出一條條的橫紋）
+                    float lo = s - 0.9;
+                    float hi = s;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        float mid = 0.5 * (lo + hi);
+                        vec2 qm = hullWorld + hd * mid;
+                        float sm = mid * 0.06 * (0.8 + 0.4 * edgeNoise);
+                        float mm = max(maskAt(qm).b, max(maskAt(qm + sd * sm).b, maskAt(qm - sd * sm).b));
+                        if (mm > 0.45) { hi = mid; } else { lo = mid; }
+                    }
+                    float behindHull = hi;
+                    // 強度量在船體邊緣往裡 0.6 格（同樣往兩側放寬）：深度固定，就不會隨格子的位置一格一格起伏；兩側照遮罩的模糊自然變淡
+                    vec2 qi = hullWorld + hd * (hi + 0.6);
+                    float si = (hi + 0.6) * 0.06 * (0.8 + 0.4 * edgeNoise);
+                    float inside = max(maskAt(qi).b, max(maskAt(qi + sd * si).b, maskAt(qi - sd * si).b));
+                    // 找的範圍只有 12.6 格：在那之前淡到零，尾端才不會切成一條直線；兩側用雜訊打散
+                    wash = smoothstep(0.3, 0.85, inside * (0.75 + 0.5 * edgeNoise)) * smoothstep(0.0, 1.0, behindHull)
+                         * exp(-behindHull / (7.0 + 12.0 * wakeSpeed)) * (1.0 - smoothstep(6.0 + 2.0 * edgeNoise, 12.0, behindHull));
+                    break;
+                }
+            }
+            // 船艏浪：往後（−航向）一點點就碰到船體的水，越貼著越白
+            for (int k = 1; k <= 4; k++)
+            {
+                float s = float(k) * 0.35;
+                if (maskAt(hullWorld - hd * s).b > 0.45)
+                {
+                    bowZone = 1.0 - smoothstep(0.3, 1.45, s);
+                    break;
+                }
+            }
+        }
         col = mix(col, col * 1.08 + vec3(0.02, 0.05, 0.05), clamp(wash * 0.45, 0.0, 1.0) * wakeSpeed);
         float washFoam = smoothstep(0.55, 0.80, wakeNoise + wash * 0.12) * wash;
-
-        // 船艏浪：船艏前方約一格、兩側到船身前段的一圈白沫
-        float bowZone = smoothstep(-1.4, -0.2, a) * (1.0 - smoothstep(0.6, 3.0, a)) * (1.0 - smoothstep(W + 0.2, W + 1.4, al));
         float bowFoam = smoothstep(0.40, 0.65, wakeNoise + 0.25 * bowZone) * bowZone;
 
         float wakeFoam = clamp(washFoam * 0.7 + armFoam * 0.7 + bowFoam * 0.8, 0.0, 1.0) * wakeSpeed;

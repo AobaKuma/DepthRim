@@ -197,6 +197,60 @@ namespace DepthRim.Acceptance
         }
 
         /// <summary>世界地圖上的海洋地形：生態區貼圖、海床深度、只在選到海洋層時畫、看海洋時地表藏起來。</summary>
+        /// <summary>
+        /// 海洋格的海床深度、年均水溫、地勢要跟著存檔走（原版 PlanetLayer 只存生態區，2026-11-21 前讀檔後深度都是 0 m），
+        /// 沒有這些資料的舊存檔要能依世界種子重算回世界生成時的深度。
+        /// </summary>
+        public static IEnumerable<Wait> L3_OceanTileDataSurvivesSave(TestContext ctx)
+        {
+            PlanetLayer ocean = DepthRimFixture.OceanLayer;
+            ctx.Require(ocean != null && ocean.Tiles.Count == ocean.TilesCount, "ocean layer has tiles");
+            int n = ocean.TilesCount;
+            float[] elev = new float[n], temp = new float[n];
+            Hilliness[] hills = new Hilliness[n];
+            bool[] water = new bool[n];
+            for (int i = 0; i < n; i++)
+            {
+                Tile t = ocean[i];
+                elev[i] = t.elevation; temp[i] = t.temperature; hills[i] = t.hilliness;
+                water[i] = !OceanWorldView.IsLandmass(t.PrimaryBiome);
+            }
+            int waterCount = water.Count(w => w);
+            ctx.Check(waterCount > 0 && Enumerable.Range(0, n).All(i => !water[i] || elev[i] < 0f), $"every ocean tile has a seafloor below sea level ({waterCount} ocean tiles)");
+
+            // ── 舊存檔：格子資料遺失（高度 = 圖層半徑）後依種子重算 ──
+            for (int i = 0; i < n; i++) { ocean[i].elevation = ocean.Radius; ocean[i].temperature = 0f; }
+            int restored = WorldGenStep_OceanTiles.RestoreTileData(Find.World.info.seedString, ocean);
+            int depthMiss = Enumerable.Range(0, n).Count(i => Mathf.Abs(ocean[i].elevation - elev[i]) > 0.01f);
+            int tempMiss = Enumerable.Range(0, n).Count(i => Mathf.Abs(ocean[i].temperature - temp[i]) > 0.01f);
+            int firstMiss = Enumerable.Range(0, n).FirstOrDefault(i => Mathf.Abs(ocean[i].elevation - elev[i]) > 0.01f);
+            ctx.Check(restored == n, $"restore filled every tile ({restored}/{n})");
+            ctx.Check(depthMiss == 0, $"restored depths match world generation ({depthMiss} differ{(depthMiss > 0 ? $", e.g. #{firstMiss} {ocean[firstMiss].elevation:0.0} vs {elev[firstMiss]:0.0}" : "")})");
+            ctx.Check(tempMiss == 0, $"restored water temperatures match world generation ({tempMiss} differ)");
+            ctx.Check(Enumerable.Range(0, n).All(i => ocean[i].hilliness != Hilliness.Undefined), "every restored tile has a hilliness");
+            for (int i = 0; i < n; i++) { ocean[i].elevation = elev[i]; ocean[i].temperature = temp[i]; ocean[i].hilliness = hills[i]; }
+
+            // ── 存檔再讀檔 ──
+            Game before = Current.Game;
+            GameDataSaveLoader.SaveGame(DepthRimFixture.TestSaveName);
+            LongEventHandler.QueueLongEvent(() => SavedGameLoaderNow.LoadGameFromSaveFileNow(DepthRimFixture.TestSaveName), "LoadingLongEvent", false, null);
+            yield return new WaitRealtime(() => Current.Game != before && Current.ProgramState == ProgramState.Playing && !LongEventHandler.AnyEventNowOrWaiting, 120f);
+            ctx.Require(Current.Game != before, "the game reloaded");
+            yield return new WaitFrames(10);
+            ocean = DepthRimFixture.OceanLayer;
+            ctx.Require(ocean != null && ocean.Tiles.Count == n, "the reloaded ocean layer has the same tiles");
+            int elevBad = Enumerable.Range(0, n).Count(i => Mathf.Abs(ocean[i].elevation - elev[i]) > 0.051f);
+            int tempBad = Enumerable.Range(0, n).Count(i => Mathf.Abs(ocean[i].temperature - temp[i]) > 0.006f);
+            int hillBad = Enumerable.Range(0, n).Count(i => ocean[i].hilliness != hills[i]);
+            ctx.Check(elevBad == 0, $"after loading, seafloor depths are unchanged ({elevBad} differ)");
+            ctx.Check(tempBad == 0, $"after loading, water temperatures are unchanged ({tempBad} differ)");
+            ctx.Check(hillBad == 0, $"after loading, hilliness is unchanged ({hillBad} differ)");
+            int sample = Enumerable.Range(0, n).First(i => water[i]);
+            ctx.Check(OceanTemperature.TryGetWater(new PlanetTile(sample, ocean), out _, out float depth, out _) && depth > 0f,
+                $"after loading, an ocean tile reports its depth ({depth:0} m)");
+            ctx.Check(Patch_PlanetLayer_ExposeOceanTiles.PendingRestore == null, "a save with ocean tile data needs no restore");
+        }
+
         public static IEnumerable<Wait> L2_OceanWorldMap(TestContext ctx)
         {
             PlanetLayer ocean = DepthRimFixture.OceanLayer;

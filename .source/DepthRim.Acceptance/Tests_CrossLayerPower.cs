@@ -12,7 +12,7 @@ namespace DepthRim.Acceptance
         /// <summary>
         /// H7：海面地圖上一艘浮船，旁邊一根支柱。水面層：浮船上的電線接支柱腳和一顆充好電的電池；平台層：甲板上的電線接支柱頂和一盞燈。
         /// 檢查：燈從水面層拿到電、支柱頂送的剛好是燈要的、支柱腳抽的多 5%（線損）；平台層加一顆空電池 → 送滿容量（2000 W）不再多；
-        /// 拆掉水面層的電池 → 送端沒電、支柱頂不再發電；拆支柱 → 分配器裡沒有這條橋接。最後還原。
+        /// 拆掉水面層的電池 → 送端沒電、支柱頂不再發電；切換方向 → 平台層的電池送下水面層的燈；拆支柱 → 分配器裡沒有這條橋接。最後還原。
         /// </summary>
         public static IEnumerable<Wait> H7_CrossLayerPower(TestContext ctx)
         {
@@ -40,7 +40,9 @@ namespace DepthRim.Acceptance
                 ctx.Check(down.IsSource && !up.IsSource && down.Partner == up && up.Partner == down, "the foot sends, the top receives, and they know each other");
                 MapComponent_CrossLayerPower links = sea.GetComponent<MapComponent_CrossLayerPower>();
                 ctx.Check(links != null && links.Sources.Contains(down), "the sea level's power links include the foot");
-                ctx.Check(platform.GetComponent<MapComponent_CrossLayerPower>()?.Sources.Count == 0, "the platform level drives no links of its own");
+                MapComponent_CrossLayerPower upLinks = platform.GetComponent<MapComponent_CrossLayerPower>();
+                ctx.Check(upLinks != null && upLinks.Sources.Contains(up) && !up.IsSource, "the platform level registers the top, which only receives by default");
+                ctx.Check(foot.def.GetCompProperties<CompProperties_Power>().transmitsPower && top.def.GetCompProperties<CompProperties_Power>().transmitsPower, "both ends transmit power");
 
                 Thing Build(ThingDef def, IntVec3 at, Map map)
                 {
@@ -91,6 +93,24 @@ namespace DepthRim.Acceptance
                 links.Recompute();
                 ctx.Check(up.delivered == 0f && up.Trader.PowerOutput == 0f, $"with nothing on the water level the top makes no power ({up.Trader.PowerOutput:F0} W)");
                 ctx.Check(down.Trader.PowerOutput == 0f, "and the foot draws nothing");
+
+                // 切換方向：平台層的電池（充滿）送下水面層的一盞燈
+                Command_Action toggle = down.CompGetGizmosExtra().OfType<Command_Action>().FirstOrDefault();
+                ctx.Require(toggle != null && up.CompGetGizmosExtra().OfType<Command_Action>().Any(), "both ends offer the direction toggle");
+                toggle.action();
+                ctx.Check(!down.IsSource && up.IsSource && down.reversed && up.reversed, "the toggle flips both ends: the top sends, the foot receives");
+                platCell.AddEnergy(platCell.AmountCanAccept);
+                Thing seaLamp = Build(ThingDef.Named("StandingLamp"), new IntVec3(dock.minX, 0, dock.minZ + 1), sea);
+                CompPowerTrader seaLampPower = seaLamp.TryGetComp<CompPowerTrader>();
+                float seaLampWatts = seaLampPower.Props.PowerConsumption;
+                yield return new WaitUntil(() => seaLampPower.PowerOn && Mathf.Abs(down.delivered - seaLampWatts) < 1f, 900);
+                upLinks.Recompute();
+                links.Recompute();
+                ctx.Check(seaLampPower.PowerOn, "the lamp on the water level is powered from the platform");
+                ctx.Check(Mathf.Abs(down.Trader.PowerOutput - seaLampWatts) < 1f, $"the foot supplies what the sea lamp draws ({down.Trader.PowerOutput:F0} W / {seaLampWatts:F0} W)");
+                ctx.Check(Mathf.Abs(-up.Trader.PowerOutput - seaLampWatts / 0.95f) < 1f, $"the top draws it plus line loss ({-up.Trader.PowerOutput:F0} W)");
+                toggle.action();
+                ctx.Check(down.IsSource && !up.IsSource, "toggling again restores the upward direction");
 
                 // 拆支柱：橋接斷掉
                 foot.Destroy(DestroyMode.Vanish);

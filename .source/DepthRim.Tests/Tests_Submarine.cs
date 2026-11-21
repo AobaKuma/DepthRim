@@ -123,6 +123,9 @@ static partial class Test
             // 海岸造船 M1：原版海岸地圖上也能蓋（限制交給 allowedTerrains = 船體平台）
             Check((string)comp.Element("spaceMapOnly") != "true", $"{keel}: not limited to transfer layers (coastal shipbuilding)");
             Check(TextureExists((string)d.Element("graphicData").Element("texPath")), $"{keel} texture exists");
+            // 2026-11-22：不畫龍骨下面的底板與龍骨之間的鋼樑（DMSE 在 BelowTerrain 畫的 MapDrawLayer_StructuralBeams）
+            Check((string)comp.Element("beamWidth") == "0" && (string)comp.Element("beamCenterDrawSize") == "0",
+                $"{keel}: no under-keel plate or girder is drawn (linking still works)");
         }
         XElement keelBase = all.Single(e => (string)e.Attribute("Name") == "DepthRim_KeelBase");
         Check((string)keelBase.Element("terrainAffordanceNeeded") == "DepthRim_HullPlatform", "keel frames are built on hull platforms");
@@ -481,5 +484,26 @@ static partial class Test
         Check(WallPressureTopology.DamagePerUpdate(1f, WallPressureTopology.Capacity(DepthTier.Shallow)) == 0f, "a plain wall holds in the shallows");
         Check(WallPressureTopology.DamagePerUpdate(4f, WallPressureTopology.Capacity(DepthTier.Shallow)) > 0f, "a plain wall is overloaded in the deep");
         Check(WallPressureTopology.DamagePerUpdate(8f, WallPressureTopology.Capacity(DepthTier.Seabed)) == 0f, "a seabed-rated wall holds at the seabed");
+    }
+
+    /// <summary>
+    /// 龍骨的繪製（2026-11-22）：甲板下的龍骨不進平台層的下方快照；Def 把底板與鋼樑的尺寸設成 0，
+    /// DMSE 的 MapDrawLayer_StructuralBeams 就畫不出東西；選取時的連結線由 <see cref="Patch_KeelLinkLines"/> 收掉。
+    /// </summary>
+    static void KeelRendering()
+    {
+        var keel = new Verse.ThingDef
+        {
+            defName = "Test_Keel",
+            comps = new List<Verse.CompProperties> { new DMSE.CompProperties_StructuralPile() }
+        };
+        Check(SectionLayer_LowerLevel.IsBelowDeckStructure(keel), "keel frames (structural piles) are not printed in the lower-level snapshot");
+        var wall = new Verse.ThingDef { defName = "Test_Wall", comps = new List<Verse.CompProperties>() };
+        Check(!SectionLayer_LowerLevel.IsBelowDeckStructure(wall), "other buildings at the water level are still printed there");
+        Check(!SectionLayer_LowerLevel.IsBelowDeckStructure(new Verse.ThingDef { defName = "Test_NoComps" }), "a def without comps is not a keel (no null reference)");
+
+        // 補丁目標：DMSE 選取時畫連結線的那個方法（HarmonyTargets 另外驗證參數）
+        Check(HarmonyLib.AccessTools.Method(typeof(DMSE.PileDrawUtility), "DrawNetworkOverlay") != null, "the link-line patch still finds DMSE's network overlay");
+        Check(typeof(DMSE.CompStructuralPile).GetProperty("Network") != null, "the keel still reports its pile network (the patch reads it through DMSE)");
     }
 }

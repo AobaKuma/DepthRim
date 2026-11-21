@@ -153,7 +153,9 @@ namespace DepthRim
                 {
                     continue;
                 }
-                int amount = Mathf.Min(Mathf.Max(1, Mathf.RoundToInt(state.buildingDamage.RandomInRange)), b.HitPoints - floor);
+                // 7×7 箱網表面積大：海況傷害 ×stormDamageFactor（箱網養殖 §6.1）
+                float scale = (b as Building_NetCage)?.Props.stormDamageFactor ?? 1f;
+                int amount = Mathf.Min(Mathf.Max(1, Mathf.RoundToInt(state.buildingDamage.RandomInRange * scale)), b.HitPoints - floor);
                 if (amount <= 0)
                 {
                     continue;
@@ -168,6 +170,10 @@ namespace DepthRim
                     b.HitPoints = floor;
                 }
                 SeaEdge.Splash(map, c);
+                if (!b.Destroyed && b is Building_NetCage cage)
+                {
+                    cage.Cage.Notify_StormHit();
+                }
                 hits++;
                 first = first ?? b;
             }

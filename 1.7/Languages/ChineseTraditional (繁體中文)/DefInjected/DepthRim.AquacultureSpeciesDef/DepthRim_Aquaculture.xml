@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <DepthRim_Aquaculture_Cod.label>鱈魚</DepthRim_Aquaculture_Cod.label>
+  <DepthRim_Aquaculture_Cod.description>入門魚種：耐操、冷水、容錯高。</DepthRim_Aquaculture_Cod.description>
+  <DepthRim_Aquaculture_Salmon.label>鮭魚</DepthRim_Aquaculture_Salmon.label>
+  <DepthRim_Aquaculture_Salmon.description>值錢，但一有機會就跳網。</DepthRim_Aquaculture_Salmon.description>
+  <DepthRim_Aquaculture_Bluefish.label>藍魚</DepthRim_Aquaculture_Bluefish.label>
+  <DepthRim_Aquaculture_Bluefish.description>快週轉的暖水魚；餌不夠時會互食。</DepthRim_Aquaculture_Bluefish.description>
+  <DepthRim_Aquaculture_Flounder.label>比目魚</DepthRim_Aquaculture_Flounder.label>
+  <DepthRim_Aquaculture_Flounder.description>長得慢、耐低氧，單價高。</DepthRim_Aquaculture_Flounder.description>
+  <DepthRim_Aquaculture_Tuna.label>鮪魚</DepthRim_Aquaculture_Tuna.label>
+  <DepthRim_Aquaculture_Tuna.description>體型巨大、極耗氧，非常值錢。只能養在外海。</DepthRim_Aquaculture_Tuna.description>
+  <DepthRim_Aquaculture_Hake.label>無鬚鱈</DepthRim_Aquaculture_Hake.label>
+  <DepthRim_Aquaculture_Hake.description>第一種深水魚：在斜溫層以下的冷水裡很穩定。</DepthRim_Aquaculture_Hake.description>
+  <DepthRim_Aquaculture_Frostfish.label>霜魚</DepthRim_Aquaculture_Frostfish.label>
+  <DepthRim_Aquaculture_Frostfish.description>最值錢的魚獲，也最挑水溫。只能養在深層網。</DepthRim_Aquaculture_Frostfish.description>
+</LanguageData>

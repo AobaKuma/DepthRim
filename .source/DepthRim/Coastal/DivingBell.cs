@@ -200,10 +200,13 @@ namespace DepthRim
             GetComp<CompShuttle>()?.CleanUpLoadingVars();
         }
 
+        /// <summary>收放途中：鐘不在地圖上，收在吊架的容器裡（<see cref="Building_BellDavit.InTransit"/>）。</summary>
+        public bool InTransit => !Spawned && ParentHolder is Building_BellDavit;
+
         protected override void Tick()
         {
             base.Tick();
-            if (!Spawned || !this.IsHashIntervalTick(AirInterval))
+            if ((!Spawned && !InTransit) || !this.IsHashIntervalTick(AirInterval))
             {
                 return;
             }
@@ -334,9 +337,65 @@ namespace DepthRim
     /// </list>
     /// 任何中斷都把鐘留在它此刻實際所在的地圖，不瞬移（§7.7b）。
     /// </summary>
-    public class Building_BellDavit : Building
+    public class Building_BellDavit : Building, IThingHolder
     {
         public const float BellRange = 2f;
+
+        /// <summary>
+        /// 收放途中的鐘（2026-11-22：收放一開始鐘就播離場動畫、離開地圖，倒數結束才出現在目的地）。
+        /// 鐘裡的人與貨留在鐘自己的容器裡；吊架每 tick 讓容器跟著跑（人的需求、鐘的氧氣）。
+        /// </summary>
+        private ThingOwner<Building_DivingBell> transit;
+
+        /// <summary>收鐘前鐘在海床上的位置與那一格（收到一半放棄時放回那裡）。</summary>
+        private IntVec3 seabedCell = IntVec3.Invalid;
+
+        private PlanetTile seabedTile = PlanetTile.Invalid;
+
+        public Building_BellDavit()
+        {
+            transit = new ThingOwner<Building_DivingBell>(this, oneStackOnly: true);
+        }
+
+        public ThingOwner GetDirectlyHeldThings() => transit;
+
+        public void GetChildHolders(List<IThingHolder> outChildren)
+        {
+            ThingOwnerUtility.AppendThingHoldersFromThings(outChildren, GetDirectlyHeldThings());
+        }
+
+        /// <summary>鐘正在收放途中（不在任何地圖上，在吊架的容器裡）。</summary>
+        public bool InTransit => bell != null && transit.Contains(bell);
+
+        /// <summary>鐘離開地圖：播離場動畫（<paramref name="sink"/>：在水面往下沉；否則從海床往上拉），收進容器。</summary>
+        private void TakeIntoTransit(bool sink)
+        {
+            if (bell == null || !bell.Spawned)
+            {
+                return;
+            }
+            BellFx.Play(bell, sink);
+            bell.PrepareToMove();
+            bell.DeSpawn(DestroyMode.WillReplace);
+            transit.TryAdd(bell);
+        }
+
+        /// <summary>鐘從容器出來，放到 <paramref name="map"/> 的 <paramref name="spot"/>。</summary>
+        private void ReleaseFromTransit(Map map, IntVec3 spot)
+        {
+            if (bell == null)
+            {
+                return;
+            }
+            if (transit.Contains(bell))
+            {
+                transit.Remove(bell);
+            }
+            if (!bell.Spawned)
+            {
+                GenSpawn.Spawn(bell, spot, map, Rot4.North);
+            }
+        }
 
         public const int CheckInterval = 60;
 
@@ -412,12 +471,7 @@ namespace DepthRim
                 reason = "DepthRim.Bell.NoSeaBelow".Translate();
                 return PlanetTile.Invalid;
             }
-            DepthTier floor = WorldObject_Submarine.SeafloorAt(tile);
-            if (floor != DepthTier.Shallow)
-            {
-                reason = "DepthRim.Bell.NoSeabed".Translate(floor.Label());
-                return PlanetTile.Invalid;
-            }
+            // 每個海洋生態區都有海床（層級是海床在多深）：深海平原也能下鐘（2026-11-22 使用者決定），越深收放越久（BellMath.TransitTicks）
             MapParent other = Find.WorldObjects.MapParentAt(tile);
             if (other != null && !(other is WorldObject_OceanSite) && !(other is WorldObject_Submarine))
             {
@@ -477,6 +531,7 @@ namespace DepthRim
             transitTicks = BellMath.TransitTicks(WorldObject_Submarine.SeafloorAt(tile));
             progress = 0;
             state = BellState.Deploying;
+            TakeIntoTransit(sink: true);
             Messages.Message("DepthRim.Bell.Lowering".Translate(transitTicks.ToStringTicksToPeriod()), this, MessageTypeDefOf.NeutralEvent, historical: false);
         }
 
@@ -495,12 +550,17 @@ namespace DepthRim
             }
             progress = 0;
             state = BellState.Retracting;
+            seabedCell = bell.Position;
+            seabedTile = bell.Map.Tile;
+            TakeIntoTransit(sink: false);
             Messages.Message("DepthRim.Bell.Raising".Translate(transitTicks.ToStringTicksToPeriod()), this, MessageTypeDefOf.NeutralEvent, historical: false);
         }
 
         protected override void Tick()
         {
             base.Tick();
+            // 途中的鐘不在地圖上：讓它（與裡面的人）照常跑
+            transit.DoTick();
             if (!Spawned || !this.IsHashIntervalTick(CheckInterval))
             {
                 return;
@@ -549,26 +609,45 @@ namespace DepthRim
             if (!tile.Valid)
             {
                 Messages.Message(reason, this, MessageTypeDefOf.RejectInput);
-                state = BellState.Stowed;
-                bell.Eject();
+                ReturnToDeck();
                 return;
             }
             Map seabed = SeabedMap(tile);
-            if (seabed == null || !TryFindLandingSpot(seabed, bell.Position, out IntVec3 spot))
+            IntVec3 preferred = stowCell.IsValid ? stowCell : Position;
+            if (seabed == null || !TryFindLandingSpot(seabed, preferred, out IntVec3 spot))
             {
                 Messages.Message("DepthRim.Bell.NoLandingSpot".Translate(), this, MessageTypeDefOf.RejectInput);
-                state = BellState.Stowed;
-                bell.Eject();
+                ReturnToDeck();
                 return;
             }
             bell.PrepareToMove();
-            bell.DeSpawn(DestroyMode.WillReplace);
-            GenSpawn.Spawn(bell, spot, seabed, Rot4.North);
+            if (bell.Spawned)
+            {
+                bell.DeSpawn(DestroyMode.WillReplace);
+            }
+            ReleaseFromTransit(seabed, spot);
             FloodFillerFog.FloodUnfog(spot, seabed);
             bell.Eject();
             state = BellState.Deployed;
             progress = 0;
             Messages.Message("DepthRim.Bell.Landed".Translate(), new TargetInfo(spot, seabed), MessageTypeDefOf.PositiveEvent);
+        }
+
+        /// <summary>下鐘失敗或下到一半放棄：鐘回到甲板（原本的位置，放不下就吊架旁），人與貨放出來，回到 Stowed。</summary>
+        private void ReturnToDeck()
+        {
+            if (bell != null && InTransit)
+            {
+                IntVec3 spot;
+                if (!TryFindStowSpot(out spot) && !CellFinder.TryFindRandomCellNear(Position, Map, 6, c => BellFits(Map, c), out spot))
+                {
+                    spot = Position;
+                }
+                ReleaseFromTransit(Map, spot);
+            }
+            bell?.Eject();
+            state = BellState.Stowed;
+            progress = 0;
         }
 
         private void CompleteRetract()
@@ -581,12 +660,17 @@ namespace DepthRim
                 Messages.Message("DepthRim.Bell.NoStowRoom".Translate(), this, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
-            bell.PrepareToMove();
-            bell.DeSpawn(DestroyMode.WillReplace);
-            GenSpawn.Spawn(bell, spot, Map, Rot4.North);
+            if (bell.Spawned)
+            {
+                bell.PrepareToMove();
+                bell.DeSpawn(DestroyMode.WillReplace);
+            }
+            ReleaseFromTransit(Map, spot);
             bell.Eject();
             state = BellState.Stowed;
             progress = 0;
+            seabedTile = PlanetTile.Invalid;
+            seabedCell = IntVec3.Invalid;
             Messages.Message("DepthRim.Bell.Stowed".Translate(), this, MessageTypeDefOf.PositiveEvent);
             _ = from;
         }
@@ -684,17 +768,33 @@ namespace DepthRim
             }
             if (state == BellState.Deploying)
             {
-                bell?.Eject();
+                // 還在往下：鐘回到甲板、人出來
+                ReturnToDeck();
                 if (bell != null)
                 {
                     bell.davit = null;
                 }
                 bell = null;
-                state = BellState.Stowed;
-                progress = 0;
                 return;
             }
             Building_DivingBell lost = bell;
+            // 往上拉到一半：鐘落回原本在海床上的位置，失聯
+            if (lost != null && InTransit)
+            {
+                Map seabed = seabedTile.Valid ? Find.WorldObjects.MapParentAt(seabedTile)?.Map : null;
+                transit.Remove(lost);
+                if (seabed != null && TryFindLandingSpot(seabed, seabedCell.IsValid ? seabedCell : seabed.Center, out IntVec3 back))
+                {
+                    GenSpawn.Spawn(lost, back, seabed, Rot4.North);
+                }
+                else if (Spawned)
+                {
+                    // 海床地圖已經不在：只好放回甲板
+                    IntVec3 deck = CellFinder.TryFindRandomCellNear(Position, Map, 6, c => BellFits(Map, c), out IntVec3 found) ? found : Position;
+                    GenSpawn.Spawn(lost, deck, Map, Rot4.North);
+                    lost.Eject();
+                }
+            }
             if (lost != null)
             {
                 lost.davit = null;
@@ -818,7 +918,7 @@ namespace DepthRim
         protected override void DrawAt(Vector3 drawLoc, bool flip = false)
         {
             base.DrawAt(drawLoc, flip);
-            if (state == BellState.Deployed || state == BellState.Retracting)
+            if (state != BellState.Stowed)
             {
                 DiveBellDraw.Cable(drawLoc, drawLoc + new Vector3(0f, 0f, -3f), AltitudeLayer.MoteOverhead.AltitudeFor());
             }
@@ -832,6 +932,13 @@ namespace DepthRim
             Scribe_Values.Look(ref progress, "progress");
             Scribe_Values.Look(ref transitTicks, "transitTicks");
             Scribe_Values.Look(ref stowCell, "stowCell", IntVec3.Invalid);
+            Scribe_Values.Look(ref seabedCell, "seabedCell", IntVec3.Invalid);
+            Scribe_Values.Look(ref seabedTile, "seabedTile", PlanetTile.Invalid);
+            Scribe_Deep.Look(ref transit, "transit", this);
+            if (transit == null)
+            {
+                transit = new ThingOwner<Building_DivingBell>(this, oneStackOnly: true);
+            }
             if (Scribe.mode == LoadSaveMode.PostLoadInit && state != BellState.Stowed && bell == null)
             {
                 state = BellState.Stowed;

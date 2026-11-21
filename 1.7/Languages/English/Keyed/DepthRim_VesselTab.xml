@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Helm inspector tab (ITab_Vessel) -->
+  <DepthRim.VesselTab.InPort>Moored in port · {0}</DepthRim.VesselTab.InPort>
+  <DepthRim.VesselTab.Surfaced>Surfaced</DepthRim.VesselTab.Surfaced>
+  <DepthRim.VesselTab.SailingSurface>Sailing on the surface</DepthRim.VesselTab.SailingSurface>
+  <DepthRim.VesselTab.Submerged>Submerged · {0}</DepthRim.VesselTab.Submerged>
+  <DepthRim.VesselTab.Diving>Changing depth · {0} → {1}</DepthRim.VesselTab.Diving>
+  <DepthRim.VesselTab.SailingSubmerged>Under way, submerged · {0}</DepthRim.VesselTab.SailingSubmerged>
+
+  <DepthRim.VesselTab.Actions>What it can do now</DepthRim.VesselTab.Actions>
+  <DepthRim.VesselTab.Ready>Ready</DepthRim.VesselTab.Ready>
+  <DepthRim.VesselTab.Blocked>Not ready</DepthRim.VesselTab.Blocked>
+  <DepthRim.VesselTab.Dive>Dive</DepthRim.VesselTab.Dive>
+  <DepthRim.VesselTab.Surface>Surface</DepthRim.VesselTab.Surface>
+  <DepthRim.VesselTab.RangeTiles>{0} tiles</DepthRim.VesselTab.RangeTiles>
+
+  <DepthRim.VesselTab.Voyage>Voyage</DepthRim.VesselTab.Voyage>
+  <DepthRim.VesselTab.TilesLeft>Tiles to go</DepthRim.VesselTab.TilesLeft>
+  <DepthRim.VesselTab.Eta>Arrives in</DepthRim.VesselTab.Eta>
+  <DepthRim.VesselTab.Stalled>Dead in the water: no working thrusters</DepthRim.VesselTab.Stalled>
+
+  <DepthRim.VesselTab.Hull>Hull</DepthRim.VesselTab.Hull>
+  <DepthRim.VesselTab.HullSize>Size</DepthRim.VesselTab.HullSize>
+  <DepthRim.VesselTab.HullSizeValue>{0} cells · {1} keels</DepthRim.VesselTab.HullSizeValue>
+  <DepthRim.VesselTab.Rating>Pressure rating</DepthRim.VesselTab.Rating>
+  <DepthRim.VesselTab.RatingEstimate>Pressure rating (est.)</DepthRim.VesselTab.RatingEstimate>
+  <DepthRim.VesselTab.NoHullPieces>No outer hull yet</DepthRim.VesselTab.NoHullPieces>
+  <DepthRim.VesselTab.Weakest>Weakest piece: {0}</DepthRim.VesselTab.Weakest>
+  <DepthRim.VesselTab.Ballast>Ballast tanks</DepthRim.VesselTab.Ballast>
+  <DepthRim.VesselTab.NoBallast>Without ballast tanks the ship can only sail on the surface.</DepthRim.VesselTab.NoBallast>
+  <DepthRim.VesselTab.NoBallastSubmerged>No ballast tanks: the submarine cannot change depth.</DepthRim.VesselTab.NoBallastSubmerged>
+  <DepthRim.VesselTab.BallastShort>Too few tanks for this hull: depth changes are slower.</DepthRim.VesselTab.BallastShort>
+
+  <DepthRim.VesselTab.Power>Power</DepthRim.VesselTab.Power>
+  <DepthRim.VesselTab.Battery>Batteries</DepthRim.VesselTab.Battery>
+  <DepthRim.VesselTab.Thrusters>Underwater thrusters</DepthRim.VesselTab.Thrusters>
+  <DepthRim.VesselTab.SurfaceThrusters>Surface thrusters</DepthRim.VesselTab.SurfaceThrusters>
+  <DepthRim.VesselTab.PerTile>Time per tile</DepthRim.VesselTab.PerTile>
+  <DepthRim.VesselTab.SurfaceRange>Surface range</DepthRim.VesselTab.SurfaceRange>
+  <DepthRim.VesselTab.SubRange>Submerged range</DepthRim.VesselTab.SubRange>
+  <DepthRim.VesselTab.CannotGo>Cannot get under way</DepthRim.VesselTab.CannotGo>
+
+  <DepthRim.VesselTab.ShowDetails>▸ Show equipment</DepthRim.VesselTab.ShowDetails>
+  <DepthRim.VesselTab.HideDetails>▾ Hide equipment</DepthRim.VesselTab.HideDetails>
+  <DepthRim.VesselTab.None>None aboard</DepthRim.VesselTab.None>
+  <DepthRim.VesselTab.Working>Working</DepthRim.VesselTab.Working>
+  <DepthRim.VesselTab.Idle>No power or broken</DepthRim.VesselTab.Idle>
+</LanguageData>

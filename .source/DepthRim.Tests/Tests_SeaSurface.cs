@@ -103,6 +103,8 @@ static partial class Test
         }
         Check(SharedBlock(shadowFrag) != null && SharedBlock(shadowFrag) == SharedBlock(pillarFrag), "the shadow overlay and the pillar shader share the same platformShade code");
         Check(shadowFrag.Contains($"const int PILLAR_TAPS = {PlatformShadow.PillarTaps};"), "the shader's pillar-shadow taps match C#");
+        Check(shadowFrag.Contains($"smoothstep({PlatformShadow.PillarShadowStart.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)}, 0.6, column)"), "the shader's pillar-shadow start matches C#");
+        Check(PlatformShadowField.CageFoamMax < PlatformShadow.PillarShadowStart, "net cage foam stays below the pillar-shadow start");
         Check(shadowFrag.Contains($"const int PILLAR_DEPTH_TAPS = {PlatformShadow.PillarDepthTaps};") && shadowFrag.Contains($"const float PILLAR_DEPTH = {PlatformShadow.PillarDepth:0.0};"), "the shader's pillar-shadow depth matches C#");
         int concrete = int.Parse((string)ext.Element("waterlineWidth"));
         Check(System.Math.Abs(PlatformShadow.PillarDepth - (concrete - 2)) < 0.01f, $"the pillar shadow is as thick as the pillar is wide (waterline 2 rows + {PlatformShadow.PillarDepth} = {concrete})");

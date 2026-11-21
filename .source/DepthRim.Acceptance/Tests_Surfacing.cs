@@ -139,6 +139,108 @@ namespace DepthRim.Acceptance
         }
 
         // ==================================================================
+        //  U5：上浮先選位、選好才播演出；取消就照預設位置上浮
+        // ==================================================================
+
+        /// <summary>
+        /// U5（2026-11-21）：開著演出上浮。按上浮後先出現選位設計器（新建的海面地圖也一樣），選之前不播演出、潛艇還在水下；
+        /// 取消選位 → 照預設位置（地圖中央附近）上浮。下潛回去再上浮一次，選一個離中央遠的位置 → 選了之後才播演出，船體落在選的位置。
+        /// </summary>
+        public static IEnumerable<Wait> U5_SurfaceChooseThenShow(TestContext ctx)
+        {
+            bool skipBefore = SubmarineSurfacing.skipCutscenes;
+            System.Type keepBefore = AcceptanceDriver.KeepWindowOpen;
+            SubmarineSurfacing.skipCutscenes = true;
+            PlanetTile tile = FindTile(t => t.temperature > 5f);
+            ctx.Require(tile.Valid, "found an ocean tile under open, ice-free sea");
+            PlanetTile above = OceanWorldView.TileAbove(tile);
+            Holder holder = new Holder();
+            foreach (Wait w in LaunchPrefab(ctx, tile, holder)) { yield return w; }
+            WorldObject_Submarine sub = holder.sub;
+            bool shows = Prefs.GravshipCutscenes && ModsConfig.OdysseyActive;
+            ctx.Note($"cutscenes {(shows ? "on" : "off (moves straight away after the choice)")}");
+            try
+            {
+                // ── 1. 上浮：先選位，選之前不播演出 ──
+                SubmarineSurfacing.skipCutscenes = false;
+                AcceptanceDriver.KeepWindowOpen = typeof(SubmarineSurfacingCutscene);
+                SubmarineSurfacing.Surface(sub);
+                yield return new WaitRealtime(() => Find.DesignatorManager.SelectedDesignator is Designator_PlaceSubmarine, 15f);
+                ctx.Require(Find.DesignatorManager.SelectedDesignator is Designator_PlaceSubmarine, "surfacing into a new sea map first asks where to surface");
+                ctx.Check(!SubmarineSurfacing.CutscenePlaying && !sub.Destroyed, "nothing plays and the submarine stays below while choosing");
+                yield return new WaitFrames(30);
+                ctx.Check(!SubmarineSurfacing.CutscenePlaying && !sub.Destroyed, "still nothing half a second later");
+                Map sea = Find.WorldObjects.MapParentAt(above)?.Map;
+                ctx.Require(sea != null, "the sea-surface map exists for the choice");
+                List<IntVec3> shipCells = TransferLandingUtility.LandingCells(sub.Map);
+                ctx.Require(SubmarineSurfacing.TryFindSpot(sea, shipCells, c => SeaSurface.IsOpenSea(c, sea), out IntVec3 defaultOffset), "there is a default spot");
+                IntVec3 defaultCenter = CellRect.FromCellList(TransferLandingUtility.HullCells(sub.Map)).CenterCell + defaultOffset;
+
+                // ── 2. 取消選位 → 照預設位置上浮 ──
+                Find.DesignatorManager.Deselect();
+                yield return new WaitRealtime(() => sub.Destroyed, 60f);
+                ctx.Require(sub.Destroyed, "cancelling the choice still surfaces");
+                yield return new WaitFrames(5);
+                List<IntVec3> hull = sea.AllCells.Where(c => c.GetTerrain(sea).defName == "DepthRim_HullPlatform").ToList();
+                IntVec3 at = CellRect.FromCellList(hull).CenterCell;
+                ctx.Check(at.DistanceTo(defaultCenter) <= 1.5f, $"at the default spot near the middle of the map ({at} vs {defaultCenter})");
+
+                yield return new WaitRealtime(() => !SubmarineSurfacing.CutscenePlaying, 30f);
+                ctx.Check(!SubmarineSurfacing.CutscenePlaying, "the first show has closed");
+                // ── 3. 下潛回去（不播演出），再上浮一次並選位 ──
+                SubmarineSurfacing.skipCutscenes = true;
+                Building helm = sea.listerBuildings.allBuildingsColonist.First(b => b.def.defName == "DepthRim_Helm");
+                HashSet<WorldObject_Submarine> subsBefore = new HashSet<WorldObject_Submarine>(Find.WorldObjects.AllWorldObjects.OfType<WorldObject_Submarine>());
+                SubmarineSurfacing.Dive(helm);
+                WorldObject_Submarine sub2 = null;
+                yield return new WaitUntil(() => (sub2 = Find.WorldObjects.AllWorldObjects.OfType<WorldObject_Submarine>().FirstOrDefault(x => !subsBefore.Contains(x) && x.HasMap)) != null, 600);
+                ctx.Require(sub2 != null, "dived again");
+                yield return new WaitFrames(10);
+                SubmarineSurfacing.skipCutscenes = false;
+                SubmarineSurfacing.Surface(sub2);
+                yield return new WaitRealtime(() => Find.DesignatorManager.SelectedDesignator is Designator_PlaceSubmarine, 15f);
+                Designator_PlaceSubmarine place = Find.DesignatorManager.SelectedDesignator as Designator_PlaceSubmarine;
+                ctx.Require(place != null, "the second surfacing asks where to surface too");
+                sea = place.TargetMap;
+                yield return new WaitRealtime(() => false, 0.5f);
+                // 離中央遠一點、放得下的位置
+                IntVec3 chosen = IntVec3.Invalid;
+                foreach (IntVec3 c in GenRadial.RadialCellsAround(sea.Center + new IntVec3(30, 0, -20), 25f, true))
+                {
+                    if (c.InBounds(sea) && place.CanDesignateCell(c).Accepted)
+                    {
+                        chosen = c;
+                        break;
+                    }
+                }
+                ctx.Require(chosen.IsValid, "found a spot away from the middle");
+                ctx.Check(!SubmarineSurfacing.CutscenePlaying && !sub2.Destroyed, "again nothing plays before the choice");
+                place.DesignateSingleCell(chosen);
+                if (shows)
+                {
+                    yield return new WaitRealtime(() => SubmarineSurfacing.CutscenePlaying || sub2.Destroyed, 10f);
+                    ctx.Check(SubmarineSurfacing.CutscenePlaying, "the surfacing show starts once the spot is chosen");
+                }
+                yield return new WaitRealtime(() => sub2.Destroyed, 60f);
+                ctx.Require(sub2.Destroyed, "surfaced at the chosen spot");
+                yield return new WaitFrames(5);
+                hull = sea.AllCells.Where(c => c.GetTerrain(sea).defName == "DepthRim_HullPlatform").ToList();
+                at = CellRect.FromCellList(hull).CenterCell;
+                ctx.Check(at.DistanceTo(chosen) <= 1.5f, $"the hull is where the player chose ({at} vs {chosen}), not the default ({defaultCenter})");
+                foreach (Wait w in ctx.ScreenshotOn(sea, at, 26f, "surfaced_at_chosen_spot")) { yield return w; }
+            }
+            finally
+            {
+                SubmarineSurfacing.skipCutscenes = skipBefore;
+                AcceptanceDriver.KeepWindowOpen = keepBefore;
+                Find.DesignatorManager.Deselect();
+            }
+            DepthRimFixture.CleanupAfterTest();
+            foreach (WorldObject_Submarine s in Find.WorldObjects.AllWorldObjects.OfType<WorldObject_Submarine>().ToList()) { if (!s.Destroyed) { s.Destroy(); } }
+            yield return new WaitFrames(2);
+        }
+
+        // ==================================================================
         //  U3：海面的畫法和原版深海比較
         // ==================================================================
 
@@ -224,7 +326,10 @@ namespace DepthRim.Acceptance
             WorldObject_Submarine sub = holder.sub;
             int hullCount = TransferLandingUtility.HullCells(sub.Map).Count;
             AcceptanceDriver.KeepWindowOpen = typeof(SubmarineSurfacingCutscene);
+            // 這個測試看演出：不問停船位置（選位與演出的先後由 U5 測）
+            SubmarineSurfacing.autoPlace = true;
             SubmarineSurfacing.Surface(sub);
+            SubmarineSurfacing.autoPlace = false;
             ctx.Check(!sub.Destroyed, "the hull waits for the cutscene before it moves");
             int splashes = 0, churns = 0, split = 0, sliceCount = 0;
             List<float> order = null;

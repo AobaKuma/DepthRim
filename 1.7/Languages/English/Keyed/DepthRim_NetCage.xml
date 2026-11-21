@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <!-- 箱網養殖（Docs/箱網養殖_內容設計.md §14） -->
+  <DepthRim.Alert.CageHypoxia>Net cage oxygen low</DepthRim.Alert.CageHypoxia>
+  <DepthRim.Alert.CageHypoxiaDesc>Dissolved oxygen in these net cages is below 50%. Fish grow slowly and, below 35%, start dying.\n\nLower the feed rate, build aerators (and keep them powered), spread the cages out, or harvest.</DepthRim.Alert.CageHypoxiaDesc>
+  <DepthRim.Alert.CageNetBreach>Net cage damaged</DepthRim.Alert.CageNetBreach>
+  <DepthRim.Alert.CageNetBreachDesc>These net cages are below 50% net condition. The net can tear and let fish escape at any time.\n\nColonists with construction mend nets (45 cloth, 30 steel) automatically, or order a net replacement (75 cloth).</DepthRim.Alert.CageNetBreachDesc>
+  <DepthRim.Alert.CageNoFeed>Net cage out of feed</DepthRim.Alert.CageNoFeed>
+  <DepthRim.Alert.CageNoFeedDesc>These stocked net cages have no kibble left. The fish stop growing.\n\nMake kibble (or fish kibble at a butcher table) and let animal handlers carry it to the cages.</DepthRim.Alert.CageNoFeedDesc>
+  <DepthRim.Alert.CageDisease>Net cage disease</DepthRim.Alert.CageDisease>
+  <DepthRim.Alert.CageDiseaseDesc>Fish in these net cages are sick. The disease does not kill by itself, but it spreads to other cages within 12 cells, faster the more crowded they are.\n\nTreat it (10 medicine, doctors) or harvest the cage to cull it.</DepthRim.Alert.CageDiseaseDesc>
+  <DepthRim.Alert.CageReady>Net cage ready to harvest</DepthRim.Alert.CageReady>
+  <DepthRim.Alert.CageReadyDesc>These net cages have been at market weight for days. Overripe fish start dying and yield less each day.\n\nSelect the cage and order a harvest.</DepthRim.Alert.CageReadyDesc>
+  <DepthRim.NetCage.BiomassLine>Biomass {0}/{1} kg · {2}</DepthRim.NetCage.BiomassLine>
+  <DepthRim.NetCage.Breach>The net has torn! {0} fish escaped.</DepthRim.NetCage.Breach>
+  <DepthRim.NetCage.CancelStock>Cancel stocking</DepthRim.NetCage.CancelStock>
+  <DepthRim.NetCage.Disabled>Net cages are turned off in the mod settings.</DepthRim.NetCage.Disabled>
+  <DepthRim.NetCage.DiseaseLine>Disease {0} ({1} cages within 12)</DepthRim.NetCage.DiseaseLine>
+  <DepthRim.NetCage.DiseaseSpread>Disease has spread to {0} more net cage(s).</DepthRim.NetCage.DiseaseSpread>
+  <DepthRim.NetCage.EmergencyHarvest>Emergency harvest</DepthRim.NetCage.EmergencyHarvest>
+  <DepthRim.NetCage.EmergencyHarvestDesc>Harvest now, before the fish reach market weight. Each fish yields less, in proportion to its weight. Use it before a storm or when the water turns bad.</DepthRim.NetCage.EmergencyHarvestDesc>
+  <DepthRim.NetCage.Empty>Empty</DepthRim.NetCage.Empty>
+  <DepthRim.NetCage.Failed>The {0} in a net cage have failed: too few are left. The cage has been cleared.</DepthRim.NetCage.Failed>
+  <DepthRim.NetCage.FeedLine>Feed {0}/{1} kibble (lasts {2} days) · feed rate {3}</DepthRim.NetCage.FeedLine>
+  <DepthRim.NetCage.FeedRate>Feed rate: {0}</DepthRim.NetCage.FeedRate>
+  <DepthRim.NetCage.FeedRateDesc>Cycle the feed rate (100%, 70%, 50%, 0%). Feeding less saves kibble and lowers the oxygen demand, but the fish grow more slowly. Cut feeding during an algal bloom or low oxygen.</DepthRim.NetCage.FeedRateDesc>
+  <DepthRim.NetCage.FishLine>{0} ×{1} · avg {2} kg ({3})</DepthRim.NetCage.FishLine>
+  <DepthRim.NetCage.Harvest>Harvest</DepthRim.NetCage.Harvest>
+  <DepthRim.NetCage.HarvestDesc>Harvest the cage once the fish reach market weight. Animal handlers do it from the shore, deck or bridge alongside.</DepthRim.NetCage.HarvestDesc>
+  <DepthRim.NetCage.HypoxiaLetter>Fish suffocated</DepthRim.NetCage.HypoxiaLetter>
+  <DepthRim.NetCage.HypoxiaLetterDesc>The oxygen in a net cage has been critically low for hours. {1} {0} suffocated; {2} are left.\n\nLower the feed rate, power aerators, or harvest.</DepthRim.NetCage.HypoxiaLetterDesc>
+  <DepthRim.NetCage.LayerLine>{0} net {1} m · water {2} °C · net {3}</DepthRim.NetCage.LayerLine>
+  <DepthRim.NetCage.NeedWater>Net cages must float entirely on sea water.</DepthRim.NetCage.NeedWater>
+  <DepthRim.NetCage.NetFine>The net is still in good condition (50% or more).</DepthRim.NetCage.NetFine>
+  <DepthRim.NetCage.NoAccess>The cage needs a shore, walkway or deck next to it.</DepthRim.NetCage.NoAccess>
+  <DepthRim.NetCage.NoSpecies>No species can be stocked at {0} °C in this net.</DepthRim.NetCage.NoSpecies>
+  <DepthRim.NetCage.NoWater>The water here is too shallow for this net ({0} m, needs {1} m).</DepthRim.NetCage.NoWater>
+  <DepthRim.NetCage.NotGrowing>not growing</DepthRim.NetCage.NotGrowing>
+  <DepthRim.NetCage.NotPlatformLevel>Net cages float on the water level, not the platform level.</DepthRim.NetCage.NotPlatformLevel>
+  <DepthRim.NetCage.OpenSeaOnly>This net hangs too deep for a bay: open sea only.</DepthRim.NetCage.OpenSeaOnly>
+  <DepthRim.NetCage.OxygenLine>Oxygen {0}</DepthRim.NetCage.OxygenLine>
+  <DepthRim.NetCage.PendingStock>Waiting to be stocked: {0} ×{1}</DepthRim.NetCage.PendingStock>
+  <DepthRim.NetCage.PreviewBay>Bay {0} m · water {1} °C</DepthRim.NetCage.PreviewBay>
+  <DepthRim.NetCage.PreviewSea>Open sea, {0} m deep · net at {1} m · water {2} °C</DepthRim.NetCage.PreviewSea>
+  <DepthRim.NetCage.PreviewSpecies>Can farm: {0}</DepthRim.NetCage.PreviewSpecies>
+  <DepthRim.NetCage.ReadyIn>ready in {0} days</DepthRim.NetCage.ReadyIn>
+  <DepthRim.NetCage.ReadyNow>ready to harvest</DepthRim.NetCage.ReadyNow>
+  <DepthRim.NetCage.Reason.OpenSeaOnly>open sea only</DepthRim.NetCage.Reason.OpenSeaOnly>
+  <DepthRim.NetCage.Reason.Research>needs {0}</DepthRim.NetCage.Reason.Research>
+  <DepthRim.NetCage.Reason.Temperature>water {0} °C, needs {1}~{2}</DepthRim.NetCage.Reason.Temperature>
+  <DepthRim.NetCage.Reason.WrongLayer>not in this net</DepthRim.NetCage.Reason.WrongLayer>
+  <DepthRim.NetCage.ReplaceNet>Replace net</DepthRim.NetCage.ReplaceNet>
+  <DepthRim.NetCage.ReplaceNetDesc>Replace the whole net bag ({0} cloth): the net is restored to 100%. Half the cloth of the old net is recovered. Only when the net is below 50%.</DepthRim.NetCage.ReplaceNetDesc>
+  <DepthRim.NetCage.ReplaceOrdered>Net replacement ordered: {0}/{1} cloth delivered</DepthRim.NetCage.ReplaceOrdered>
+  <DepthRim.NetCage.Stock>Stock…</DepthRim.NetCage.Stock>
+  <DepthRim.NetCage.StockOption>{0} ×{1} ({2}~{3} °C, {4} days)</DepthRim.NetCage.StockOption>
+  <DepthRim.NetCage.StockDesc>Choose a species to stock; the number of fish is fixed per species. Only species that suit this place, this net and the current water temperature (±2 °C) can be chosen. Animal handlers stock the cage.\n\nThe fish keep growing; once they outgrow the cage, crowding slows them down and starts killing some off.</DepthRim.NetCage.StockDesc>
+  <DepthRim.NetCage.TooSmall>The fish are below {0} of market weight.</DepthRim.NetCage.TooSmall>
+  <DepthRim.NetLayer.Shallow>surface</DepthRim.NetLayer.Shallow>
+  <DepthRim.NetLayer.Midwater>thermocline</DepthRim.NetLayer.Midwater>
+  <DepthRim.NetLayer.Deep>deep</DepthRim.NetLayer.Deep>
+  <DepthRim.Settings.NetCages>Net cage aquaculture</DepthRim.Settings.NetCages>
+  <DepthRim.Settings.NetCagesTip>Turn off to hide net cages and their events. Existing cages stay where they are but stop working.</DepthRim.Settings.NetCagesTip>
+
+</LanguageData>

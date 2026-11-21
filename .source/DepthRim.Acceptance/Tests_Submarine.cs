@@ -464,6 +464,7 @@ namespace DepthRim.Acceptance
                 yield return new WaitTicks(900);
                 float p1 = sub.Progress;
                 ctx.Check(p1 > p0, $"the voyage advances while the thruster runs ({p0:0.0000} -> {p1:0.0000})");
+                foreach (Wait w in ctx.ScreenshotHelmTab(helm, "helm_tab_submerged_under_way")) { yield return w; }
                 ctx.Check(Mathf.Abs(thrusterPower.PowerOutput + thrusterWatts) < 0.5f, $"under way the thruster draws full power ({thrusterPower.PowerOutput:0.#} W)");
 
                 CompFlickable flick = thruster.TryGetComp<CompFlickable>();
@@ -490,6 +491,7 @@ namespace DepthRim.Acceptance
                 ctx.Check(sub.Tile == here && sub.destination == here, "the submarine stays on the tile it was on");
                 yield return new WaitTicks(260);
                 ctx.Check(!sub.Destroyed && sub.HasMap && helm.Map == subMap, "the submarine and its crew stay at sea");
+                foreach (Wait w in ctx.ScreenshotHelmTab(helm, "helm_tab_submerged")) { yield return w; }
                 ctx.Check(Mathf.Abs(thrusterPower.PowerOutput + thrusterWatts * VoyageMath.StandbyFactor) < 0.5f, $"after stopping the thruster drops back to standby ({thrusterPower.PowerOutput:0.#} W)");
                 CompTransferConsole subConsole = helm.TryGetComp<CompTransferConsole>();
                 ctx.Check(!TransferReadiness.Check(subConsole, null, includeWarnings: false).Any(i => i.IsError && i.text == TransferText.Key("DMSE.Transfer.Issue.InFlight", subConsole).Translate()), "a new voyage can be planned from where it stopped");

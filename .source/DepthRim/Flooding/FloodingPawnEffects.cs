@@ -51,6 +51,11 @@ namespace DepthRim
                 // 水生生物（魚）住在水裡：不涉水、不溺水、不受水壓；反過來離水（排乾的艙室）會窒息
                 if (CompFishCatch.IsAquatic(pawn))
                 {
+                    // 地面地圖帶著艙室積水時，海面的水（原版海水、開放海面）也算水（箱網逃逸魚，§6.6）
+                    if (!flooding.Active && FishHabitat.OnSurfaceWater(pawn))
+                    {
+                        level = 1f;
+                    }
                     FishHabitat.ApplyWater(pawn, level);
                     continue;
                 }

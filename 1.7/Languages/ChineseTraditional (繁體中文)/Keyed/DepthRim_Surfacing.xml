@@ -208,7 +208,6 @@ Dive anyway? -->
   <!-- EN: The ship is already under way. -->
   <DepthRim.Sail.AlreadyUnderWay>船已經在航行中。</DepthRim.Sail.AlreadyUnderWay>
   <!-- EN: Two ships' keels are joined: separate them before sailing. -->
-  <DepthRim.Sail.ShipsLinked>兩艘船的龍骨連在一起：先拆開才能出航。</DepthRim.Sail.ShipsLinked>
   <!-- EN: No working surface thruster aboard. -->
   <DepthRim.Sail.NoThruster>船上沒有能運作的水面推進器。</DepthRim.Sail.NoThruster>
   <!-- EN: The batteries aboard cannot run the thrusters for a single tile. -->
@@ -239,6 +238,8 @@ Dive anyway? -->
   <DepthRim.Sail.ArrivedNoRoom>{0}停在{1}旁邊：那裡沒有地方停靠。</DepthRim.Sail.ArrivedNoRoom>
   <!-- EN: {0} has moored at {1}. -->
   <DepthRim.Sail.ArrivedAt>{0}停靠在{1}。</DepthRim.Sail.ArrivedAt>
+  <!-- EN: {0} has arrived at {1}. Choose where to moor. -->
+  <DepthRim.Sail.ArrivedChooseBerth>{0}抵達{1}，選擇停靠位置。</DepthRim.Sail.ArrivedChooseBerth>
   <!-- EN: Mooring -->
   <DepthRim.Sail.Mooring>停靠中</DepthRim.Sail.Mooring>
   <!-- EN: Under way: {0} tiles to go, thrust {1} -->
@@ -285,8 +286,6 @@ Dive anyway? -->
   <DepthRim.Bell.NotAtSea>吊架不在海上的船或潛艇上。</DepthRim.Bell.NotAtSea>
   <!-- EN: There is no sea below here. -->
   <DepthRim.Bell.NoSeaBelow>這裡下面沒有海。</DepthRim.Bell.NoSeaBelow>
-  <!-- EN: The sea below is {0}: there is no seabed for the bell to rest on. -->
-  <DepthRim.Bell.NoSeabed>下面是{0}：沒有讓鐘停放的海床。</DepthRim.Bell.NoSeabed>
   <!-- EN: The bell is not stowed. -->
   <DepthRim.Bell.Busy>鐘不在吊架上。</DepthRim.Bell.Busy>
   <!-- EN: No diving bell within {0} cells of the davit. -->
@@ -369,5 +368,7 @@ Dive anyway? -->
   <DepthRim.Dock.NoGangwayAshore>沒有舷梯接到岸上：在甲板上朝陸地蓋一座舷梯才能上下船。</DepthRim.Dock.NoGangwayAshore>
   <!-- EN: {0} is off {1}. Use Dock on the helm to choose a berth. -->
   <DepthRim.Dock.ArrivedOffColony>{0}到了{1}外海。用艦橋的「靠岸」選泊位。</DepthRim.Dock.ArrivedOffColony>
+  <!-- EN: Docking cancelled: {0} waits in the sea off {1}. -->
+  <DepthRim.Dock.Cancelled>取消靠岸：{0}停在{1}外海。</DepthRim.Dock.Cancelled>
 
 </LanguageData>

@@ -41,5 +41,19 @@ static partial class Test
         List<Vector2> bent = new List<Vector2> { new Vector2(0, 0), new Vector2(0, 10), new Vector2(10, 10) };
         Vector2 p = HarborShowMath.AlongPath(bent, 0.75f, out Vector2 d);
         Check((p - new Vector2(5, 10)).magnitude < 0.01f && (d - Vector2.right).magnitude < 0.01f, "positions along a bent route go by arc length");
+
+        // 實際秒數：開船速度固定，路線長短只改變開的那段多久；出港倒著播用同一條時間軸，速度一樣
+        HarborShowMath.Timeline near = HarborShowMath.TimelineFor(40f, false);
+        HarborShowMath.Timeline far = HarborShowMath.TimelineFor(120f, false);
+        Check(Mathf.Abs(40f / near.travel - 120f / far.travel) < 0.01f, $"the same cruising speed on short and long routes ({40f / near.travel:0.0} vs {120f / far.travel:0.0} cells/s)");
+        Check(near.turn == far.turn && near.slide == far.slide && near.settle == far.settle, "turning, sliding and settling take the same time on any route");
+        Check(HarborShowMath.TimelineFor(1f, false).travel >= HarborShowMath.MinTravelSeconds - 1e-4f
+              && HarborShowMath.TimelineFor(10000f, false).travel <= HarborShowMath.MaxTravelSeconds + 1e-4f, "travel time is clamped");
+        HarborShowMath.Timeline shortTl = HarborShowMath.TimelineFor(120f, true);
+        Check(shortTl.Total < far.Total, $"the short version is shorter ({shortTl.Total:0.0}s vs {far.Total:0.0}s)");
+        Check(HarborShowMath.ProgressAt(0f, far) == 0f && HarborShowMath.ProgressAt(far.Total, far) == 1f
+              && Mathf.Abs(HarborShowMath.ProgressAt(far.travel, far) - HarborShowMath.TravelEnd) < 1e-4f
+              && Mathf.Abs(HarborShowMath.ProgressAt(far.travel + far.turn, far) - HarborShowMath.TurnEnd) < 1e-4f
+              && Mathf.Abs(HarborShowMath.ProgressAt(far.travel + far.turn + far.slide, far) - HarborShowMath.SlideEnd) < 1e-4f, "seconds map onto the phase boundaries");
     }
 }

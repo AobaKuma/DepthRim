@@ -39,10 +39,12 @@ static partial class Test
         Run("ContentSurfaceShip", ContentSurfaceShip);
         Run("DockingMath", DockingMathTests);
         Run("HarborShowMath", HarborShowMathTests);
+        Run("VesselTabMath", VesselTabMathTests);
         Run("DivingBellMath", DivingBellMath);
         Run("ContentDivingBell", ContentDivingBell);
         Run("SubmarinePockets", SubmarinePockets);
         Run("ContentSubmarine", ContentSubmarine);
+        Run("KeelRendering", KeelRendering);
         Run("ContentSubmarinePrefab", ContentSubmarinePrefab);
         Run("IceBreachMath", IceBreachMathTests);
         Run("IceCrackPattern", IceCrackPatternTests);
@@ -69,6 +71,11 @@ static partial class Test
         Run("GeneBreathing", GeneBreathing);
         Run("SeasicknessMath", SeasicknessMathTests);
         Run("ContentGenes", ContentGenes);
+        Run("AquacultureMath", AquacultureMath);
+        Run("AquacultureClimate", AquacultureClimate);
+        Run("AquacultureDisease", AquacultureDisease);
+        Run("ContentAquaculture", ContentAquaculture);
+        Run("AquacultureHabitat", AquacultureHabitat);
         Run("ContentXml", ContentXml);
         Run("ContentOcean", ContentOcean);
         Run("ContentSounds", ContentSounds);

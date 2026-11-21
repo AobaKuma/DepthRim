@@ -181,20 +181,38 @@ namespace DepthRim
                 map.designationManager.RemoveAllDesignationsOn(t);
             }
 
-            // 移出東西（Pawn 照常移出；其他用 WillReplace，DMSE 的龍骨連結不會斷）
+            // 移出東西：Pawn 先移出（照常），再重新收集其他東西——Pawn 移出時會放下搬運中的東西，放下的堆會和地上的同種堆合併，
+            // 先收集的清單裡就會有已經被併掉（銷毀）的堆（2026-11-21 log：Steel 被重複移出、以 0 堆疊數重生）。
+            // 其他用 WillReplace，DMSE 的龍骨連結不會斷。
             Dictionary<Pawn, bool> drafted = new Dictionary<Pawn, bool>();
+            foreach (Pawn p in things.OfType<Pawn>().Where(p => p.Spawned).ToList())
+            {
+                drafted[p] = p.Drafted;
+                p.DeSpawn();
+            }
+            List<Thing> pawnsMoved = things.Where(t => t is Pawn).ToList();
+            things = ThingsOn(map, source).Where(t => !(t is Pawn)).ToList();
             foreach (Thing t in things)
             {
-                if (t is Pawn p)
+                if (!placements.ContainsKey(t))
                 {
-                    drafted[p] = p.Drafted;
-                    p.DeSpawn();
+                    // Pawn 放下的東西（1×1 物品，一定轉得過去）
+                    IntVec2 size = t.def.size;
+                    if (DockingMath.RotatedPlacement(t.Position, t.Rotation, size, t.def.rotatable, pivot, turns, out IntVec3 pos, out Rot4 rot))
+                    {
+                        placements[t] = (pos, rot);
+                    }
                 }
-                else
+            }
+            things = things.Where(t => placements.ContainsKey(t)).ToList();
+            foreach (Thing t in things)
+            {
+                if (!t.Destroyed && t.Spawned)
                 {
                     t.DeSpawn(DestroyMode.WillReplace);
                 }
             }
+            things.AddRange(pawnsMoved);
 
             // 清空舊格、鋪新格
             TerrainDef empty = SeaLevels.VoidTerrain(map);
@@ -225,6 +243,10 @@ namespace DepthRim
             // 放回東西：建築先放（地板、電線等），Pawn 最後
             foreach (Thing t in things.OrderBy(t => t is Pawn ? 2 : t.def.category == ThingCategory.Building ? 0 : 1))
             {
+                if (t.Destroyed || t.Spawned)
+                {
+                    continue;
+                }
                 (IntVec3 pos, Rot4 rot) = placements[t];
                 GenSpawn.Spawn(t, pos, map, rot, WipeMode.Vanish, respawningAfterLoad: false);
                 if (t is Pawn p && drafted.TryGetValue(p, out bool wasDrafted) && wasDrafted && p.drafter != null)

@@ -49,6 +49,9 @@ namespace DepthRim
         /// <summary>簡化進出港：靠岸與下水不播演出，直接搬（海岸船舶 M4，設計稿 §6.4）。</summary>
         public bool simplifiedHarbor = false;
 
+        /// <summary>箱網養殖（Docs/箱網養殖_內容設計.md §10 #12）：關掉時隱藏藍圖與事件，已存在的箱網停止運作。</summary>
+        public bool enableNetCages = true;
+
         private static DepthRimModSettings current;
 
         /// <summary>目前載入的設定；沒有載入（單元測試、極早期）時回傳一份預設值。</summary>
@@ -89,6 +92,7 @@ namespace DepthRim
             Scribe_Values.Look(ref hullCreakFrequency, "hullCreakFrequency", 1f);
             Scribe_Values.Look(ref seaCameraSway, "seaCameraSway", true);
             Scribe_Values.Look(ref simplifiedHarbor, "simplifiedHarbor", false);
+            Scribe_Values.Look(ref enableNetCages, "enableNetCages", true);
         }
 
         public void DoWindowContents(Rect inRect)
@@ -126,6 +130,8 @@ namespace DepthRim
                 "DepthRim.Settings.SeaCameraSwayTip".Translate());
             list.CheckboxLabeled("DepthRim.Settings.SimplifiedHarbor".Translate(), ref simplifiedHarbor,
                 "DepthRim.Settings.SimplifiedHarborTip".Translate());
+            list.CheckboxLabeled("DepthRim.Settings.NetCages".Translate(), ref enableNetCages,
+                "DepthRim.Settings.NetCagesTip".Translate());
             list.GapLine();
             list.Label("DepthRim.Settings.AudioHeader".Translate());
             list.Label("DepthRim.Settings.Muffle".Translate(muffleStrength.ToStringPercent()));

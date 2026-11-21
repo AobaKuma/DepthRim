@@ -138,6 +138,7 @@ namespace DepthRim.Acceptance
             {
                 string block = CoastalLaunch.BlockReason(helm, out _, out PlanetTile target);
                 ctx.Require(block == null, $"the ship can launch ({block})");
+                foreach (Wait w in ctx.ScreenshotHelmTab(helm, "helm_tab_in_port")) { yield return w; }
                 ctx.Check(target == seaTile, "target is the open sea next door");
                 CoastalLaunch.quiet = true;
                 ctx.Require(CoastalLaunch.Launch(helm), "launch started");
@@ -158,6 +159,7 @@ namespace DepthRim.Acceptance
                 string dive = SubmarineSurfacing.DiveBlockReason(helm, out _, out _);
                 ctx.Check(dive == "DepthRim.Ballast.None".Translate().ToString(), $"a ship without ballast tanks cannot dive ({dive})");
                 foreach (Wait w in ctx.ScreenshotOn(sea, CellRect.FromCellList(hull).CenterCell, 14f, "coastal_launched")) { yield return w; }
+                foreach (Wait w in ctx.ScreenshotHelmTab(helm, "helm_tab_surfaced_no_ballast")) { yield return w; }
                 yield return new WaitFrames(30);
             }
             finally

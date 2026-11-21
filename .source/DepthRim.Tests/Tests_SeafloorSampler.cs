@@ -59,8 +59,8 @@ static partial class Test
         foreach (XElement p in projects)
         {
             string name = (string)p.Element("defName");
-            // 初始科技與海岸造船（海岸開局在灣裡造第一艘船，還碰不到海床）是一般研究
-            if (name == "DepthRim_UnderwaterSurvival" || name == "DepthRim_CoastalShipbuilding")
+            // 初始科技、海岸造船（海岸開局在灣裡造第一艘船，還碰不到海床）、箱網養殖與水質管理（水面上的事）是一般研究
+            if (name == "DepthRim_UnderwaterSurvival" || name == "DepthRim_CoastalShipbuilding" || name == "DepthRim_Aquaculture" || name == "DepthRim_WaterQuality")
             {
                 Check((string)p.Element("tab") == "DepthRim_ResearchTab" && p.Element("baseCost") != null && p.Element("knowledgeCategory") == null,
                     $"{name} stays ordinary research on the underwater tab");

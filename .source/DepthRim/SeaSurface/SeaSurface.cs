@@ -243,6 +243,9 @@ namespace DepthRim
         /// <summary>給驗收測試：最近一次重建時遮罩裡浮在水面的平台格（b）。</summary>
         public int lastFloatingCells;
 
+        /// <summary>上次重建時箱網浮框的格數（水線白沫）。</summary>
+        public int lastCageCells;
+
         /// <summary>浮在水面的平台：水線在甲板下方幾格（= 船體平台的乾舷）、影子濃度、白沫強度。</summary>
         public static readonly Vector4 HullParams = new Vector4(0.5f, 0.45f, 1f, 0f);
 
@@ -539,6 +542,8 @@ namespace DepthRim
             mat.SetVector("_Voyage", new Vector4(wakeHeading.x, wakeHeading.y, wakeSpeed, 0f));
             mat.SetVector("_Wake", wakeSpeed > 0f ? wakeHull.ToShader() : Vector4.zero);
             mat.SetVector("_Flow", new Vector4(wakeFlow.x, wakeFlow.y, 0f, 0f));
+            mat.SetVector("_BowA", wakeHull.BowA);
+            mat.SetVector("_BowB", wakeHull.BowB);
         }
 
         public override void MapComponentUpdate()
@@ -593,6 +598,7 @@ namespace DepthRim
                 owner.RebuildMask();
                 lastPlatformCells = owner.lastPlatformCells;
                 lastFloatingCells = owner.lastFloatingCells;
+                lastCageCells = owner.lastCageCells;
                 lastPillarCells = owner.lastPillarCells;
                 return;
             }
@@ -626,7 +632,9 @@ namespace DepthRim
             bool[] pillar = new bool[w * h];
             int platformCells = 0;
             int floatingCells = 0;
-            Dictionary<TerrainDef, bool> floats = new Dictionary<TerrainDef, bool>();
+            int cageCells = 0;
+            // 每種地形的 HullPlatformPropsExtension（沒有的是 null）
+            Dictionary<TerrainDef, HullPlatformPropsExtension> props = new Dictionary<TerrainDef, HullPlatformPropsExtension>();
             for (int z = 0; z < h; z++)
             {
                 for (int x = 0; x < w; x++)
@@ -636,17 +644,18 @@ namespace DepthRim
                     TerrainDef t = map.terrainGrid.TerrainAt(c);
                     if (t != null && t != DepthRimDefOf.DepthRim_OpenSea)
                     {
-                        if (!floats.TryGetValue(t, out bool f))
+                        if (!props.TryGetValue(t, out HullPlatformPropsExtension p))
                         {
-                            f = floats[t] = t.GetModExtension<HullPlatformPropsExtension>()?.FloatsOnSea == true;
+                            p = props[t] = t.GetModExtension<HullPlatformPropsExtension>();
                         }
-                        // 浮在水面的平台（船體平台）在 b；水面層上的其他地形（舊存檔的海上平台）當成高出海面
-                        if (f)
+                        // 浮在水面的平台（船體平台）在 b；水面層上不浮的平台地形（舊存檔的海上平台）當成高出海面。
+                        // 其他地形（橋、橋上的地板等）貼著水面，不是高出海面的甲板（2026-11-21 使用者回報：搭橋多出平台的影子與輪廓）
+                        if (p != null && p.FloatsOnSea)
                         {
                             hull[i] = true;
                             floatingCells++;
                         }
-                        else
+                        else if (p != null)
                         {
                             raised[i] = true;
                         }
@@ -659,6 +668,27 @@ namespace DepthRim
                     if (raised[i])
                     {
                         platformCells++;
+                    }
+                }
+            }
+            // 箱網（Docs/箱網養殖_內容設計.md）：浮框那一圈貼著水面，水線白沫加在 g（見 PlatformShadowField.CageFoamMax）
+            bool[] cage = new bool[w * h];
+            MapComponent_Aquaculture aqua = MapComponent_Aquaculture.For(map);
+            if (aqua != null)
+            {
+                foreach (Building_NetCage net in aqua.Cages)
+                {
+                    if (!net.Spawned)
+                    {
+                        continue;
+                    }
+                    foreach (IntVec3 c in net.OccupiedRect().EdgeCells)
+                    {
+                        if (c.InBounds(map) && !cage[c.z * w + c.x])
+                        {
+                            cage[c.z * w + c.x] = true;
+                            cageCells++;
+                        }
                     }
                 }
             }
@@ -678,7 +708,8 @@ namespace DepthRim
             lastPlatformCells = platformCells;
             lastFloatingCells = floatingCells;
             lastPillarCells = pillarCells;
-            field = new PlatformShadowField(w, h, raised, pillar, hull);
+            lastCageCells = cageCells;
+            field = new PlatformShadowField(w, h, raised, pillar, hull, cage);
             fieldStale = false;
         }
 
