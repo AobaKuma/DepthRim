@@ -217,9 +217,9 @@
       <renderNodeProperties>
         <li>
           <debugLabel>DepthRim diving suit</debugLabel>
-          <nodeClass>DepthRim.PawnRenderNode_FullBodySuit</nodeClass>
+          <nodeClass>Fortified.PawnRenderNode_MaskedApparel</nodeClass>
           <drawSize>1.75</drawSize>
-          <workerClass>DepthRim.PawnRenderNodeWorker_FullBodySuit</workerClass>
+          <workerClass>Fortified.PawnRenderNodeWorker_BodyApparel</workerClass>
           <texPath>Thing/DiveSuit/DiveSuit</texPath>
           <parentTagDef>Root</parentTagDef>
           <!-- 掛在 Root：Body 被 renderSkipFlags 藏起來時子節點也不畫。頭 50、頭髮 62、頭部傷口 65 之上，頭飾根節點 70 之下 -->

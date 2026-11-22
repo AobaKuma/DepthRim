@@ -24,8 +24,11 @@
 | 抽象防空 | `CompProperties_WorldAirDefense.ignoreNetworkResearch` | 海盜潛艇不等玩家研究雷達網就建立節點 |
 | 地圖層酬載 | `IBVRPayloadHolder`、`IInterceptResolver`、`IBVRContactLabel` | 突擊艇：DMSE 認得艇上的人、被攔下時沉沒、抵達前顯示「未知聲納接觸」 |
 | 飛彈行為 | `MissileBehaviorSet.Get<T>()` | `TorpedoUtility.BehaviorOf` |
+| 崖壁邊緣 | `TransferEnvironmentExtension.drawTerrainEdges` | 海洋層設 true：深淵的崖壁邊緣（P2-10）。原本是 DepthRim 的 `Patch_SectionLayer_TerrainEdges`，2026-11-22 移到 DMSE |
+| 整備檢查 | `TransferReadiness.ExtraChecks` 事件 | `DiveBellTransferCheck`：潛水鐘沒收回不能出港。原本是對 `TransferReadiness.Check` 的 Postfix |
+| 結構樁疊加層 | `CompProperties_StructuralPile.drawLinkLines` | 大／小龍骨設 false，選取時不畫連結線。原本是對 `PileDrawUtility.DrawNetworkOverlay` 的補丁 |
 
-DMSE 的單元測試 `ExtensionPoints` 檢查每個擴充點的預設值都等於加入前的行為；DepthRim 的 `Tests_Submarine` 檢查這些擴充點有被用上。
+2026-11-22 起單元測試已移除（兩邊都是），改以建置與遊戲內實測驗證。
 
 ## 3. 相容性
 

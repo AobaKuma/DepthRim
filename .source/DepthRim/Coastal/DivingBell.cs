@@ -982,18 +982,22 @@ namespace DepthRim
         }
     }
 
-    /// <summary>DMSE 的起飛整備檢查（潛艇出港、航行）：鐘沒收回就擋下。</summary>
-    [HarmonyPatch(typeof(TransferReadiness), nameof(TransferReadiness.Check))]
-    public static class Patch_TransferReadiness_DiveBell
+    /// <summary>DMSE 的起飛整備檢查（潛艇出港、航行）：鐘沒收回就擋下。掛在 DMSE 的 <see cref="TransferReadiness.ExtraChecks"/>。</summary>
+    [StaticConstructorOnStartup]
+    public static class DiveBellTransferCheck
     {
-        [HarmonyPostfix]
-        public static void Postfix(CompTransferConsole console, List<TransferIssue> __result)
+        static DiveBellTransferCheck()
         {
-            Map map = console?.parent?.MapHeld;
-            string reason = DiveBellLock.Reason(map);
-            if (reason != null && __result != null)
+            TransferReadiness.ExtraChecks -= Check;
+            TransferReadiness.ExtraChecks += Check;
+        }
+
+        private static void Check(CompTransferConsole console, TransferPlan plan, bool includeWarnings, List<TransferIssue> issues)
+        {
+            string reason = DiveBellLock.Reason(console?.parent?.MapHeld);
+            if (reason != null)
             {
-                __result.Add(new TransferIssue(TransferIssueSeverity.Error, reason));
+                issues.Add(new TransferIssue(TransferIssueSeverity.Error, reason));
             }
         }
     }

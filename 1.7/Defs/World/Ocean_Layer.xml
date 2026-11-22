@@ -63,6 +63,8 @@
         <shipWorldObject>DepthRim_Submarine</shipWorldObject>
         <!-- 出港時船體放在航行地圖正中央：船外的水域四周一樣寬 -->
         <centerHullOnShipMap>true</centerHullOnShipMap>
+        <!-- 深淵的崖壁邊緣（二期 P2-10）：原版只在太空圖層畫，DMSE 讓設了這個欄位的圖層也畫 -->
+        <drawTerrainEdges>true</drawTerrainEdges>
         <!-- 只走海路、只算推進器耗電、下錨守深度規則 -->
         <routeWorker Class="DepthRim.OceanRouteWorker" />
         <energyWorker Class="DepthRim.SubmarineEnergyWorker" />

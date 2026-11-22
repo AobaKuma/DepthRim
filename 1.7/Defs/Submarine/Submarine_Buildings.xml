@@ -83,6 +83,8 @@
              連結、船體範圍與出港判定都不變。DepthRim 的龍骨用 0 = 不畫，DMSE 自己的結構樁不受影響。 -->
         <beamWidth>0</beamWidth>
         <beamCenterDrawSize>0</beamCenterDrawSize>
+        <!-- 選取時不畫龍骨之間的連結線：一船好幾座，整片都是線像雜訊（2026-11-22 使用者要求）。船體範圍等提示照畫 -->
+        <drawLinkLines>false</drawLinkLines>
       </li>
     </comps>
     <uiOrder>2205</uiOrder>
@@ -126,9 +128,10 @@
         <beamWorkPerCell>120</beamWorkPerCell>
         <beamDismantleWorkFactor>0.5</beamDismantleWorkFactor>
         <beamDismantleRefund>0.5</beamDismantleRefund>
-        <!-- 同上：小龍骨也不畫底板與鋼樑 -->
+        <!-- 同上：小龍骨也不畫底板、鋼樑與連結線 -->
         <beamWidth>0</beamWidth>
         <beamCenterDrawSize>0</beamCenterDrawSize>
+        <drawLinkLines>false</drawLinkLines>
       </li>
     </comps>
     <uiOrder>2206</uiOrder>
