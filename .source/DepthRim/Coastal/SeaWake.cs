@@ -6,7 +6,6 @@ using Verse;
 namespace DepthRim
 {
     /// <summary>
-    /// 水面航行的航跡（M2，2026-11-20 使用者要求：浮航不用艙外淡出，要專門的航跡）。
     /// 船體在地圖上的朝向固定、航向任意，所以航跡不靠移動船體，而是在海面著色器（DepthRim_SeaSurface）裡畫：
     /// <list type="bullet">
     /// <item>海水往船尾方向流過（<c>_Flow</c>：累積的位移，格）：漣漪、色塊、浪花雜訊都跟著流，看起來船在前進。暫停時不動。</item>

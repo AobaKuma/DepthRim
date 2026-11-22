@@ -322,11 +322,8 @@ namespace DepthRim
             mat.SetFloat("_RippleStrength", 1f);
             mat.SetFloat("_CausticStrength", CompartmentCausticStrength);
             mat.SetFloat("_ShoreDarken", CompartmentShoreDarken);
-            // 半淹可見度（使用者回報「半淹不明顯」）：最低覆蓋與水線泡沫。@default 不會自動套用，一定要設
             mat.SetFloat("_MinAlpha", CompartmentMinAlpha);
             mat.SetFloat("_FoamStrength", CompartmentFoamStrength);
-            // 艙室層海洋雪（二期 P2-6）：只有 Def 開啟 compartmentEffects 的層級才有，
-            // 而且刻意比外海層淡（係數 0.6），免得小房間裡變成一片雜訊。
             mat.SetFloat("_SnowDensity", CompartmentSnow(def));
             mat.SetFloat("_SnowSpeed", def?.snowSpeed ?? 1f);
             return mat;

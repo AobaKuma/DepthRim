@@ -400,9 +400,6 @@ namespace DepthRim
     public static class ImplosionAssets
     {
         public const int RenderQueue = 3185;
-
-        /// <summary>主氣泡（真空泡）：用原版煙霧貼圖，像一團柔和的雲狀氣體（2026-11-18 使用者要求）。</summary>
-        /// <summary>煙霧貼圖的煙只佔中間一部分，畫的時候放大這麼多，看起來才和氣泡半徑一致。</summary>
         public const float SmokeBubbleScale = 1.4f;
 
         public static readonly Material BubbleMat = Above(MaterialPool.MatFrom("Things/Mote/Smoke", ShaderDatabase.TransparentPostLight), "DepthRim_ImplosionBubble");

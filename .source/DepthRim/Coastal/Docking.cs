@@ -697,7 +697,6 @@ namespace DepthRim
         }
 
         /// <summary>
-        /// 取消靠岸（2026-11-21 使用者決定）：船留在鄰近的海洋格（自己的地圖上，船體在中央），鏡頭回到船上。
         /// 玩家自己切到別張地圖造成的取消不搶鏡頭。
         /// </summary>
         public override void Deselected()

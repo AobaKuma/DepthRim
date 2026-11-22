@@ -471,7 +471,6 @@ namespace DepthRim
                 reason = "DepthRim.Bell.NoSeaBelow".Translate();
                 return PlanetTile.Invalid;
             }
-            // 每個海洋生態區都有海床（層級是海床在多深）：深海平原也能下鐘（2026-11-22 使用者決定），越深收放越久（BellMath.TransitTicks）
             MapParent other = Find.WorldObjects.MapParentAt(tile);
             if (other != null && !(other is WorldObject_OceanSite) && !(other is WorldObject_Submarine))
             {

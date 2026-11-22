@@ -14,15 +14,6 @@ namespace DepthRim
         public bool lowerVariants = true;
     }
 
-    /// <summary>
-    /// 抗壓水密牆的斜角（使用者回報「船體需要跟逆重船外殼一樣會渲染斜角」），做法比照原版 SectionLayer_GravshipHull
-    /// 與 DMSE 的 SectionLayer_PlatformHull：在空的缺口格上貼一張 2×2 格的斜角貼圖，蓋過相鄰兩段牆的端點。
-    /// - 斜接（兩段牆只以斜角相接）：兩側缺口格都補，內外兩面都成為斜牆。
-    /// - 直角 L 形轉角：只在船體平台外（海水那一側）的缺口格補，艙室內角維持直角。
-    /// 貼圖照 ShipHull 的風格產生（.source/Tools/gen_angled_shiphull.py）。下方有牆的 NW/NE 類另有兩種：
-    /// 左下（NE 為右下）那段牆往正南接直牆（_Linked）或往外斜接下一段（_Diag），牆腳的頂面與正面畫法不同。
-    /// 只影響繪製：房間與水密都以正交相鄰判定，斜角相接的牆本來就封閉。
-    /// </summary>
     [StaticConstructorOnStartup]
     public class SectionLayer_ShipHullCorners : SectionLayer
     {

@@ -68,7 +68,6 @@ namespace DepthRim
 
         /// <summary>
         /// 進水聲的音量與音高倍率：滲水小聲、偏高（細細的水流），湧入大聲、偏低（整片水牆）。
-        /// 使用者要求「漏水效果的速度與強度要跟牆體耐久階段相關」，聲音跟著同一個階段。
         /// </summary>
         public static void FloodLoopParams(int stage, out float volume, out float pitch)
         {

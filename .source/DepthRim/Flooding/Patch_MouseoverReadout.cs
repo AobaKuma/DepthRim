@@ -8,8 +8,7 @@ using Verse;
 namespace DepthRim
 {
     /// <summary>
-    /// 左下角的格子資訊加上水位（使用者要求「水位百分比顯示在左下角，和真空放一起」）。
-    ///
+
     /// <para>原版 <c>MouseoverReadout.MouseoverReadoutOnGUI</c> 依序往上畫每一行（每行 19 px，偏移量存在區域變數 num）：
     /// 光照之後就是 Odyssey 的真空行。這裡在光照那行的 <c>num += 19f</c> 之後插入 <c>DrawWaterLine(ref num)</c>，
     /// 所以水位和真空在同一個位置、之後的地形、屋頂等行自動往上推。</para>

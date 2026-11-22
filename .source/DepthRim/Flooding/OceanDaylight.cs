@@ -5,14 +5,7 @@ using Verse;
 
 namespace DepthRim
 {
-    /// <summary>
-    /// 海洋地圖的日光依水深限制（2026-11-11 使用者要求）：原版天空光（<c>SkyManager.CurSkyGlow</c>）決定黑暗判定、工作速度與植物生長，
-    /// 原本深海、海溝在白天也有完整日光。現在乘不過該層級的 <see cref="WaterVisualTierDef.maxSkyGlow"/>：
-    /// 淺海不限、變溫層微光、深海幾乎全黑、深海海床完全沒有日光。層級看 <see cref="FloodingUtility.DepthTierOf"/>，
-    /// 所以潛艇的船體地圖跟著下潛深度變暗。
-    /// <para>水體的樣子（外海層、深淵背景、暗處提示）照舊用限制前的日光乘上各層級的 ambientReach（<see cref="Uncapped"/>），
-    /// 那些視覺已經依深度調好，不重複變暗。</para>
-    /// </summary>
+
     public static class OceanDaylight
     {
         private static readonly Dictionary<int, float> uncapped = new Dictionary<int, float>();

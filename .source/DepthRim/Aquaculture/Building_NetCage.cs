@@ -86,7 +86,6 @@ namespace DepthRim
             for (int x = outer.minX; x <= outer.maxX; x++) { yield return new IntVec3(x, 0, outer.maxZ); }
         }
 
-        // ── 浮動（2026-11-22 使用者要求）：浮框跟著海面輕輕漂移、上下起伏，幅度隨天氣（海面的擺動倍率）。
         // 只動畫面：位置、選取框、作業格都不變。各座箱網的相位不同，不會整排一起晃。
 
         /// <summary>平靜時水平漂移的幅度（格）。</summary>

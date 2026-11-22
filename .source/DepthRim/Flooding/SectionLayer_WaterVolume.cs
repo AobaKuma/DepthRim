@@ -38,30 +38,15 @@ namespace DepthRim
         {
             new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 1f), new Vector3(1f, 0f, 1f), new Vector3(1f, 0f, 0f)
         };
-
-        /// <summary>
-        /// 原版牆在格子南側露出的正面高度（佔一格的比例，依 1.7 牆貼圖量測）。北牆的這一段畫一條隨水位升高的水帶，
-        /// 看起來像水貼著艙壁漲上來（使用者回報「水線能不能顯示在牆面上」）。
-        /// </summary>
         public const float WallFaceDepth = 0.45f;
 
-        /// <summary>牆面水帶頂點的 b 通道：頂邊（水線）與底邊。艙室水面的 b 一律是 0，著色器靠這個分辨兩種四邊形。</summary>
         public const byte FaceTopB = 128;
 
         public const byte FaceBottomB = 255;
 
-        /// <summary>
-        /// 水面往相鄰牆格延伸的距離（格）。牆的連接貼圖兩側有透明邊（ShipHull 的直牆約 0.1–0.15 格），
-        /// 底下的地板會從縫裡露出來（使用者回報「左右兩邊的縫隙」）。艙室著色器有深度測試、牆比水高，
-        /// 所以延伸進牆格的水只會從透明邊露出來，不會蓋到牆本身；延伸半格就不會從牆的另一側透出去。
-        /// </summary>
         public const float WallOverlap = 0.5f;
 
-        /// <summary>
-        /// 牆角斜面在正面頂端的寬度（格）。北牆與往南轉的側牆相接時，正面兩端各有一塊三角形斜面
-        /// （頂端約 0.25 格寬、往下收到 0），水帶只蓋本格寬度會在兩側留下乾的斜面（使用者回報「側面的隙縫」）。
-        /// 依截圖量測：面高 0.45 格時斜面頂寬約 0.22–0.26 格。
-        /// </summary>
+
         public const float WallBevelWidth = 0.25f;
 
         private readonly Color32[] cornerColors = new Color32[4];

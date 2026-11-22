@@ -274,10 +274,6 @@ namespace DepthRim
             SurfaceAt(sub, map, offset);
         }
 
-        /// <summary>
-        /// 取消上浮選位時（2026-11-21 使用者決定）：照預設位置上浮（從地圖中央往外找第一個放得下的地方），一樣播演出。
-        /// 下一個畫面做，不在設計器的回呼裡搬船；這段期間情況變了（例如又開始換深度）就不浮。
-        /// </summary>
         private static void SurfaceAtDefault(WorldObject_Submarine sub, Map map)
         {
             LongEventHandler.ExecuteWhenFinished(delegate

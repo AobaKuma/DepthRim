@@ -224,11 +224,6 @@ namespace DepthRim
             float t = seconds / duration;
             return (1f - t) * (1f - t);
         }
-
-        /// <summary>
-        /// 內爆在水的混濁裡（2026-11-18 使用者要求）：顏色往該處的水色混多少。<paramref name="turbidity"/> 是外海層同一個定義的混濁度
-        /// （<see cref="FloodingMath.WaterAlpha"/>，0–1）。最多混 65%：再多就和水色分不出來（試過整個畫在水層下面，夜裡完全看不見）。
-        /// </summary>
         public static float MurkBlend(float turbidity)
         {
             return 0.65f * Clamp(turbidity, 0f, 1f);

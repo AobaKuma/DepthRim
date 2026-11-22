@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!--
-    箱網養殖（Docs/箱網養殖_內容設計.md §3）：7×7 浮框，浮在灣內（原版海岸地圖的海水）或外海（海面地圖的開放海面）。
-    - 表層網灣內／外海通用（同一個 Def，Building_NetCage 依場地染色：灣內偏綠、外海偏藍）；斜溫層／深層網只能放外海。
-    - 承載力用 DepthRim_HullBase（開放海面、原版深／淺海水都有），PlaceWorker_NetCage 再排除陸地、橋、平台層，檢查水深與連通。
-    - 原版的「修理」會免費補滿 HP，所以 repairable = false：只能修網（45 布＋30 鋼）或換網（75 布）。
-    - 不可通行但看得過去、打得過去（浮框很矮）：disableImpassableShotOverConfigError。
-    - 貼圖：Textures/Thing/DR_NetCase＋遮罩 DR_NetCase_m（使用者提供）；浮球依場地與網層染色。
-    - 外海：浮框那一圈加進海面遮罩的 g（貼著水面的水線白沫，不像船體平台有甲板偏移與短影子；PlatformShadowField.CageFoamMax）。
-  -->
   <ThingDef Name="DepthRim_NetCageBase" ParentName="BuildingBase" Abstract="True">
     <thingClass>DepthRim.Building_NetCage</thingClass>
     <!-- 每幀畫：浮框跟著海面漂移、起伏（Building_NetCage.DrawAt）。平台層往下看的快照另外用 Print 印，不受影響 -->

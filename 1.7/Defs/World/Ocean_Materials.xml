@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!--
-    海洋生態區的材料：珊瑚岩（天然岩體，使用者定案）、海床淤泥、海藻。
-    珊瑚岩只由生態區的 forceRockTypes 生成（mineablePreventNaturalRockOnSurface = 不會隨機出現在地表地圖）。
-    貼圖：Textures/Thing/coralWall（淺色，淺珊瑚礁）、coralWallDark（深色，深珊瑚礁），4×4 連接圖集，灰階由 color 上色。
-  -->
-
   <!-- ================ 淺色珊瑚岩 ================ -->
 
   <ThingDef ParentName="RockBase" Name="DepthRim_CoralRockBase">

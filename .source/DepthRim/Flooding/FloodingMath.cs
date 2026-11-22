@@ -59,7 +59,6 @@ namespace DepthRim
         public const float RoofInflowCellsPerSecond = 0.4f;
 
         /// <summary>
-        /// 和外海相通的房間裡，一格沒滿的格子這次更新要上升多少（使用者回報「露天區要慢慢進水，不要馬上填滿」）。
         /// 碰到地圖邊緣：每格固定速度 × 水壓。只有屋頂破洞：破洞數 × 每格流量 × 水壓，平均分給還沒滿的格子，但不超過碰到邊緣時的速度。
         /// </summary>
         public static float OpenRoomFill(bool touchesEdge, int openRoofCells, int unfilledCells, DepthTier tier, float seconds)
@@ -78,7 +77,6 @@ namespace DepthRim
         }
 
         /// <summary>
-        /// 室內建築是否被淹沒（使用者要求「依 fill percent 決定建築是否出現水下效果」）：水位 ≥ 建築高度（fillPercent）就整個泡在水裡。
         /// 很矮的建築（fillPercent 接近 0）至少要有 <see cref="MinSubmergeLevel"/> 的水才算，避免一點積水就整片蓋上。
         /// </summary>
         public static bool BuildingSubmerged(float fillPercent, float level)
@@ -89,7 +87,6 @@ namespace DepthRim
         public const float MinSubmergeLevel = 0.1f;
 
         /// <summary>
-        /// 進水效果的強度階段（依牆體耐久，使用者要求「漏水效果的速度與強度要跟耐久階段相關」）：
         /// 0 = 滲水（耐久 &gt; 75%）、1 = 噴水（50–75%）、2 = 強噴（25–50%）、3 = 湧入（&lt; 25%）。
         /// </summary>
         public static int LeakStage(float hitPointFraction)

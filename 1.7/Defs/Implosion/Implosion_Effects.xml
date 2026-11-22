@@ -21,12 +21,6 @@
     </graphicData>
   </FleckDef>
 
-  <!--
-    空間扭曲（2026-11-18 使用者要求「原版靈能的那種扭曲效果」）：原版 Core 的 MoteLargeDistortionWave 著色器與貼圖
-    （ShockwaveFast、靈能收縮環用的同一套），不依賴 DLC。著色器換成複本 DepthRim_ImplosionWarp（Implosion_Shader.xml）：
-    原版在 3151 抓畫面、會被外海層蓋掉，複本改在 3188 抓，扭曲的是看得見的水與內爆。
-    向外：爆炸瞬間的壓力波；向內：氣泡塌回中心時，周圍的水被吸進去。
-  -->
   <FleckDef ParentName="FleckBase">
     <defName>DepthRim_ImplosionWarpOut</defName>
     <altitudeLayer>MoteOverhead</altitudeLayer>

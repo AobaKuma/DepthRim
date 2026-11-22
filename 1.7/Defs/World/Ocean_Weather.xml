@@ -7,10 +7,7 @@
     <label>undersea</label>
     <description>There is no weather on the sea floor, only the cold, dark water.</description>
   </WeatherDef>
-
-  <!-- 冰下（2026-11-11 使用者要求：地下冰洋要非常低光）：海冰與積雪擋掉絕大部分日光，冰下只剩約百分之一，
-       白天最亮也只有 maxGlow（原版 0.3 以下就算「黑暗」）。地下冰洋四層都用這個天氣；冰下的焦散與光柱由
-       DepthRim.WaterTierMaterials.UpdateSkyLight 關掉。 -->
+  
   <WeatherDef ParentName="Weather_Underground">
     <defName>DepthRim_UnderIce</defName>
     <label>under the ice</label>

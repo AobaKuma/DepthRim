@@ -310,10 +310,6 @@ namespace DepthRim
             return new Vector2(sun, SmoothStep(0.1f, 0.9f, Sample(sky, sea)));
         }
 
-        /// <summary>
-        /// 遊戲邏輯：這一點的天光被擋住多少（0..1）。甲板正下方天光整個被擋（0% 光照，2026-11-15 使用者要求），
-        /// 陽光投影只在有太陽時算（乘上影子強度）。
-        /// </summary>
         public float GameplayShadow(Vector2 sea, PlatformSun sun)
         {
             Vector2 s = Shade(sea, sun.cast, 0f, 0f);
@@ -336,10 +332,6 @@ namespace DepthRim
         }
     }
 
-    /// <summary>
-    /// 水面層：平台底下的天光依遮住的程度扣掉（黑暗判定、工作速度、心情、植物都看這個）。燈光照舊。
-    /// 原版只在有屋頂時不算天光；高出海面的平台不是屋頂（2026-11-15 使用者回報：影子裡顯示「光線充足 100%」）。
-    /// </summary>
     [HarmonyPatch(typeof(GlowGrid), nameof(GlowGrid.GroundGlowAt))]
     public static class Patch_PlatformShadowGlow
     {

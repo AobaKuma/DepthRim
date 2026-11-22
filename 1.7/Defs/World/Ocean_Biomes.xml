@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!--
-    海洋層的七種生態區（使用者定案：依正上方地表決定，見 DepthRim.OceanBiomeSelector）。
-    共同點：室外就是水（WaterMapExtension 啟用 MapComponent_Flooding）、沒有天光（地下天氣）、不能走出地圖。
-    各自的水深層級（depthTier）決定水壓、水體視覺與深淵；升降井只能通到淺海與變溫層的生態區。
-  -->
   <BiomeDef Name="DepthRim_OceanBiomeBase" ParentName="Biome_Underground" Abstract="True">
     <workerClass>DepthRim.BiomeWorker_Ocean</workerClass>
     <generatesNaturally>false</generatesNaturally>
@@ -34,10 +29,6 @@
     <diseases Inherit="False" />
   </BiomeDef>
 
-  <!-- 地下冰洋（2026-11-11 由「極地冰蓋」改名）：冰海（海冰）下必定是它、別處不會有；冰原算陸地。
-       同日使用者要求分深淺層：冰海下的深度照一般海底地形（大陸棚、大陸坡、洋盆、中洋脊、海溝），再依深度分成四個生態區，
-       各自的水深層級決定水壓、深淵、潛艇與升降井（OceanBiomeSelector.SubglacialFor）。
-       淺層沿用 defName DepthRim_PolarIceCap（舊存檔相容）。 -->
   <BiomeDef ParentName="DepthRim_OceanBiomeBase">
     <defName>DepthRim_PolarIceCap</defName>
     <label>subglacial ocean (shallows)</label>
@@ -573,10 +564,7 @@
       </li>
     </modExtensions>
   </BiomeDef>
-
-  <!-- 陸塊（2026-11-09，使用者定案：處於陸地的地圖格不會有海洋）。正上方是陸地（含冰原；海冰是冰海，不算）的海洋格子用這個：
-       沒有海洋、不能進入（impassable、不能蓋基地、沒有 WaterMapExtension，升降井也不會通到這裡）。
-       世界地圖上由 DepthRim.WorldDrawLayer_OceanLand 畫成正上方的地表生態區；這裡的 texture 只是退路。 -->
+  
   <BiomeDef>
     <defName>DepthRim_Landmass</defName>
     <label>landmass</label>

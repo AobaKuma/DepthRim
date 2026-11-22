@@ -10,12 +10,6 @@ namespace DepthRim
     public class UnderwaterWeaponExtension : DefModExtension
     {
     }
-
-    /// <summary>
-    /// 水中射程（2026-11-16 使用者要求）：射手泡在水裡時，遠程武器射程只剩 <see cref="FloodingMath.UnderwaterRangeFactor"/>。
-    /// 不用原版天氣的 maxRangeCap：那是整張地圖一起砍，連排乾的艙室裡也會被限制；這裡依射手所在格的水位判斷，
-    /// 排乾的艙室（水位 0）不受影響，淹水艙室則和開放水域一樣。帶 <see cref="UnderwaterWeaponExtension"/> 的武器不受限。
-    /// </summary>
     public static class UnderwaterRange
     {
         public static bool IsUnderwaterWeapon(Verb verb)

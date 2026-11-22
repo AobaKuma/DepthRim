@@ -649,7 +649,6 @@ namespace DepthRim
                             p = props[t] = t.GetModExtension<HullPlatformPropsExtension>();
                         }
                         // 浮在水面的平台（船體平台）在 b；水面層上不浮的平台地形（舊存檔的海上平台）當成高出海面。
-                        // 其他地形（橋、橋上的地板等）貼著水面，不是高出海面的甲板（2026-11-21 使用者回報：搭橋多出平台的影子與輪廓）
                         if (p != null && p.FloatsOnSea)
                         {
                             hull[i] = true;

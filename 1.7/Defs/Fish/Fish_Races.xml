@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!-- 通用魚類生物（2026-11-16 使用者設計）：只有小、中、大三種體型的白色貼圖，
-       生成時依生態區、水深層級與水溫抽一個品種（Fish_Variants.xml），決定顏色、名稱與死後的魚獲。
-       魚死了不留屍體，直接變成魚獲（DeathActionWorker_FishCatch）。不吃東西、不睡覺、不繁殖，靠野生動物生成補充。 -->
-
   <PawnRenderTreeDef>
     <defName>DepthRim_Fish</defName>
     <root Class="PawnRenderNodeProperties_Parent">

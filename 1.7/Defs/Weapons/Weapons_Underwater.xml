@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!-- 水下步槍（2026-11-16 使用者要求）：泡在水裡開火時，一般遠程武器射程只剩 25%（DepthRim.UnderwaterRange），
-       這把帶 DepthRim.UnderwaterWeaponExtension，射程不打折；代價是射程本來就比突擊步槍（30.9）短，彈速也慢。 -->
   <ThingDef ParentName="BaseBullet">
     <defName>DepthRim_Bullet_UnderwaterDart</defName>
     <label>underwater dart</label>

@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!--
-    水中內爆的空間扭曲（2026-11-18 使用者要求「原版靈能的那種扭曲效果」）。
-    原版 MoteLargeDistortionWave 在 3151 抓畫面，排在外海層（3177）之前：在開放水域畫出來的會被水完全蓋掉。
-    這裡用同一份著色器（1.7/Shaders/DepthRim_ImplosionWarp.frag.glsl，原版的複本）、原版頂點著色器 Mote.vert.glsl，
-    把抓畫面與繪製都排到 3188：外海層（3177）、光照暗化（3180）與內爆本身（3185）之後，扭曲的是看得見的水。
-    defName 必須等於 GLSL 檔名（去掉 .frag.glsl）；抓畫面的取樣器名稱是 _Grab + sceneGrab 名稱。
-  -->
   <ShaderDef>
     <defName>DepthRim_ImplosionWarp</defName>
     <shaderProgram>

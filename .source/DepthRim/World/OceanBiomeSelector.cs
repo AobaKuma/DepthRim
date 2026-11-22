@@ -59,19 +59,6 @@ namespace DepthRim
         public float seamountNoise;
     }
 
-    /// <summary>
-    /// 海洋層生態區與海床深度的規則，比照真實的海底地形（2026-11-09 使用者要求：中洋脊、近海隱沒帶海溝）。
-    /// 純函式，可單元測試；海底地形資訊（離岸距離、中洋脊、活動邊緣）在 <see cref="WorldGenStep_OceanTiles"/> 算好。
-    /// <list type="number">
-    /// <item>陸地（含冰原：陸上的冰算陸地）→ 陸塊（沒有海洋）。</item>
-    /// <item>地下冰洋（defName 沿用 DepthRim_PolarIceCap，舊存檔相容）只長在冰海（海冰）下（2026-11-11 使用者要求）：
-    /// 地表是冰海的格子，下方必定是地下冰洋（同日使用者定案），不分離岸遠近。深度照一般海底地形，
-    /// 再依深度分成淺海／變溫層／深海／深海海床四個生態區（<see cref="SubglacialFor"/>）。升降井開在冰海上，只到得了前兩層。</item>
-    /// <item>被動大陸邊緣：大陸棚（離岸 1–2 格）→ 淺珊瑚礁（熱帶）或海藻林；大陸坡（3–4 格）→ 深珊瑚礁。</item>
-    /// <item>活動大陸邊緣：大陸棚只有 1 格；大陸坡 2–3 格；坡腳外 4–5 格是平行海岸的深淵海溝。</item>
-    /// <item>遠洋：中洋脊軸線 → 熱液噴口區（熱液段）或中洋脊；軸線兩側 1 格 → 中洋脊；海山 → 深珊瑚礁；其他 → 海床平原。</item>
-    /// </list>
-    /// </summary>
     public static class OceanBiomeSelector
     {
         public const float PolarTemperature = -10f;
@@ -274,13 +261,8 @@ namespace DepthRim
             return 2500f + 3100f * (1f - (float)System.Math.Exp(-ridgeDistance / decay));
         }
 
-        /// <summary>海岸往外到第幾格，深度才完全是海底地形算出來的深度（之前和地表視圖的深度混合）。</summary>
         public const int SurfaceBlendTiles = 5;
 
-        /// <summary>
-        /// 地表視圖的深度在這格的權重（2026-11-11 使用者要求：靠近陸地邊緣的海洋深度趨近地表視圖，再往外漸變成海底地形的深度）。
-        /// 緊鄰陸地（離岸 1 格）是 1，離岸 <see cref="SurfaceBlendTiles"/> 格以上是 0，中間平滑過渡；沒有地表資料時 0。
-        /// </summary>
         public static float SurfaceBlendWeight(int coastDistance)
         {
             if (coastDistance <= 1)

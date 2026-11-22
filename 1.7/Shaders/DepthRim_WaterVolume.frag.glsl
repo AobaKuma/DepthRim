@@ -154,7 +154,6 @@ void main()
 
     // 岸邊：加深，並用雜訊把格子邊緣的直線打散
     float n = valueNoise(world * 2.3 + vec2(t * 0.05, 0.0)) * 0.6 + valueNoise(world * 5.1) * 0.4;
-    // 岸邊只淡出一部分（最低 0.65）：完全淡出會在牆邊留下一條沒有水的縫（使用者回報）
     float edgeFade = 1.0 - 0.35 * smoothstep(0.35, 1.0, shore + (n - 0.5) * 0.5);
     col *= 1.0 - u._ShoreDarken * shore;
 

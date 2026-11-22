@@ -702,7 +702,6 @@ namespace DepthRim
         }
 
         /// <summary>
-        /// 放養只選品種（2026-11-21 使用者決定）：尾數固定是品種的 stockCount，不讓玩家調。
         /// 魚自然長大，長到超過容量就由密度造成的損耗（過密死亡、成長變慢）自己淘汰。
         /// </summary>
         private void OpenStockMenu()
