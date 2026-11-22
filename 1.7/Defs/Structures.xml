@@ -866,7 +866,7 @@
       </li>
       <li Class="Fortified.Structures.FFF_Element_Thing">
         <def>DepthRim_MoonPool</def>
-        <pos>(6, 0, 56)</pos>
+        <pos>(6, 0, 57)</pos>
       </li>
       <li Class="Fortified.Structures.FFF_Element_Thing">
         <def>DepthRim_PlayerBoardingCraft</def>

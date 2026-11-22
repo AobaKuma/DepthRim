@@ -209,18 +209,17 @@
   <!-- ==================== 玩家的突擊艇（6.7） ====================
        月池：艙底對海開的井（非 edifice 的地面建築）；玩家的突擊艇只能造在月池上（DepthRim.PlaceWorker_OnMoonPool）。
        殖民者右鍵登艇，「出發」選一格海路 8 格內的海洋格；抵達後切入對方的密閉艙室（敵方地圖）或降在海床上。
-       月池貼圖暫用船體平台。 -->
+       -->
   <ThingDef ParentName="BuildingBase">
     <defName>DepthRim_MoonPool</defName>
     <label>moon pool</label>
     <description>A sealed well in the deck, open to the sea below, where a boarding craft can be built, docked and launched. Build a boarding craft on top of it.</description>
     <graphicData>
-      <texPath>Thing/DR_LightPlatform/Platform</texPath>
+      <texPath>Thing/DR_MoonPool</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-      <drawSize>(5,4)</drawSize>
-      <color>(110,140,160)</color>
+      <drawSize>(5,5)</drawSize>
     </graphicData>
-    <size>(5,4)</size>
+    <size>(5,5)</size>
     <altitudeLayer>FloorEmplacement</altitudeLayer>
     <passability>Standable</passability>
     <rotatable>false</rotatable>

@@ -17,7 +17,7 @@
     </graphicData>
     <rotatable>false</rotatable>
     <passability>Impassable</passability>
-    <fillPercent>1</fillPercent>
+    <fillPercent>0.4</fillPercent>
     <holdsRoof>true</holdsRoof>
     <blockWind>true</blockWind>
     <castEdgeShadows>true</castEdgeShadows>

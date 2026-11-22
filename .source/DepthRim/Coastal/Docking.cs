@@ -24,7 +24,7 @@ namespace DepthRim
     /// </summary>
     public static class Docking
     {
-        /// <summary>這一格旁邊的玩家原版地表殖民地（沒有時 null）。</summary>
+        /// <summary>這一格旁邊的玩家原版地表殖民地或停泊點（沒有時 null）。</summary>
         public static Map AdjacentColony(PlanetTile seaTile)
         {
             if (!seaTile.Valid)
@@ -33,7 +33,131 @@ namespace DepthRim
             }
             List<PlanetTile> neighbors = new List<PlanetTile>();
             Find.WorldGrid.GetTileNeighbors(seaTile, neighbors);
-            return Find.Maps.FirstOrDefault(m => m.IsPlayerHome && SeaLevels.IsVanillaSurface(m) && neighbors.Contains(m.Tile));
+            return Find.Maps.FirstOrDefault(m => IsDockableMap(m) && neighbors.Contains(m.Tile));
+        }
+
+        /// <summary>能靠岸的地圖：玩家的原版地表殖民地（包括靠岸時建立的停泊點，見 <see cref="BeginAtCoast"/>）。</summary>
+        public static bool IsDockableMap(Map m)
+        {
+            return m != null && SeaLevels.IsVanillaSurface(m) && m.IsPlayerHome;
+        }
+
+        /// <summary>
+        /// 2026-11-22：能靠的海岸格（不限殖民地）：地表的陸地格（不是海、不是無法通行的山）、旁邊至少一格船能浮的海，
+        /// 而且上面沒有別的世界物件，或者是玩家的殖民地。
+        /// </summary>
+        public static bool IsCoastTarget(PlanetTile tile)
+        {
+            if (!tile.Valid || tile.LayerDef != PlanetLayerDefOf.Surface || SurfaceRouting.Navigable(tile))
+            {
+                return false;
+            }
+            Tile t = tile.Tile;
+            if (t == null || t.WaterCovered || t.hilliness == Hilliness.Impassable)
+            {
+                return false;
+            }
+            MapParent parent = Find.WorldObjects.MapParentAt(tile);
+            if (parent != null)
+            {
+                if (!parent.HasMap || !IsDockableMap(parent.Map))
+                {
+                    return false;
+                }
+            }
+            else if (Find.WorldObjects.AnyWorldObjectAt(tile))
+            {
+                return false;
+            }
+            List<PlanetTile> neighbors = new List<PlanetTile>();
+            Find.WorldGrid.GetTileNeighbors(tile, neighbors);
+            return neighbors.Any(SurfaceRouting.Navigable);
+        }
+
+        /// <summary>海岸格上已有的可靠岸地圖（還沒有時 null）。</summary>
+        public static Map CoastMap(PlanetTile coast)
+        {
+            MapParent parent = Find.WorldObjects.MapParentAt(coast);
+            return parent != null && parent.HasMap && IsDockableMap(parent.Map) ? parent.Map : null;
+        }
+
+        /// <summary>
+        /// 靠到 <paramref name="coast"/> 這一格海岸：已有殖民地就直接選泊位；沒有就照原版奧德賽重力船降落在空地的做法
+        /// （<c>GravshipUtility.ArriveNewMap</c>）：在那一格建立玩家的新殖民地（停泊點，名字「X的停泊點」）、生成地圖，再選泊位。
+        /// 殖民地不會因為還沒有人而被移除；取消選泊位時，沒有人也沒有建築的停泊點直接撤掉（<see cref="RemoveIfUnused"/>）。
+        /// 船要停在那一格旁邊的海上。
+        /// </summary>
+        public static void BeginAtCoast(Thing helm, PlanetTile coast)
+        {
+            Map existing = CoastMap(coast);
+            if (existing != null)
+            {
+                Begin(helm, existing);
+                return;
+            }
+            string block = ShipBlockReason(helm, out _);
+            if (block == null && (helm.Map == null || !Find.WorldGrid.IsNeighbor(helm.Map.Tile, coast) || !IsCoastTarget(coast)))
+            {
+                block = "DepthRim.Dock.NoColony".Translate();
+            }
+            if (block != null)
+            {
+                Messages.Message(block, helm, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+            LongEventHandler.QueueLongEvent(delegate
+            {
+                Settlement site = SettleUtility.AddNewHome(coast, Faction.OfPlayer);
+                site.Name = "DepthRim.Dock.LandingSite".Translate(SurfaceVoyage.ShipNameFor(helm)).CapitalizeFirst();
+                site.namedByPlayer = true;
+                GameComponent_SurfaceSail.Instance?.MarkLandingSite(site);
+                Map map = GetOrGenerateMapUtility.GetOrGenerateMap(coast, Find.World.info.initialMapSize, site.def);
+                LongEventHandler.ExecuteWhenFinished(() =>
+                {
+                    if (helm.Spawned && Find.Maps.Contains(map))
+                    {
+                        Begin(helm, map);
+                    }
+                });
+            }, "GeneratingMap", doAsynchronously: false, null);
+        }
+
+        /// <summary>這張地圖是靠岸時建立的停泊點、而且上面沒有玩家的人、建築或船（可以撤掉）。</summary>
+        public static bool UnusedLandingSite(Map map)
+        {
+            return map != null && map.Parent != null && GameComponent_SurfaceSail.Instance?.IsLandingSite(map.Parent) == true
+                   && map.mapPawns.FreeColonistsSpawnedCount == 0 && !map.mapPawns.AnyPawnBlockingMapRemoval
+                   && !map.listerBuildings.allBuildingsColonist.Any();
+        }
+
+        /// <summary>取消靠岸：剛建立、還沒用到的停泊點直接撤掉（不留被遺棄的據點）。</summary>
+        public static void RemoveIfUnused(Map map)
+        {
+            if (!UnusedLandingSite(map) || Find.CurrentMap == map)
+            {
+                return;
+            }
+            MapParent parent = map.Parent;
+            GameComponent_SurfaceSail.Instance?.UnmarkLandingSite(parent);
+            Current.Game.DeinitAndRemoveMap(map, false);
+            if (!parent.Destroyed)
+            {
+                parent.Destroy();
+            }
+        }
+
+        /// <summary>
+        /// 船從停泊點下水離開後：停泊點上沒有人也沒有建築就照原版奧德賽重力船離開的做法放棄這張地圖
+        /// （<c>MapParent.Abandon(wasGravshipLaunch: true)</c>）。
+        /// </summary>
+        public static void AbandonIfUnused(Map map)
+        {
+            if (!UnusedLandingSite(map) || Find.CurrentMap == map)
+            {
+                return;
+            }
+            GameComponent_SurfaceSail.Instance?.UnmarkLandingSite(map.Parent);
+            map.Parent.Abandon(wasGravshipLaunch: true);
         }
 
         /// <summary>
@@ -57,6 +181,22 @@ namespace DepthRim
             if (colony == null || colony == map || !Find.Maps.Contains(colony))
             {
                 return "DepthRim.Dock.NoColony".Translate();
+            }
+            return ShipBlockReason(helm, out plan);
+        }
+
+        /// <summary>船本身能不能靠岸（不看靠哪裡；可以時 null）。</summary>
+        public static string ShipBlockReason(Thing helm, out SurfaceVoyage.Plan plan)
+        {
+            plan = null;
+            Map map = helm?.Map;
+            if (map == null || !SeaLevels.IsSeaLevel(map))
+            {
+                return "DepthRim.Sail.NotAtSea".Translate();
+            }
+            if (SurfaceVoyage.ShipOf(helm) is WorldObject_SurfaceShip ship && ship.underWay)
+            {
+                return "DepthRim.Sail.StopFirst".Translate();
             }
             plan = SurfaceVoyage.PlanFor(helm);
             if (plan == null || plan.footprint.Count == 0)
@@ -573,12 +713,15 @@ namespace DepthRim
             {
                 if (helm.Destroyed || !helm.Spawned || Find.CurrentMap != colony)
                 {
+                    Docking.RemoveIfUnused(colony);
                     return;
                 }
                 Current.Game.CurrentMap = seaMap;
                 IntVec3 center = cells.Count > 0 ? CellRect.FromCellList(cells).CenterCell : seaMap.Center;
                 CameraJumper.TryJump(center, seaMap);
                 Messages.Message("DepthRim.Dock.Cancelled".Translate(label, colony.Parent.LabelCap), new TargetInfo(center, seaMap), MessageTypeDefOf.NeutralEvent, historical: false);
+                // 剛為這次靠岸建立、還沒用到的停泊點撤掉
+                Docking.RemoveIfUnused(colony);
             });
         }
 

@@ -153,17 +153,12 @@ namespace DepthRim
         }
 
         /// <summary>
-        /// 目的地：點到玩家的原版海岸殖民地時，改成它旁邊海路最近的一格海（靠岸 M3：開到外海，再用艦橋的「靠岸」選泊位）。
-        /// 其他格照原樣。
+        /// 目的地：點到能靠的海岸格（<see cref="Docking.IsCoastTarget"/>：殖民地、停泊點或沒有東西的海岸陸地）時，
+        /// 改成它旁邊海路最近的一格海（開到外海，抵達後選泊位）。其他格照原樣。
         /// </summary>
         public static PlanetTile ResolveDestination(PlanetTile origin, PlanetTile tile)
         {
-            if (!tile.Valid || SurfaceRouting.Navigable(tile))
-            {
-                return tile;
-            }
-            MapParent parent = Find.WorldObjects.MapParentAt(tile);
-            if (parent == null || !parent.HasMap || !parent.Map.IsPlayerHome || !SeaLevels.IsVanillaSurface(parent.Map))
+            if (!tile.Valid || !Docking.IsCoastTarget(tile))
             {
                 return tile;
             }
@@ -194,6 +189,32 @@ namespace DepthRim
                 }
             }
             return best;
+        }
+
+        /// <summary>
+        /// 點的是能靠的海岸格、而且船就停在它旁邊的海格上：回傳那一格（直接靠岸，不用再航行）。其他情況 Invalid。
+        /// </summary>
+        public static PlanetTile AdjacentDockTarget(PlanetTile origin, PlanetTile tile)
+        {
+            if (!origin.Valid || !tile.Valid || tile == origin || tile.Layer != origin.Layer || !Find.WorldGrid.IsNeighbor(origin, tile))
+            {
+                return PlanetTile.Invalid;
+            }
+            return Docking.IsCoastTarget(tile) ? tile : PlanetTile.Invalid;
+        }
+
+        /// <summary>直接靠到旁邊海岸格不能做的原因（可以時 null）：已有地圖就照那張地圖檢查，否則只檢查船。</summary>
+        public static string CoastDockBlockReason(Thing helm, PlanetTile coast)
+        {
+            Map map = Docking.CoastMap(coast);
+            return map != null ? Docking.BlockReason(helm, out _, out _, map) : Docking.ShipBlockReason(helm, out _);
+        }
+
+        /// <summary>海岸格的名字（殖民地或停泊點用它的名字，沒有地圖時是「海岸」）。</summary>
+        public static string CoastLabel(PlanetTile coast)
+        {
+            Map map = Docking.CoastMap(coast);
+            return map != null ? map.Parent.LabelCap.ToString() : "DepthRim.Dock.Coast".Translate().ToString();
         }
 
         // ── 出航前檢查 ──
@@ -320,6 +341,20 @@ namespace DepthRim
             Find.WorldSelector.ClearSelection();
             Find.WorldTargeter.BeginTargeting(target =>
             {
+                // 2026-11-22：船已經在殖民地旁邊的海格（剛下水、取消靠岸後）時，點殖民地直接開始選泊位，
+                // 不再解析成「目前這一格」被當成「已經在這裡」擋掉
+                PlanetTile dockAt = AdjacentDockTarget(origin, target.Tile);
+                if (dockAt.Valid)
+                {
+                    string dockBlock = CoastDockBlockReason(helm, dockAt);
+                    if (dockBlock != null)
+                    {
+                        Messages.Message(dockBlock, MessageTypeDefOf.RejectInput, historical: false);
+                        return false;
+                    }
+                    Docking.BeginAtCoast(helm, dockAt);
+                    return true;
+                }
                 PlanetTile dest = ResolveDestination(origin, target.Tile);
                 string reason = DestinationBlockReason(origin, dest, range);
                 if (reason != null)
@@ -327,7 +362,7 @@ namespace DepthRim
                     Messages.Message(reason, MessageTypeDefOf.RejectInput, historical: false);
                     return false;
                 }
-                Depart(helm, dest);
+                Depart(helm, dest, dest != target.Tile ? target.Tile : PlanetTile.Invalid);
                 return true;
             }, canTargetTiles: true, mouseAttachment: SubmarineIcons.RoutePlanning, closeWorldTabWhenFinished: true,
             onUpdate: () =>
@@ -339,12 +374,19 @@ namespace DepthRim
             },
             extraLabelGetter: target =>
             {
+                PlanetTile dockAt = AdjacentDockTarget(origin, target.Tile);
+                if (dockAt.Valid)
+                {
+                    return CoastDockBlockReason(helm, dockAt) ?? "DepthRim.Dock.Option".Translate(CoastLabel(dockAt)).ToString();
+                }
                 PlanetTile dest = ResolveDestination(origin, target.Tile);
                 return DestinationBlockReason(origin, dest, range)
                     ?? "DepthRim.Sail.Eta".Translate(SurfaceRouting.Distance(origin, dest),
                         Mathf.RoundToInt(SurfaceRouting.Distance(origin, dest) * plan.hoursPerTile * GenDate.TicksPerHour).ToStringTicksToPeriod()).ToString();
             },
-            canSelectTarget: target => DestinationBlockReason(origin, ResolveDestination(origin, target.Tile), range) == null,
+            canSelectTarget: target => AdjacentDockTarget(origin, target.Tile) is PlanetTile dockAt && dockAt.Valid
+                ? CoastDockBlockReason(helm, dockAt) == null
+                : DestinationBlockReason(origin, ResolveDestination(origin, target.Tile), range) == null,
             originForClosest: origin, showCancelButton: true);
         }
 
@@ -352,7 +394,7 @@ namespace DepthRim
         /// 出航到 <paramref name="destination"/>：船上有伸出的舷梯就先收起來、收完才走（回傳 false，排進 <see cref="GameComponent_SurfaceSail"/>）；
         /// 否則立刻出航（回傳 true）。不能出航時發訊息、回傳 false。
         /// </summary>
-        public static bool Depart(Thing helm, PlanetTile destination)
+        public static bool Depart(Thing helm, PlanetTile destination, PlanetTile? coast = null)
         {
             string block = BlockReason(helm, out Plan plan);
             if (block == null)
@@ -375,11 +417,11 @@ namespace DepthRim
                         g.Retract();
                     }
                 }
-                GameComponent_SurfaceSail.Instance?.Queue(helm, destination, plan.footprint);
+                GameComponent_SurfaceSail.Instance?.Queue(helm, destination, plan.footprint, coast);
                 Messages.Message("DepthRim.Sail.RetractingGangway".Translate(), helm, MessageTypeDefOf.NeutralEvent, historical: false);
                 return false;
             }
-            DepartNow(helm, destination, plan);
+            DepartNow(helm, destination, plan, coast);
             return true;
         }
 
@@ -389,7 +431,7 @@ namespace DepthRim
         }
 
         /// <summary>出航（檢查都過了）：船體搬進新的船地圖，開始沿海路走。</summary>
-        public static void DepartNow(Thing helm, PlanetTile destination, Plan plan)
+        public static void DepartNow(Thing helm, PlanetTile destination, Plan plan, PlanetTile? coast = null)
         {
             Map origin = helm.Map;
             PlanetTile from = origin.Tile;
@@ -410,6 +452,7 @@ namespace DepthRim
                 ship.Tile = from;
                 ship.SetFaction(Faction.OfPlayer);
                 ship.shipName = name;
+                ship.coastTarget = coast is PlanetTile c && c.Valid ? c.tileId : -1;
                 Find.WorldObjects.Add(ship);
                 Map shipMap = MapGenerator.GenerateMap(origin.Size, ship, ship.def.mapGenerator);
                 ShipSeparationUtility.RelocateHull(origin, shipMap, cells, IntVec3.Zero);
@@ -469,13 +512,20 @@ namespace DepthRim
             }
             if (other == null || !ship.HasMap)
             {
-                Map colony = Docking.AdjacentColony(tile);
-                if (colony != null)
+                // 2026-11-22：出航時點的海岸格（殖民地、停泊點或沒有東西的海岸）優先；沒記下就找旁邊的殖民地
+                PlanetTile coast = ship.coastTarget >= 0 ? new PlanetTile(ship.coastTarget, tile.Layer) : PlanetTile.Invalid;
+                ship.coastTarget = -1;
+                if (!coast.Valid || !Find.WorldGrid.IsNeighbor(tile, coast) || !Docking.IsCoastTarget(coast))
                 {
-                    Messages.Message("DepthRim.Dock.ArrivedOffColony".Translate(ship.Label, colony.Parent.LabelCap), ship, MessageTypeDefOf.PositiveEvent);
-                    if (choose && Docking.BlockReason(helm, out _, out _) == null)
+                    Map near = Docking.AdjacentColony(tile);
+                    coast = near != null ? near.Tile : PlanetTile.Invalid;
+                }
+                if (coast.Valid)
+                {
+                    Messages.Message("DepthRim.Dock.ArrivedOffColony".Translate(ship.Label, CoastLabel(coast)), ship, MessageTypeDefOf.PositiveEvent);
+                    if (choose && CoastDockBlockReason(helm, coast) == null)
                     {
-                        Docking.Begin(helm);
+                        Docking.BeginAtCoast(helm, coast);
                     }
                 }
                 else
@@ -548,6 +598,8 @@ namespace DepthRim
         private List<Thing> helms = new List<Thing>();
         private List<int> destinations = new List<int>();
         private List<int> queuedTicks = new List<int>();
+        /// <summary>出航時點的海岸格（抵達後靠那一格；沒有時 -1）。</summary>
+        private List<int> coasts = new List<int>();
 
         private int shipCounter;
 
@@ -562,8 +614,29 @@ namespace DepthRim
 
         public bool Pending(Thing helm) => helms.Contains(helm);
 
+        /// <summary>靠岸時建立的停泊點（殖民地的世界物件 ID）：船離開、沒人留下時放棄，取消靠岸時撤掉。</summary>
+        private List<int> landingSites = new List<int>();
+
+        public void MarkLandingSite(WorldObject site)
+        {
+            if (site != null && !landingSites.Contains(site.ID))
+            {
+                landingSites.Add(site.ID);
+            }
+        }
+
+        public void UnmarkLandingSite(WorldObject site)
+        {
+            if (site != null)
+            {
+                landingSites.Remove(site.ID);
+            }
+        }
+
+        public bool IsLandingSite(WorldObject site) => site != null && landingSites.Contains(site.ID);
+
         /// <summary>排進出航；同一艘船（<paramref name="footprint"/> 上的其他艦橋，母船載子船時會有好幾座）先前排的取消，只留最新的這一筆。</summary>
-        public void Queue(Thing helm, PlanetTile destination, ICollection<IntVec3> footprint = null)
+        public void Queue(Thing helm, PlanetTile destination, ICollection<IntVec3> footprint = null, PlanetTile? coast = null)
         {
             for (int i = helms.Count - 1; i >= 0; i--)
             {
@@ -576,6 +649,7 @@ namespace DepthRim
             helms.Add(helm);
             destinations.Add(destination.tileId);
             queuedTicks.Add(Find.TickManager.TicksGame);
+            coasts.Add(coast is PlanetTile c && c.Valid ? c.tileId : -1);
         }
 
         public override void GameComponentTick()
@@ -602,8 +676,9 @@ namespace DepthRim
                 if (SurfaceVoyage.GangwaysOut(helm.Map, plan.footprint).Count == 0)
                 {
                     PlanetTile dest = new PlanetTile(destinations[i], helm.Map.Tile.Layer);
+                    PlanetTile? coast = coasts[i] >= 0 ? new PlanetTile(coasts[i], helm.Map.Tile.Layer) : (PlanetTile?)null;
                     Remove(i);
-                    SurfaceVoyage.Depart(helm, dest);
+                    SurfaceVoyage.Depart(helm, dest, coast);
                     continue;
                 }
                 if (Find.TickManager.TicksGame - queuedTicks[i] > GiveUpTicks)
@@ -619,6 +694,7 @@ namespace DepthRim
             helms.RemoveAt(i);
             destinations.RemoveAt(i);
             queuedTicks.RemoveAt(i);
+            coasts.RemoveAt(i);
         }
 
         public override void ExposeData()
@@ -627,12 +703,20 @@ namespace DepthRim
             Scribe_Collections.Look(ref helms, "helms", LookMode.Reference);
             Scribe_Collections.Look(ref destinations, "destinations", LookMode.Value);
             Scribe_Collections.Look(ref queuedTicks, "queuedTicks", LookMode.Value);
+            Scribe_Collections.Look(ref coasts, "coasts", LookMode.Value);
+            Scribe_Collections.Look(ref landingSites, "landingSites", LookMode.Value);
             Scribe_Values.Look(ref shipCounter, "shipCounter");
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 helms ??= new List<Thing>();
                 destinations ??= new List<int>();
                 queuedTicks ??= new List<int>();
+                coasts ??= new List<int>();
+                landingSites ??= new List<int>();
+                while (coasts.Count < helms.Count)
+                {
+                    coasts.Add(-1);
+                }
                 int n = Mathf.Min(helms.Count, Mathf.Min(destinations.Count, queuedTicks.Count));
                 for (int i = helms.Count - 1; i >= 0; i--)
                 {
@@ -641,6 +725,7 @@ namespace DepthRim
                         helms.RemoveAt(i);
                         if (i < destinations.Count) { destinations.RemoveAt(i); }
                         if (i < queuedTicks.Count) { queuedTicks.RemoveAt(i); }
+                        if (i < coasts.Count) { coasts.RemoveAt(i); }
                     }
                 }
             }

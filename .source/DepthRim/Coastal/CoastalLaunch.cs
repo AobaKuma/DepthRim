@@ -198,6 +198,14 @@ namespace DepthRim
                         Current.Game.CurrentMap = sea;
                         CameraJumper.TryJump(center, sea);
                     }
+                    // 從停泊點出港、上面沒人也沒建築：照奧德賽重力船離開的做法放棄那張地圖
+                    LongEventHandler.ExecuteWhenFinished(() =>
+                    {
+                        if (Find.Maps.Contains(origin))
+                        {
+                            Docking.AbandonIfUnused(origin);
+                        }
+                    });
                 };
                 // 離港演出（M4）：船體已經搬到海上，殖民地上只剩影像——從泊位退出、轉向、沿路線開出地圖邊
                 if (quiet || Docking.SkipShow())

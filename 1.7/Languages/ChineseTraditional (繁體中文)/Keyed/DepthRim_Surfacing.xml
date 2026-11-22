@@ -334,6 +334,8 @@ Dive anyway? -->
   <!-- 靠岸（M3） -->
   <!-- EN: Dock at {0}... -->
   <DepthRim.Dock.Option>靠岸：{0}……</DepthRim.Dock.Option>
+  <DepthRim.Dock.Coast>海岸</DepthRim.Dock.Coast>
+  <DepthRim.Dock.LandingSite>{0}的停泊點</DepthRim.Dock.LandingSite>
   <!-- EN: Dock... -->
   <DepthRim.Dock.OptionNoColony>靠岸……</DepthRim.Dock.OptionNoColony>
   <!-- EN: None of your coastal colonies is next to this tile. -->

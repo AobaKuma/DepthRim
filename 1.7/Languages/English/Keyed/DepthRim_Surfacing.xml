@@ -175,6 +175,8 @@ Dive anyway?</DepthRim.HullWarn.Text>
 
   <!-- Docking (M3) -->
   <DepthRim.Dock.Option>Dock at {0}...</DepthRim.Dock.Option>
+  <DepthRim.Dock.Coast>the coast</DepthRim.Dock.Coast>
+  <DepthRim.Dock.LandingSite>{0} landing site</DepthRim.Dock.LandingSite>
   <DepthRim.Dock.OptionNoColony>Dock...</DepthRim.Dock.OptionNoColony>
   <DepthRim.Dock.NoColony>None of your coastal colonies is next to this tile.</DepthRim.Dock.NoColony>
   <DepthRim.Dock.Label>Choose berth</DepthRim.Dock.Label>

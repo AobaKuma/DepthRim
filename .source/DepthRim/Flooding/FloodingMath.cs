@@ -6,7 +6,7 @@ namespace DepthRim
 {
     /// <summary>
     /// 水位系統的純計算（不碰地圖與房間），讓 <see cref="MapComponent_Flooding"/>、<see cref="PawnWaterRendering"/>
-    /// 與單元測試（.source/DepthRim.Tests）共用同一套公式。
+    /// 共用同一套公式。
     /// </summary>
     public static class FloodingMath
     {

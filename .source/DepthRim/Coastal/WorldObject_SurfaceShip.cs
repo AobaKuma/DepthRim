@@ -29,6 +29,9 @@ namespace DepthRim
 
         public bool underWay;
 
+        /// <summary>出航時點的海岸格（tileId；抵達後靠那一格，沒有時 -1）。</summary>
+        public int coastTarget = -1;
+
         /// <summary>出航時的水面推力（推力比例的分母）。</summary>
         public float plannedThrust;
 
@@ -249,6 +252,7 @@ namespace DepthRim
             Scribe_Values.Look(ref stalled, "stalled");
             Scribe_Values.Look(ref thrustFraction, "thrustFraction", 1f);
             Scribe_Values.Look(ref sinceCheck, "sinceCheck");
+            Scribe_Values.Look(ref coastTarget, "coastTarget", -1);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 route ??= new List<PlanetTile>();
