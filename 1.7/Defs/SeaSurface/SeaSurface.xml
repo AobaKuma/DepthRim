@@ -131,7 +131,7 @@
           <li>Thing/DR_OceanPlatform/Edge_Loop</li>
         </sideLoopTexPaths>
       </li>
-      <li Class="DMSE.RemovablePlatformExtension">
+      <li Class="Fortified.RemovablePlatformExtension">
         <refundFraction>0.5</refundFraction>
       </li>
     </modExtensions>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
+using Fortified;
 using Fortified.Structures;
 using HarmonyLib;
 using RimWorld;
@@ -84,7 +85,7 @@ namespace DepthRim
             Rect rect = listing.GetScenPartRect(this, ScenPart.RowHeight);
             if (Widgets.ButtonText(rect, Structure?.defName ?? "-"))
             {
-                FloatMenuUtility.MakeMenu(DefDatabase<FFF_StructureDef>.AllDefs, d => d.defName, d => delegate { structure = d; });
+                RimWorld.FloatMenuUtility.MakeMenu(DefDatabase<FFF_StructureDef>.AllDefs, d => d.defName, d => delegate { structure = d; });
             }
         }
 

@@ -99,7 +99,7 @@
           <li>Thing/DR_LightPlatform/Edge_Loop5</li>
         </sideLoopTexPaths>
       </li>
-      <li Class="DMSE.RemovablePlatformExtension">
+      <li Class="Fortified.RemovablePlatformExtension">
         <refundFraction>0.5</refundFraction>
       </li>
     </modExtensions>

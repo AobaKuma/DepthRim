@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
+using Fortified;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace DepthRim
         public ITab_Vessel()
         {
             size = new Vector2(Width, MaxHeight);
-            labelKey = "DMSE.Transfer.Tab";
+            labelKey = "FFF.Transfer.Tab";
         }
 
         protected override void UpdateSize()
@@ -145,7 +146,7 @@ namespace DepthRim
             if (name.NullOrEmpty())
             {
                 GUI.color = Muted;
-                Widgets.Label(label, TransferText.Key("DMSE.Transfer.Console.Unnamed").Translate());
+                Widgets.Label(label, TransferText.Key("FFF.Transfer.Console.Unnamed").Translate());
             }
             else
             {
@@ -153,7 +154,7 @@ namespace DepthRim
             }
             GUI.color = Color.white;
             Text.Font = GameFont.Small;
-            TooltipHandler.TipRegion(btn, TransferText.Key("DMSE.Transfer.Console.Rename").Translate());
+            TooltipHandler.TipRegion(btn, TransferText.Key("FFF.Transfer.Console.Rename").Translate());
             if (Widgets.ButtonImage(btn, TexButton.Rename))
             {
                 Find.WindowStack.Add(new Dialog_RenameTransferShip(console));
@@ -236,9 +237,9 @@ namespace DepthRim
             {
                 listing.Gap(SectionGap);
                 SectionLabel(listing, "DepthRim.VesselTab.Voyage".Translate());
-                Row(listing, TransferText.Key("DMSE.Transfer.UI.Phase").Translate(), sub.CurrentPhaseLabel);
-                Row(listing, TransferText.Key("DMSE.Transfer.UI.FlightProgress").Translate(), sub.Progress.ToStringPercent());
-                Row(listing, (sub.isImpact ? "DMSE.Transfer.UI.ImpactIn" : "DMSE.Transfer.UI.ArrivalIn").Translate(), sub.TotalTicksLeft.ToStringTicksToPeriod());
+                Row(listing, TransferText.Key("FFF.Transfer.UI.Phase").Translate(), sub.CurrentPhaseLabel);
+                Row(listing, TransferText.Key("FFF.Transfer.UI.FlightProgress").Translate(), sub.Progress.ToStringPercent());
+                Row(listing, (sub.isImpact ? "FFF.Transfer.UI.ImpactIn" : "FFF.Transfer.UI.ArrivalIn").Translate(), sub.TotalTicksLeft.ToStringTicksToPeriod());
                 if (sub.Stalled)
                 {
                     Colored(listing, "DepthRim.VesselTab.Stalled".Translate(), Error);
@@ -336,7 +337,7 @@ namespace DepthRim
                     }
                 }
                 listing.Gap(SectionGap);
-                SectionLabel(listing, TransferText.Key("DMSE.Transfer.UI.IssuesHeader").Translate());
+                SectionLabel(listing, TransferText.Key("FFF.Transfer.UI.IssuesHeader").Translate());
                 TransferUIUtility.DrawIssues(listing, console.Issues, ref jump);
                 listing.Gap(SectionGap);
             }
@@ -469,7 +470,7 @@ namespace DepthRim
         {
             Rect rect = Row(listing, label, value, valueColor, Color.white);
             Widgets.DrawHighlightIfMouseover(rect);
-            TooltipHandler.TipRegion(rect, "DMSE.UI.Locate".Translate());
+            TooltipHandler.TipRegion(rect, "FFF.UI.Locate".Translate());
             return Widgets.ButtonInvisible(rect);
         }
 

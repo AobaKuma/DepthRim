@@ -1,5 +1,6 @@
 using System;
 using DMSE;
+using Fortified;
 using RimWorld;
 using Verse;
 

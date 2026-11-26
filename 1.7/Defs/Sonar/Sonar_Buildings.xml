@@ -54,7 +54,7 @@
       </li>
       <li Class="CompProperties_Flickable" />
       <li Class="CompProperties_Breakdownable" />
-      <li Class="DMSE.CompProperties_SearchRadar">
+      <li Class="Fortified.CompProperties_SearchRadar">
         <worldDetectionRange>6</worldDetectionRange>
         <searchDistance>120</searchDistance>
         <powerLevel>2</powerLevel>
@@ -92,7 +92,7 @@
       </li>
       <li Class="CompProperties_Flickable" />
       <li Class="CompProperties_Breakdownable" />
-      <li Class="DMSE.CompProperties_SearchRadar">
+      <li Class="Fortified.CompProperties_SearchRadar">
         <worldDetectionRange>3</worldDetectionRange>
         <searchDistance>60</searchDistance>
         <powerLevel>1</powerLevel>
@@ -133,7 +133,7 @@
       </li>
       <li Class="CompProperties_Flickable" />
       <li Class="CompProperties_Breakdownable" />
-      <li Class="DMSE.CompProperties_FireControlRadar">
+      <li Class="Fortified.CompProperties_FireControlRadar">
         <maxTargets>2</maxTargets>
         <powerLevel>1</powerLevel>
         <guidanceAccuracyTime>900</guidanceAccuracyTime>

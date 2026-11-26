@@ -36,13 +36,13 @@ namespace DepthRim
         /// <summary>世界物件是不是一條魚雷航跡。</summary>
         public static bool IsTorpedoTrack(WorldObject o)
         {
-            return o is MissileWorldObject missile && IsTorpedo(missile.config);
+            return o is WorldObject_Missile missile && IsTorpedo(missile.config);
         }
 
         /// <summary>航跡上的魚雷行為（記著深度）；不是魚雷回傳 null。</summary>
         public static MissileBehavior_Torpedo BehaviorOf(object track)
         {
-            return (track as MissileWorldObject)?.Behaviors?.Get<MissileBehavior_Torpedo>();
+            return (track as WorldObject_Missile)?.Behaviors?.Get<MissileBehavior_Torpedo>();
         }
 
         /// <summary>
@@ -96,11 +96,11 @@ namespace DepthRim
         public override void PostLaunch()
         {
             Map map = null;
-            if (track is ScorerProjectile_WorldObject scorer && scorer.launcherThing != null)
+            if (track is WorldObject_OutgoingMissile scorer && scorer.launcherThing != null)
             {
                 map = scorer.launcherThing.MapHeld;
             }
-            if (map == null && track is MissileWorldObject missile)
+            if (map == null && track is WorldObject_Missile missile)
             {
                 map = Find.WorldObjects.MapParentAt(missile.Origin)?.Map;
             }
@@ -110,7 +110,7 @@ namespace DepthRim
                 return;
             }
             // 沒有地圖的發射者（敵方魚雷艇）：用它的巡航深度，否則當作貼著那一格的海床。
-            if (track is MissileWorldObject origin && origin.Origin.Valid)
+            if (track is WorldObject_Missile origin && origin.Origin.Valid)
             {
                 WorldObject_EnemyTorpedoBoat boat = WorldObject_EnemyTorpedoBoat.At(origin.Origin);
                 depth = boat != null ? boat.depth : DepthTierUtility.MaxTierAt(origin.Origin);
@@ -123,7 +123,7 @@ namespace DepthRim
         /// </summary>
         public override bool PreArrive()
         {
-            if (!(track is MissileWorldObject missile))
+            if (!(track is WorldObject_Missile missile))
             {
                 return false;
             }

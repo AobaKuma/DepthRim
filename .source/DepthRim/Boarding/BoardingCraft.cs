@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
+using Fortified;
 using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
@@ -42,7 +43,7 @@ namespace DepthRim
     /// 艇上的人與貨放在原版 <see cref="CompTransporter"/> 的容器裡（<see cref="CompUnderwaterTransporter"/> 負責存檔），
     /// 登艇流程、載入/卸下 gizmo、檢視字串全部沿用原版穿梭機的實作。
     /// </summary>
-    public class Building_BoardingCraft : Building, IThingHolder, IBVRPayloadHolder, IInterceptResolver, IBVRContactLabel
+    public class Building_BoardingCraft : Building, IThingHolder, IAirPayloadHolder, IInterceptResolver, IAirContactLabel
     {
         public const int EjectDelayTicks = 120;
 
@@ -85,7 +86,7 @@ namespace DepthRim
         /// <summary>聲納分類（§11 M7 7.4）：來襲的突擊艇在抵達前這麼多 tick 內才分得出來，之前只是「未知聲納接觸」。</summary>
         public const int ClassifyTicksBeforeImpact = 1200;
 
-        public string ContactLabel(BVRTarget target, int ticksToImpact)
+        public string ContactLabel(AirDefenseTarget target, int ticksToImpact)
         {
             return ticksToImpact > ClassifyTicksBeforeImpact && !IsPlayerCraft ? "DepthRim.Sonar.UnknownContact".Translate().ToString() : def.label;
         }
@@ -97,7 +98,7 @@ namespace DepthRim
         /// 被擊落的突擊艇在水下是「沉沒」（§3.4 第 3 點）：不用 DMSE 的殘骸空投，艇身碎片與遺體直接沉到落點附近的海床，
         /// 發一則訊息。艇上人員照 DMSE 的規則處理（玩家的人失蹤，其他人陣亡）。
         /// </summary>
-        public bool TryResolveIntercept(BVRTarget target, Map map, IntVec3 debrisCell)
+        public bool TryResolveIntercept(AirDefenseTarget target, Map map, IntVec3 debrisCell)
         {
             if (map == null)
             {

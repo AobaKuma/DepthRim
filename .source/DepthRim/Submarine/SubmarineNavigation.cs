@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
+using Fortified;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -196,7 +197,7 @@ namespace DepthRim
             PlanetTile origin = helm.Map.Tile;
             if (!tile.Valid || tile.Layer != origin.Layer)
             {
-                return TransferText.Key("DMSE.Transfer.Dest.OtherLayer", origin).Translate();
+                return TransferText.Key("FFF.Transfer.Dest.OtherLayer", origin).Translate();
             }
             WorldObject_Submarine sub = SubOf(helm);
             if (tile == origin)
@@ -223,9 +224,9 @@ namespace DepthRim
             }
             if (!DebugSettings.ignoreGravshipRange && TransferFlightMath.Distance(origin, tile) > maxDistance)
             {
-                return TransferText.Key("DMSE.Transfer.Dest.OutOfRange", origin).Translate(Mathf.Max(0, maxDistance));
+                return TransferText.Key("FFF.Transfer.Dest.OutOfRange", origin).Translate(Mathf.Max(0, maxDistance));
             }
-            return TransferText.Key("DMSE.Transfer.Dest.Occupied", origin).Translate();
+            return TransferText.Key("FFF.Transfer.Dest.Occupied", origin).Translate();
         }
 
         // ==================================================================

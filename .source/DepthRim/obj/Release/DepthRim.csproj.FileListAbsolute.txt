@@ -10,3 +10,4 @@ D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.source\DepthRim\obj\Release\r
 D:\Steam\steamapps\common\RimWorld\Mods\_DepthRim\.tmp\depthrim-tests\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\250bb04e-ff29-44c6-8f94-6f1ad899b0dc\scratchpad\ut\DepthRim.dll
 C:\Users\user\AppData\Local\Temp\claude\b3d23334f6d9bf19\779fd179-5ff6-4bc3-a677-3b31dfa9f681\scratchpad\unit\DepthRim.dll
+C:\Users\user\AppData\Local\Temp\claude\1d38b5b6bb4d04e4\00f84ef8-7141-4540-95b0-f384f5c10495\scratchpad\drbuild\DepthRim.dll

@@ -21,7 +21,7 @@
     <canHaveFaction>true</canHaveFaction>
     <allowCaravanIncidentsWhichGenerateMap>true</allowCaravanIncidentsWhichGenerateMap>
     <comps>
-      <li Class="DMSE.CompProperties_MissileBase">
+      <li Class="Fortified.WorldObjectCompProperties_MissileBase">
         <missileFireIntervalDays>1~3</missileFireIntervalDays>
         <missilesPerSalvo>1~2</missilesPerSalvo>
         <range>10</range>
@@ -40,7 +40,7 @@
         <relocatedLetterLabelKey>DepthRim.Enemy.SubLeftLabel</relocatedLetterLabelKey>
         <relocatedLetterTextKey>DepthRim.Enemy.SubLeft</relocatedLetterTextKey>
       </li>
-      <li Class="DMSE.CompProperties_WorldAirDefense">
+      <li Class="Fortified.WorldObjectCompProperties_AirDefense">
         <worldDetectionRange>5</worldDetectionRange>
         <antiStealthLevel>1</antiStealthLevel>
         <fireControlDef>DepthRim_FireControlSonar</fireControlDef>

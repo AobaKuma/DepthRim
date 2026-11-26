@@ -83,7 +83,7 @@
     </skyfaller>
     <!-- 聲納預警：突擊艇安靜，主動聲納的窗口 7200 × 0.4 ≈ 2900 tick（約 48 遊戲分鐘）；DMSE 的攔截彈與近防可以在窗口內打它。 -->
     <modExtensions>
-      <li Class="DMSE.BVRTargetProps">
+      <li Class="Fortified.AirTargetExtension">
         <distanceLevel>0.4</distanceLevel>
         <stealthLevel>0</stealthLevel>
         <!-- 水下領域：火控聲納＋反魚雷魚雷可以攔它，DMSE 的防空不打它 -->

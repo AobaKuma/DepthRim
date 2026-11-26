@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DMSE;
+using Fortified;
 using RimWorld;
 using UnityEngine;
 using Verse;

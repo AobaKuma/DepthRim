@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
+using Fortified;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -27,18 +28,18 @@ namespace DepthRim
             {
                 return;
             }
-            WorldComponent_BVRNetwork network = WorldComponent_BVRNetwork.Current;
+            WorldComponent_AirDefenseNetwork network = WorldComponent_AirDefenseNetwork.Current;
             if (network == null)
             {
                 return;
             }
-            foreach (BVRNode node in network.Nodes.ToList())
+            foreach (AirDefenseNode node in network.Nodes.ToList())
             {
                 if (node.faction != Faction.OfPlayer || node.parent == null)
                 {
                     continue;
                 }
-                float range = node.DetectionRange(BVRTargetProps.Default);
+                float range = node.DetectionRange(AirTargetExtension.Default);
                 if (Rand.Chance(LandmarkMath.DiscoveryChancePerHour(range)))
                 {
                     TryDiscover(node, range, out _);
@@ -109,7 +110,7 @@ namespace DepthRim
             return result;
         }
 
-        public static bool TryDiscover(BVRNode node, float range, out WorldObject landmark)
+        public static bool TryDiscover(AirDefenseNode node, float range, out WorldObject landmark)
         {
             landmark = null;
             PlanetTile center = OceanCenter(node.parent);

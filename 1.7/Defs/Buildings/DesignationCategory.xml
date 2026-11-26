@@ -11,7 +11,7 @@
     <specialDesignatorClasses>
       <li>Designator_Cancel</li>
       <li>Designator_Deconstruct</li>
-      <li>DMSE.Designator_RemovePlatform</li>
+      <li>Fortified.Designator_RemovePlatform</li>
     </specialDesignatorClasses>
   </DesignationCategoryDef>
 

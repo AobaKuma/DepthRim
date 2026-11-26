@@ -597,7 +597,7 @@ namespace DepthRim
 
     /// <summary>
     /// 平台支撐：一格海上平台要「在某根支柱的支撐半徑內」而且「以共邊相連的方式連到某根支柱頂底下的平台」才撐得住。
-    /// 連通用 DMSE 結構樁網路判定船體範圍的方式（<see cref="DMSE.GridTopology"/> 增量維護共邊連通塊，含支柱頂佔地格的塊才算數）：
+    /// 連通用 DMSE 結構樁網路判定船體範圍的方式（<see cref="Fortified.GridTopology"/> 增量維護共邊連通塊，含支柱頂佔地格的塊才算數）：
     /// 平台層的地形一變（<see cref="Patch_PlatformStructureChanged"/>），下一次檢查就把斷開的碎塊與範圍外的平台一起排進崩塌倒數。
     /// 基座消失後，任何撐不住的海上平台進入崩塌倒數（紅框標出），
     /// 倒數結束就塌進海裡：上面的建築毀掉、物品沉下去、Pawn 摔回最近的平台並受傷（附近沒有平台就落海失蹤），
@@ -625,7 +625,7 @@ namespace DepthRim
         private Dictionary<IntVec3, int> pending = new Dictionary<IntVec3, int>();
 
         /// <summary>平台格（基底地形是海上平台）的共邊連通塊；第一次用到時從整張地圖建立，之後只餵地形變動。不存檔。</summary>
-        private DMSE.GridTopology topology;
+        private Fortified.GridTopology topology;
 
         private readonly HashSet<IntVec3> dirtyCells = new HashSet<IntVec3>();
 
@@ -717,7 +717,7 @@ namespace DepthRim
         {
             if (topology == null)
             {
-                topology = new DMSE.GridTopology(map.Size.x, map.Size.z);
+                topology = new Fortified.GridTopology(map.Size.x, map.Size.z);
                 topoAdds.Clear();
                 foreach (IntVec3 c in map.AllCells)
                 {

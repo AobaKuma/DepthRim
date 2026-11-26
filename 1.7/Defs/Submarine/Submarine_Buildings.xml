@@ -33,7 +33,7 @@
     </building>
     <designationCategory>DepthRim_Underwater</designationCategory>
     <placeWorkers>
-      <li>DMSE.PlaceWorker_StructuralPile</li>
+      <li>Fortified.PlaceWorker_StructuralPile</li>
     </placeWorkers>
     <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
   </ThingDef>
@@ -60,7 +60,7 @@
       <ComponentIndustrial>2</ComponentIndustrial>
     </costList>
     <comps>
-      <li Class="DMSE.CompProperties_StructuralPile">
+      <li Class="Fortified.CompProperties_StructuralPile">
         <coverageRadius>11</coverageRadius>
         <linkRange>23</linkRange>
         <circularRange>true</circularRange>
@@ -107,7 +107,7 @@
       <ComponentIndustrial>1</ComponentIndustrial>
     </costList>
     <comps>
-      <li Class="DMSE.CompProperties_StructuralPile">
+      <li Class="Fortified.CompProperties_StructuralPile">
         <coverageRadius>7</coverageRadius>
         <linkRange>0</linkRange>
         <!-- 不限轉移圖層：allowedTerrains 只有船體平台，船體平台只能鋪在水上（海岸造船 M1：原版海岸地圖也能造船） -->
@@ -175,7 +175,7 @@
         <basePowerConsumption>300</basePowerConsumption>
       </li>
       <li Class="CompProperties_Flickable" />
-      <li Class="DMSE.CompProperties_TransferConsole">
+      <li Class="Fortified.CompProperties_TransferConsole">
         <operateTicks>1250</operateTicks>
         <countdownTicks>600</countdownTicks>
         <!-- 規劃航線併入艦橋的航行指令（DepthRim.SubmarineNavigation） -->
@@ -222,7 +222,7 @@
         <basePowerConsumption>150</basePowerConsumption>
       </li>
       <li Class="CompProperties_Flickable" />
-      <li Class="DMSE.CompProperties_TransferEngine">
+      <li Class="Fortified.CompProperties_TransferEngine">
         <thrust>3</thrust>
         <fuelFactor>1</fuelFactor>
         <exclusionAreaSize>(0, 0, 0)</exclusionAreaSize>
@@ -272,7 +272,7 @@
         <basePowerConsumption>300</basePowerConsumption>
       </li>
       <li Class="CompProperties_Flickable" />
-      <li Class="DMSE.CompProperties_TransferEngine">
+      <li Class="Fortified.CompProperties_TransferEngine">
         <thrust>8</thrust>
         <fuelFactor>0.5</fuelFactor>
         <exclusionAreaSize>(0, 0, 0)</exclusionAreaSize>

@@ -57,7 +57,7 @@
     <!-- 潛艇（DMSE 轉移飛行）：海洋層可以起飛。虛空 = 深淵；龍骨樁只把船體平台算進船體（allowedTerrains），
          所以海床不會被帶走，潛艇只能在深淵上的平台建造。船體地圖只鋪深淵，父物件是 DepthRim 的潛艇。 -->
     <modExtensions>
-      <li Class="DMSE.TransferEnvironmentExtension">
+      <li Class="Fortified.TransferEnvironmentExtension">
         <voidTerrain>DepthRim_Abyss</voidTerrain>
         <shipMapGenerator>DepthRim_SubmarineHull</shipMapGenerator>
         <shipWorldObject>DepthRim_Submarine</shipWorldObject>

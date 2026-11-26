@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
+using Fortified;
 using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
@@ -191,19 +192,19 @@ namespace DepthRim
             {
                 return true;
             }
-            WorldComponent_BVRNetwork network = WorldComponent_BVRNetwork.Current;
+            WorldComponent_AirDefenseNetwork network = WorldComponent_AirDefenseNetwork.Current;
             if (network == null)
             {
                 return false;
             }
             Vector3 at = MissileWorldUtility.TileCenter(o.Tile);
-            foreach (BVRNode node in network.Nodes)
+            foreach (AirDefenseNode node in network.Nodes)
             {
                 if (node.faction != Faction.OfPlayer || node.parent == null)
                 {
                     continue;
                 }
-                float range = node.DetectionRange(BVRTargetProps.Default);
+                float range = node.DetectionRange(AirTargetExtension.Default);
                 if (range > 0f && MissileWorldUtility.SurfaceTilesBetween(node.Center, at) <= range * ClassifyFraction)
                 {
                     return true;

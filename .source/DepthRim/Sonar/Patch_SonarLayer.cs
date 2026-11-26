@@ -16,7 +16,7 @@ namespace DepthRim
         /// <summary>地圖上有沒有某陣營運作中的主動聲納（會暴露位置的搜索雷達）。之後的水下襲擊以此為條件（設計稿 §6）。</summary>
         public static bool HasActiveSonar(Map map, Faction faction)
         {
-            MapComponent_BVRCombat comp = map?.GetComponent<MapComponent_BVRCombat>();
+            MapComponent_AirDefense comp = map?.GetComponent<MapComponent_AirDefense>();
             if (comp == null)
             {
                 return false;

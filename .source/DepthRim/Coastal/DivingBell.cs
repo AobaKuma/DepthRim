@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DMSE;
+using Fortified;
 using HarmonyLib;
 using RimWorld;
 using RimWorld.Planet;
