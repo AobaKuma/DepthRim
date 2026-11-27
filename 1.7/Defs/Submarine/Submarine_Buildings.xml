@@ -16,7 +16,9 @@
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <rotatable>false</rotatable>
-    <passability>Impassable</passability>
+    <!-- 可通過（同原版柱子）：Impassable 加上 fillPercent 0.4 會觸發「impassable, player-buildable building that can be shot/seen over」設定錯誤 -->
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
     <fillPercent>0.4</fillPercent>
     <holdsRoof>true</holdsRoof>
     <blockWind>true</blockWind>

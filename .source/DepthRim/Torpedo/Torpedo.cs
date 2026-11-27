@@ -16,7 +16,7 @@ namespace DepthRim
     {
     }
 
-    /// <summary>反魚雷魚雷的彈體標記（內容檢查用）。攔截的分工由彈體的水下領域（DMSE 的 <c>CombatDomain</c>）決定。</summary>
+    /// <summary>反魚雷魚雷的彈體標記（內容檢查用）。攔截的分工由彈體的水下領域（FFF 的 <c>CombatDomainDef</c>）決定。</summary>
     public class AntiTorpedoExtension : DefModExtension
     {
     }

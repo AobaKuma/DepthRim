@@ -62,12 +62,12 @@ namespace DepthRim
 
         public bool CanFire(int now) => Armed && now >= cooldownUntil;
 
-        /// <summary>只打水下領域（DMSE 的 <see cref="CombatDomain"/>）。</summary>
-        public bool Engages(CombatDomain domain) => domain == CombatDomain.Underwater;
+        /// <summary>只打水下領域（FFF 的 <see cref="CombatDomainDef"/>）。</summary>
+        public bool Engages(CombatDomainDef domain) => domain == CombatDomainDefOf.Underwater;
 
         public bool CanEngage(AirEngagement engagement)
         {
-            if (engagement == null || !parent.Spawned || (CombatDomain)engagement.Domain != CombatDomain.Underwater)
+            if (engagement == null || !parent.Spawned || engagement.Domain != CombatDomainDefOf.Underwater)
             {
                 return false;
             }
